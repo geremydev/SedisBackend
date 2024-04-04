@@ -5,7 +5,7 @@ namespace SedisBackend.Core.Domain.Medical_Insurance
     public class MedicationCoverage
     {
         public int Id { get; set; }
-        public string HealthInsuranceId { get; set; } // FK
+        public int HealthInsuranceId { get; set; } // FK
         public HealthInsurance HealthInsurance { get; set; } 
         public string MedicationId { get; set; } // FK
         public Medication Medication { get; set; }

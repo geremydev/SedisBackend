@@ -1,4 +1,4 @@
-﻿using SedisBackend.Core.Domain.Presctiptions;
+﻿using SedisBackend.Core.Domain.Prescriptions;
 using SedisBackend.Core.Domain.Products;
 using SedisBackend.Core.Domain.Users.Doctors;
 using SedisBackend.Core.Domain.Users.Patients;
@@ -8,17 +8,15 @@ namespace SedisBackend.Core.Domain.Medical_History.Clinical_History
     public class ClinicalHistory
     {
         public int Id { get; set; }
-        public string PatientId { get; set; }
+        public int PatientId { get; set; }
         public Patient Patient { get; set; }
-        public string DoctorId { get; set; }
+        public int DoctorId { get; set; }
         public Doctor Doctor { get; set; }
         public string ReasonForVisit { get; set; }
         public string CurrentHistory { get; set; }
         public string? PhysicalExamination { get; set; }
         public string? Diagnosis { get; set; }
-
-        public ICollection<Prescription>? Prescriptions { get; set; }
-        public ICollection<LabTest>? LabTests { get; set; }
+        public Prescription? Prescription { get; set; }
 
 
         /* Ejemplo de campos

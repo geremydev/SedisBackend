@@ -5,11 +5,13 @@ namespace SedisBackend.Core.Domain.Products
     public class LabTest
     {
         public int Id { get; set; }
-        public int ClinicalHistoryId { get; set; } 
-        public ClinicalHistory ClinicalHistory { get; set; } 
-        public string Status { get; set; } // Usamos el enum LabTestStatus
-        public string TestType { get; set; } 
-        public DateTime PerformedDate { get; set; } 
-        public string ResultUrl { get; set; }
+
+        // Name of the lab test
+        public string TestName { get; set; }
+
+        // Code of the lab test (LOINC, CPT, etc.)
+        public string TestCode { get; set; }
+
+        //Realizarle la relación de un LabTest es realizado por muchos laboratorios etc etc
     }
 }

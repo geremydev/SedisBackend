@@ -1,5 +1,5 @@
 ﻿using SedisBackend.Core.Application.Interfaces.Repositories.Base;
-using SedisBackend.Core.Domain.Presctiptions;
+using SedisBackend.Core.Domain.Prescriptions;
 
 namespace SedisBackend.Core.Application.Interfaces.Repositories.Prescriptions
 {

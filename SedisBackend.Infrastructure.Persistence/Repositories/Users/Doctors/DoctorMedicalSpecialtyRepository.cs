@@ -5,7 +5,7 @@ using SedisBackend.Infrastructure.Persistence.Repositories.Base;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories.Users.Doctors
 {
-    public class DoctorMedicalSpecialtyRepository : GenericRepository<DoctorMedicalSpeciality>, IDoctorMedicalSpeciality
+    public class DoctorMedicalSpecialtyRepository : GenericRepository<DoctorMedicalSpecialty>, IDoctorMedicalSpecialtyRepository
     {
         public DoctorMedicalSpecialtyRepository(SedisContext context) : base(context)
         {
