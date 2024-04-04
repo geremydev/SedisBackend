@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories.Users.Doctors
 {
-    public class MedicalSpecialtyRepository : GenericRepository<MedicalSpeciality>, IMedicalSpeciality
+    public class MedicalSpecialtyRepository : GenericRepository<MedicalSpecialty>, IMedicalSpecialtyRepository
     {
         public MedicalSpecialtyRepository(SedisContext context) : base(context)
         {
