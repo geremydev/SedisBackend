@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Application.Interfaces.Repositories.Base;
 using SedisBackend.Infrastructure.Persistence.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories.Base
 {
@@ -52,7 +47,7 @@ namespace SedisBackend.Infrastructure.Persistence.Repositories.Base
             return await query.ToListAsync();
         }
 
-        public virtual async Task<TEntity> GetEntityByIDAsync(string Id)
+        public virtual async Task<TEntity> GetEntityByIDAsync(int Id)
         {
             return await _entities.FindAsync(Id);
         }
@@ -64,7 +59,7 @@ namespace SedisBackend.Infrastructure.Persistence.Repositories.Base
             return entity;
         }
 
-        public virtual async Task UpdateAsync(TEntity entity, string Id)
+        public virtual async Task UpdateAsync(TEntity entity, int Id)
         {
             var entry = await _context.Set<TEntity>().FindAsync(Id);
             _context.Entry(entry).CurrentValues.SetValues(entity);
