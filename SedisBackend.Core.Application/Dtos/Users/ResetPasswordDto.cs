@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SedisBackend.Core.Application.Dtos.Users
 {
-    public class ResetPasswordViewModel
+    public class ResetPasswordDto
     {
         [Required(ErrorMessage = "Debe colocar el email")]
         [DataType(DataType.Text)]

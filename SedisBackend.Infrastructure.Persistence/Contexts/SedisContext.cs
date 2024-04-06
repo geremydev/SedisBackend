@@ -489,7 +489,6 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
 
             #endregion
 
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

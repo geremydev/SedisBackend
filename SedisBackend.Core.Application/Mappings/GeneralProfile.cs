@@ -8,15 +8,12 @@ namespace SedisBackend.Core.Application.Mappings
     {
         public GeneralProfile() 
         {
-            CreateMap<AuthenticationRequest, LoginViewModel>()
+            CreateMap<AuthenticationRequest, LoginDto>()
                 .ForMember(dest => dest.HasError, opt => opt.Ignore())
                 .ForMember(dest => dest.Error, opt => opt.Ignore())
                 .ReverseMap();
 
-
-
-
-            CreateMap<RegisterRequest, SaveUserViewModel>()
+            CreateMap<RegisterRequest, SaveUserDto>()
                 .ForMember(x => x.HasError, opt => opt.Ignore())
                 .ForMember(x => x.Error, opt => opt.Ignore())
                 .ReverseMap();
@@ -24,7 +21,7 @@ namespace SedisBackend.Core.Application.Mappings
 
 
 
-            CreateMap<ForgotPasswordRequest, ForgotPasswordViewModel>()
+            CreateMap<ForgotPasswordRequest, ForgotPasswordDto>()
                 .ForMember(dest => dest.HasError, opt => opt.Ignore())
                 .ForMember(dest => dest.Error, opt => opt.Ignore())
                 .ReverseMap();
@@ -32,7 +29,7 @@ namespace SedisBackend.Core.Application.Mappings
 
 
 
-            CreateMap<ResetPasswordRequest, ResetPasswordViewModel>()
+            CreateMap<ResetPasswordRequest, ResetPasswordDto>()
                 .ForMember(dest => dest.HasError, opt => opt.Ignore())
                 .ForMember(dest => dest.Error, opt => opt.Ignore())
                 .ReverseMap();

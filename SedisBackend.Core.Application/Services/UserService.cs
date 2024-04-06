@@ -19,7 +19,7 @@ namespace SedisBackend.Core.Application.Services
         }
 
 
-        public async Task<AuthenticationResponse> LoginAsync(LoginViewModel vm)
+        public async Task<AuthenticationResponse> LoginAsync(LoginDto vm)
         {
             AuthenticationRequest loginrequest = _mapper.Map<AuthenticationRequest>(vm);
 
@@ -35,7 +35,7 @@ namespace SedisBackend.Core.Application.Services
 
 
 
-        public async Task<ServiceResult> RegisterAsync(SaveUserViewModel vm, string origin )
+        public async Task<ServiceResult> RegisterAsync(SaveUserDto vm, string origin )
         {
             RegisterRequest registerRequest = _mapper.Map<RegisterRequest>(vm);
             return await _accountservice.RegisterUserAsync(registerRequest, origin, RolesEnum.Patient.ToString());
@@ -47,13 +47,13 @@ namespace SedisBackend.Core.Application.Services
         }
 
 
-        public async Task<ServiceResult> ForgotPasssowrdAsync(ForgotPasswordViewModel vm, string origin)
+        public async Task<ServiceResult> ForgotPasssowrdAsync(ForgotPasswordDto vm, string origin)
         {
             ForgotPasswordRequest forgotRequest = _mapper.Map<ForgotPasswordRequest>(vm);
             return await _accountservice.ForgotPassswordAsync(forgotRequest, origin);
         }
 
-        public async Task<ServiceResult> ResetPasssowrdAsync(ResetPasswordViewModel vm)
+        public async Task<ServiceResult> ResetPasssowrdAsync(ResetPasswordDto vm)
         {
             ResetPasswordRequest resetRequest = _mapper.Map<ResetPasswordRequest>(vm);
             return await _accountservice.ResetPasswordAsync(resetRequest);

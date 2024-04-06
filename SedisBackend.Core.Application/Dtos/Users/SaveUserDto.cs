@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SedisBackend.Core.Application.Dtos.Users
 {
-    public class SaveUserViewModel
+    public class SaveUserDto
     {
         [Required(ErrorMessage = "Debe colocar el nombre del usuario")]
         [DataType(DataType.Text)]
