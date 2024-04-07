@@ -97,14 +97,10 @@ namespace SedisBackend.Core.Application.Mappings
                 .ForMember(x => x.Error, opt => opt.Ignore())
                 .ReverseMap();
 
-
             CreateMap<ForgotPasswordRequest, ForgotPasswordDto>()
                 .ForMember(dest => dest.HasError, opt => opt.Ignore())
                 .ForMember(dest => dest.Error, opt => opt.Ignore())
                 .ReverseMap();
-
-
-
 
             CreateMap<ResetPasswordRequest, ResetPasswordDto>()
                 .ForMember(dest => dest.HasError, opt => opt.Ignore())

@@ -9,8 +9,6 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Products
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class MedicationController : BaseApiController
     {
         private readonly IMedicationService _medicationService;

@@ -5,8 +5,6 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Appointment
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class AppointmentController : BaseApiController
     {
         private readonly IAppointmentService _appointmentsService;
