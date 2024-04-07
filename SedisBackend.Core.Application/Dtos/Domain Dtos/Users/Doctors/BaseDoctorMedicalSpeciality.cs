@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors
 {
-    public class BaseDoctorMedicalSpeciality
+    public class BaseMedicalSpeciality
     {
         public int Id { get; set; }
         public int DoctorId { get; set; }

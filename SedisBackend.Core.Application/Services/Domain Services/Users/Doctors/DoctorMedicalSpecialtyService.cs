@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors
 {
-    public class DoctorMedicalSpecialtyService : GenericService<SaveDoctorMedicalSpecialtyDto, BaseDoctorMedicalSpeciality, DoctorMedicalSpecialty>, IDoctorMedicalSpecialtyService
+    public class DoctorMedicalSpecialtyService : GenericService<SaveDoctorMedicalSpecialtyDto, BaseMedicalSpeciality, DoctorMedicalSpecialty>, IDoctorMedicalSpecialtyService
     {
         public DoctorMedicalSpecialtyService(IGenericRepository<DoctorMedicalSpecialty> repository, IMapper mapper) : base(repository, mapper)
         {

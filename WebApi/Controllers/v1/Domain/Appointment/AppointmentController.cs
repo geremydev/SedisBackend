@@ -3,7 +3,7 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Appointments;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Appointment
+namespace WebApi.Controllers.v1.Domain.Appointment
 {
     [Route("api/[controller]")]
     [ApiController]

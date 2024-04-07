@@ -3,7 +3,7 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Health_Centers;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Health_Centers;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Health_Centers
+namespace WebApi.Controllers.v1.Domain.Health_Centers
 {
     public class HealthCenterController : BaseApiController
     {
