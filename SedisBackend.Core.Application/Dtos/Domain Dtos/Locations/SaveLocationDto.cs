@@ -4,7 +4,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Locations
 {
     public class SaveLocationDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public int EntityId { get; set; }
         public int StreetId { get; set; }

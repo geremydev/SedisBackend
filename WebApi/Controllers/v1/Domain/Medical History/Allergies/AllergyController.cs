@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Allergies;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
+using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Medical_History.Allergies
 {
-    public class AllergyController : Controller
+    public class AllergyController : BaseApiController
     {
         private readonly IAllergyService _allergyService;
 

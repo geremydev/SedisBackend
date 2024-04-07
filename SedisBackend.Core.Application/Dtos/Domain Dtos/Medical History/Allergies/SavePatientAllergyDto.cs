@@ -11,7 +11,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergi
 {
     public class SavePatientAllergyDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public int PatientId { get; set; }
         public int AllergyId { get; set; }

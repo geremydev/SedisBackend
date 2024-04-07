@@ -9,7 +9,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical
 {
     public class SaveRiskFactorDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public string Code { get; set; } //SNOMED CT
 

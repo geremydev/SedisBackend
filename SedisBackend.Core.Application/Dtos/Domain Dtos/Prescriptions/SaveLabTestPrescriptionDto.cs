@@ -5,7 +5,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions
 {
     public class SaveLabTestPrescriptionDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public int ClinicalHistoryId { get; set; }
         public int LabTestId { get; set; }
