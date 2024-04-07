@@ -127,6 +127,7 @@ namespace SedisBackend.Core.Application.IOC
             #region Prescription
             services.AddTransient<IPrescriptionService, PrescriptionService>();
             services.AddTransient<IMedicationService, MedicationService>();
+            services.AddTransient<IMedicationPrescriptionService, MedicationPrescriptionService>();
             services.AddTransient<ILabTestPrescriptionService, LabTestPrescriptionService>();
 
             #endregion
