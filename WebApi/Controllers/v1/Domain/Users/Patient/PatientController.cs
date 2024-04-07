@@ -6,10 +6,8 @@ using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Pa
 using SedisBackend.Core.Domain.Users.Patients;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Users.Patient
+namespace WebApi.Controllers.v1.Domain.Users.Patient
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class PatientController : BaseApiController
     {
         private readonly IPatientService _patientService;
