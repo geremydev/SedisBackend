@@ -52,7 +52,7 @@ namespace SedisBackend.Core.Application.Services.Base
             await _repository.DeleteAsync(entity);
         }
 
-        public async Task<SaveDto> GetByIdSaveViewModelAsync(int Id)
+        public async Task<SaveDto> GetByIdSaveDtoAsync(int Id)
         {
             var entity = await _repository.GetEntityByIDAsync(Id);
             return _mapper.Map<SaveDto>(entity);

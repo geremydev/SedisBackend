@@ -6,6 +6,7 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Co
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness_Condition;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
 using SedisBackend.Core.Domain.Medical_History.Vaccines;
+using SedisBackend.Core.Domain.Users.Doctors;
 
 namespace SedisBackend.Core.Domain.Users.Patients
 {

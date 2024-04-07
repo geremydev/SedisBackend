@@ -87,7 +87,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.ToTable("HealthCenters", (string)null);
                 });
 
-            modelBuilder.Entity("SedisBackend.Core.Domain.Location", b =>
+            modelBuilder.Entity("SedisBackend.Core.Domain.Locations.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -310,9 +310,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DiagnosisDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -329,6 +326,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("DiagnosisDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DischargeDate")
                         .HasColumnType("datetime2");
@@ -526,9 +526,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<int>("MedicationId1")
                         .HasColumnType("int");
 
-                    b.Property<string>("PriorAuthorizationRequired")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("PriorAuthorizationRequired")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -661,9 +660,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("ClinicalHistoryId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Extra")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherPrescriptions")
                         .HasColumnType("nvarchar(max)");
@@ -835,7 +831,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.ToTable("DoctorHealthCenters", (string)null);
                 });
 
-            modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.DoctorMedicalSpeciality", b =>
+            modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.DoctorMedicalSpecialty", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -849,16 +845,19 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<int>("MedicalSpecialityId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MedicalSpecialtyId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DoctorId");
 
-                    b.HasIndex("MedicalSpecialityId");
+                    b.HasIndex("MedicalSpecialtyId");
 
                     b.ToTable("DoctorMedicalSpecialities", (string)null);
                 });
 
-            modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.MedicalSpeciality", b =>
+            modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.MedicalSpecialty", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1207,23 +1206,23 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Navigation("HealthCenter");
                 });
 
-            modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.DoctorMedicalSpeciality", b =>
+            modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.DoctorMedicalSpecialty", b =>
                 {
                     b.HasOne("SedisBackend.Core.Domain.Users.Doctors.Doctor", "Doctor")
-                        .WithMany("Specialities")
+                        .WithMany("Specialties")
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SedisBackend.Core.Domain.Users.Doctors.MedicalSpeciality", "MedicalSpeciality")
+                    b.HasOne("SedisBackend.Core.Domain.Users.Doctors.MedicalSpecialty", "MedicalSpecialty")
                         .WithMany()
-                        .HasForeignKey("MedicalSpecialityId")
+                        .HasForeignKey("MedicalSpecialtyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Doctor");
 
-                    b.Navigation("MedicalSpeciality");
+                    b.Navigation("MedicalSpecialty");
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Health_Centers.HealthCenter", b =>
@@ -1265,7 +1264,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Navigation("DevelopedClinicalHistories");
 
-                    b.Navigation("Specialities");
+                    b.Navigation("Specialties");
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Users.Patients.Patient", b =>

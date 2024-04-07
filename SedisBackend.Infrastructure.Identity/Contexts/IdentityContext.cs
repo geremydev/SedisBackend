@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SedisBackend.Infrastructure.Identity.Entities;
+using SedisBackend.Infrastructure.Identity.Relation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,18 @@ namespace SedisBackend.Infrastructure.Identity.Contexts
             {
                 entity.ToTable(name: "UserLogins");
             });
-        }
+
+            modelBuilder.Entity<UserEntityRelation>().ToTable("UserEntityRelation");
+
+            modelBuilder.Entity<UserEntityRelation>()
+            .HasKey(p => p.Id);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(k => k.AssignedUsers)
+                .WithOne(k => k.User)
+                .HasForeignKey(k => k.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+    }
     }
 }

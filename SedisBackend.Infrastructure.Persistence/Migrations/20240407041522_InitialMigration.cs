@@ -96,8 +96,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DiagnosisDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -266,7 +265,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
-                    MedicalSpecialityId = table.Column<int>(type: "int", nullable: false)
+                    MedicalSpecialityId = table.Column<int>(type: "int", nullable: false),
+                    MedicalSpecialtyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -278,8 +278,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DoctorMedicalSpecialities_MedicalSpecialities_MedicalSpecialityId",
-                        column: x => x.MedicalSpecialityId,
+                        name: "FK_DoctorMedicalSpecialities_MedicalSpecialities_MedicalSpecialtyId",
+                        column: x => x.MedicalSpecialtyId,
                         principalTable: "MedicalSpecialities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -297,7 +297,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     CoverageStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CopayAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CoinsurancePercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PriorAuthorizationRequired = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PriorAuthorizationRequired = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -502,6 +502,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     PatientId = table.Column<int>(type: "int", nullable: false),
                     IllnessId = table.Column<int>(type: "int", nullable: false),
                     DocumentURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DiagnosisDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DischargeDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -584,8 +585,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClinicalHistoryId = table.Column<int>(type: "int", nullable: false),
-                    OtherPrescriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Extra = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    OtherPrescriptions = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -710,9 +710,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 column: "DoctorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DoctorMedicalSpecialities_MedicalSpecialityId",
+                name: "IX_DoctorMedicalSpecialities_MedicalSpecialtyId",
                 table: "DoctorMedicalSpecialities",
-                column: "MedicalSpecialityId");
+                column: "MedicalSpecialtyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FamilyHistories_PatientId",
