@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Products;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Users;
@@ -36,6 +39,9 @@ using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Patients;
 using SedisBackend.Core.Domain.Appointments;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
+using SedisBackend.Core.Domain.Prescriptions;
+using SedisBackend.Core.Domain.Products;
+using SedisBackend.Core.Domain.Users.Doctors;
 using SedisBackend.Core.Domain.Users.Patients;
 
 namespace SedisBackend.Core.Application.Mappings
@@ -76,13 +82,10 @@ namespace SedisBackend.Core.Application.Mappings
             #region Domain Services
 
             #region Appointments
-
-            CreateMap<Appointment, SaveAppointmentDto>()
-                .ReverseMap();
-
-            CreateMap<Appointment, BaseAppointmentDto>()
-                .ReverseMap();
-
+                CreateMap<Appointment, SaveAppointmentDto>()
+                    .ReverseMap();
+                CreateMap<Appointment, BaseAppointmentDto>()
+                    .ReverseMap();
             #endregion
 
             #region HealthCenters
@@ -138,31 +141,49 @@ namespace SedisBackend.Core.Application.Mappings
 
             #region Presctiption
 
+            #region LabTestPrescription
+                CreateMap<LabTestPrescription, BaseLabTestPrescriptionDto>()
+                    .ReverseMap();
+                CreateMap<LabTestPrescription, SaveLabTestPrescriptionDto>()
+                    .ReverseMap();
+            #endregion
+
+            #region MedicationPrescription
+                CreateMap<MedicationPrescription, BaseMedicationPrescriptionDto>()
+                    .ReverseMap();
+            CreateMap<MedicationPrescription, SaveMedicationPrescriptionDto>()
+                .ReverseMap();
+            #endregion
+
             #endregion
 
             #region Products
+
+            #region Medication
+                CreateMap<Medication, BaseMedicationDto>()
+                    .ReverseMap();
+                CreateMap<Medication, SaveMedicationDto>()
+                    .ReverseMap();
+            #endregion
 
             #endregion
 
             #region Users
 
             #region Patient
-
             CreateMap<BasePatientDto, SavePatientDto>()
                 .ReverseMap();
-
-
             CreateMap<Patient, SavePatientDto>()
                 .ReverseMap();
-
-
             CreateMap<Patient, BasePatientDto>()
                 .ReverseMap();
-
             #endregion
 
             #region Doctor
-
+            CreateMap<Doctor, BaseDoctorDto>()
+                .ReverseMap();
+            CreateMap<Doctor, SaveDoctorDto>()
+                .ReverseMap();
             #endregion
 
             #endregion
