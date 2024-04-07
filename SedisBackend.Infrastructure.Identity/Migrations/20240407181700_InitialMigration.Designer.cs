@@ -12,7 +12,7 @@ using SedisBackend.Infrastructure.Identity.Contexts;
 namespace SedisBackend.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20240407120155_InitialMigration")]
+    [Migration("20240407181700_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -179,7 +179,6 @@ namespace SedisBackend.Infrastructure.Identity.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")

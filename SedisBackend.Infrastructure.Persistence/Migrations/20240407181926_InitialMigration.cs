@@ -326,8 +326,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     DoctorId = table.Column<int>(type: "int", nullable: false),
                     AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HealthCenterId = table.Column<int>(type: "int", nullable: false),
-                    AppointmentStatus = table.Column<int>(type: "int", nullable: false),
-                    ConsultationType = table.Column<int>(type: "int", nullable: false),
+                    AppointmentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConsultationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ConsultationRoom = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

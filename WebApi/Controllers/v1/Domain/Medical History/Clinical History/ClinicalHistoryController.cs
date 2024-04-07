@@ -1,40 +1,37 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
-using SedisBackend.Core.Domain.Users.Patients;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinical_History;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Allergies;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Clinical_History;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Domain.Users.Patient
+namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
 {
-    public class PatientController : BaseApiController
+    public class ClinicalHistoryController : BaseApiController
     {
-        private readonly IPatientService _patientService;
-        private readonly IMapper _mapper;
+        private readonly IClinicalHistoryService _clinicalHistoryService;
 
-        public PatientController(IPatientService patienService, IMapper mapper)
+        public ClinicalHistoryController(IClinicalHistoryService clinicalHistoryService)
         {
-            _patientService = patienService;
-            _mapper = mapper;
+            _clinicalHistoryService = clinicalHistoryService;
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseClinicalHistoryDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get()
         {
             try
             {
-                var patients = await _patientService.GetAllAsync();
+                var allergies = await _clinicalHistoryService.GetAllAsync();
 
-                if (patients == null || patients.Count == 0)
+                if (allergies == null || allergies.Count == 0)
                 {
                     return NotFound();
                 }
 
-                return Ok(patients);
+                return Ok(allergies);
             }
             catch (Exception ex)
             {
@@ -43,14 +40,14 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseClinicalHistoryDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var patient = await _patientService.GetByIdAsync(id);
+                var patient = await _clinicalHistoryService.GetByIdAsync(id);
 
                 if (patient == null)
                 {
@@ -65,38 +62,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
             }
         }
 
-        [HttpGet("GetAllWithInclude/{includes}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BasePatientDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        
-        public async Task<IActionResult> Get(string includes)
-        {
-            try
-            {
-                var list = includes.Split(",").ToList();
-                var patientList = await _patientService.GetAllWithIncludeAsync(list);
-
-                
-
-                if (patientList == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(patientList);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post(SavePatientDto dto)
+        public async Task<IActionResult> Post(SaveClinicalHistoryDto dto)
         {
             try
             {
@@ -105,7 +75,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
                     return BadRequest();
                 }
 
-                await _patientService.AddAsync(dto);
+                await _clinicalHistoryService.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -116,10 +86,10 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
 
 
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePatientDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveClinicalHistoryDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SavePatientDto dto)
+        public async Task<IActionResult> Put(int id, SaveClinicalHistoryDto dto)
         {
             try
             {
@@ -128,7 +98,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
                     return BadRequest();
                 }
 
-                await _patientService.UpdateAsync(dto, id);
+                await _clinicalHistoryService.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -144,7 +114,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
         {
             try
             {
-                await _patientService.Delete(id);
+                await _clinicalHistoryService.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)
@@ -152,7 +122,5 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-
-        
     }
 }

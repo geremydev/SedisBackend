@@ -1,35 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Presctiprions;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Products;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Products;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Domain.Presctiprions
+namespace WebApi.Controllers.v1.Users.Patient
 {
-    public class PresctiprionController : BaseApiController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class MedicationController : BaseApiController
     {
-        private readonly IPrescriptionService _prescriptionService;
+        private readonly IMedicationService _medicationService;
 
-        public PresctiprionController(IPrescriptionService prescriptionService)
+        public MedicationController(IMedicationService medicationService)
         {
-            _prescriptionService = prescriptionService;
+            _medicationService = medicationService;
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePrescriptionDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseMedicationDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get()
         {
             try
             {
-                var prescriptions = await _prescriptionService.GetAllAsync();
+                var medications = await _medicationService.GetAllAsync();
 
-                if (prescriptions == null || prescriptions.Count == 0)
+                if (medications == null || medications.Count == 0)
                 {
                     return NotFound();
                 }
 
-                return Ok(prescriptions);
+                return Ok(medications);
             }
             catch (Exception ex)
             {
@@ -38,21 +44,21 @@ namespace WebApi.Controllers.v1.Domain.Presctiprions
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePrescriptionDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseMedicationDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var prescription = await _prescriptionService.GetByIdAsync(id);
+                var medication = await _medicationService.GetByIdAsync(id);
 
-                if (prescription == null)
+                if (medication == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(prescription);
+                return Ok(medication);
             }
             catch (Exception ex)
             {
@@ -64,7 +70,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiprions
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post(SavePrescriptionDto dto)
+        public async Task<IActionResult> Post(SaveMedicationDto dto)
         {
             try
             {
@@ -73,7 +79,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiprions
                     return BadRequest();
                 }
 
-                await _prescriptionService.AddAsync(dto);
+                await _medicationService.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -84,10 +90,10 @@ namespace WebApi.Controllers.v1.Domain.Presctiprions
 
 
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePrescriptionDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveMedicationDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SavePrescriptionDto dto)
+        public async Task<IActionResult> Put(int id, SaveMedicationDto dto)
         {
             try
             {
@@ -96,7 +102,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiprions
                     return BadRequest();
                 }
 
-                await _prescriptionService.UpdateAsync(dto, id);
+                await _medicationService.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -112,7 +118,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiprions
         {
             try
             {
-                await _prescriptionService.Delete(id);
+                await _medicationService.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

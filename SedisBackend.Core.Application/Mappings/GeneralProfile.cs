@@ -3,12 +3,23 @@
 using AutoMapper;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Health_Centers;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Locations;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Discapacity_Condition;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Illness_Condition;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Risk_Factor_Condition;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinical_History;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Family_History;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Discapacity_Condition;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Illness_Condition;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Risk_Factor_Condition;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Vaccines;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Products;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Users;
@@ -44,6 +55,7 @@ using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Patients;
 using SedisBackend.Core.Domain.Health_Centers;
 using SedisBackend.Core.Domain.Locations;
+using SedisBackend.Core.Domain.Appointments;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
@@ -51,6 +63,16 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness_Condit
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
 using SedisBackend.Core.Domain.Medical_Insurance;
 using SedisBackend.Core.Domain.Prescriptions;
+using SedisBackend.Core.Domain.Medical_History.Clinical_History;
+using SedisBackend.Core.Domain.Medical_History.Family_History;
+using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
+using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness_Condition;
+using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
+using SedisBackend.Core.Domain.Medical_History.Vaccines;
+using SedisBackend.Core.Domain.Medical_Insurance;
+using SedisBackend.Core.Domain.Prescriptions;
+using SedisBackend.Core.Domain.Products;
+using SedisBackend.Core.Domain.Users.Doctors;
 using SedisBackend.Core.Domain.Users.Patients;
 
 #endregion
@@ -92,8 +114,11 @@ namespace SedisBackend.Core.Application.Mappings
 
             #region Domain Services
 
-            #region Appointments    
-
+            #region Appointments
+                CreateMap<Appointment, SaveAppointmentDto>()
+                    .ReverseMap();
+                CreateMap<Appointment, BaseAppointmentDto>()
+                    .ReverseMap();
             #endregion
 
             #region HealthCenters
@@ -122,21 +147,32 @@ namespace SedisBackend.Core.Application.Mappings
             CreateMap<Allergy, BaseAllergyDto>()
                 .ReverseMap();
 
-            
+            #endregion
 
+            #region PatientAllergies
             CreateMap<PatientAllergy, SavePatientAllergyDto>()
                 .ReverseMap();
             CreateMap<PatientAllergy, BasePatientAllergyDto>()
-                .ReverseMap()
-                .ForMember(a => a.Patient , opt => opt.Ignore());
+                .ForMember(p=>p.Patient, opt => opt.Ignore())
+                .ReverseMap();
+
             #endregion
 
             #region Clinical History
-
+            CreateMap<ClinicalHistory, SaveClinicalHistoryDto>()
+                    .ReverseMap();
+            CreateMap<ClinicalHistory, BaseClinicalHistoryDto>()
+                    .ForMember(p => p.Patient, opt => opt.Ignore())
+                    .ReverseMap();
+            CreateMap<ClinicalHistory, BaseClinicalHistoryDto>()
+                    .ReverseMap();
             #endregion
 
             #region Family History
-
+            CreateMap<FamilyHistory, BaseFamilyHistoryDto>()
+                    .ReverseMap();
+            CreateMap<FamilyHistory, SaveFamilyHistoryDto>()
+                    .ReverseMap();
             #endregion
 
             #region Medical Conditions
@@ -195,9 +231,19 @@ namespace SedisBackend.Core.Application.Mappings
             #endregion
 
             #region Vaccines
+            CreateMap<PatientVaccine, BasePatientVaccineDto>()
+                    .ReverseMap();
+            CreateMap<PatientVaccine, SavePatientVaccineDto>()
+                    .ReverseMap();
+            #endregion
 
             #endregion
 
+            #region Medical Insurance
+            CreateMap<PatientHealthInsurance, BasePatientHealthInsuranceDto>()
+                    .ReverseMap();
+            CreateMap<PatientHealthInsurance, SavePatientHealthInsuranceDto>()
+                    .ReverseMap();
             #endregion
 
             #region Medical Insurance
@@ -220,8 +266,11 @@ namespace SedisBackend.Core.Application.Mappings
                 .ReverseMap();
 
 
-            CreateMap<HealthInsurance, SaveHealthInsuranceDto>()
-                .ReverseMap();
+            #region LabTestPrescription
+            CreateMap<LabTestPrescription, BaseLabTestPrescriptionDto>()
+                    .ReverseMap();
+                CreateMap<LabTestPrescription, SaveLabTestPrescriptionDto>()
+                    .ReverseMap();
             #endregion
 
             #region Presctiption
@@ -243,22 +292,33 @@ namespace SedisBackend.Core.Application.Mappings
 
             #region Products
 
+            #region Medication
+                CreateMap<Medication, BaseMedicationDto>()
+                    .ReverseMap();
+                CreateMap<Medication, SaveMedicationDto>()
+                    .ReverseMap();
+            #endregion
+
             #endregion
 
             #region Users
 
             #region Patient
-
-            CreateMap<Patient, BasePatientDto>()
+            CreateMap<BasePatientDto, SavePatientDto>()
                 .ReverseMap();
-
-
             CreateMap<Patient, SavePatientDto>()
                 .ReverseMap();
+
+
+            
+
             #endregion
 
             #region Doctor
-
+            CreateMap<Doctor, BaseDoctorDto>()
+                .ReverseMap();
+            CreateMap<Doctor, SaveDoctorDto>()
+                .ReverseMap();
             #endregion
 
             #endregion

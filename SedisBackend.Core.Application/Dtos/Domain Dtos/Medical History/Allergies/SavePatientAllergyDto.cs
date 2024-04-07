@@ -1,11 +1,4 @@
-﻿using SedisBackend.Core.Domain.Medical_History.Allergies;
-using SedisBackend.Core.Domain.Users.Patients;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 
 namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies
 {

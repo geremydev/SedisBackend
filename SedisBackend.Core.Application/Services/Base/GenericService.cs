@@ -52,19 +52,19 @@ namespace SedisBackend.Core.Application.Services.Base
             await _repository.DeleteAsync(entity);
         }
 
-        public async Task<SaveDto> GetByIdSaveDtoAsync(int Id)
+        public virtual async Task<SaveDto> GetByIdSaveDtoAsync(int Id)
         {
             var entity = await _repository.GetEntityByIDAsync(Id);
             return _mapper.Map<SaveDto>(entity);
         }
 
-        public async Task<List<BaseDto>> FindAllAsync(Expression<Func<Entity, bool>> filter)
+        public virtual async Task<List<BaseDto>> FindAllAsync(Expression<Func<Entity, bool>> filter)
         {
             var query = await _repository.FindAllAsync(filter);
             return _mapper.Map<List<BaseDto>>(query);
         }
 
-        public async Task<List<BaseDto>> GetAllWithIncludeAsync(List<string> properties)
+        public virtual async Task<List<BaseDto>> GetAllWithIncludeAsync(List<string> properties)
         {
             var query = await _repository.GetAllWithIncludeAsync(properties);
             return _mapper.Map<List<BaseDto>>(query);

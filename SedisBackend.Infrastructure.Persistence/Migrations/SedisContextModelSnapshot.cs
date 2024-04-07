@@ -33,15 +33,17 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("AppointmentStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("AppointmentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConsultationRoom")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ConsultationType")
-                        .HasColumnType("int");
+                    b.Property<string>("ConsultationType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");

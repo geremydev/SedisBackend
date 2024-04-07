@@ -12,7 +12,7 @@ using SedisBackend.Infrastructure.Persistence.Contexts;
 namespace SedisBackend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SedisContext))]
-    [Migration("20240407115906_InitialMigration")]
+    [Migration("20240407181926_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -36,15 +36,17 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("AppointmentStatus")
-                        .HasColumnType("int");
+                    b.Property<string>("AppointmentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConsultationRoom")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ConsultationType")
-                        .HasColumnType("int");
+                    b.Property<string>("ConsultationType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
