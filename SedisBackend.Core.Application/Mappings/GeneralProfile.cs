@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
@@ -33,6 +34,7 @@ using SedisBackend.Core.Application.Services.Domain_Services.Prescriptions;
 using SedisBackend.Core.Application.Services.Domain_Services.Products;
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Patients;
+using SedisBackend.Core.Domain.Appointments;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
 using SedisBackend.Core.Domain.Users.Patients;
 
@@ -73,7 +75,13 @@ namespace SedisBackend.Core.Application.Mappings
 
             #region Domain Services
 
-            #region Appointments    
+            #region Appointments
+
+            CreateMap<Appointment, SaveAppointmentDto>()
+                .ReverseMap();
+
+            CreateMap<Appointment, BaseAppointmentDto>()
+                .ReverseMap();
 
             #endregion
 

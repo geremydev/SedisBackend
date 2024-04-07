@@ -20,7 +20,7 @@ namespace WebApi.Controllers.v1.Appointment
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAppointmentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> GetAllAppointments()
+        public async Task<ActionResult> Get()
         {
             try
             {
@@ -43,7 +43,7 @@ namespace WebApi.Controllers.v1.Appointment
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAppointmentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> GetAppointment(int id)
+        public async Task<ActionResult> Get(int id)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace WebApi.Controllers.v1.Appointment
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> CreateAppointment(SaveAppointmentDto appointment)
+        public async Task<ActionResult> Post(SaveAppointmentDto appointment)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace WebApi.Controllers.v1.Appointment
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAppointmentDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> UpdateAppointment(int id, SaveAppointmentDto appointment)
+        public async Task<ActionResult> Put(int id, SaveAppointmentDto appointment)
         {
             try
             {
@@ -106,11 +106,11 @@ namespace WebApi.Controllers.v1.Appointment
             }
         }
 
-        [HttpPatch]
+        [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAppointmentDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> PatchAppointment(int id, SaveAppointmentDto appointment)
+        public async Task<ActionResult> Patch(int id, SaveAppointmentDto appointment)
         {
             try
             {
