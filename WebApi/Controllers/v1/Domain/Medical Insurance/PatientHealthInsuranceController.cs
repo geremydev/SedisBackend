@@ -1,37 +1,35 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_Insurance;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Users.Patient
+namespace WebApi.Controllers.v1.Medical_Insurance
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PatientController : BaseApiController
+    public class PatientHealthInsuranceController : BaseApiController
     {
-        private readonly IPatientService _patienService;
+        private readonly IPatientHealthInsuranceService _patientHealthInsuranceService;
 
-        public PatientController(IPatientService patienService)
+        public PatientHealthInsuranceController(IPatientHealthInsuranceService patientHealthInsuranceService)
         {
-            _patienService = patienService;
+            _patientHealthInsuranceService = patientHealthInsuranceService;
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientHealthInsuranceDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get()
         {
             try
             {
-                var patients = await _patienService.GetAllAsync();
+                var patientHealtInsurances = await _patientHealthInsuranceService.GetAllAsync();
 
-                if (patients == null || patients.Count == 0)
+                if (patientHealtInsurances == null || patientHealtInsurances.Count == 0)
                 {
                     return NotFound();
                 }
 
-                return Ok(patients);
+                return Ok(patientHealtInsurances);
             }
             catch (Exception ex)
             {
@@ -40,21 +38,21 @@ namespace WebApi.Controllers.v1.Users.Patient
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientHealthInsuranceDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var patient = await _patienService.GetByIdAsync(id);
+                var patientHealtInsurance = await _patientHealthInsuranceService.GetByIdAsync(id);
 
-                if (patient == null)
+                if (patientHealtInsurance == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(patient);
+                return Ok(patientHealtInsurance);
             }
             catch (Exception ex)
             {
@@ -66,7 +64,7 @@ namespace WebApi.Controllers.v1.Users.Patient
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post(SavePatientDto dto)
+        public async Task<IActionResult> Post(SavePatientHealthInsuranceDto dto)
         {
             try
             {
@@ -75,7 +73,7 @@ namespace WebApi.Controllers.v1.Users.Patient
                     return BadRequest();
                 }
 
-                await _patienService.AddAsync(dto);
+                await _patientHealthInsuranceService.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -86,10 +84,10 @@ namespace WebApi.Controllers.v1.Users.Patient
 
 
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePatientDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePatientHealthInsuranceDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SavePatientDto dto)
+        public async Task<IActionResult> Put(int id, SavePatientHealthInsuranceDto dto)
         {
             try
             {
@@ -98,7 +96,7 @@ namespace WebApi.Controllers.v1.Users.Patient
                     return BadRequest();
                 }
 
-                await _patienService.UpdateAsync(dto, id);
+                await _patientHealthInsuranceService.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -114,7 +112,7 @@ namespace WebApi.Controllers.v1.Users.Patient
         {
             try
             {
-                await _patienService.Delete(id);
+                await _patientHealthInsuranceService.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

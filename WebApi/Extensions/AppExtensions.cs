@@ -10,7 +10,7 @@ namespace SedisBackend.WebApi.Extensions
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "StockApp API");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Sedis API");
                 options.DefaultModelRendering(ModelRendering.Model);
             });
         }
