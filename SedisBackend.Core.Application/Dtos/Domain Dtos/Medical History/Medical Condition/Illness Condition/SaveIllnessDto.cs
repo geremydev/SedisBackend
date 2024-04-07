@@ -9,7 +9,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical
 {
     public class SaveIllnessDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
 
         // Código de la enfermedad (ICD-10, SNOMED CT, etc.)

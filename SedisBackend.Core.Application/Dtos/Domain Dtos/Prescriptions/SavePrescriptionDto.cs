@@ -11,7 +11,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions
 {
     public class SavePrescriptionDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public int ClinicalHistoryId { get; set; }
         public string? OtherPrescriptions { get; set; }

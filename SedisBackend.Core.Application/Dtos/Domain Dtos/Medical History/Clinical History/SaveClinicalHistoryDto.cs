@@ -12,7 +12,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinica
 {
     public class SaveClinicalHistoryDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
