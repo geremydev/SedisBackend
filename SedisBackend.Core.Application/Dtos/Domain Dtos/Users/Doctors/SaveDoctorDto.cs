@@ -9,7 +9,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors
 {
     public class SaveDoctorDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

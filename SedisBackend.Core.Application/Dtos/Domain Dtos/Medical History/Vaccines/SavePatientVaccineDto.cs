@@ -11,7 +11,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Vaccine
 {
     public class SavePatientVaccineDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public int PatientId { get; set; }
         public string VaccineId { get; set; }

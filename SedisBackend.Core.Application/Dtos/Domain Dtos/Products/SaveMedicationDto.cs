@@ -9,7 +9,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Products
 {
     public class SaveMedicationDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public string Name { get; set; }
         public string DosageForm { get; set; } // Usando el Enum DosageForm

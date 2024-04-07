@@ -4,7 +4,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments
 {
     public class SaveAppointmentDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public int PatientId { get; set; }
         public int DoctorId { get; set; }

@@ -10,7 +10,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance
 {
     public class SaveHealthInsuranceDto
     {
-        [JsonIgnore]
         public int Id { get; set; }
         public string InsuranceName { get; set; }
         public string PolicyType { get; set; } // Usando el enum PolicyType
