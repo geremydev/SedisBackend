@@ -3,7 +3,7 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1
+namespace WebApi.Controllers.v1.Users.Patient
 {
     [Route("api/[controller]")]
     [ApiController]
