@@ -1,6 +1,13 @@
 ﻿using AutoMapper;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinical_History;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Family_History;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Discapacity_Condition;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Illness_Condition;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Risk_Factor_Condition;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Vaccines;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Products;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
@@ -39,6 +46,13 @@ using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Patients;
 using SedisBackend.Core.Domain.Appointments;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
+using SedisBackend.Core.Domain.Medical_History.Clinical_History;
+using SedisBackend.Core.Domain.Medical_History.Family_History;
+using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
+using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness_Condition;
+using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
+using SedisBackend.Core.Domain.Medical_History.Vaccines;
+using SedisBackend.Core.Domain.Medical_Insurance;
 using SedisBackend.Core.Domain.Prescriptions;
 using SedisBackend.Core.Domain.Products;
 using SedisBackend.Core.Domain.Users.Doctors;
@@ -103,51 +117,82 @@ namespace SedisBackend.Core.Application.Mappings
                 .ReverseMap();
             CreateMap<Allergy, BaseAllergyDto>()
                 .ReverseMap();
+
             #endregion
 
             #region PatientAllergies
-                CreateMap<PatientAllergy, SavePatientAllergyDto>()
-                    .ReverseMap();
-                CreateMap<PatientAllergy, BasePatientAllergyDto>()
-                    .ReverseMap()
-                    .ForMember(a => a.Patient , opt => opt.Ignore());
+            CreateMap<PatientAllergy, SavePatientAllergyDto>()
+                .ReverseMap();
+            CreateMap<PatientAllergy, BasePatientAllergyDto>()
+                .ForMember(p=>p.Patient, opt => opt.Ignore())
+                .ReverseMap();
+
             #endregion
 
             #region Clinical History
-
+            CreateMap<ClinicalHistory, SaveClinicalHistoryDto>()
+                    .ReverseMap();
+            CreateMap<ClinicalHistory, BaseClinicalHistoryDto>()
+                    .ForMember(p => p.Patient, opt => opt.Ignore())
+                    .ReverseMap();
+            CreateMap<ClinicalHistory, BaseClinicalHistoryDto>()
+                    .ReverseMap();
             #endregion
 
             #region Family History
-
+            CreateMap<FamilyHistory, BaseFamilyHistoryDto>()
+                    .ReverseMap();
+            CreateMap<FamilyHistory, SaveFamilyHistoryDto>()
+                    .ReverseMap();
             #endregion
 
             #region Medical Conditions
 
             #region Discapacity Condition
-
+            CreateMap<PatientDiscapacity, BasePatientDiscapacityDto>()
+                    .ReverseMap();
+            CreateMap<PatientDiscapacity, SavePatientDiscapacityDto>()
+                    .ReverseMap();
             #endregion
 
             #region Illness Condition
-
+            CreateMap<PatientIllness, BasePatientIllnessDto>()
+                    .ReverseMap();
+            CreateMap<PatientIllness, SavePatientIllnessDto>()
+                    .ReverseMap();
             #endregion
 
             #region RiskFactor
-
+            CreateMap<PatientRiskFactor, BasePatientRiskFactorDto>()
+                    .ReverseMap();
+            CreateMap<PatientRiskFactor, SavePatientRiskFactorDto>()
+                    .ReverseMap();
             #endregion
 
             #endregion
 
             #region Vaccines
-
+            CreateMap<PatientVaccine, BasePatientVaccineDto>()
+                    .ReverseMap();
+            CreateMap<PatientVaccine, SavePatientVaccineDto>()
+                    .ReverseMap();
             #endregion
 
             #endregion
 
             #region Medical Insurance
-
+            CreateMap<PatientHealthInsurance, BasePatientHealthInsuranceDto>()
+                    .ReverseMap();
+            CreateMap<PatientHealthInsurance, SavePatientHealthInsuranceDto>()
+                    .ReverseMap();
             #endregion
 
             #region Presctiption
+
+            CreateMap<Prescription, BasePrescriptionDto>()
+                    .ReverseMap();
+            CreateMap<Prescription, SavePrescriptionDto>()
+                .ReverseMap();
 
             #region LabTestPrescription
             CreateMap<LabTestPrescription, BaseLabTestPrescriptionDto>()
@@ -184,7 +229,14 @@ namespace SedisBackend.Core.Application.Mappings
             CreateMap<Patient, SavePatientDto>()
                 .ReverseMap();
             CreateMap<Patient, BasePatientDto>()
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(dest => dest.Allergies, opt => opt.Ignore())
+                .ForMember(dest => dest.ClinicalHistories, opt => opt.Ignore())
+                .ForMember(dest => dest.Illnesses, opt => opt.Ignore())
+                .ForMember(dest => dest.Discapacities, opt => opt.Ignore())
+                .ForMember(dest => dest.RiskFactors, opt => opt.Ignore())
+                .ForMember(dest => dest.Appointments, opt => opt.Ignore());
+
             #endregion
 
             #region Doctor

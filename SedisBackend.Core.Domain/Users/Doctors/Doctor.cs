@@ -11,8 +11,8 @@ namespace SedisBackend.Core.Domain.Users.Doctors
 {
     public class Doctor : BasePerson
     {
-        public ICollection<DoctorHealthCenter> CurrentlyWorkingHealthCenters { get; set; }
         public string LicenseNumber { get; set; }
+        public ICollection<DoctorHealthCenter> CurrentlyWorkingHealthCenters { get; set; }
         public ICollection<DoctorMedicalSpecialty> Specialties { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
         public ICollection<ClinicalHistory> DevelopedClinicalHistories { get; set; }
