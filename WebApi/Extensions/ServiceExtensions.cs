@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace StockApp.WebApi.Extensions
+namespace SedisBackend.WebApi.Extensions
 {
     public static class ServiceExtensions
     {

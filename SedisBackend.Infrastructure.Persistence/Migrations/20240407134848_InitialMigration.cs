@@ -297,7 +297,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     CoverageStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CopayAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CoinsurancePercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PriorAuthorizationRequired = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PriorAuthorizationRequired = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -585,8 +585,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClinicalHistoryId = table.Column<int>(type: "int", nullable: false),
-                    OtherPrescriptions = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Extra = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    OtherPrescriptions = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

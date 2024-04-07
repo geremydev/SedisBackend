@@ -11,6 +11,5 @@ namespace SedisBackend.Core.Domain.Prescriptions
         public ICollection<MedicationPrescription>? PrescribedMedications { get; set; }
         public ICollection<LabTestPrescription>? PrescribedLabTests { get; set; }
         public string? OtherPrescriptions { get; set; }
-        public string? Extra { get; set; } // Special instructions for the medication (nullable)
     }
 }

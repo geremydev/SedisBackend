@@ -12,7 +12,11 @@ using SedisBackend.Infrastructure.Persistence.Contexts;
 namespace SedisBackend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SedisContext))]
+<<<<<<<< HEAD:SedisBackend.Infrastructure.Persistence/Migrations/20240407134848_InitialMigration.Designer.cs
     [Migration("20240407134848_InitialMigration")]
+========
+    [Migration("20240407041522_InitialMigration")]
+>>>>>>>> c1d1ca5390c32b8f8017d8080296a7db8517b223:SedisBackend.Infrastructure.Persistence/Migrations/20240407041522_InitialMigration.Designer.cs
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -529,9 +533,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<int>("MedicationId1")
                         .HasColumnType("int");
 
-                    b.Property<string>("PriorAuthorizationRequired")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("PriorAuthorizationRequired")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -664,9 +667,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("ClinicalHistoryId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Extra")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherPrescriptions")
                         .HasColumnType("nvarchar(max)");

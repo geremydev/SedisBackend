@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-namespace StockApp.WebApi.Extensions
+namespace SedisBackend.WebApi.Extensions
 {
     public static class AppExtensions
     {

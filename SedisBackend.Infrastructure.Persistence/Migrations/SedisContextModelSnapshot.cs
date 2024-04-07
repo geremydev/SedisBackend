@@ -526,9 +526,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<int>("MedicationId1")
                         .HasColumnType("int");
 
-                    b.Property<string>("PriorAuthorizationRequired")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("PriorAuthorizationRequired")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -661,9 +660,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("ClinicalHistoryId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Extra")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherPrescriptions")
                         .HasColumnType("nvarchar(max)");

@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 using SedisBackend.Core.Application.Enums;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
 using SedisBackend.Infrastructure.Identity.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SedisBackend.Infrastructure.Identity.Seeds
 {
