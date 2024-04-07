@@ -1,7 +1,25 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SedisBackend.Infrastructure.Identity.Entities;
+using SedisBackend.Infrastructure.Identity.Seeds;
 using SedisBackend.Infrastructure.Persistence.IOC;
+using SedisBackend.WebApi.Extensions;
+using SedisBackend.Core.Application.IOC;
+using SedisBackend.Infrastructure.Identity.IOC;
+using SedisBackend.Infrastructure.Shared;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new ProducesAttribute("application/json"));
+}).ConfigureApiBehaviorOptions(options =>
+{
+    options.SuppressConsumesConstraintForFormFileParameters = true;
+    options.SuppressMapClientErrors = true;
+});
 
 // Add services to the container.
 
@@ -10,6 +28,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
+builder.Services.IdentityLayerRegistration(builder.Configuration);
+builder.Services.AddSharedInfrastructure(builder.Configuration);
+builder.Services.AddApiVersioningExtension();
+builder.Services.AddSwaggerExtension();
+builder.Services.AddApplicationLayer();
+
+builder.Services.AddHealthChecks();
+builder.Services.AddSwaggerGen();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSession();
+
+
+
 
 var app = builder.Build();
 
@@ -19,11 +51,39 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        await DefaultRoles.SeedAsync(userManager, roleManager);
+        await AdminUser.SeedAsync(userManager, roleManager);
+        await PatientUser.SeedAsync(userManager, roleManager);
+        await SuperAdmin.SeedAsync(userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+
+    }
+}
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseRouting();
 
-app.MapControllers();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSwaggerExtension();
+app.UseHealthChecks("/health");
+app.UseSession();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
