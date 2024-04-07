@@ -2,13 +2,13 @@
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using SedisBackend.Core.Application.Dtos.Email;
+using SedisBackend.Core.Application.Dtos.Shared_Dtos;
 using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Domain.Settings;
 
 namespace SedisBackend.Infrastructure.Shared.Services
 {
-    public class EmailService : IEmailServices
+    public class EmailService : IEmailService
     {
         public MailSettings MailSettings { get; }
 

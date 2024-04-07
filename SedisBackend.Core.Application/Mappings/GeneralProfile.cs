@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using SedisBackend.Core.Application.Dtos.Account;
-using SedisBackend.Core.Application.Dtos.Users;
+using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
+using SedisBackend.Core.Application.Dtos.Identity_Dtos.Users;
 
 namespace SedisBackend.Core.Application.Mappings
 {

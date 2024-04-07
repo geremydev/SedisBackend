@@ -44,7 +44,7 @@ namespace SedisBackend.Infrastructure.Identity.IOC
 
             #endregion
 
-            service.AddTransient<IAccountServices, AccountServices>();
+            service.AddTransient<IAccountService, AccountServices>();
         }
     }
 }

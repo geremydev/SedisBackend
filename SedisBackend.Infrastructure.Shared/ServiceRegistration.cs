@@ -11,7 +11,7 @@ namespace SedisBackend.Infrastructure.Shared
         public static void AddSharedInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
-            services.AddTransient<IEmailServices, EmailService>();
+            services.AddTransient<IEmailService, EmailService>();
         }
     }
 }

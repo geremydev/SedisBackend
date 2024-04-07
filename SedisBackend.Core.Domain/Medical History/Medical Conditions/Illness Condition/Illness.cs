@@ -20,7 +20,5 @@ namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions
         // Descripción de la enfermedad
         public string Description { get; set; }
 
-        // Fecha de diagnóstico
-        public DateTime DiagnosisDate { get; set; }
     }
 }

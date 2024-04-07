@@ -1,29 +1,25 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
-using SedisBackend.Core.Application.Dtos.Account;
-using SedisBackend.Core.Application.Dtos.Email;
 using SedisBackend.Core.Application.Dtos.Error;
+using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
+using SedisBackend.Core.Application.Dtos.Shared_Dtos;
 using SedisBackend.Core.Application.Helpers;
 using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Infrastructure.Identity.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SedisBackend.Infrastructure.Identity.Services
 {
-    public class AccountServices: IAccountServices
+    public class AccountServices: IAccountService
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailServices _emailServices;
+        private readonly IEmailService _emailServices;
 
         public AccountServices(UserManager<ApplicationUser> userManager,
                              SignInManager<ApplicationUser> signInManager,
-                             IEmailServices emailServices)
+                             IEmailService emailServices)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -296,7 +292,7 @@ namespace SedisBackend.Infrastructure.Identity.Services
 
             var verificationURI = await SendForgotPasswordUri(user, origin);
 
-            await _emailServices.SendAsync(new Core.Application.Dtos.Email.EmailRequest()
+            await _emailServices.SendAsync(new EmailRequest()
             {
                 To = user.Email,
                 Body = $"Please reset your account visiting this URL {verificationURI}",
