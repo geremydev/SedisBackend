@@ -15,8 +15,8 @@ namespace SedisBackend.WebApi.Extensions
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "StockApp API",
-                    Description = "This Api will be responsible for overall data distribution",
+                    Title = "Sedis API",
+                    Description = "This is APi is for the services of sedis.",
                     Contact = new OpenApiContact
                     {
                         Name = "Yahinniel Vasquez",

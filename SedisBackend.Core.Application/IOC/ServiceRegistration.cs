@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿#region usings
+
+using Microsoft.Extensions.DependencyInjection;
 using SedisBackend.Core.Application.Interfaces.Services.Base;
 using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Application.Services.Base;
@@ -6,23 +8,6 @@ using SedisBackend.Core.Application.Services;
 using System.Reflection;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Patients;
-using Microsoft.EntityFrameworkCore;
-using SedisBackend.Core.Domain.Appointments;
-using SedisBackend.Core.Domain.Health_Centers;
-using SedisBackend.Core.Domain.Locations;
-using SedisBackend.Core.Domain.Medical_History.Allergies;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
-using SedisBackend.Core.Domain.Medical_History.Family_History;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness_Condition;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
-using SedisBackend.Core.Domain.Medical_History.Vaccines;
-using SedisBackend.Core.Domain.Medical_Insurance;
-using SedisBackend.Core.Domain.Prescriptions;
-using SedisBackend.Core.Domain.Products;
-using SedisBackend.Core.Domain.Users.Doctors;
-using SedisBackend.Core.Domain.Users.Patients;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Appointments;
 using SedisBackend.Core.Application.Services.Domain_Services.Appointments;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Health_Centers;
@@ -51,6 +36,8 @@ using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Products
 using SedisBackend.Core.Application.Services.Domain_Services.Products;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
+
+#endregion
 
 namespace SedisBackend.Core.Application.IOC
 {
