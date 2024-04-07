@@ -844,9 +844,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MedicalSpecialityId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MedicalSpecialtyId")
                         .HasColumnType("int");
 

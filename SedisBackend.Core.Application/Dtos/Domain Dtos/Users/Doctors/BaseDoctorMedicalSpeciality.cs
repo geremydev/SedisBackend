@@ -11,7 +11,6 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors
     {
         public int Id { get; set; }
         public int DoctorId { get; set; }
-        public Doctor Doctor { get; set; }
         public int MedicalSpecialityId { get; set; }
         public MedicalSpecialty MedicalSpecialty { get; set; }
     }

@@ -265,7 +265,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
-                    MedicalSpecialityId = table.Column<int>(type: "int", nullable: false),
                     MedicalSpecialtyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

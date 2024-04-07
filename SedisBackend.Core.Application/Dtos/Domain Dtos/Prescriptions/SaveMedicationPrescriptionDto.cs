@@ -13,7 +13,7 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions
     public class SaveMedicationPrescriptionDto
     {
         public int Id { get; set; }
-        public string PatientId { get; set; }
+        public int PatientId { get; set; }
         public int MedicationId { get; set; }
         public int PrescriptionId { get; set; }
         public DateTime? TreatmentStart { get; set; }

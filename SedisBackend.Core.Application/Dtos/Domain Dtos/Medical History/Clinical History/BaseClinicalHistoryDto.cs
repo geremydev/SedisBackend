@@ -22,6 +22,5 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinica
         public string CurrentHistory { get; set; }
         public string? PhysicalExamination { get; set; }
         public string? Diagnosis { get; set; }
-        public Prescription? Prescription { get; set; }
     }
 }

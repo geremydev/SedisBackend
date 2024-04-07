@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Health_Centers;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Locations;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinical_History;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Family_History;
@@ -45,6 +47,8 @@ using SedisBackend.Core.Application.Services.Domain_Services.Products;
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Patients;
 using SedisBackend.Core.Domain.Appointments;
+using SedisBackend.Core.Domain.Health_Centers;
+using SedisBackend.Core.Domain.Locations;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Medical_History.Family_History;
@@ -103,11 +107,17 @@ namespace SedisBackend.Core.Application.Mappings
             #endregion
 
             #region HealthCenters
-
+            CreateMap<HealthCenter, BaseHealthCenterDto>()
+                .ReverseMap();
+            CreateMap<HealthCenter, SaveHealthCenterDto>()
+                .ReverseMap();
             #endregion
 
             #region Location
-
+                CreateMap<Location, BaseLocationDto>()
+                    .ReverseMap();
+                CreateMap<Location, SaveLocationDto>()
+                    .ReverseMap();
             #endregion
 
             #region Medical History

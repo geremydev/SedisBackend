@@ -12,7 +12,7 @@ using SedisBackend.Infrastructure.Persistence.Contexts;
 namespace SedisBackend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SedisContext))]
-    [Migration("20240407181926_InitialMigration")]
+    [Migration("20240407200635_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -845,9 +845,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MedicalSpecialityId")
                         .HasColumnType("int");
 
                     b.Property<int>("MedicalSpecialtyId")
