@@ -92,6 +92,14 @@ namespace SedisBackend.Core.Application.Mappings
                 .ReverseMap();
             CreateMap<Allergy, BaseAllergyDto>()
                 .ReverseMap();
+
+            
+
+            CreateMap<PatientAllergy, SavePatientAllergyDto>()
+                .ReverseMap();
+            CreateMap<PatientAllergy, BasePatientAllergyDto>()
+                .ReverseMap()
+                .ForMember(a => a.Patient , opt => opt.Ignore());
             #endregion
 
             #region Clinical History
@@ -140,7 +148,7 @@ namespace SedisBackend.Core.Application.Mappings
 
             #region Patient
 
-            CreateMap<BasePatientDto, SavePatientDto>()
+            CreateMap<Patient, BasePatientDto>()
                 .ReverseMap();
 
 
@@ -148,8 +156,7 @@ namespace SedisBackend.Core.Application.Mappings
                 .ReverseMap();
 
 
-            CreateMap<Patient, BasePatientDto>()
-                .ReverseMap();
+            
 
             #endregion
 

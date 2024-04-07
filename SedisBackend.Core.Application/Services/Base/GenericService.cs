@@ -63,5 +63,11 @@ namespace SedisBackend.Core.Application.Services.Base
             var query = await _repository.FindAllAsync(filter);
             return _mapper.Map<List<BaseDto>>(query);
         }
+
+        public async Task<List<BaseDto>> GetAllWithIncludeAsync(List<string> properties)
+        {
+            var query = await _repository.GetAllWithIncludeAsync(properties);
+            return _mapper.Map<List<BaseDto>>(query);
+        }
     }
 }

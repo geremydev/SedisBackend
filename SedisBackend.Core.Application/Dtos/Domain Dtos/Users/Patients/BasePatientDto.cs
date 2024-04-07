@@ -1,4 +1,12 @@
-﻿using SedisBackend.Core.Domain.Appointments;
+﻿using SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinical_History;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Family_History;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Discapacity_Condition;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Illness_Condition;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Risk_Factor_Condition;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Vaccines;
+using SedisBackend.Core.Domain.Appointments;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Medical_History.Family_History;
@@ -22,13 +30,13 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients
         public string? EmergencyContactName { get; set; }
         public string? EmergencyContactPhone { get; set; }
         public int? PrimaryCarePhysicianId { get; set; }
-        public List<ClinicalHistory> ClinicalHistories { get; set; }
-        public List<Appointment>? Appointments { get; set; }
-        public List<PatientAllergy>? Allergies { get; set; }
-        public List<PatientIllness>? Illnesses { get; set; }
-        public List<PatientDiscapacity>? Discapacities { get; set; }
-        public List<PatientRiskFactor>? RiskFactors { get; set; }
-        public List<PatientVaccine>? Vaccines { get; set; }
-        public List<FamilyHistory> FamilyHistories { get; set; }
+        public List<BaseClinicalHistoryDto> ClinicalHistories { get; set; }
+        public List<BaseAppointmentDto>? Appointments { get; set; }
+        public List<BasePatientAllergyDto>? Allergies { get; set; }
+        public List<BaseIllnessDto>? Illnesses { get; set; }
+        public List<BasePatientDiscapacityDto>? Discapacities { get; set; }
+        public List<BasePatientRiskFactorDto>? RiskFactors { get; set; }
+        public List<BasePatientVaccineDto>? Vaccines { get; set; }
+        public List<BaseFamilyHistoryDto> FamilyHistories { get; set; }
     }
 }

@@ -14,5 +14,6 @@ namespace SedisBackend.Core.Application.Interfaces.Services.Base
         public Task UpdateAsync(SaveDto vm, int Id);
         public Task Delete(int Id);
         Task<List<BaseDto>> FindAllAsync(Expression<Func<Model, bool>> filter);
+        Task<List<BaseDto>> GetAllWithIncludeAsync(List<string> properties);
     }
 }
