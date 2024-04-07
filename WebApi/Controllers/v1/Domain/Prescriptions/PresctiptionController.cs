@@ -3,13 +3,13 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Presctiprions;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Domain.Presctiprions
+namespace WebApi.Controllers.v1.Domain.Presctiptions
 {
-    public class PresctiprionController : BaseApiController
+    public class PresctiptionController : BaseApiController
     {
         private readonly IPrescriptionService _prescriptionService;
 
-        public PresctiprionController(IPrescriptionService prescriptionService)
+        public PresctiptionController(IPrescriptionService prescriptionService)
         {
             _prescriptionService = prescriptionService;
         }

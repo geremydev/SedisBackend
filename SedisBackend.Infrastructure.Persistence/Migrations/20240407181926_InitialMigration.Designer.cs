@@ -12,7 +12,7 @@ using SedisBackend.Infrastructure.Persistence.Contexts;
 namespace SedisBackend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SedisContext))]
-    [Migration("20240407143844_InitialMigration")]
+    [Migration("20240407181926_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
