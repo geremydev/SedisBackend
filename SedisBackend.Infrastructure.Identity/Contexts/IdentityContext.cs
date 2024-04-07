@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SedisBackend.Core.Domain.Health_Centers;
 using SedisBackend.Infrastructure.Identity.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SedisBackend.Infrastructure.Identity.Relation;
+
 
 namespace SedisBackend.Infrastructure.Identity.Contexts
 {
@@ -14,6 +12,7 @@ namespace SedisBackend.Infrastructure.Identity.Contexts
     {
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) { }
 
+        public DbSet<UserEntityRelation> UserEntityRelation { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +41,17 @@ namespace SedisBackend.Infrastructure.Identity.Contexts
             {
                 entity.ToTable(name: "UserLogins");
             });
+
+            modelBuilder.Entity<UserEntityRelation>().ToTable("UserEntityRelation");
+
+            modelBuilder.Entity<UserEntityRelation>()
+            .HasKey(p => p.Id);
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(k => k.AssignedUsers)
+                .WithOne(k => k.User)
+                .HasForeignKey(k => k.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
