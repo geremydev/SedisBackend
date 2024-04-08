@@ -754,6 +754,26 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.ToTable("Medications", (string)null);
                 });
 
+            modelBuilder.Entity("SedisBackend.Core.Domain.UserEntityRelation.UserEntityRelation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserEntityRelation", (string)null);
+                });
+
             modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.Doctor", b =>
                 {
                     b.Property<int>("Id")

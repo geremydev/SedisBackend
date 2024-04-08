@@ -14,6 +14,7 @@ using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medi
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_Insurance;
 using SedisBackend.Core.Application.Interfaces.Repositories.Prescriptions;
 using SedisBackend.Core.Application.Interfaces.Repositories.Products;
+using SedisBackend.Core.Application.Interfaces.Repositories.UserEntityRelations;
 using SedisBackend.Core.Application.Interfaces.Repositories.Users.Doctors;
 using SedisBackend.Core.Application.Interfaces.Repositories.Users.Patients;
 using SedisBackend.Infrastructure.Persistence.Contexts;
@@ -29,6 +30,7 @@ using SedisBackend.Infrastructure.Persistence.Repositories.Medical_History.Medic
 using SedisBackend.Infrastructure.Persistence.Repositories.Medical_Insurance;
 using SedisBackend.Infrastructure.Persistence.Repositories.Presctiption;
 using SedisBackend.Infrastructure.Persistence.Repositories.Products;
+using SedisBackend.Infrastructure.Persistence.Repositories.UserEntityRelations;
 using SedisBackend.Infrastructure.Persistence.Repositories.Users.Doctors;
 using SedisBackend.Infrastructure.Persistence.Repositories.Users.Patients;
 
@@ -110,6 +112,10 @@ namespace SedisBackend.Infrastructure.Persistence.IOC
 
             #endregion
 
+            #endregion
+
+            #region UserEntityRelation
+            services.AddTransient<IUserEntityRelationRepository, UserEntityRelationRepository>();
             #endregion
 
             #region Medical Insurance

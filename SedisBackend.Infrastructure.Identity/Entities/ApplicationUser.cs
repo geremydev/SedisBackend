@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SedisBackend.Infrastructure.Identity.Relation;
+using SedisBackend.Core.Domain.UserEntityRelation;
 
 namespace SedisBackend.Infrastructure.Identity.Entities
 {

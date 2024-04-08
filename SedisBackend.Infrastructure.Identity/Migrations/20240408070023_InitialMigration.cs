@@ -132,15 +132,16 @@ namespace SedisBackend.Infrastructure.Identity.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EntityId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EntityId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserEntityRelation", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserEntityRelation_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_UserEntityRelation_Users_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalSchema: "Identity",
                         principalTable: "Users",
                         principalColumn: "Id");
@@ -216,10 +217,10 @@ namespace SedisBackend.Infrastructure.Identity.Migrations
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserEntityRelation_UserId",
+                name: "IX_UserEntityRelation_ApplicationUserId",
                 schema: "Identity",
                 table: "UserEntityRelation",
-                column: "UserId");
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserLogins_UserId",

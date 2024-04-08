@@ -12,6 +12,7 @@ using SedisBackend.Core.Domain.Settings;
 using SedisBackend.Infrastructure.Identity.Contexts;
 using SedisBackend.Infrastructure.Identity.Entities;
 using SedisBackend.Infrastructure.Identity.Services;
+using System.Reflection;
 using System.Text;
 
 namespace SedisBackend.Infrastructure.Identity.IOC
@@ -99,6 +100,7 @@ namespace SedisBackend.Infrastructure.Identity.IOC
             });
             #endregion
 
+            service.AddAutoMapper(Assembly.GetExecutingAssembly());
             service.AddTransient<IAccountService, AccountServices>();
         }
     }

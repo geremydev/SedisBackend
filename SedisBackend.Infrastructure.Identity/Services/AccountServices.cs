@@ -1,37 +1,49 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 using SedisBackend.Core.Application.Dtos.Error;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
 using SedisBackend.Core.Application.Dtos.Shared_Dtos;
 using SedisBackend.Core.Application.Helpers;
 using SedisBackend.Core.Application.Interfaces.Services;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.User_Entity_Relation;
 using SedisBackend.Core.Domain.Settings;
+using SedisBackend.Core.Domain.UserEntityRelation;
 using SedisBackend.Infrastructure.Identity.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.User_Entity_Relation;
 
 namespace SedisBackend.Infrastructure.Identity.Services
 {
     public class AccountServices: IAccountService
     {
+        private readonly IPatientService _patientService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailServices;
         private readonly JWTSettings _jwtSettings;
+        private readonly IMapper _mapper;
+        private readonly IUserEntityRelationService _userEntityRelationService;
 
         public AccountServices(UserManager<ApplicationUser> userManager,
-                             SignInManager<ApplicationUser> signInManager,
-                             IEmailService emailServices,
-                             JWTSettings jwtSettings)
+            SignInManager<ApplicationUser> signInManager, IEmailService emailServices,
+            IMapper mapper, JWTSettings jwtSettings,IPatientService patientService,
+            IUserEntityRelationService userEntityRelationService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _emailServices = emailServices;
             _jwtSettings = jwtSettings;
+            _mapper = mapper;
+            _patientService = patientService;
+            _userEntityRelationService = userEntityRelationService;
         }
 
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
@@ -126,10 +138,26 @@ namespace SedisBackend.Infrastructure.Identity.Services
                 PhoneNumber = request.PhoneNumber
             };
 
+            var patient = _mapper.Map<SavePatientDto>(request);
+            var p = await _patientService.AddAsync(patient);
+
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (result.Succeeded)
             {
+
+                var userDto = await _userManager.FindByEmailAsync(user.Email);
+
+                var userEntityRelation = new UserEntityRelation
+                {
+                    UserId = userDto.Id,
+                    EntityId = p.Id
+                };
+
+                var userEntityRelationDto = _mapper.Map<SaveUserEntityRelation>(userEntityRelation);
+
+                await _userEntityRelationService.AddAsync(userEntityRelationDto);
+
                 await _userManager.AddToRoleAsync(user, UserRoles);
                 var verificationURI = await SendVerificationUri(user, origin);
                 await _emailServices.SendAsync(new EmailRequest()

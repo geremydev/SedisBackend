@@ -13,6 +13,7 @@ using SedisBackend.Core.Domain.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.Medical_Insurance;
 using SedisBackend.Core.Domain.Prescriptions;
 using SedisBackend.Core.Domain.Products;
+using SedisBackend.Core.Domain.UserEntityRelation;
 using SedisBackend.Core.Domain.Users.Doctors;
 using SedisBackend.Core.Domain.Users.Patients;
 
@@ -179,6 +180,12 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
             modelBuilder.Entity<MedicationCoverage>().ToTable("MedicationCoverages");
             #endregion
 
+            #region UserEntityRelation
+
+            modelBuilder.Entity<UserEntityRelation>().ToTable("UserEntityRelation");
+
+            #endregion
+
             #region Presctiption
             modelBuilder.Entity<MedicationPrescription>().ToTable("MedicationPrescriptions");
             modelBuilder.Entity<LabTestPrescription>().ToTable("LabTestPrescriptions");
@@ -260,6 +267,11 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
             modelBuilder.Entity<PatientVaccine>().HasKey(p => p.Id);
             #endregion
 
+            #endregion
+
+            #region UserEntityRelation 
+            modelBuilder.Entity<UserEntityRelation>()
+            .HasKey(p => p.Id);
             #endregion
 
             #region Medical Insurance
@@ -486,6 +498,14 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
                     v => v.ToString("HH:mm:ss"),
                     v => TimeSpan.Parse(v)
                 );
+            #endregion
+
+            #region Patient
+
+            modelBuilder.Entity<Patient>()
+                .Property(p => p.IdCard)
+                .(true);
+
             #endregion
 
             #endregion

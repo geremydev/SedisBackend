@@ -12,7 +12,7 @@ using SedisBackend.Infrastructure.Identity.Contexts;
 namespace SedisBackend.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20240408005229_InitialMigration")]
+    [Migration("20240408070023_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -159,6 +159,31 @@ namespace SedisBackend.Infrastructure.Identity.Migrations
                     b.ToTable("AspNetUserTokens", "Identity");
                 });
 
+            modelBuilder.Entity("SedisBackend.Core.Domain.UserEntityRelation.UserEntityRelation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("UserEntityRelation", "Identity");
+                });
+
             modelBuilder.Entity("SedisBackend.Infrastructure.Identity.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -230,29 +255,6 @@ namespace SedisBackend.Infrastructure.Identity.Migrations
                     b.ToTable("Users", "Identity");
                 });
 
-            modelBuilder.Entity("SedisBackend.Infrastructure.Identity.Relation.UserEntityRelation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("EntityId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserEntityRelation", "Identity");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -304,15 +306,11 @@ namespace SedisBackend.Infrastructure.Identity.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SedisBackend.Infrastructure.Identity.Relation.UserEntityRelation", b =>
+            modelBuilder.Entity("SedisBackend.Core.Domain.UserEntityRelation.UserEntityRelation", b =>
                 {
-                    b.HasOne("SedisBackend.Infrastructure.Identity.Entities.ApplicationUser", "User")
+                    b.HasOne("SedisBackend.Infrastructure.Identity.Entities.ApplicationUser", null)
                         .WithMany("AssignedUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("SedisBackend.Infrastructure.Identity.Entities.ApplicationUser", b =>

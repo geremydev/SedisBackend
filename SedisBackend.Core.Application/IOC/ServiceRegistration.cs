@@ -36,6 +36,8 @@ using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Products
 using SedisBackend.Core.Application.Services.Domain_Services.Products;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.User_Entity_Relation;
+using SedisBackend.Core.Application.Services.Domain_Services.User_Entity_Relation;
 
 #endregion
 
@@ -122,6 +124,10 @@ namespace SedisBackend.Core.Application.IOC
             services.AddTransient<IMedicationCoverageService, MedicationCoverageService>();
             services.AddTransient<IPatientHealthInsuranceService, PatientHealthInsuranceService>();
 
+            #endregion
+
+            #region UserEntityRelation
+            services.AddTransient<IUserEntityRelationService, UserEntityRelationService>();
             #endregion
 
             #region Prescription

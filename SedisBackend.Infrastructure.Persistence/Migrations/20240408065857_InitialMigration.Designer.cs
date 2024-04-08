@@ -12,7 +12,7 @@ using SedisBackend.Infrastructure.Persistence.Contexts;
 namespace SedisBackend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SedisContext))]
-    [Migration("20240408004856_InitialMigration")]
+    [Migration("20240408065857_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -755,6 +755,26 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Medications", (string)null);
+                });
+
+            modelBuilder.Entity("SedisBackend.Core.Domain.UserEntityRelation.UserEntityRelation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserEntityRelation", (string)null);
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.Doctor", b =>

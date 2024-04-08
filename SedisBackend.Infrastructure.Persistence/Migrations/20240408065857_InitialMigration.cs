@@ -216,6 +216,20 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserEntityRelation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EntityId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserEntityRelation", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Vaccines",
                 columns: table => new
                 {
@@ -861,6 +875,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "PatientVaccines");
+
+            migrationBuilder.DropTable(
+                name: "UserEntityRelation");
 
             migrationBuilder.DropTable(
                 name: "HealthCenters");
