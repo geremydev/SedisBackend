@@ -1,4 +1,6 @@
-﻿namespace SedisBackend.Core.Application.Dtos.Identity_Dtos.Account
+﻿using System.Text.Json.Serialization;
+
+namespace SedisBackend.Core.Application.Dtos.Identity_Dtos.Account
 {
     public class AuthenticationResponse
     {
@@ -13,5 +15,11 @@
         public List<string> Roles { get; set; }
         public bool HasError { get; set; }
         public string? Error { get; set; }
+
+
+        //Atributos para el JWToken
+        public string? JWToken { get; set; }
+        [JsonIgnore]
+        public string? RefreshToken { get; set; }
     }
 }

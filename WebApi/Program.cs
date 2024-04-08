@@ -22,17 +22,13 @@ builder.Services.AddControllers(options =>
 });
 
 // Add services to the container.
-
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 builder.Services.IdentityLayerRegistration(builder.Configuration);
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 builder.Services.AddApiVersioningExtension();
-builder.Services.AddSwaggerExtension();
 builder.Services.AddApplicationLayer();
+builder.Services.AddSwaggerExtension();
 
 builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerGen();
@@ -41,7 +37,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSession();
 
 
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
 

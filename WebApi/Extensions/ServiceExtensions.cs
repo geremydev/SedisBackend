@@ -19,9 +19,10 @@ namespace SedisBackend.WebApi.Extensions
                     Description = "This is APi is for the services of sedis.",
                     Contact = new OpenApiContact
                     {
-                        Name = "Yahinniel Vasquez",
-                        Email = "20221196@itla.edu.do",
-                        Url = new Uri("https://www.itla.edu.do")
+                        Name = "Ssdis - Dominican Republic",
+                        Email = "sedisinford@gmail.com",
+                        Url = new Uri("https://www.itla.edu.do"),
+                        
                     }
                 });
 
