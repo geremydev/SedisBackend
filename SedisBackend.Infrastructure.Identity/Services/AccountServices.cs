@@ -78,7 +78,6 @@ namespace SedisBackend.Infrastructure.Identity.Services
             response.IsVerified = user.EmailConfirmed;
             response.ImageUrl = user.ImageUrl;
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             var refreshToken = GenerateRefreshToken();
             response.RefreshToken = refreshToken.Token;
 

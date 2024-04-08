@@ -29,6 +29,7 @@ namespace SedisBackend.Infrastructure.Identity.IOC
             {
                 service.AddDbContext<IdentityContext>(options =>
                 {
+                    options.EnableSensitiveDataLogging();
                     options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"),
                     m => m.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName));
                 });
@@ -47,7 +48,8 @@ namespace SedisBackend.Infrastructure.Identity.IOC
                 options.AccessDeniedPath = "/User/AccessDenied";
             });
 
-            service.Configure<JWTSettings>(configuration.GetSection("JWTSettings"));
+            service.AddSingleton<JWTSettings>(configuration.GetSection("JWTSettings").Get<JWTSettings>());
+
 
             service.AddAuthentication(options =>
             {

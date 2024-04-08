@@ -15,8 +15,8 @@ namespace WebApi.Middlewares
         {
             if (_userSession.HasUser())
             {
-                var controller = (UserController)context.Controller;
-                context.Result = controller.RedirectToAction("index", "home");
+                //var controller = (UserController)context.Controller;
+                //context.Result = controller.RedirectToAction("index", "home");
             }
             else
             {
