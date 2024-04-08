@@ -9,8 +9,6 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Users.Patient
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
     //public class LabTestController : BaseApiController
     //{
     //    private readonly ILabTestService _labTestService;

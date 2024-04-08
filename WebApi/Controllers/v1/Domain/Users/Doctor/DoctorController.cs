@@ -7,8 +7,6 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Users.Patient
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class DoctorController : BaseApiController
     {
         private readonly IDoctorService _doctorService;
