@@ -265,7 +265,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DoctorId = table.Column<int>(type: "int", nullable: false),
-                    MedicalSpecialityId = table.Column<int>(type: "int", nullable: false),
                     MedicalSpecialtyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -638,8 +637,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PatientId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PatientId1 = table.Column<int>(type: "int", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: false),
                     MedicationId = table.Column<int>(type: "int", nullable: false),
                     PrescriptionId = table.Column<int>(type: "int", nullable: false),
                     TreatmentStart = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -657,8 +655,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MedicationPrescriptions_Patients_PatientId1",
-                        column: x => x.PatientId1,
+                        name: "FK_MedicationPrescriptions_Patients_PatientId",
+                        column: x => x.PatientId,
                         principalTable: "Patients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -755,9 +753,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 column: "MedicationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MedicationPrescriptions_PatientId1",
+                name: "IX_MedicationPrescriptions_PatientId",
                 table: "MedicationPrescriptions",
-                column: "PatientId1");
+                column: "PatientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicationPrescriptions_PrescriptionId",

@@ -7,122 +7,124 @@ using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Do
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Users.Patient
+namespace WebApi.Controllers.v1.Domain.Products
 {
-    //public class LabTestController : BaseApiController
-    //{
-    //    private readonly ILabTestService _labTestService;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LabTestController : BaseApiController
+    {
+        private readonly ILabTestService _labTestService;
 
-    //    public LabTestController(ILabTestService labTestService)
-    //    {
-    //        _labTestService = labTestService;
-    //    }
+        public LabTestController(ILabTestService labTestService)
+        {
+            _labTestService = labTestService;
+        }
 
-    //    [HttpGet]
-    //    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLabTestDto))]
-    //    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    //    public async Task<IActionResult> Get()
-    //    {
-    //        try
-    //        {
-    //            var labTests = await _labTestService.GetAllAsync();
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLabTestDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var labTests = await _labTestService.GetAllAsync();
 
-    //            if (labTests == null || .Count == 0)
-    //            {
-    //                return NotFound();
-    //            }
+                if (labTests == null || labTests.Count == 0)
+                {
+                    return NotFound();
+                }
 
-    //            return Ok(medications);
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-    //        }
-    //    }
+                return Ok(labTests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
 
-    //    [HttpGet("{id}")]
-    //    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseMedicationDto))]
-    //    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    //    public async Task<IActionResult> Get(int id)
-    //    {
-    //        try
-    //        {
-    //            var medication = await _medicationService.GetByIdAsync(id);
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLabTestDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get(int id)
+        {
+            try
+            {
+                var labTest = await _labTestService.GetByIdAsync(id);
 
-    //            if (medication == null)
-    //            {
-    //                return NotFound();
-    //            }
+                if (labTest == null)
+                {
+                    return NotFound();
+                }
 
-    //            return Ok(medication);
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-    //        }
-    //    }
+                return Ok(labTest);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
 
-    //    [HttpPost]
-    //    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    //    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    //    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    //    public async Task<IActionResult> Post(SaveMedicationDto dto)
-    //    {
-    //        try
-    //        {
-    //            if (!ModelState.IsValid)
-    //            {
-    //                return BadRequest();
-    //            }
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Post(SaveLabTestDto dto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
 
-    //            await _medicationService.AddAsync(dto);
-    //            return NoContent();
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-    //        }
-    //    }
+                await _labTestService.AddAsync(dto);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
 
 
-    //    [HttpPut("{id}")]
-    //    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveMedicationDto))]
-    //    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    //    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    //    public async Task<IActionResult> Put(int id, SaveMedicationDto dto)
-    //    {
-    //        try
-    //        {
-    //            if (!ModelState.IsValid)
-    //            {
-    //                return BadRequest();
-    //            }
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveLabTestDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put(int id, SaveLabTestDto dto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
 
-    //            await _medicationService.UpdateAsync(dto, id);
-    //            return Ok(dto);
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-    //        }
-    //    }
+                await _labTestService.UpdateAsync(dto, id);
+                return Ok(dto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
 
-    //    [HttpDelete("{id}")]
-    //    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    //    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    //    public async Task<IActionResult> Delete(int id)
-    //    {
-    //        try
-    //        {
-    //            await _medicationService.Delete(id);
-    //            return NoContent();
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-    //        }
-    //    }
-    //}
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _labTestService.Delete(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+    }
 }

@@ -4,7 +4,7 @@ using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Presctip
 using SedisBackend.Core.Application.Services.Domain_Services.Prescriptions;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Domain.Presctiptions
+namespace WebApi.Controllers.v1.Domain.Prescriptions
 {
     public class LabTestPrescriptionController : BaseApiController
     {

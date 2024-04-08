@@ -6,7 +6,7 @@ namespace SedisBackend.Core.Domain.Prescriptions
     public class MedicationPrescription
     {
         public int Id { get; set; }
-        public string PatientId { get; set; }
+        public int PatientId { get; set; }
         public Patient Patient { get; set; }
         public int  MedicationId { get; set; }
         public Medication Medication { get; set; }

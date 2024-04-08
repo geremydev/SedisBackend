@@ -1,35 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Allergies;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
+namespace WebApi.Controllers.v1.Domain.Users.Doctor
 {
-    public class PatientAllergyController : BaseApiController
+    public class DoctorHealthCenterController : BaseApiController
     {
-        private readonly IPatientAllergyService _patientAllergyService;
+        private readonly IDoctorHealthCenterService _doctorHealthCenterService;
 
-        public PatientAllergyController(IPatientAllergyService allergyService)
+        public DoctorHealthCenterController(IDoctorHealthCenterService doctorHealthCenterService)
         {
-            _patientAllergyService = allergyService;
+            _doctorHealthCenterService = doctorHealthCenterService;
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientAllergyDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseDoctorDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get()
         {
             try
             {
-                var allergies = await _patientAllergyService.GetAllAsync();
+                var doctorsHealtCenters = await _doctorHealthCenterService.GetAllAsync();
 
-                if (allergies == null || allergies.Count == 0)
+                if (doctorsHealtCenters == null || doctorsHealtCenters.Count == 0)
                 {
                     return NotFound();
                 }
 
-                return Ok(allergies);
+                return Ok(doctorsHealtCenters);
             }
             catch (Exception ex)
             {
@@ -38,21 +40,21 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientAllergyDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseDoctorHealthCenterDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var patient = await _patientAllergyService.GetByIdAsync(id);
+                var doctorHealthCenter = await _doctorHealthCenterService.GetByIdAsync(id);
 
-                if (patient == null)
+                if (doctorHealthCenter == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(patient);
+                return Ok(doctorHealthCenter);
             }
             catch (Exception ex)
             {
@@ -64,7 +66,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post(SavePatientAllergyDto dto)
+        public async Task<IActionResult> Post(SaveDoctorHealthCenterDto dto)
         {
             try
             {
@@ -73,7 +75,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
                     return BadRequest();
                 }
 
-                await _patientAllergyService.AddAsync(dto);
+                await _doctorHealthCenterService.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -84,10 +86,10 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
 
 
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePatientAllergyDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveDoctorDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SavePatientAllergyDto dto)
+        public async Task<IActionResult> Put(int id, SaveDoctorHealthCenterDto dto)
         {
             try
             {
@@ -96,7 +98,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
                     return BadRequest();
                 }
 
-                await _patientAllergyService.UpdateAsync(dto, id);
+                await _doctorHealthCenterService.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -112,7 +114,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
         {
             try
             {
-                await _patientAllergyService.Delete(id);
+                await _doctorHealthCenterService.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

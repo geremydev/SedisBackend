@@ -5,7 +5,7 @@ using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Do
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Users.Patient
+namespace WebApi.Controllers.v1.Domain.Users.Doctor
 {
     public class DoctorController : BaseApiController
     {
@@ -66,7 +66,7 @@ namespace WebApi.Controllers.v1.Users.Patient
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post(SaveDoctorDto doctor)
+        public async Task<IActionResult> Post(SaveDoctorDto dto)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace WebApi.Controllers.v1.Users.Patient
                     return BadRequest();
                 }
 
-                await _doctorService.AddAsync(doctor);
+                await _doctorService.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -89,7 +89,7 @@ namespace WebApi.Controllers.v1.Users.Patient
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveDoctorDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveDoctorDto doctor)
+        public async Task<IActionResult> Put(int id, SaveDoctorDto dto)
         {
             try
             {
@@ -98,8 +98,8 @@ namespace WebApi.Controllers.v1.Users.Patient
                     return BadRequest();
                 }
 
-                await _doctorService.UpdateAsync(doctor, id);
-                return Ok(doctor);
+                await _doctorService.UpdateAsync(dto, id);
+                return Ok(dto);
             }
             catch (Exception ex)
             {

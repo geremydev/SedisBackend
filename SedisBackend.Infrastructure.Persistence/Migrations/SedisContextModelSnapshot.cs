@@ -621,11 +621,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<int>("MedicationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PatientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PatientId1")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int");
 
                     b.Property<int>("PrescriptionId")
@@ -645,7 +641,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("MedicationId");
 
-                    b.HasIndex("PatientId1");
+                    b.HasIndex("PatientId");
 
                     b.HasIndex("PrescriptionId");
 
@@ -842,9 +838,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MedicalSpecialityId")
                         .HasColumnType("int");
 
                     b.Property<int>("MedicalSpecialtyId")
@@ -1161,7 +1154,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.HasOne("SedisBackend.Core.Domain.Users.Patients.Patient", "Patient")
                         .WithMany()
-                        .HasForeignKey("PatientId1")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

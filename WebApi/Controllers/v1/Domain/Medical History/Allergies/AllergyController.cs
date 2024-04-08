@@ -3,7 +3,7 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Allergies;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Medical_History.Allergies
+namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
 {
     public class AllergyController : BaseApiController
     {

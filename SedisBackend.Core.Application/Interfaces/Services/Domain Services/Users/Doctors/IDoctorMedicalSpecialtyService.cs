@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors
 {
-    public interface IDoctorMedicalSpecialtyService : IGenericService<SaveDoctorMedicalSpecialtyDto, BaseDoctorMedicalSpeciality, DoctorMedicalSpecialty>
+    public interface IDoctorMedicalSpecialtyService : IGenericService<SaveDoctorMedicalSpecialtyDto, BaseMedicalSpeciality, DoctorMedicalSpecialty>
     {
     }
 }

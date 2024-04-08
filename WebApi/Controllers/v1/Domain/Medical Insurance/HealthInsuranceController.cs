@@ -4,7 +4,7 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_Insurance;
 using SedisBackend.WebApi.Controllers.v1;
 
-namespace WebApi.Controllers.v1.Medical_Insurance
+namespace WebApi.Controllers.v1.Domain.Medical_Insurance
 {
     public class HealthInsuranceController : BaseApiController
     {

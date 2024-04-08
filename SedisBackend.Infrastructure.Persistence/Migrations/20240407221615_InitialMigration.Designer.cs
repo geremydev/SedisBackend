@@ -12,7 +12,7 @@ using SedisBackend.Infrastructure.Persistence.Contexts;
 namespace SedisBackend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SedisContext))]
-    [Migration("20240407181926_InitialMigration")]
+    [Migration("20240407221615_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -624,11 +624,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<int>("MedicationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PatientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PatientId1")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int");
 
                     b.Property<int>("PrescriptionId")
@@ -648,7 +644,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("MedicationId");
 
-                    b.HasIndex("PatientId1");
+                    b.HasIndex("PatientId");
 
                     b.HasIndex("PrescriptionId");
 
@@ -845,9 +841,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MedicalSpecialityId")
                         .HasColumnType("int");
 
                     b.Property<int>("MedicalSpecialtyId")
@@ -1164,7 +1157,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.HasOne("SedisBackend.Core.Domain.Users.Patients.Patient", "Patient")
                         .WithMany()
-                        .HasForeignKey("PatientId1")
+                        .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
