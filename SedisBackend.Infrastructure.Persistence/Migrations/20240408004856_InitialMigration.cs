@@ -637,7 +637,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PatientId = table.Column<int>(type: "int", nullable: false),
                     MedicationId = table.Column<int>(type: "int", nullable: false),
                     PrescriptionId = table.Column<int>(type: "int", nullable: false),
                     TreatmentStart = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -652,12 +651,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         name: "FK_MedicationPrescriptions_Medications_MedicationId",
                         column: x => x.MedicationId,
                         principalTable: "Medications",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MedicationPrescriptions_Patients_PatientId",
-                        column: x => x.PatientId,
-                        principalTable: "Patients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -751,11 +744,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 name: "IX_MedicationPrescriptions_MedicationId",
                 table: "MedicationPrescriptions",
                 column: "MedicationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MedicationPrescriptions_PatientId",
-                table: "MedicationPrescriptions",
-                column: "PatientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicationPrescriptions_PrescriptionId",

@@ -621,9 +621,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<int>("MedicationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PrescriptionId")
                         .HasColumnType("int");
 
@@ -640,8 +637,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MedicationId");
-
-                    b.HasIndex("PatientId");
 
                     b.HasIndex("PrescriptionId");
 
@@ -1152,12 +1147,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SedisBackend.Core.Domain.Users.Patients.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SedisBackend.Core.Domain.Prescriptions.Prescription", "Prescription")
                         .WithMany("PrescribedMedications")
                         .HasForeignKey("PrescriptionId")
@@ -1165,8 +1154,6 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Medication");
-
-                    b.Navigation("Patient");
 
                     b.Navigation("Prescription");
                 });

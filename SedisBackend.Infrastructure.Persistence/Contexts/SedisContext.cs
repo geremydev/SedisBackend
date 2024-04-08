@@ -381,6 +381,7 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
                 .WithOne(k => k.Prescription)
                 .HasForeignKey(k => k.PrescriptionId)
                 .OnDelete(DeleteBehavior.NoAction);
+
             #endregion
 
             #region Products
