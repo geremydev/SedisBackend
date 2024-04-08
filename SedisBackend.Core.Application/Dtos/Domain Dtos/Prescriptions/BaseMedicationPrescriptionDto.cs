@@ -12,7 +12,7 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions
     public class BaseMedicationPrescriptionDto
     {
         public int Id { get; set; }
-        public int PatientId { get; set; }
+        //public int PatientId { get; set; }
         //public Patient Patient { get; set; }
         public int MedicationId { get; set; }
         //public Medication Medication { get; set; }

@@ -119,7 +119,7 @@ namespace SedisBackend.Core.Application.Mappings
             #region HealthCenters
                 CreateMap<HealthCenter, BaseHealthCenterDto>()
                     .ReverseMap();
-                CreateMap<HealthCenter, BaseHealthCenterDto>()
+                CreateMap<HealthCenter, SaveHealthCenterDto>()
                     .ReverseMap();
             #endregion
 
@@ -290,16 +290,18 @@ namespace SedisBackend.Core.Application.Mappings
             #region Users
 
             #region Patients
-                CreateMap<BasePatientDto, SavePatientDto>()
-                    .ReverseMap();
-                CreateMap<Patient, SavePatientDto>()
+            CreateMap<BasePatientDto, SavePatientDto>()
+                .ReverseMap();
+            CreateMap<Patient, SavePatientDto>()
+                .ReverseMap();
+            CreateMap<Patient, BasePatientDto>()
                     .ReverseMap();
             #endregion
 
             #region Doctors
 
             #region Doctor
-                CreateMap<Doctor, BaseDoctorDto>()
+            CreateMap<Doctor, BaseDoctorDto>()
                     .ReverseMap();
                 CreateMap<Doctor, SaveDoctorDto>()
                     .ReverseMap();
