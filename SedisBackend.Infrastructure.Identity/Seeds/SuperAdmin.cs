@@ -17,8 +17,10 @@ namespace SedisBackend.Infrastructure.Identity.Seeds
             adminuser.UserName = "superadminuser";
             adminuser.Email = "superadminuser@email.com";
             adminuser.PhoneNumber = "829-123-9811";
+            adminuser.IsActive = true;
             adminuser.EmailConfirmed = true;
             adminuser.PhoneNumberConfirmed = true;
+            adminuser.ImageUrl = ".";
 
             if (userManager.Users.All(u => u.Id != adminuser.Id))
             {

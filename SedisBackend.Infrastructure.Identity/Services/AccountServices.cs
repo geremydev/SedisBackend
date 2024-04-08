@@ -53,12 +53,14 @@ namespace SedisBackend.Infrastructure.Identity.Services
                 response.Error = $"Invalid Credential for {request.Email}";
                 return response;
             }
+
             if (!user.EmailConfirmed)
             {
                 response.HasError = true;
                 response.Error = $"Account not confirmed for {request.Email}";
                 return response;
             }
+
             if (user.IsActive == false)
             {
                 response.HasError = true;

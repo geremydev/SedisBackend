@@ -14,8 +14,10 @@ namespace SedisBackend.Infrastructure.Identity.Seeds
             clientuser.UserName = "patient";
             clientuser.Email = "patientuser@email.com";
             clientuser.PhoneNumber = "829-123-9811";
+            clientuser.IsActive = true;
             clientuser.EmailConfirmed = true;
             clientuser.PhoneNumberConfirmed = true;
+            clientuser.ImageUrl = ".";
 
             if (userManager.Users.All(u => u.Id != clientuser.Id))
             {
