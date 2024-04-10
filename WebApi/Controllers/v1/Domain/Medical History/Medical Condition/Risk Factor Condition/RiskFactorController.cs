@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Illness_Condition;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Risk_Factor_Condition;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Illness_Condition;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Risk_Factor_Condition;
 using SedisBackend.WebApi.Controllers.v1;
 
@@ -69,6 +67,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Fa
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Post(SaveRiskFactorDto dto)
         {
             try
@@ -92,6 +91,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Fa
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveRiskFactorDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Put(int id, SaveRiskFactorDto dto)
         {
             try

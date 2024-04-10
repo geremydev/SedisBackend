@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_Insurance;
@@ -66,6 +66,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post(SaveMedicationlCoverageDto dto)
         {
             try
@@ -89,6 +90,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveMedicationlCoverageDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(int id, SaveMedicationlCoverageDto dto)
         {
             try

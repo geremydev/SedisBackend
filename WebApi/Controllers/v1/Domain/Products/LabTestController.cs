@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Products;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
@@ -9,7 +10,6 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Products
 {
-    [ApiController]
     [ApiVersion("1.0")]
     public class LabTestController : BaseApiController
     {
@@ -70,6 +70,7 @@ namespace WebApi.Controllers.v1.Domain.Products
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post(SaveLabTestDto dto)
         {
             try
@@ -93,6 +94,7 @@ namespace WebApi.Controllers.v1.Domain.Products
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveLabTestDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(int id, SaveLabTestDto dto)
         {
             try
