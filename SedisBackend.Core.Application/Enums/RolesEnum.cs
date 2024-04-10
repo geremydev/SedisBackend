@@ -11,6 +11,7 @@ namespace SedisBackend.Core.Application.Enums
         Patient = 1,
         Doctor,
         Admin,
-        SuperAdmin
+        SuperAdmin,
+        Assistant
     }
 }

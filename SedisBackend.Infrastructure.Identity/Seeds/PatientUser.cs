@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 using SedisBackend.Core.Application.Enums;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
 using SedisBackend.Infrastructure.Identity.Entities;
 
 namespace SedisBackend.Infrastructure.Identity.Seeds

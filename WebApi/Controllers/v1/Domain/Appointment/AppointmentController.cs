@@ -86,10 +86,10 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         }
 
         [HttpPut]
-        [Authorize(Roles = "Doctor")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAppointmentDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Doctor, Assistant")]
         public async Task<ActionResult> Put(int id, SaveAppointmentDto appointment)
         {
             try
@@ -133,6 +133,7 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Assistant")]
         public async Task<ActionResult> DeleteAppointment(int id, SaveAppointmentDto appointment)
         {
             try

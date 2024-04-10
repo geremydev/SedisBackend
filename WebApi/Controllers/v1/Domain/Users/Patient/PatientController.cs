@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
@@ -119,6 +120,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePatientDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> Put(int id, SavePatientDto dto)
         {
             try
