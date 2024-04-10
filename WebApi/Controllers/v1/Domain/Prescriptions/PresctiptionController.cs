@@ -5,6 +5,7 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Presctiptions
 {
+        [ApiVersion("1.0")]
     public class PresctiptionController : BaseApiController
     {
         private readonly IPrescriptionService _prescriptionService;

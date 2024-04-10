@@ -7,6 +7,7 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
 {
+    [ApiVersion("1.0")]
     public class ClinicalHistoryController : BaseApiController
     {
         private readonly IClinicalHistoryService _clinicalHistoryService;

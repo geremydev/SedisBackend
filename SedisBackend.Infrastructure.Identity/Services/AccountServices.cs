@@ -19,6 +19,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.User_Entity_Relation;
+using SedisBackend.Core.Application.Enums;
 
 namespace SedisBackend.Infrastructure.Identity.Services
 {
@@ -113,14 +114,6 @@ namespace SedisBackend.Infrastructure.Identity.Services
                 HasError = true,
             };
 
-            var userWithSameUserName = await _userManager.FindByNameAsync(request.UserName);
-            if (userWithSameUserName != null)
-            {
-                response.HasError = true;
-                response.Error = $"Username {request.UserName} is already taken";
-                return response;
-            }
-
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail != null)
             {
@@ -151,7 +144,8 @@ namespace SedisBackend.Infrastructure.Identity.Services
                 var userEntityRelation = new UserEntityRelation
                 {
                     UserId = userDto.Id,
-                    EntityId = p.Id
+                    EntityId = p.Id,
+                    EntityRole = RolesEnum.Patient.ToString()
                 };
 
                 var userEntityRelationDto = _mapper.Map<SaveUserEntityRelation>(userEntityRelation);
@@ -472,7 +466,7 @@ namespace SedisBackend.Infrastructure.Identity.Services
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-            var route = "User/ConfirmEmail";
+            var route = "api/account/confirm-email";
             var Uri = new Uri(string.Concat($"{origin}/", route));
             var verificationUri = QueryHelpers.AddQueryString(Uri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "Token", code);

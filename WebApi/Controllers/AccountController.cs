@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.MSIdentity.Shared;
+using Newtonsoft.Json;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
+using SedisBackend.Core.Application.Dtos.Shared_Dtos;
 using SedisBackend.Core.Application.Interfaces.Services;
+using SedisBackend.Core.Application.Interfaces.Services.Shared_Services;
+using SedisBackend.Infrastructure.Shared.Services;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers
@@ -11,10 +16,12 @@ namespace WebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly ICardValidationService _cardValidationService;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, ICardValidationService cardValidationService)
         {
             _accountService = accountService;
+            _cardValidationService = cardValidationService;
         }
 
         [HttpPost("authenticate")]
@@ -24,7 +31,7 @@ namespace WebApi.Controllers
         {
             return Ok(await _accountService.AuthenticateAsync(request));
         }
-
+            
         [HttpPost("register")]
         [SwaggerOperation(Summary = "El Endpoint de Registro",
                           Description = "Aqui tendras que llenar todos los campos con los datos correspondientes para registrarte en el sistema.")]
@@ -59,6 +66,14 @@ namespace WebApi.Controllers
         public async Task<IActionResult> ResetPasswordAsync(ResetPasswordRequest request)
         {
             return Ok(await _accountService.ResetPasswordAsync(request));
+        }
+
+        [HttpGet("validate-IdCard")]
+        [SwaggerOperation(Summary = "Valida si la cédula existe en los servidores de la JCE",
+                          Description = "Inserta tu cédula sin guiones.")]
+        public async Task<IActionResult> VerifyIdCard(string IdCard)
+        {
+            return Ok(await _cardValidationService.VerifyCardId(IdCard));
         }
     }
 }

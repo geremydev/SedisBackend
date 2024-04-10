@@ -12,7 +12,7 @@ using SedisBackend.Infrastructure.Identity.Contexts;
 namespace SedisBackend.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20240408070023_InitialMigration")]
+    [Migration("20240410035625_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -172,6 +172,10 @@ namespace SedisBackend.Infrastructure.Identity.Migrations
 
                     b.Property<int>("EntityId")
                         .HasColumnType("int");
+
+                    b.Property<string>("EntityRole")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()

@@ -17,6 +17,7 @@ namespace SedisBackend.Core.Domain.Medical_History.Clinical_History
         public string? PhysicalExamination { get; set; }
         public string? Diagnosis { get; set; }
         public Prescription? Prescription { get; set; }
+        public DateTime RegisterDate { get; set; }
 
 
         /* Ejemplo de campos

@@ -15,6 +15,8 @@ using SedisBackend.Core.Application.Interfaces.Repositories.Medical_Insurance;
 using SedisBackend.Core.Application.Interfaces.Repositories.Prescriptions;
 using SedisBackend.Core.Application.Interfaces.Repositories.Products;
 using SedisBackend.Core.Application.Interfaces.Repositories.UserEntityRelations;
+using SedisBackend.Core.Application.Interfaces.Repositories.Users.Admins;
+using SedisBackend.Core.Application.Interfaces.Repositories.Users.Assistants;
 using SedisBackend.Core.Application.Interfaces.Repositories.Users.Doctors;
 using SedisBackend.Core.Application.Interfaces.Repositories.Users.Patients;
 using SedisBackend.Infrastructure.Persistence.Contexts;
@@ -31,6 +33,8 @@ using SedisBackend.Infrastructure.Persistence.Repositories.Medical_Insurance;
 using SedisBackend.Infrastructure.Persistence.Repositories.Presctiption;
 using SedisBackend.Infrastructure.Persistence.Repositories.Products;
 using SedisBackend.Infrastructure.Persistence.Repositories.UserEntityRelations;
+using SedisBackend.Infrastructure.Persistence.Repositories.Users.Admins;
+using SedisBackend.Infrastructure.Persistence.Repositories.Users.Assistants;
 using SedisBackend.Infrastructure.Persistence.Repositories.Users.Doctors;
 using SedisBackend.Infrastructure.Persistence.Repositories.Users.Patients;
 
@@ -147,6 +151,15 @@ namespace SedisBackend.Infrastructure.Persistence.IOC
             services.AddTransient<IDoctorMedicalSpecialtyRepository, DoctorMedicalSpecialtyRepository>();
             services.AddTransient<IMedicalSpecialtyRepository, MedicalSpecialtyRepository>();
 
+            #endregion
+
+            #region Admin
+            services.AddTransient<IAdminRepository, AdminRepository>();
+
+            #endregion
+
+            #region Assistant
+            services.AddTransient<IAssistantRepository, AssistantRepository>();
             #endregion
 
             #endregion

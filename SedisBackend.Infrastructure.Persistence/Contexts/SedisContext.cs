@@ -14,6 +14,8 @@ using SedisBackend.Core.Domain.Medical_Insurance;
 using SedisBackend.Core.Domain.Prescriptions;
 using SedisBackend.Core.Domain.Products;
 using SedisBackend.Core.Domain.UserEntityRelation;
+using SedisBackend.Core.Domain.Users.Admins;
+using SedisBackend.Core.Domain.Users.Assistants;
 using SedisBackend.Core.Domain.Users.Doctors;
 using SedisBackend.Core.Domain.Users.Patients;
 
@@ -94,6 +96,11 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
         public DbSet<Medication> Medications { get; set; }
         #endregion
 
+        #region UserEntityRelation
+        public DbSet<UserEntityRelation> UserEntityRelation { get; set; }
+
+        #endregion
+
         #region Users
 
         #region Patient
@@ -109,16 +116,19 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
 
         #endregion
 
+        #region Location
         public DbSet<Location> Locations { get; set; }
-
         #endregion
 
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             #region Table names
+
+
 
             #region Appointments    
             modelBuilder.Entity<Appointment>().ToTable("Appointments");
@@ -208,6 +218,14 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
             modelBuilder.Entity<DoctorHealthCenter>().ToTable("DoctorHealthCenters");
             modelBuilder.Entity<MedicalSpecialty>().ToTable("MedicalSpecialities");
             modelBuilder.Entity<DoctorMedicalSpecialty>().ToTable("DoctorMedicalSpecialities");
+            #endregion
+
+            #region Admin
+            modelBuilder.Entity<Admin>().ToTable("Admins");
+            #endregion
+            
+            #region Assistant
+            modelBuilder.Entity<Assistant>().ToTable("Assistants");
             #endregion
 
             #endregion
@@ -303,6 +321,13 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
 
             #endregion
 
+            #region Admin
+            modelBuilder.Entity<Admin>().HasKey(p => p.Id);
+            #endregion
+
+            #region Assistant
+            modelBuilder.Entity<Assistant>().HasKey(p => p.Id);
+            #endregion
             #endregion
 
 
@@ -323,6 +348,18 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
 
             modelBuilder.Entity<HealthCenter>()
                 .HasMany(k => k.Doctors)
+                .WithOne(k => k.HealthCenter)
+                .HasForeignKey(k => k.HealthCenterId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<HealthCenter>()
+                .HasMany(k => k.Admins)
+                .WithOne(k => k.HealthCenter)
+                .HasForeignKey(k => k.HealthCenterId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<HealthCenter>()
+                .HasMany(k => k.Assistants)
                 .WithOne(k => k.HealthCenter)
                 .HasForeignKey(k => k.HealthCenterId)
                 .OnDelete(DeleteBehavior.NoAction);
@@ -502,9 +539,9 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
 
             #region Patient
 
-            modelBuilder.Entity<Patient>()
+            /*modelBuilder.Entity<Patient>()
                 .Property(p => p.IdCard)
-                .(true);
+                .(true);*/
 
             #endregion
 

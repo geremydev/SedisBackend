@@ -134,6 +134,7 @@ namespace SedisBackend.Infrastructure.Identity.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EntityId = table.Column<int>(type: "int", nullable: false),
+                    EntityRole = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>

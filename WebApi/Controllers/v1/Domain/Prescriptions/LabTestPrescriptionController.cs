@@ -6,6 +6,7 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Prescriptions
 {
+    [ApiVersion("1.0")]
     public class LabTestPrescriptionController : BaseApiController
     {
         private readonly ILabTestPrescriptionService _labTestPrescriptionService;

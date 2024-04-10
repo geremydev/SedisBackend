@@ -5,6 +5,7 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Health_Centers
 {
+    [ApiVersion("1.0")]
     public class HealthCenterController : BaseApiController
     {
         private readonly IHealthCenterService _healthCenterService;

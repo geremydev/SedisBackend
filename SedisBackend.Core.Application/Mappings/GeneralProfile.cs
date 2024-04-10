@@ -78,6 +78,10 @@ using SedisBackend.Core.Domain.Prescriptions;
 using SedisBackend.Core.Domain.Products;
 using SedisBackend.Core.Domain.Users.Doctors;
 using SedisBackend.Core.Domain.Users.Patients;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Admins;
+using SedisBackend.Core.Domain.Users.Admins;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Assistants;
+using SedisBackend.Core.Domain.Users.Assistants;
 
 #endregion
 
@@ -328,6 +332,24 @@ namespace SedisBackend.Core.Application.Mappings
                 .ReverseMap();
             #endregion
 
+            #endregion
+
+            #region Admin  
+            CreateMap<BaseAdminDto, SaveAdminDto>()
+               .ReverseMap();
+            CreateMap<Admin, SaveAdminDto>()
+                .ReverseMap();
+            CreateMap<Admin, BaseAdminDto>()
+                    .ReverseMap();
+            #endregion
+
+            #region Assistant 
+            CreateMap<BaseAssistantDto, SaveAssistantDto>()
+               .ReverseMap();
+            CreateMap<Assistant, SaveAssistantDto>()
+                .ReverseMap();
+            CreateMap<Assistant, BaseAssistantDto>()
+                    .ReverseMap();
             #endregion
 
             #endregion
