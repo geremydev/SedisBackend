@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Health_Centers;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Health_Centers;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Health_Centers
 {
+    [ApiVersion("1.0")]
+    [Authorize(Roles = "Admin")]
     public class HealthCenterController : BaseApiController
     {
         private readonly IHealthCenterService _healthCenterService;

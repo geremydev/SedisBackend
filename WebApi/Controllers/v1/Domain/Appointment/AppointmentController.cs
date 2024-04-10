@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Appointments;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Appointment
 {
+    [ApiVersion("1.0")]
+    [Authorize(Roles = "Doctor, Patient")]
     public class AppointmentController : BaseApiController
     {
         private readonly IAppointmentService _appointmentsService;
@@ -83,6 +86,7 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         }
 
         [HttpPut]
+        [Authorize(Roles = "Doctor")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAppointmentDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

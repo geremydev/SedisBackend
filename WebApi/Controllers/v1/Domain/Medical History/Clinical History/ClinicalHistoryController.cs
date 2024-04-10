@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinical_History;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Allergies;
@@ -7,6 +8,7 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
 {
+    [ApiVersion("1.0")]
     public class ClinicalHistoryController : BaseApiController
     {
         private readonly IClinicalHistoryService _clinicalHistoryService;
@@ -66,6 +68,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Post(SaveClinicalHistoryDto dto)
         {
             try
@@ -89,6 +92,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveClinicalHistoryDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Put(int id, SaveClinicalHistoryDto dto)
         {
             try
