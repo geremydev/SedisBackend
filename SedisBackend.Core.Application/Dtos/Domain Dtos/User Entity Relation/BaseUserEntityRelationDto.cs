@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.User_Entity_Relation
 {
-    public class BaseUserEntityRelation
+    public class BaseUserEntityRelationDto
     {
         public int Id { get; set; }
         public string UserId { get; set; }

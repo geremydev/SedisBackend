@@ -7,24 +7,24 @@ using SedisBackend.WebApi.Controllers.v1;
 namespace WebApi.Controllers.v1.Domain.Health_Centers
 {
     [ApiVersion("1.0")]
-    public class HealthCenterController : BaseApiController
+    public class HealthCenterServicesController : BaseApiController
     {
-        private readonly IHealthCenterService _healthCenterService;
+        private readonly IHealthCenterServicesService _healthCenterServicesService;
 
-        public HealthCenterController(IHealthCenterService healthCenterService)
+        public HealthCenterServicesController(IHealthCenterServicesService healthCenterServicesService)
         {
-            _healthCenterService = healthCenterService;
+            _healthCenterServicesService = healthCenterServicesService;
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseHealthCenterDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseHealthCenterServicesDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get()
         {
             try
             {
-                var healthCenters = await _healthCenterService.GetAllAsync();
+                var healthCenters = await _healthCenterServicesService.GetAllAsync();
 
                 if (healthCenters == null || healthCenters.Count == 0)
                 {
@@ -40,14 +40,14 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseHealthCenterDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseHealthCenterServicesDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(int id)
         {
             try
             {
-                var helthCenter = await _healthCenterService.GetByIdAsync(id);
+                var helthCenter = await _healthCenterServicesService.GetByIdAsync(id);
 
                 if (helthCenter == null)
                 {
@@ -68,7 +68,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post(SaveHealthCenterDto dto)
+        public async Task<IActionResult> Post(SaveHealthCenterServicesDto dto)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
                     return BadRequest();
                 }
 
-                await _healthCenterService.AddAsync(dto);
+                await _healthCenterServicesService.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -89,10 +89,10 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveHealthCenterDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveHealthCenterServicesDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveHealthCenterDto dto)
+        public async Task<IActionResult> Put(int id, SaveHealthCenterServicesDto dto)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
                     return BadRequest();
                 }
 
-                await _healthCenterService.UpdateAsync(dto, id);
+                await _healthCenterServicesService.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -118,7 +118,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         {
             try
             {
-                await _healthCenterService.Delete(id);
+                await _healthCenterServicesService.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

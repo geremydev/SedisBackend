@@ -5,7 +5,8 @@ using SedisBackend.Core.Domain.UserEntityRelation;
 
 namespace SedisBackend.Core.Application.Interfaces.Services.Domain_Services.User_Entity_Relation
 {
-    public interface IUserEntityRelationService : IGenericService<SaveUserEntityRelation, BaseUserEntityRelation, UserEntityRelation>
+    public interface IUserEntityRelationService : IGenericService<SaveUserEntityRelationDto, BaseUserEntityRelationDto, UserEntityRelation>
     {
+        Task<List<UserEntityRelation>> GetByUserIdAsync(string UserId);
     }
 }

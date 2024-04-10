@@ -15,5 +15,6 @@ namespace SedisBackend.Core.Domain.Health_Centers
         public ICollection<DoctorHealthCenter> Doctors { get; set; }
         public ICollection<Admin> Admins { get; set; }
         public ICollection<Assistant> Assistants { get; set; }
+        public ICollection<HealthCenterServices> Services { get; set; }
     }
 }

@@ -66,6 +66,7 @@ namespace SedisBackend.Core.Application.IOC
 
             #region HealthCenters
             services.AddTransient<IHealthCenterService, HealthCenterService>();
+            services.AddTransient<IHealthCenterServicesService, HealthCenterServicesService>();
 
             #endregion
 

@@ -13,6 +13,7 @@ namespace SedisBackend.Core.Application.Dtos.Identity_Dtos.Account
         public List<int> AssignedUsersIds { get; set; }
         public List<string> AssignedUsersRoles { get; set; } //Filled with RolesEnum.ToString()
         public List<string> Roles { get; set; }
+        public DomainEntitiesRelatedDto DomainEntitiesRelated { get; set; }
         public bool HasError { get; set; }
         public string? Error { get; set; }
 

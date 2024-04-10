@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.MSIdentity.Shared;
+using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
 using SedisBackend.Core.Application.Dtos.Shared_Dtos;
@@ -41,6 +42,23 @@ namespace WebApi.Controllers
             return Ok(await _accountService.RegisterUserAsync(request, origin, userRoles));
         }
 
+
+        [HttpPost("upgrade-user")]
+        [SwaggerOperation(Summary = "El Endpoint de upgrade user",
+                          Description = "Aqui tendras que llenar todos los campos con los datos correspondientes para registrarte en el sistema.")]
+        public async Task<IActionResult> Update2Doctor(string CardId, int HealthCenterId, string Role)
+        {
+            try
+            {
+                await _accountService.AddRole(CardId, HealthCenterId, Role);
+                return NoContent(); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
         [HttpGet("confirm-email")]
         [SwaggerOperation(Summary = "El Endpoint para confirmar tu email.",
                           Description = "Aqui tendras que llenar todos los campos con los datos correspondientes para confirmar tu cuenta.")]
@@ -48,6 +66,7 @@ namespace WebApi.Controllers
         {
             return Ok(await _accountService.ConfirmAccountAsync(userId, token));
         }
+
 
 
         [HttpPost("forgot-password")]

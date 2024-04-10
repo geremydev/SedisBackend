@@ -34,6 +34,7 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
 
         #region HealthCenters
         public DbSet<HealthCenter> HealthCenters { get; set; }
+        public DbSet<HealthCenterServices> HealthCenterServices { get; set; }
 
         #endregion
 
@@ -136,6 +137,7 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
 
             #region HealthCenters
             modelBuilder.Entity<HealthCenter>().ToTable("HealthCenters");
+            modelBuilder.Entity<HealthCenterServices>().ToTable("HealthCenterServices");
             #endregion
 
             #region Location
@@ -241,6 +243,7 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
 
             #region HealthCenters
             modelBuilder.Entity<HealthCenter>().HasKey(p => p.Id);
+            modelBuilder.Entity<HealthCenterServices>().HasKey(p => p.Id);
             #endregion
 
             #region Location
@@ -360,6 +363,12 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
 
             modelBuilder.Entity<HealthCenter>()
                 .HasMany(k => k.Assistants)
+                .WithOne(k => k.HealthCenter)
+                .HasForeignKey(k => k.HealthCenterId)
+                .OnDelete(DeleteBehavior.NoAction);
+            
+            modelBuilder.Entity<HealthCenter>() //Los servicios deberían estar normalizados ya que el mismo servicio puede ser ofrecido por distintos Centros de salud.
+                .HasMany(k => k.Services)
                 .WithOne(k => k.HealthCenter)
                 .HasForeignKey(k => k.HealthCenterId)
                 .OnDelete(DeleteBehavior.NoAction);
@@ -535,14 +544,27 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
                     v => v.ToString("HH:mm:ss"),
                     v => TimeSpan.Parse(v)
                 );
+            modelBuilder.Entity<Doctor>()
+                .HasIndex(p => p.IdCard) 
+                .IsUnique();
             #endregion
 
             #region Patient
+            modelBuilder.Entity<Patient>()
+                .HasIndex(p => p.IdCard)  // Consider adding an index for performance
+                .IsUnique();
+            #endregion
 
-            /*modelBuilder.Entity<Patient>()
-                .Property(p => p.IdCard)
-                .(true);*/
+            #region Assistant
+            modelBuilder.Entity<Assistant>()
+                .HasIndex(p => p.IdCard)
+                .IsUnique();
+            #endregion
 
+            #region Admin
+            modelBuilder.Entity<Admin>()
+                .HasIndex(p => p.IdCard)
+                .IsUnique();
             #endregion
 
             #endregion

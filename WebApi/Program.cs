@@ -60,6 +60,7 @@ using (var scope = app.Services.CreateScope())
         await DefaultRoles.SeedAsync(userManager, roleManager);
         await AdminUser.SeedAsync(userManager, roleManager);
         await PatientUser.SeedAsync(userManager, roleManager);
+        await AssistantUser.SeedAsync(userManager, roleManager);
         await SuperAdmin.SeedAsync(userManager, roleManager);
     }
     catch (Exception ex)

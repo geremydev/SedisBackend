@@ -82,6 +82,8 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Admins;
 using SedisBackend.Core.Domain.Users.Admins;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Assistants;
 using SedisBackend.Core.Domain.Users.Assistants;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.User_Entity_Relation;
+using SedisBackend.Core.Domain.UserEntityRelation;
 
 #endregion
 
@@ -125,10 +127,19 @@ namespace SedisBackend.Core.Application.Mappings
                     .ReverseMap();
                 CreateMap<HealthCenter, SaveHealthCenterDto>()
                     .ReverseMap();
+
+            CreateMap<HealthCenterServices, BaseHealthCenterServicesDto>()
+                .ReverseMap();
+            CreateMap<HealthCenter, SaveHealthCenterServicesDto>()
+                .ReverseMap();
+            CreateMap<BaseHealthCenterServicesDto, SaveHealthCenterServicesDto>()
+                .ReverseMap();
+
+
             #endregion
 
             #region Location
-                CreateMap<Location, BaseLocationDto>()
+            CreateMap<Location, BaseLocationDto>()
                     .ReverseMap();
                 CreateMap<Location, SaveLocationDto>()
                     .ReverseMap();
@@ -355,6 +366,24 @@ namespace SedisBackend.Core.Application.Mappings
             #endregion
 
             #endregion
+
+            CreateMap<RegisterRequest, SavePatientDto>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ReverseMap()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<UserEntityRelation, SaveUserEntityRelationDto>()
+                .ReverseMap();
+
+            CreateMap<UserEntityRelation, BaseUserEntityRelationDto>()
+                .ReverseMap();
+            CreateMap<BaseUserEntityRelationDto, SaveUserEntityRelationDto>()
+                .ReverseMap();
+
+            CreateMap<BasePatientDto, SaveAdminDto>()
+                .ReverseMap();
+            CreateMap<BasePatientDto, SaveAssistantDto>()
+                .ReverseMap();
 
         }
     }

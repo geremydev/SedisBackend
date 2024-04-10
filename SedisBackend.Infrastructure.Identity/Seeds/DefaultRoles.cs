@@ -16,6 +16,7 @@ namespace SedisBackend.Infrastructure.Identity.Seeds
             await roleManager.CreateAsync(new IdentityRole(RolesEnum.SuperAdmin.ToString()));
             await roleManager.CreateAsync(new IdentityRole(RolesEnum.Admin.ToString()));
             await roleManager.CreateAsync(new IdentityRole(RolesEnum.Patient.ToString()));
+            await roleManager.CreateAsync(new IdentityRole(RolesEnum.Assistant.ToString()));
         }
     }
 }

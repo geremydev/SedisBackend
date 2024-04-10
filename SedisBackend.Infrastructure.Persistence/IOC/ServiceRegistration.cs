@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SedisBackend.Core.Application.Interfaces.Repositories;
 using SedisBackend.Core.Application.Interfaces.Repositories.Appointments;
 using SedisBackend.Core.Application.Interfaces.Repositories.Base;
+using SedisBackend.Core.Application.Interfaces.Repositories.Health_Centers;
 using SedisBackend.Core.Application.Interfaces.Repositories.Locations;
 using SedisBackend.Core.Application.Interfaces.Repositories.Locations;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History;
@@ -23,6 +24,7 @@ using SedisBackend.Infrastructure.Persistence.Contexts;
 using SedisBackend.Infrastructure.Persistence.Repositories;
 using SedisBackend.Infrastructure.Persistence.Repositories.Appointments;
 using SedisBackend.Infrastructure.Persistence.Repositories.Base;
+using SedisBackend.Infrastructure.Persistence.Repositories.Health_Centers;
 using SedisBackend.Infrastructure.Persistence.Repositories.Locations;
 using SedisBackend.Infrastructure.Persistence.Repositories.Medical_History;
 using SedisBackend.Infrastructure.Persistence.Repositories.Medical_History.Allergies;
@@ -66,11 +68,16 @@ namespace SedisBackend.Infrastructure.Persistence.IOC
 
             #region HealthCenters
             services.AddTransient<IHealthCenterRepository, HealthCenterRepository>();
+            services.AddTransient<IHealthCenterServicesRepository, HealthCenterServicesRepository>();
 
             #endregion
 
             #region Location
             services.AddTransient<ILocationRepository, LocationRepository>();
+            #endregion
+
+            #region Location
+            services.AddTransient<IUserEntityRelationRepository, UserEntityRelationRepository>();
             #endregion
 
             #region Medical History

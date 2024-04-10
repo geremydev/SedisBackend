@@ -20,6 +20,14 @@ using System.Security.Cryptography;
 using System.Text;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.User_Entity_Relation;
 using SedisBackend.Core.Application.Enums;
+using SedisBackend.Core.Application.Interfaces.Services.Shared_Services;
+using SedisBackend.Infrastructure.Shared.Services;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Admins;
+using SedisBackend.Core.Domain.Users.Admins;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Admins;
+using System.Text.Json.Serialization;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Assistants;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Assistants;
 
 namespace SedisBackend.Infrastructure.Identity.Services
 {
@@ -32,11 +40,17 @@ namespace SedisBackend.Infrastructure.Identity.Services
         private readonly JWTSettings _jwtSettings;
         private readonly IMapper _mapper;
         private readonly IUserEntityRelationService _userEntityRelationService;
+        private readonly ICardValidationService _cardValidationService;
+        private readonly IAdminService _adminService;
+        private readonly IAssistantService _assistantService;
 
         public AccountServices(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager, IEmailService emailServices,
             IMapper mapper, JWTSettings jwtSettings,IPatientService patientService,
-            IUserEntityRelationService userEntityRelationService)
+            IUserEntityRelationService userEntityRelationService,
+            ICardValidationService cardValidationService,
+            IAdminService adminService,
+            IAssistantService assistantService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -45,6 +59,9 @@ namespace SedisBackend.Infrastructure.Identity.Services
             _mapper = mapper;
             _patientService = patientService;
             _userEntityRelationService = userEntityRelationService;
+            _cardValidationService = cardValidationService;
+            _adminService = adminService;
+            _assistantService = assistantService;
         }
 
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
@@ -95,7 +112,7 @@ namespace SedisBackend.Infrastructure.Identity.Services
             response.JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             var refreshToken = GenerateRefreshToken();
             response.RefreshToken = refreshToken.Token;
-
+            response.DomainEntitiesRelated = await GetDomainEntitiesByIdAsync(user.Id);
             return response;
         }
 
@@ -113,6 +130,12 @@ namespace SedisBackend.Infrastructure.Identity.Services
             {
                 HasError = true,
             };
+            var cardValidation =  await _cardValidationService.VerifyCardId(request.IdCard);
+            if (!cardValidation.valid)
+            {
+                response.Error = "Cédula inválida";
+                return response;
+            }
 
             var userWithSameEmail = await _userManager.FindByEmailAsync(request.Email);
             if (userWithSameEmail != null)
@@ -148,7 +171,7 @@ namespace SedisBackend.Infrastructure.Identity.Services
                     EntityRole = RolesEnum.Patient.ToString()
                 };
 
-                var userEntityRelationDto = _mapper.Map<SaveUserEntityRelation>(userEntityRelation);
+                var userEntityRelationDto = _mapper.Map<SaveUserEntityRelationDto>(userEntityRelation);
 
                 await _userEntityRelationService.AddAsync(userEntityRelationDto);
 
@@ -475,5 +498,103 @@ namespace SedisBackend.Infrastructure.Identity.Services
         }
 
         #endregion
+
+
+        public async Task<ServiceResult> AddRole(string IdCard, int HealthCenterId, string Role)
+        {
+            SaveAdminDto admin = new();
+            SaveAssistantDto assistant = new();
+            ServiceResult serviceResult = new() { HasError = false };
+            SaveUserEntityRelationDto userEntityRelation = new();
+
+            var allPatients = await _patientService.GetAllAsync();
+            var patient = allPatients.Find(p => p.IdCard == IdCard);
+            var allUER = await _userEntityRelationService.GetAllAsync();
+            var specificUER = allUER.Find(u => u.EntityId == patient.Id);
+            var identityUser = await GetByIdAsync(specificUER.UserId);
+
+            if(Role == RolesEnum.Admin.ToString())
+            {
+                admin = _mapper.Map<SaveAdminDto>(patient);
+                admin.HealthCenterId = HealthCenterId;
+                admin.Id = 0;
+            }
+            else if(Role == RolesEnum.Assistant.ToString())
+            {
+                assistant = _mapper.Map<SaveAssistantDto>(patient);
+                assistant.HealthCenterId = HealthCenterId;
+                assistant.Id = 0;
+            }
+            //Todavía no funciona, almacena el Entity Id en la tabla UserEntityRelation como 0, pero al menos ya lo almacena y actualiza los roles.
+
+            try
+            {
+                if(Role == RolesEnum.Admin.ToString())
+                {
+
+                    admin = await _adminService.AddAsync(admin);
+                    userEntityRelation = new SaveUserEntityRelationDto
+                    {
+                        UserId = identityUser.Id,
+                        EntityId = admin.Id,
+                        EntityRole = RolesEnum.Admin.ToString()
+                    };
+                }
+                else if(Role == RolesEnum.Assistant.ToString())
+                {
+                    assistant = await _assistantService.AddAsync(assistant);
+                    userEntityRelation = new SaveUserEntityRelationDto
+                    {
+                        UserId = identityUser.Id,
+                        EntityId = assistant.Id,
+                        EntityRole = RolesEnum.Assistant.ToString()
+                    };
+                }
+
+                await _userEntityRelationService.AddAsync(userEntityRelation);
+                
+                await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(identityUser.Id), Role == RolesEnum.Admin.ToString()? RolesEnum.Admin.ToString() : RolesEnum.Assistant.ToString());
+
+                serviceResult.HasError = false;
+            }
+            catch (Exception ex)
+            {
+                serviceResult.HasError = true;
+                serviceResult.Error = ex.Message;
+            }
+            return serviceResult;
+        }
+
+        public async Task<DomainEntitiesRelatedDto> GetDomainEntitiesByIdAsync(string Id)
+        {
+            DomainEntitiesRelatedDto domainEntitiesRelatedDto = new();
+
+            var identityUser = await _userManager.FindByIdAsync(Id);
+            var entitiesRelated = await _userEntityRelationService.GetByUserIdAsync(identityUser.Id);
+            if (entitiesRelated.Exists(e => e.EntityRole == RolesEnum.Patient.ToString()))
+            {
+                var uerEntity = entitiesRelated.Find(e => e.EntityRole == RolesEnum.Patient.ToString());
+                domainEntitiesRelatedDto.Patient = await _patientService.GetByIdAsync(uerEntity.EntityId);
+                domainEntitiesRelatedDto.Patient.Allergies = null;
+                domainEntitiesRelatedDto.Patient.Discapacities = null;
+                domainEntitiesRelatedDto.Patient.Illnesses = null;
+                domainEntitiesRelatedDto.Patient.RiskFactors = null;
+                domainEntitiesRelatedDto.Patient.Appointments = null;
+                domainEntitiesRelatedDto.Patient.Vaccines = null;
+                domainEntitiesRelatedDto.Patient.ClinicalHistories = null;
+                domainEntitiesRelatedDto.Patient.FamilyHistories = null;
+            }
+            if (entitiesRelated.Exists(e=>e.EntityRole == RolesEnum.Admin.ToString()))
+            {
+                var uerEntity = entitiesRelated.Find(e => e.EntityRole == RolesEnum.Admin.ToString());
+                domainEntitiesRelatedDto.Admin = await _adminService.GetByIdAsync(uerEntity.EntityId);
+            }
+            if (entitiesRelated.Exists(e => e.EntityRole == RolesEnum.Admin.ToString()))
+            {
+                var uerEntity = entitiesRelated.Find(e => e.EntityRole == RolesEnum.Assistant.ToString());
+                domainEntitiesRelatedDto.Assistant = await _assistantService.GetByIdAsync(uerEntity.EntityId);
+            }
+            return domainEntitiesRelatedDto;
+        }
     }
 }
