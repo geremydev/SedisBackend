@@ -27,6 +27,9 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients
         public DateTime Birthdate { get; set; }
         public char Sex { get; set; }
         public string BloodType { get; set; }
+        public string? BloodTypeLabResultURl { get; set; }
+        public decimal Height { get; set; }
+        public decimal Weight { get; set; }
         public string? EmergencyContactName { get; set; }
         public string? EmergencyContactPhone { get; set; }
         public int? PrimaryCarePhysicianId { get; set; }

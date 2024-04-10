@@ -38,6 +38,10 @@ using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Do
 using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.User_Entity_Relation;
 using SedisBackend.Core.Application.Services.Domain_Services.User_Entity_Relation;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Admins;
+using SedisBackend.Core.Application.Services.Domain_Services.Users.Admins;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Assistants;
+using SedisBackend.Core.Application.Services.Domain_Services.Users.Assistants;
 
 #endregion
 
@@ -51,7 +55,6 @@ namespace SedisBackend.Core.Application.IOC
 
             #region Services
             services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
-            services.AddTransient<IPatientService, PatientService>();
             services.AddTransient<IUserService, UserService>();
 
             #region Domain Services
@@ -157,6 +160,14 @@ namespace SedisBackend.Core.Application.IOC
             services.AddTransient<IDoctorMedicalSpecialtyService, DoctorMedicalSpecialtyService>();
             services.AddTransient<IMedicalSpecialtyService, MedicalSpecialtyService>();
 
+            #endregion
+
+            #region Admin
+            services.AddTransient<IAdminService, AdminService>();
+            #endregion
+
+            #region Assistant
+            services.AddTransient<IAssistantService, AssistantService>();
             #endregion
 
             #endregion

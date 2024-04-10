@@ -5,6 +5,7 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness_Condition
 {
+    [ApiVersion("1.0")]
     public class PatientIllnessController : BaseApiController
     {
         private readonly IPatientIllnessService _patientIllnessService;

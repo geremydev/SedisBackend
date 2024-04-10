@@ -6,6 +6,7 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Medical_Insurance
 {
+    [ApiVersion("1.0")]
     public class MedicationCoverageController : BaseApiController
     {
         private readonly IMedicationCoverageService _medicationCoverageService;

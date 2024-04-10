@@ -6,6 +6,7 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Factor_Condition
 {
+    [ApiVersion("1.0")]
     public class PatientRiskFactorController : BaseApiController
     {
         private readonly IPatientRiskFactorService _patientRiskFactorService;

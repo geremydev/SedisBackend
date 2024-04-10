@@ -7,6 +7,8 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Users.Doctor
 {
+    [ApiVersion("1.0")]
+    [ApiController]
     public class MedicalSpecialtyController : BaseApiController
     {
         private readonly IMedicalSpecialtyService _medicalSpecialtyService;

@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Locations;
+using SedisBackend.Core.Application.Dtos.Shared_Dtos;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Locations;
 using SedisBackend.WebApi.Controllers.v1;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApi.Controllers.v1.Domain.Locations
 {
+    [ApiVersion("1.0")]
     public class LocationController : BaseApiController
     {
         private readonly ILocationService _locationService;
@@ -120,5 +124,30 @@ namespace WebApi.Controllers.v1.Domain.Locations
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+
+        /*[HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProvinceDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                Uri baseAddress = new Uri("https://api.digital.gob.do/v1/");
+                HttpClient _httpClient = new HttpClient();
+                _httpClient.BaseAddress = baseAddress;
+                HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + "/territories/provinces").Result;
+                List< ProvinceDto> jsonData = new();
+                jsonData = JsonConvert.DeserializeObject<List<ProvinceDto>>(response.Content.ReadAsStringAsync().Result);
+
+                return Ok(jsonData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }*/
+
     }
 }

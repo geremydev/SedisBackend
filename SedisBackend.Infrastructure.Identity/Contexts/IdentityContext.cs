@@ -11,8 +11,6 @@ namespace SedisBackend.Infrastructure.Identity.Contexts
     {
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options) { }
 
-        public DbSet<UserEntityRelation> UserEntityRelation { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

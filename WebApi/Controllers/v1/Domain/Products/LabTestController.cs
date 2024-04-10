@@ -9,8 +9,8 @@ using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Products
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class LabTestController : BaseApiController
     {
         private readonly ILabTestService _labTestService;
