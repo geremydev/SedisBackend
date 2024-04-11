@@ -7,7 +7,7 @@ using SedisBackend.WebApi.Controllers.v1;
 namespace WebApi.Controllers.v1.Domain.Appointment
 {
     [ApiVersion("1.0")]
-    [Authorize(Roles = "Doctor, Patient")]
+    //[Authorize(Roles = "Doctor, Patient")]
     public class AppointmentController : BaseApiController
     {
         private readonly IAppointmentService _appointmentsService;
@@ -89,7 +89,7 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAppointmentDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Doctor, Assistant")]
+        ////[Authorize(Roles = "Doctor, Assistant")]
         public async Task<ActionResult> Put(int id, SaveAppointmentDto appointment)
         {
             try
@@ -133,7 +133,7 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Assistant")]
+        //[Authorize(Roles = "Assistant")]
         public async Task<ActionResult> DeleteAppointment(int id, SaveAppointmentDto appointment)
         {
             try

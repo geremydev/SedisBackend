@@ -67,7 +67,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Doctor")]
+        //[Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Post(SavePatientIllnessDto dto)
         {
             try
@@ -91,7 +91,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePatientIllnessDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Doctor")]
+        //[Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Put(int id, SavePatientIllnessDto dto)
         {
             try

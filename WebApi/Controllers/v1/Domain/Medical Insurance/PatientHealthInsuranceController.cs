@@ -66,7 +66,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post(SavePatientHealthInsuranceDto dto)
         {
             try
@@ -90,7 +90,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePatientHealthInsuranceDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Admin")]
+        ////[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(int id, SavePatientHealthInsuranceDto dto)
         {
             try

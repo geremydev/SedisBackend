@@ -14,6 +14,7 @@ namespace SedisBackend.Infrastructure.Shared
             services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
             services.AddTransient<IEmailService, EmailService>();
             services.AddSingleton<ICardValidationService, CardValidationService>(); 
+            services.AddSingleton<IChatGPTService, ChatGPTService>(); 
         }
     }
 }

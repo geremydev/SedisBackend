@@ -7,7 +7,7 @@ using SedisBackend.WebApi.Controllers.v1;
 namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Discapacity
 {
     [ApiVersion("1.0")]
-    [Authorize(Roles = "Admin")]
+    ////[Authorize(Roles = "Admin")]
     public class DiscapacityController : BaseApiController
     {
         private readonly IDiscapacityService _discapacityServiceService;

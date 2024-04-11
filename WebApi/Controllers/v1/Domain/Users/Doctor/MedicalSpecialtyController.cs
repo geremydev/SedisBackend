@@ -69,7 +69,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Admin")]
+        ////[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post(SaveMedicalSpecialityDto dto)
         {
             try

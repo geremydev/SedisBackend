@@ -68,7 +68,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Doctor")]
+        //[Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Post(SaveClinicalHistoryDto dto)
         {
             try
@@ -92,7 +92,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveClinicalHistoryDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Doctor")]
+        //[Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Put(int id, SaveClinicalHistoryDto dto)
         {
             try

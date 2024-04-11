@@ -89,6 +89,36 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.ToTable("HealthCenters", (string)null);
                 });
 
+            modelBuilder.Entity("SedisBackend.Core.Domain.Health_Centers.HealthCenterServices", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HealthCenterId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HealthCenterId");
+
+                    b.ToTable("HealthCenterServices", (string)null);
+                });
+
             modelBuilder.Entity("SedisBackend.Core.Domain.Locations.Location", b =>
                 {
                     b.Property<int>("Id")
@@ -801,7 +831,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("IdCard")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -817,6 +847,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("HealthCenterId");
+
+                    b.HasIndex("IdCard")
+                        .IsUnique();
 
                     b.ToTable("Admins", (string)null);
                 });
@@ -841,7 +874,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("IdCard")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -857,6 +890,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("HealthCenterId");
+
+                    b.HasIndex("IdCard")
+                        .IsUnique();
 
                     b.ToTable("Assistants", (string)null);
                 });
@@ -878,7 +914,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("IdCard")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -896,6 +932,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(1)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdCard")
+                        .IsUnique();
 
                     b.ToTable("Doctors", (string)null);
                 });
@@ -1007,7 +1046,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("IdCard")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -1027,6 +1066,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdCard")
+                        .IsUnique();
 
                     b.ToTable("Patients", (string)null);
                 });
@@ -1056,6 +1098,17 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Navigation("HealthCenter");
 
                     b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("SedisBackend.Core.Domain.Health_Centers.HealthCenterServices", b =>
+                {
+                    b.HasOne("SedisBackend.Core.Domain.Health_Centers.HealthCenter", "HealthCenter")
+                        .WithMany("Services")
+                        .HasForeignKey("HealthCenterId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("HealthCenter");
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Allergies.PatientAllergy", b =>
@@ -1353,6 +1406,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Navigation("Assistants");
 
                     b.Navigation("Doctors");
+
+                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Allergies.Allergy", b =>

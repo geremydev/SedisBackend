@@ -68,7 +68,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post(SaveDoctorHealthCenterDto dto)
         {
             try
@@ -92,7 +92,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveDoctorDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(int id, SaveDoctorHealthCenterDto dto)
         {
             try

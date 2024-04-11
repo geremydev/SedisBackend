@@ -42,11 +42,11 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+/*if (app.Environment.IsDevelopment())
+{*/
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 using (var scope = app.Services.CreateScope())
 {

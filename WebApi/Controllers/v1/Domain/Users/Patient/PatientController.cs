@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
+using SedisBackend.Core.Application.Interfaces.Services.Shared_Services;
 using SedisBackend.Core.Domain.Users.Patients;
 using SedisBackend.WebApi.Controllers.v1;
 
@@ -19,6 +20,8 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
             _patientService = patienService;
             _mapper = mapper;
         }
+
+        
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientDto))]
@@ -120,7 +123,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePatientDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Patient")]
+        ////[Authorize(Roles = "Patient")]
         public async Task<IActionResult> Put(int id, SavePatientDto dto)
         {
             try

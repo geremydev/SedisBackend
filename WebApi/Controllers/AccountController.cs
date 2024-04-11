@@ -18,11 +18,14 @@ namespace WebApi.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly ICardValidationService _cardValidationService;
+        private readonly IChatGPTService _chatGPTService;
 
-        public AccountController(IAccountService accountService, ICardValidationService cardValidationService)
+
+        public AccountController(IAccountService accountService, ICardValidationService cardValidationService, IChatGPTService chatGPTService)
         {
             _accountService = accountService;
             _cardValidationService = cardValidationService;
+            _chatGPTService = chatGPTService;
         }
 
         [HttpPost("authenticate")]
@@ -32,7 +35,30 @@ namespace WebApi.Controllers
         {
             return Ok(await _accountService.AuthenticateAsync(request));
         }
-            
+
+        [HttpPost("{query}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Post(string query)
+        {
+            try
+            {
+                var response = _chatGPTService.SendQuery(query);
+
+                if (response.Length == 0)
+                {
+                    return NotFound();
+                }
+
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
         [HttpPost("register")]
         [SwaggerOperation(Summary = "El Endpoint de Registro",
                           Description = "Aqui tendras que llenar todos los campos con los datos correspondientes para registrarte en el sistema.")]

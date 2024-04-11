@@ -28,7 +28,7 @@ namespace SedisBackend.WebApi.Extensions
 
                 options.EnableAnnotations();
                 options.DescribeAllParametersInCamelCase();
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                /*options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
                     In = ParameterLocation.Header,
@@ -52,7 +52,7 @@ namespace SedisBackend.WebApi.Extensions
                             In = ParameterLocation.Header,
                         }, new List<string>()
                     },
-                });
+                });*/
 
             });
         }

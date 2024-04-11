@@ -63,7 +63,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -87,7 +87,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveHealthCenterServicesDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -110,7 +110,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

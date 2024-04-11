@@ -47,7 +47,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     LicenseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdCard = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdCard = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Sex = table.Column<string>(type: "nvarchar(1)", nullable: false)
@@ -192,7 +192,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     PrimaryCarePhysicianId = table.Column<int>(type: "int", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdCard = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdCard = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Sex = table.Column<string>(type: "nvarchar(1)", nullable: false)
@@ -258,7 +258,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     HealthCenterId = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdCard = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdCard = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Sex = table.Column<string>(type: "nvarchar(1)", nullable: false)
@@ -282,7 +282,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     HealthCenterId = table.Column<int>(type: "int", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdCard = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IdCard = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Birthdate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Sex = table.Column<string>(type: "nvarchar(1)", nullable: false)
@@ -319,6 +319,27 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DoctorHealthCenters_HealthCenters_HealthCenterId",
+                        column: x => x.HealthCenterId,
+                        principalTable: "HealthCenters",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HealthCenterServices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HealthCenterId = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HealthCenterServices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HealthCenterServices_HealthCenters_HealthCenterId",
                         column: x => x.HealthCenterId,
                         principalTable: "HealthCenters",
                         principalColumn: "Id");
@@ -733,6 +754,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 column: "HealthCenterId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Admins_IdCard",
+                table: "Admins",
+                column: "IdCard",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Appointments_DoctorId",
                 table: "Appointments",
                 column: "DoctorId");
@@ -751,6 +778,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 name: "IX_Assistants_HealthCenterId",
                 table: "Assistants",
                 column: "HealthCenterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Assistants_IdCard",
+                table: "Assistants",
+                column: "IdCard",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClinicalHistories_DoctorId",
@@ -783,6 +816,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 column: "MedicalSpecialtyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Doctors_IdCard",
+                table: "Doctors",
+                column: "IdCard",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FamilyHistories_PatientId",
                 table: "FamilyHistories",
                 column: "PatientId");
@@ -791,6 +830,11 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 name: "IX_FamilyHistories_RelativeId1",
                 table: "FamilyHistories",
                 column: "RelativeId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HealthCenterServices_HealthCenterId",
+                table: "HealthCenterServices",
+                column: "HealthCenterId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LabTestPrescriptions_ClinicalHistoryId",
@@ -878,6 +922,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 column: "RiskFactorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Patients_IdCard",
+                table: "Patients",
+                column: "IdCard",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PatientVaccines_PatientId",
                 table: "PatientVaccines",
                 column: "PatientId");
@@ -916,6 +966,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 name: "FamilyHistories");
 
             migrationBuilder.DropTable(
+                name: "HealthCenterServices");
+
+            migrationBuilder.DropTable(
                 name: "LabTestPrescriptions");
 
             migrationBuilder.DropTable(
@@ -949,10 +1002,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 name: "UserEntityRelation");
 
             migrationBuilder.DropTable(
-                name: "HealthCenters");
+                name: "MedicalSpecialities");
 
             migrationBuilder.DropTable(
-                name: "MedicalSpecialities");
+                name: "HealthCenters");
 
             migrationBuilder.DropTable(
                 name: "LabTests");

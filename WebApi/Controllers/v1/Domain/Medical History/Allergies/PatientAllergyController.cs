@@ -66,7 +66,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Doctor")]
+        //[Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Post(SavePatientAllergyDto dto)
         {
             try
@@ -90,7 +90,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SavePatientAllergyDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Doctor")]
+        //[Authorize(Roles = "Doctor")]
         public async Task<IActionResult> Put(int id, SavePatientAllergyDto dto)
         {
             try
