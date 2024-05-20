@@ -7,7 +7,7 @@ using SedisBackend.WebApi.Extensions;
 using SedisBackend.Core.Application.IOC;
 using SedisBackend.Infrastructure.Identity.IOC;
 using SedisBackend.Infrastructure.Shared;
-
+using Microsoft.AspNetCore.Mvc.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +28,7 @@ builder.Services.IdentityLayerRegistration(builder.Configuration);
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 builder.Services.AddApiVersioningExtension();
 builder.Services.AddApplicationLayer();
-builder.Services.AddSwaggerExtension();
+builder.Services.AddSwaggerExtension(builder.Configuration);
 
 builder.Services.AddHealthChecks();
 builder.Services.AddSwaggerGen();
@@ -36,6 +36,20 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSession();
 
+
+
+/*builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+{
+    builder.Coo()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));*/
+builder.Services.AddMvc();
+
+/*builder.Services.Configure<MvcOptions>(options =>
+{
+    options.Filters.Add(new CorsAuthorizationFilterFactory("MyPolicy"));
+});*/
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

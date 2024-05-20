@@ -1,11 +1,12 @@
 ﻿using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Configuration;
 
 namespace SedisBackend.WebApi.Extensions
 {
     public static class ServiceExtensions
     {
-        public static void AddSwaggerExtension(this IServiceCollection services)
+        public static void AddSwaggerExtension(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerGen(options =>
             {
@@ -53,6 +54,8 @@ namespace SedisBackend.WebApi.Extensions
                         }, new List<string>()
                     },
                 });*/
+
+
 
             });
         }

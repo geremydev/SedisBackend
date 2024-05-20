@@ -1,5 +1,6 @@
 ﻿using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Admins;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Assistants;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 
 namespace SedisBackend.Core.Application.Dtos.Identity_Dtos.Account
@@ -9,5 +10,6 @@ namespace SedisBackend.Core.Application.Dtos.Identity_Dtos.Account
         public BaseAdminDto? Admin { get; set; } = null;
         public BaseAssistantDto Assistant { get; set; } = null;
         public BasePatientDto Patient { get; set; } = null;
+        public BaseDoctorDto Doctor { get; set; } = null;
     }
 }

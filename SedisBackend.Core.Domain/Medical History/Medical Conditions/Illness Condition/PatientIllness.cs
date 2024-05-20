@@ -21,5 +21,6 @@ namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness_Co
         public DateTime? DischargeDate { get; set; }
         // Estado actual de la enfermedad (activa, inactiva, en remisión)
         public string Status { get; set; }
+        public string Notes { get; set; }
     }
 }

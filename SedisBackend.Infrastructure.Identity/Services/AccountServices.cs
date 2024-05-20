@@ -28,6 +28,7 @@ using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Ad
 using System.Text.Json.Serialization;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Assistants;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Assistants;
+using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
 
 namespace SedisBackend.Infrastructure.Identity.Services
 {
@@ -43,6 +44,7 @@ namespace SedisBackend.Infrastructure.Identity.Services
         private readonly ICardValidationService _cardValidationService;
         private readonly IAdminService _adminService;
         private readonly IAssistantService _assistantService;
+        private readonly IDoctorService _doctorService;
 
         public AccountServices(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager, IEmailService emailServices,
@@ -50,7 +52,8 @@ namespace SedisBackend.Infrastructure.Identity.Services
             IUserEntityRelationService userEntityRelationService,
             ICardValidationService cardValidationService,
             IAdminService adminService,
-            IAssistantService assistantService)
+            IAssistantService assistantService,
+            IDoctorService doctorService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -62,6 +65,7 @@ namespace SedisBackend.Infrastructure.Identity.Services
             _cardValidationService = cardValidationService;
             _adminService = adminService;
             _assistantService = assistantService;
+            _doctorService = doctorService;
         }
 
         public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
@@ -593,6 +597,11 @@ namespace SedisBackend.Infrastructure.Identity.Services
             {
                 var uerEntity = entitiesRelated.Find(e => e.EntityRole == RolesEnum.Assistant.ToString());
                 domainEntitiesRelatedDto.Assistant = await _assistantService.GetByIdAsync(uerEntity.EntityId);
+            }
+            if (entitiesRelated.Exists(e => e.EntityRole == RolesEnum.Doctor.ToString()))
+            {
+                var uerEntity = entitiesRelated.Find(e => e.EntityRole == RolesEnum.Doctor.ToString());
+                domainEntitiesRelatedDto.Doctor = await _doctorService.GetByIdAsync(uerEntity.EntityId);
             }
             return domainEntitiesRelatedDto;
         }
