@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_Insurance;
 using SedisBackend.WebApi.Controllers.v1;
+using Asp.Versioning;
 
 namespace WebApi.Controllers.v1.Domain.Medical_Insurance
 {

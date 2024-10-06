@@ -34,11 +34,11 @@ namespace SedisBackend.Infrastructure.Identity.Services
 {
     public class AccountServices: IAccountService
     {
-        private readonly IPatientService _patientService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailService _emailServices;
         private readonly JWTSettings _jwtSettings;
+        private readonly IPatientService _patientService;
+        private readonly IEmailService _emailServices;
         private readonly IMapper _mapper;
         private readonly IUserEntityRelationService _userEntityRelationService;
         private readonly ICardValidationService _cardValidationService;
@@ -117,9 +117,46 @@ namespace SedisBackend.Infrastructure.Identity.Services
             var refreshToken = GenerateRefreshToken();
             response.RefreshToken = refreshToken.Token;
             response.DomainEntitiesRelated = await GetDomainEntitiesByIdAsync(user.Id);
+                
             return response;
         }
 
+        public async Task<AuthenticationResponse> ValidateTokenAsync(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.Key);
+
+            // Configurar las validaciones del token
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero  // No tolerar retrasos en el reloj
+            }, out SecurityToken validatedToken);
+
+            var jwtToken = (JwtSecurityToken)validatedToken;
+
+            // Extraer la información del usuario a partir de los claims del token
+            var userId = jwtToken.Claims.First(x => x.Type == "uid").Value;
+            var email = jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Email).Value;
+            var userName = jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
+            var roles = jwtToken.Claims.Where(x => x.Type == "roles").Select(x => x.Value).ToList();
+
+            // Crear una respuesta con los detalles del usuario
+            var authResponse = new AuthenticationResponse
+            {
+                Id = userId,
+                Email = email,
+                UserName = userName,
+                Roles = roles,
+                IsVerified = true,  // Suponiendo que si el token es válido, el usuario está verificado
+                HasError = false
+            };
+
+            return authResponse;
+        }
 
         public async Task SingOutAsync()
         {

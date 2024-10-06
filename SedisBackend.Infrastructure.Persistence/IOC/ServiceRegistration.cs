@@ -6,7 +6,6 @@ using SedisBackend.Core.Application.Interfaces.Repositories.Appointments;
 using SedisBackend.Core.Application.Interfaces.Repositories.Base;
 using SedisBackend.Core.Application.Interfaces.Repositories.Health_Centers;
 using SedisBackend.Core.Application.Interfaces.Repositories.Locations;
-using SedisBackend.Core.Application.Interfaces.Repositories.Locations;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Allergies;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medical_Condition.Discapacity_Condition;
@@ -55,7 +54,11 @@ namespace SedisBackend.Infrastructure.Persistence.IOC
             else
             {
                 services.AddDbContext<SedisContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), m => m.MigrationsAssembly(typeof(SedisContext).Assembly.FullName)));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), sqlServerOptions =>
+                {
+                    sqlServerOptions.MigrationsAssembly(typeof(SedisContext).Assembly.FullName);
+                    sqlServerOptions.MaxBatchSize(30);
+                }));
             }
             #endregion
 

@@ -5,6 +5,7 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinical_Hi
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Allergies;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Clinical_History;
 using SedisBackend.WebApi.Controllers.v1;
+using Asp.Versioning;
 
 namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
 {

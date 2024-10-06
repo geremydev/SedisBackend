@@ -4,6 +4,7 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Presctiprions;
 using SedisBackend.Core.Application.Services.Domain_Services.Prescriptions;
 using SedisBackend.WebApi.Controllers.v1;
+using Asp.Versioning;
 
 namespace WebApi.Controllers.v1.Domain.Prescriptions
 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Configuration;
+using Asp.Versioning;
 
 namespace SedisBackend.WebApi.Extensions
 {

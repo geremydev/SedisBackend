@@ -1,13 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.MSIdentity.Shared;
 using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using NuGet.Common;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
 using SedisBackend.Core.Application.Dtos.Shared_Dtos;
 using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Application.Interfaces.Services.Shared_Services;
+using SedisBackend.Core.Domain.Settings;
 using SedisBackend.Infrastructure.Shared.Services;
 using Swashbuckle.AspNetCore.Annotations;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace WebApi.Controllers
 {
@@ -33,7 +38,94 @@ namespace WebApi.Controllers
                           Description = "Aqui van los datos para iniciar sesion (Email, Password).")]
         public async Task<IActionResult> AuthenticateAsync(AuthenticationRequest request)
         {
-            return Ok(await _accountService.AuthenticateAsync(request));
+            var authResponse = await _accountService.AuthenticateAsync(request);
+
+            if (authResponse.HasError)
+            {
+                return Unauthorized(new { authResponse.Error });
+            }
+
+            Response.Cookies.Append("auth_token", authResponse.JWToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(60)
+            });
+
+            //Response.Cookies.Append("refresh_token", authResponse.RefreshToken, new CookieOptions
+            //{
+            //    HttpOnly = true,
+            //    Secure = true,
+            //    SameSite = SameSiteMode.Strict,
+            //    Expires = DateTime.UtcNow.AddDays(7) // Longer expiry for refresh token
+            //});
+
+            var response = new
+            {
+                Id = authResponse.Id,
+                UserName = authResponse.UserName,
+                Email = authResponse.Email,
+                IsVerified = authResponse.IsVerified,
+                HasError = authResponse.HasError,
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet("me")]
+        [SwaggerOperation(Summary = "Validar la autenticación del usuario actual",
+                   Description = "Este endpoint devuelve los detalles del usuario si el JWT es válido.")]
+        public async Task<IActionResult> ValidateUserAsync()
+        {
+            // Obtener el token de la cookie
+            var token = Request.Cookies["auth_token"];
+
+            Console.WriteLine(token);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                Console.WriteLine("No se encontró token de autenticación.");
+                return Unauthorized(new { Error = "No se encontró token de autenticación." });
+            }
+
+            // Intentar validar el token
+            try
+            {
+                var authResponse = await _accountService.ValidateTokenAsync(token);
+
+                var response = new
+                {
+                    Id = authResponse.Id,
+                    UserName = authResponse.UserName,
+                    Email = authResponse.Email,
+                    IsVerified = authResponse.IsVerified,
+                    HasError = authResponse.HasError,
+                };
+
+                return Ok(authResponse);  // Devolver los detalles del usuario
+            }
+            catch
+            {
+                // Si el token es inválido o expirado, devolver un error de autenticación
+                return Unauthorized(new { Error = "Token inválido o expirado." });
+            }
+        }
+
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _accountService.SingOutAsync();
+            Response.Cookies.Delete("auth_token", new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddDays(-1)
+            });
+
+            return Ok(new { message = "Logged out" });
         }
 
         [HttpPost("{query}")]

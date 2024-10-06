@@ -7,6 +7,7 @@ using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Products
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
 using SedisBackend.WebApi.Controllers.v1;
+using Asp.Versioning;
 
 namespace WebApi.Controllers.v1.Domain.Products
 {

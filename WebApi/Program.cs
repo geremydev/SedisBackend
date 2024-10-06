@@ -7,11 +7,11 @@ using SedisBackend.WebApi.Extensions;
 using SedisBackend.Core.Application.IOC;
 using SedisBackend.Infrastructure.Identity.IOC;
 using SedisBackend.Infrastructure.Shared;
-using Microsoft.AspNetCore.Mvc.Cors;
+using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+// Add services to the container.
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(new ProducesAttribute("application/json"));
@@ -21,8 +21,6 @@ builder.Services.AddControllers(options =>
     options.SuppressMapClientErrors = true;
 });
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 builder.Services.IdentityLayerRegistration(builder.Configuration);
 builder.Services.AddSharedInfrastructure(builder.Configuration);
@@ -35,32 +33,43 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSession();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-
-
-/*builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+builder.Services.AddCors(options => options.AddPolicy("NextJS", policy =>
 {
-    builder.Coo()
-           .AllowAnyMethod()
-           .AllowAnyHeader();
-}));*/
-builder.Services.AddMvc();
+    policy.WithOrigins("http://localhost:3000")
+          .AllowAnyHeader()
+          .AllowAnyMethod()
+          .WithMethods("POST", "OPTIONS")
+          .AllowCredentials();
+}));
 
-/*builder.Services.Configure<MvcOptions>(options =>
-{
-    options.Filters.Add(new CorsAuthorizationFilterFactory("MyPolicy"));
-});*/
+//builder.Services.AddCors(options => options.AddPolicy("NextJS", policy =>
+//{
+//    if (builder.Environment.IsDevelopment())
+//    {
+//        policy.WithOrigins("http://localhost:3000")
+//              .AllowAnyHeader()
+//              .AllowAnyMethod();
+//    }
+//    else
+//    {
+//        policy.WithOrigins("http://localhost:3000")
+//              .AllowAnyHeader()
+//              .AllowAnyMethod();
+//    }
+//}));
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-/*if (app.Environment.IsDevelopment())
-{*/
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+}
 
 using (var scope = app.Services.CreateScope())
 {
@@ -79,13 +88,16 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred during user seeding.");
     }
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("NextJS");
 app.UseRouting();
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
