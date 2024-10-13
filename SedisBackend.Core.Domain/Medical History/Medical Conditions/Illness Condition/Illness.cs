@@ -13,8 +13,6 @@ namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int ParentIllnessId { get; set; }
-        public Illness ParentIllness { get; set; }
 
     }
 }
