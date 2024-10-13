@@ -375,6 +375,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<int>("IllnessId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 

@@ -12,7 +12,7 @@ using SedisBackend.Infrastructure.Persistence.Contexts;
 namespace SedisBackend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SedisContext))]
-    [Migration("20240410203852_InitialMigration")]
+    [Migration("20241013200413_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -377,6 +377,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("IllnessId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("int");

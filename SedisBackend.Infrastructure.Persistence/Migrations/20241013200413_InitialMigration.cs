@@ -591,7 +591,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     DocumentURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DiagnosisDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DischargeDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
