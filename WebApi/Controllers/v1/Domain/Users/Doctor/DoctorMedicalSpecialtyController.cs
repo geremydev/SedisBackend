@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
-using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
-using SedisBackend.Core.Domain.Users.Doctors;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Users.Doctor
@@ -13,12 +8,8 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
     [ApiVersion("1.0")]
     public class DoctorMedicalSpecialtyController : BaseApiController
     {
-        private readonly IDoctorMedicalSpecialtyService _doctorMedicalSpecialtyService;
-
-        public DoctorMedicalSpecialtyController(IDoctorMedicalSpecialtyService doctorMedicalSpecialtyService)
-        {
-            _doctorMedicalSpecialtyService = doctorMedicalSpecialtyService;
-        }
+        private readonly IServiceManager _service;
+        public DoctorMedicalSpecialtyController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseMedicalSpeciality))]
@@ -28,7 +19,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         {
             try
             {
-                var doctorMedicalSpecialtys = await _doctorMedicalSpecialtyService.GetAllAsync();
+                var doctorMedicalSpecialtys = await _service.DoctorMedicalSpecialty.GetAllAsync();
 
                 if (doctorMedicalSpecialtys == null || doctorMedicalSpecialtys.Count == 0)
                 {
@@ -47,11 +38,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseMedicalSpeciality))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var doctorMedicalSpecialty = await _doctorMedicalSpecialtyService.GetByIdAsync(id);
+                var doctorMedicalSpecialty = await _service.DoctorMedicalSpecialty.GetByIdAsync(id);
 
                 if (doctorMedicalSpecialty == null)
                 {
@@ -80,7 +71,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
                     return BadRequest();
                 }
 
-                await _doctorMedicalSpecialtyService.AddAsync(dto);
+                await _service.DoctorMedicalSpecialty.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -95,7 +86,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(int id, SaveDoctorMedicalSpecialtyDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveDoctorMedicalSpecialtyDto dto)
         {
             try
             {
@@ -104,7 +95,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
                     return BadRequest();
                 }
 
-                await _doctorMedicalSpecialtyService.UpdateAsync(dto, id);
+                await _service.DoctorMedicalSpecialty.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -116,11 +107,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _doctorMedicalSpecialtyService.Delete(id);
+                await _service.DoctorMedicalSpecialty.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

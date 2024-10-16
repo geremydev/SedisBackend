@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Users.Doctor
@@ -11,12 +8,8 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
     [ApiVersion("1.0")]
     public class DoctorHealthCenterController : BaseApiController
     {
-        private readonly IDoctorHealthCenterService _doctorHealthCenterService;
-
-        public DoctorHealthCenterController(IDoctorHealthCenterService doctorHealthCenterService)
-        {
-            _doctorHealthCenterService = doctorHealthCenterService;
-        }
+        private readonly IServiceManager _service;
+        public DoctorHealthCenterController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseDoctorDto))]
@@ -26,7 +19,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         {
             try
             {
-                var doctorsHealtCenters = await _doctorHealthCenterService.GetAllAsync();
+                var doctorsHealtCenters = await _service.doctorHealthCenter.GetAllAsync();
 
                 if (doctorsHealtCenters == null || doctorsHealtCenters.Count == 0)
                 {
@@ -45,11 +38,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseDoctorHealthCenterDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var doctorHealthCenter = await _doctorHealthCenterService.GetByIdAsync(id);
+                var doctorHealthCenter = await _service.doctorHealthCenter.GetByIdAsync(id);
 
                 if (doctorHealthCenter == null)
                 {
@@ -78,7 +71,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
                     return BadRequest();
                 }
 
-                await _doctorHealthCenterService.AddAsync(dto);
+                await _service.doctorHealthCenter.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -93,7 +86,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(int id, SaveDoctorHealthCenterDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveDoctorHealthCenterDto dto)
         {
             try
             {
@@ -102,7 +95,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
                     return BadRequest();
                 }
 
-                await _doctorHealthCenterService.UpdateAsync(dto, id);
+                await _service.doctorHealthCenter.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -114,11 +107,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _doctorHealthCenterService.Delete(id);
+                await _service.doctorHealthCenter.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

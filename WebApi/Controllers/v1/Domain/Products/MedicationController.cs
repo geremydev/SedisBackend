@@ -1,23 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Products;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Products;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Products
 {
     public class MedicationController : BaseApiController
     {
-        private readonly IMedicationService _medicationService;
-
-        public MedicationController(IMedicationService medicationService)
-        {
-            _medicationService = medicationService;
-        }
+        private readonly IServiceManager _service;
+        public MedicationController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseMedicationDto))]
@@ -27,7 +18,7 @@ namespace WebApi.Controllers.v1.Domain.Products
         {
             try
             {
-                var medications = await _medicationService.GetAllAsync();
+                var medications = await _service.Medication.GetAllAsync();
 
                 if (medications == null || medications.Count == 0)
                 {
@@ -46,11 +37,11 @@ namespace WebApi.Controllers.v1.Domain.Products
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseMedicationDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var medication = await _medicationService.GetByIdAsync(id);
+                var medication = await _service.Medication.GetByIdAsync(id);
 
                 if (medication == null)
                 {
@@ -79,7 +70,7 @@ namespace WebApi.Controllers.v1.Domain.Products
                     return BadRequest();
                 }
 
-                await _medicationService.AddAsync(dto);
+                await _service.Medication.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -94,7 +85,7 @@ namespace WebApi.Controllers.v1.Domain.Products
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(int id, SaveMedicationDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveMedicationDto dto)
         {
             try
             {
@@ -103,7 +94,7 @@ namespace WebApi.Controllers.v1.Domain.Products
                     return BadRequest();
                 }
 
-                await _medicationService.UpdateAsync(dto, id);
+                await _service.Medication.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -115,11 +106,11 @@ namespace WebApi.Controllers.v1.Domain.Products
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _medicationService.Delete(id);
+                await _service.Medication.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

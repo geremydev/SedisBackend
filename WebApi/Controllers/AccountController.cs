@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.DotNet.MSIdentity.Shared;
-using Microsoft.Identity.Client;
-using Newtonsoft.Json;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
-using SedisBackend.Core.Application.Dtos.Shared_Dtos;
 using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Application.Interfaces.Services.Shared_Services;
-using SedisBackend.Infrastructure.Shared.Services;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace WebApi.Controllers
@@ -72,7 +67,7 @@ namespace WebApi.Controllers
         [HttpPost("upgrade-user")]
         [SwaggerOperation(Summary = "El Endpoint de upgrade user",
                           Description = "Aqui tendras que llenar todos los campos con los datos correspondientes para registrarte en el sistema.")]
-        public async Task<IActionResult> Update2Doctor(string CardId, int HealthCenterId, string Role)
+        public async Task<IActionResult> Update2Doctor(string CardId, Guid HealthCenterId, string Role)
         {
             try
             {

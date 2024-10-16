@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinical_History;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Allergies;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Clinical_History;
 using SedisBackend.WebApi.Controllers.v1;
@@ -11,12 +12,8 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
     [ApiVersion("1.0")]
     public class ClinicalHistoryController : BaseApiController
     {
-        private readonly IClinicalHistoryService _clinicalHistoryService;
-
-        public ClinicalHistoryController(IClinicalHistoryService clinicalHistoryService)
-        {
-            _clinicalHistoryService = clinicalHistoryService;
-        }
+        private readonly IServiceManager _service;
+        public ClinicalHistoryController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseClinicalHistoryDto))]
@@ -26,7 +23,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
         {
             try
             {
-                var allergies = await _clinicalHistoryService.GetAllAsync();
+                var allergies = await _service.ClinicalHistory.GetAllAsync();
 
                 if (allergies == null || allergies.Count == 0)
                 {
@@ -45,11 +42,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseClinicalHistoryDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var patient = await _clinicalHistoryService.GetByIdAsync(id);
+                var patient = await _service.ClinicalHistory.GetByIdAsync(id);
 
                 if (patient == null)
                 {
@@ -78,7 +75,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
                     return BadRequest();
                 }
 
-                await _clinicalHistoryService.AddAsync(dto);
+                await _service.ClinicalHistory.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -93,7 +90,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Doctor")]
-        public async Task<IActionResult> Put(int id, SaveClinicalHistoryDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveClinicalHistoryDto dto)
         {
             try
             {
@@ -102,7 +99,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
                     return BadRequest();
                 }
 
-                await _clinicalHistoryService.UpdateAsync(dto, id);
+                await _service.ClinicalHistory.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -114,11 +111,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Clinical_History
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _clinicalHistoryService.Delete(id);
+                await _service.ClinicalHistory.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

@@ -17,7 +17,7 @@ namespace SedisBackend.Core.Domain.Users.Patients
         public decimal? Weight { get; set; }
         public string? EmergencyContactName { get; set; }
         public string? EmergencyContactPhone { get; set; }
-        public int? PrimaryCarePhysicianId { get; set; }
+        public Guid? PrimaryCarePhysicianId { get; set; }
         public ICollection<ClinicalHistory> ClinicalHistories { get; set; }
         public ICollection<Appointment>? Appointments { get; set; }
         public ICollection<PatientAllergy>? Allergies { get; set; }

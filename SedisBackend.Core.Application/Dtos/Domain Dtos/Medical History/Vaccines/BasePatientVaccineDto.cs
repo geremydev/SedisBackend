@@ -10,8 +10,8 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Vaccine
 {
     public class BasePatientVaccineDto
     {
-        public int Id { get; set; }
-        public int PatientId { get; set; }
+        public Guid Id { get; set; }
+        public Guid PatientId { get; set; }
         public Patient Patient { get; set; }
         public string VaccineId { get; set; }
         public Vaccine Vaccine { get; set; }

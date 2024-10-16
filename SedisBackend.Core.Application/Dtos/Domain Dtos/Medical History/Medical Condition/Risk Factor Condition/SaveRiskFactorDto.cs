@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
-namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Risk_Factor_Condition
+﻿namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Risk_Factor_Condition
 {
     public class SaveRiskFactorDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Code { get; set; } //SNOMED CT
 
         // Description of the risk factor

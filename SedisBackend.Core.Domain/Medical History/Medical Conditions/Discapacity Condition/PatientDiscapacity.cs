@@ -4,10 +4,10 @@ namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacit
 {
     public class PatientDiscapacity
     {
-        public int Id { get; set; }
-        public int PatientId { get; set; }
+        public Guid Id { get; set; }
+        public Guid PatientId { get; set; }
         public Patient Patient { get; set; }
-        public int DiscapacityId { get; set; }
+        public Guid DiscapacityId { get; set; }
         public Discapacity Discapacity { get; set; }
         // Fecha de diagnóstico (opcional)
         public DateTime? DiagnosisDate { get; set; }

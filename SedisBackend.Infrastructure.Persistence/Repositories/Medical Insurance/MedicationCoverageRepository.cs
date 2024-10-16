@@ -5,9 +5,9 @@ using SedisBackend.Infrastructure.Persistence.Repositories.Base;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories
 {
-    public class MedicationCoverageRespository : GenericRepository<MedicationCoverage>, IMedicationCoverageRepository
+    public class MedicationCoverageRepository : GenericRepository<MedicationCoverage>, IMedicationCoverageRepository
     {
-        public MedicationCoverageRespository(SedisContext context) : base(context)
+        public MedicationCoverageRepository(SedisContext context) : base(context)
         {
         }
     }

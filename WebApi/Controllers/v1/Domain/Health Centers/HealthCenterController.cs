@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Health_Centers;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Health_Centers;
 using SedisBackend.WebApi.Controllers.v1;
 
@@ -9,12 +10,9 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
     [ApiVersion("1.0")]
     public class HealthCenterController : BaseApiController
     {
-        private readonly IHealthCenterService _healthCenterService;
+        private readonly IServiceManager _service;
 
-        public HealthCenterController(IHealthCenterService healthCenterService)
-        {
-            _healthCenterService = healthCenterService;
-        }
+        public HealthCenterController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseHealthCenterDto))]
@@ -24,7 +22,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         {
             try
             {
-                var healthCenters = await _healthCenterService.GetAllAsync();
+                var healthCenters = await _service.HealthCenter.GetAllAsync();
 
                 if (healthCenters == null || healthCenters.Count == 0)
                 {
@@ -43,11 +41,11 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseHealthCenterDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var helthCenter = await _healthCenterService.GetByIdAsync(id);
+                var helthCenter = await _service.HealthCenter.GetByIdAsync(id);
 
                 if (helthCenter == null)
                 {
@@ -77,7 +75,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
                     return BadRequest();
                 }
 
-                await _healthCenterService.AddAsync(dto);
+                await _service.HealthCenter.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -92,7 +90,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveHealthCenterDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveHealthCenterDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveHealthCenterDto dto)
         {
             try
             {
@@ -101,7 +99,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
                     return BadRequest();
                 }
 
-                await _healthCenterService.UpdateAsync(dto, id);
+                await _service.HealthCenter.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -114,11 +112,11 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _healthCenterService.Delete(id);
+                await _service.HealthCenter.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

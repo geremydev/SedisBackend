@@ -18,6 +18,7 @@ using SedisBackend.Core.Domain.Users.Admins;
 using SedisBackend.Core.Domain.Users.Assistants;
 using SedisBackend.Core.Domain.Users.Doctors;
 using SedisBackend.Core.Domain.Users.Patients;
+using SedisBackend.Infrastructure.Persistence.Configuration;
 
 namespace SedisBackend.Infrastructure.Persistence.Contexts
 {
@@ -128,8 +129,6 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
             base.OnModelCreating(modelBuilder);
 
             #region Table names
-
-
 
             #region Appointments    
             modelBuilder.Entity<Appointment>().ToTable("Appointments");
@@ -389,6 +388,7 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
             modelBuilder.Entity<ClinicalHistory>()
                 .HasOne(k => k.Prescription)
                 .WithOne(k => k.ClinicalHistory)
+                .HasForeignKey<ClinicalHistory>(k => k.PrescriptionId)
                 .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
@@ -439,6 +439,14 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
                 .WithOne(k => k.Prescription)
                 .HasForeignKey(k => k.PrescriptionId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Prescription>()
+                .HasOne(p => p.ClinicalHistory)
+                .WithOne(k => k.Prescription)
+                .HasForeignKey<Prescription>(k => k.ClinicalHistoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<MedicationPrescription>().ToTable("MedicationPrescriptions");
+            //modelBuilder.Entity<LabTestPrescription>().ToTable("LabTestPrescriptions");
 
             #endregion
 
@@ -521,28 +529,33 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
               .WithOne(k => k.Doctor)
               .HasForeignKey(k => k.DoctorId)
               .OnDelete(DeleteBehavior.Cascade);
-            #endregion
 
-            #endregion
+            //public ICollection<DoctorHealthCenter> CurrentlyWorkingHealthCenters { get; set; }
+            //public ICollection<DoctorMedicalSpecialty> Specialties { get; set; }
+            //public ICollection<Appointment> Appointments { get; set; }
+            //public ICollection<ClinicalHistory> DevelopedClinicalHistories { get; set; }
+        #endregion
+
+        #endregion
 
 
-            #endregion
+        #endregion
 
-            #region Properties
+        #region Properties
 
             #region Doctor
-            modelBuilder.Entity<DoctorHealthCenter>()
+        modelBuilder.Entity<DoctorHealthCenter>()
                 .Property(e => e.EntryHour)
                 .HasConversion(
-                    v => v.ToString("HH:mm:ss"),
-                    v => TimeSpan.Parse(v)
+                    v => TimeSpanToString(v),
+                    v => StringToTimeSpan(v)
                 );
 
             modelBuilder.Entity<DoctorHealthCenter>()
                 .Property(e => e.ExitHour)
                 .HasConversion(
-                    v => v.ToString("HH:mm:ss"),
-                    v => TimeSpan.Parse(v)
+                    v => TimeSpanToString(v),
+                    v => StringToTimeSpan(v)
                 );
             modelBuilder.Entity<Doctor>()
                 .HasIndex(p => p.IdCard) 
@@ -560,15 +573,74 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
                 .HasIndex(p => p.IdCard)
                 .IsUnique();
             #endregion
-
+                
             #region Admin
             modelBuilder.Entity<Admin>()
                 .HasIndex(p => p.IdCard)
                 .IsUnique();
             #endregion
 
+            #region Location
+            modelBuilder.Entity<Location>()
+               .Property(l => l.Latitude)
+               .HasColumnType("decimal(10, 8)");
+            modelBuilder.Entity<Location>()
+                .Property(l => l.Longitude)
+                .HasColumnType("decimal(11, 8)");
             #endregion
 
+            #region MedicationCoverage
+            modelBuilder.Entity<MedicationCoverage>()
+                .Property(mc => mc.CoinsurancePercentage)
+                .HasColumnType("decimal(5, 4)"); 
+            modelBuilder.Entity<MedicationCoverage>()
+                .Property(mc => mc.CopayAmount)
+                .HasColumnType("decimal(10, 2)");
+            #endregion
+
+            #region MedicationCoverage
+            modelBuilder.Entity<Medication>()
+                .Property(m => m.Concentration)
+                .HasColumnType("decimal(10, 2)");
+            #endregion
+
+            #region Patient
+            modelBuilder.Entity<Patient>()
+               .Property(p => p.Height)
+               .HasColumnType("decimal(5, 2)"); 
+            modelBuilder.Entity<Patient>()
+                .Property(p => p.Weight)
+                .HasColumnType("decimal(5, 2)"); ;
+            #endregion
+
+            #endregion
+
+            #region Seeding
+            modelBuilder.ApplyConfiguration(new PatientConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+            modelBuilder.ApplyConfiguration(new ClinicalHistoryConfiguration());
+            modelBuilder.ApplyConfiguration(new DoctorConfiguration());
+            modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
+            modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
+            modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
+            #endregion
+        }
+
+        private static string TimeSpanToString(TimeSpan timeSpan)
+        {
+            return timeSpan.ToString(@"hh\:mm\:ss");
+        }
+
+        private static TimeSpan StringToTimeSpan(string timeString)
+        {
+            if (TimeSpan.TryParse(timeString, out var timeSpan))
+            {
+                return timeSpan;
+            }
+
+            // Return a default value (e.g., TimeSpan.Zero) or throw an exception
+            return TimeSpan.Zero; // or throw new FormatException("Invalid TimeSpan format");
         }
     }
 }

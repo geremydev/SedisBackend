@@ -52,7 +52,8 @@ namespace SedisBackend.Core.Application.IOC
         public static void AddApplicationLayer(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
+            services.AddScoped<IServiceManager, ServiceManager>();
+            /*
             #region Services
             services.AddTransient(typeof(IGenericService<,,>), typeof(GenericService<,,>));
             services.AddTransient<IUserService, UserService>();
@@ -177,6 +178,7 @@ namespace SedisBackend.Core.Application.IOC
             #endregion
 
             #endregion
+            */
         }
     }
 }

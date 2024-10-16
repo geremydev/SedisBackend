@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Discapacity_Condition;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Discapacity_Condition;
 using SedisBackend.WebApi.Controllers.v1;
 
@@ -10,13 +11,8 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Discapa
     ////[Authorize(Roles = "Admin")]
     public class DiscapacityController : BaseApiController
     {
-        private readonly IDiscapacityService _discapacityServiceService;
-
-
-        public DiscapacityController(IDiscapacityService discapacityServiceService)
-        {
-            _discapacityServiceService = discapacityServiceService;
-        }
+        private readonly IServiceManager _service;
+        public DiscapacityController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseDiscapacityDto))]
@@ -26,7 +22,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Discapa
         {
             try
             {
-                var discapacities = await _discapacityServiceService.GetAllAsync();
+                var discapacities = await _service.Discapacity.GetAllAsync();
 
                 if (discapacities == null || discapacities.Count == 0)
                 {
@@ -45,11 +41,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Discapa
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseDiscapacityDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var discapacity = await _discapacityServiceService.GetByIdAsync(id);
+                var discapacity = await _service.Discapacity.GetByIdAsync(id);
 
                 if (discapacity == null)
                 {
@@ -77,7 +73,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Discapa
                     return BadRequest();
                 }
 
-                await _discapacityServiceService.AddAsync(dto);
+                await _service.Discapacity.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -91,7 +87,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Discapa
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveDiscapacityDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveDiscapacityDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveDiscapacityDto dto)
         {
             try
             {
@@ -100,7 +96,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Discapa
                     return BadRequest();
                 }
 
-                await _discapacityServiceService.UpdateAsync(dto, id);
+                await _service.Discapacity.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -112,11 +108,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Discapa
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _discapacityServiceService.Delete(id);
+                await _service.Discapacity.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

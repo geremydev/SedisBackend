@@ -21,6 +21,7 @@ builder.Services.AddControllers(options =>
     options.SuppressMapClientErrors = true;
 });
 
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
@@ -35,15 +36,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSession();
-
-
-
-/*builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-{
-    builder.Coo()
-           .AllowAnyMethod()
-           .AllowAnyHeader();
-}));*/
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddMvc();
 
 /*builder.Services.Configure<MvcOptions>(options =>
@@ -55,12 +48,11 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-/*if (app.Environment.IsDevelopment())
-{*/
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+}
 
 using (var scope = app.Services.CreateScope())
 {

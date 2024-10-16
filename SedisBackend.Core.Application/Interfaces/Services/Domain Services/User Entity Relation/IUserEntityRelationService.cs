@@ -7,6 +7,6 @@ namespace SedisBackend.Core.Application.Interfaces.Services.Domain_Services.User
 {
     public interface IUserEntityRelationService : IGenericService<SaveUserEntityRelationDto, BaseUserEntityRelationDto, UserEntityRelation>
     {
-        Task<List<UserEntityRelation>> GetByUserIdAsync(string UserId);
+        Task<List<UserEntityRelation>> GetByUserIdAsync(Guid UserId);
     }
 }

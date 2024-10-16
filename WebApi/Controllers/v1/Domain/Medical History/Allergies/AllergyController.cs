@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Allergies;
 using SedisBackend.WebApi.Controllers.v1;
 
@@ -9,12 +10,8 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
     [ApiVersion("1.0")]
     public class AllergyController : BaseApiController
     {
-        private readonly IAllergyService _allergyService;
-
-        public AllergyController(IAllergyService allergyService)
-        {
-            _allergyService = allergyService;
-        }
+        private readonly IServiceManager _service;
+        public AllergyController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAllergyDto))]
@@ -24,7 +21,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
         {
             try
             {
-                var allergies = await _allergyService.GetAllAsync();
+                var allergies = await _service.Allergy.GetAllAsync();
 
                 if (allergies == null || allergies.Count == 0)
                 {
@@ -43,11 +40,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAllergyDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var patient = await _allergyService.GetByIdAsync(id);
+                var patient = await _service.Allergy.GetByIdAsync(id);
 
                 if (patient == null)
                 {
@@ -76,7 +73,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
                     return BadRequest();
                 }
 
-                await _allergyService.AddAsync(dto);
+                await _service.Allergy.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -91,7 +88,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(int id, SaveAllergyDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveAllergyDto dto)
         {
             try
             {
@@ -100,7 +97,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
                     return BadRequest();
                 }
 
-                await _allergyService.UpdateAsync(dto, id);
+                await _service.Allergy.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -112,11 +109,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Allergies
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _allergyService.Delete(id);
+                await _service.Allergy.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

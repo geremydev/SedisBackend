@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Illness_Condition;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Illness_Condition;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness_Condition
@@ -10,13 +9,8 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness
     ////[Authorize(Roles = "Admin")]
     public class IllnessController : BaseApiController
     {
-        private readonly IIllnessService _IllnessServiceService;
-
-
-        public IllnessController(IIllnessService illnessServiceService)
-        {
-            _IllnessServiceService = illnessServiceService;
-        }
+        private readonly IServiceManager _service;
+        public IllnessController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseIllnessDto))]
@@ -26,7 +20,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness
         {
             try
             {
-                var illiness = await _IllnessServiceService.GetAllAsync();
+                var illiness = await _service.Illness.GetAllAsync();
 
                 if (illiness == null || illiness.Count == 0)
                 {
@@ -45,11 +39,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseIllnessDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var illiness = await _IllnessServiceService.GetByIdAsync(id);
+                var illiness = await _service.Illness.GetByIdAsync(id);
 
                 if (illiness == null)
                 {
@@ -77,7 +71,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness
                     return BadRequest();
                 }
 
-                await _IllnessServiceService.AddAsync(dto);
+                await _service.Illness.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -91,7 +85,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveIllnessDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveIllnessDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveIllnessDto dto)
         {
             try
             {
@@ -100,7 +94,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness
                     return BadRequest();
                 }
 
-                await _IllnessServiceService.UpdateAsync(dto, id);
+                await _service.Illness.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -112,11 +106,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Illness
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _IllnessServiceService.Delete(id);
+                await _service.Illness.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

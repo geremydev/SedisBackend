@@ -5,7 +5,7 @@ namespace SedisBackend.Core.Application.Dtos.Identity_Dtos.Account
 {
     public class RegisterRequest
     {
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -24,6 +24,6 @@ namespace SedisBackend.Core.Application.Dtos.Identity_Dtos.Account
         public string BloodType { get; set; }
         public string? EmergencyContactName { get; set; }
         public string? EmergencyContactPhone { get; set; }
-        public int? PrimaryCarePhysicianId { get; set; }
+        public Guid? PrimaryCarePhysicianId { get; set; }
     }
 }

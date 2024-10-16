@@ -2,43 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SedisBackend.Core.Application.Interfaces.Repositories;
-using SedisBackend.Core.Application.Interfaces.Repositories.Appointments;
-using SedisBackend.Core.Application.Interfaces.Repositories.Base;
-using SedisBackend.Core.Application.Interfaces.Repositories.Health_Centers;
-using SedisBackend.Core.Application.Interfaces.Repositories.Locations;
-using SedisBackend.Core.Application.Interfaces.Repositories.Locations;
-using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History;
-using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Allergies;
-using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medical_Condition.Discapacity_Condition;
-using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medical_Condition.Illness_Condition;
-using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medical_Condition.Risk_Factor_Condition;
-using SedisBackend.Core.Application.Interfaces.Repositories.Medical_Insurance;
-using SedisBackend.Core.Application.Interfaces.Repositories.Prescriptions;
-using SedisBackend.Core.Application.Interfaces.Repositories.Products;
-using SedisBackend.Core.Application.Interfaces.Repositories.UserEntityRelations;
-using SedisBackend.Core.Application.Interfaces.Repositories.Users.Admins;
-using SedisBackend.Core.Application.Interfaces.Repositories.Users.Assistants;
-using SedisBackend.Core.Application.Interfaces.Repositories.Users.Doctors;
-using SedisBackend.Core.Application.Interfaces.Repositories.Users.Patients;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 using SedisBackend.Infrastructure.Persistence.Repositories;
-using SedisBackend.Infrastructure.Persistence.Repositories.Appointments;
-using SedisBackend.Infrastructure.Persistence.Repositories.Base;
-using SedisBackend.Infrastructure.Persistence.Repositories.Health_Centers;
-using SedisBackend.Infrastructure.Persistence.Repositories.Locations;
-using SedisBackend.Infrastructure.Persistence.Repositories.Medical_History;
-using SedisBackend.Infrastructure.Persistence.Repositories.Medical_History.Allergies;
-using SedisBackend.Infrastructure.Persistence.Repositories.Medical_History.Medical_Conditions.Discapacity_Condition;
-using SedisBackend.Infrastructure.Persistence.Repositories.Medical_History.Medical_Conditions.Illness_Condition;
-using SedisBackend.Infrastructure.Persistence.Repositories.Medical_History.Medical_Conditions.Risk_Factor_Condition;
-using SedisBackend.Infrastructure.Persistence.Repositories.Medical_Insurance;
-using SedisBackend.Infrastructure.Persistence.Repositories.Presctiption;
-using SedisBackend.Infrastructure.Persistence.Repositories.Products;
-using SedisBackend.Infrastructure.Persistence.Repositories.UserEntityRelations;
-using SedisBackend.Infrastructure.Persistence.Repositories.Users.Admins;
-using SedisBackend.Infrastructure.Persistence.Repositories.Users.Assistants;
-using SedisBackend.Infrastructure.Persistence.Repositories.Users.Doctors;
-using SedisBackend.Infrastructure.Persistence.Repositories.Users.Patients;
+using Microsoft.Extensions.Http;
 
 namespace SedisBackend.Infrastructure.Persistence.IOC
 {
@@ -58,12 +24,15 @@ namespace SedisBackend.Infrastructure.Persistence.IOC
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), m => m.MigrationsAssembly(typeof(SedisContext).Assembly.FullName)));
             }
             #endregion
+            services.AddHttpClient();
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
 
+            /*
             #region Repositories
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             #region Appointments   
-            services.AddTransient<IAppointmentRepository, AppointmentRepository>();
+            services.AddTransient<IAppointmentRepository, AppointmentRepository>(); 
             #endregion
 
             #region HealthCenters
@@ -131,7 +100,7 @@ namespace SedisBackend.Infrastructure.Persistence.IOC
 
             #region Medical Insurance
             services.AddTransient<IHealthInsuranceRepository, HealthInsuranceRepository>();
-            services.AddTransient<IMedicationCoverageRepository, MedicationCoverageRespository>();
+            services.AddTransient<IMedicationCoverageRepository, MedicationCoverageRepository>();
             services.AddTransient<IPatientHealthInsuranceRepository, PatientHealthInsuranceRepository>();
             #endregion
 
@@ -173,7 +142,7 @@ namespace SedisBackend.Infrastructure.Persistence.IOC
 
 
             #endregion
-
+            */
         }
     }
 }

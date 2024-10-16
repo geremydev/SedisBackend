@@ -1,11 +1,5 @@
 ﻿using SedisBackend.Core.Domain.Appointments;
-using SedisBackend.Core.Domain.Health_Centers;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SedisBackend.Core.Domain.Users.Doctors
 {

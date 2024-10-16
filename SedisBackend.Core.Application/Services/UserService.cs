@@ -18,7 +18,6 @@ namespace SedisBackend.Core.Application.Services
             _mapper = mapper;
         }
 
-
         public async Task<AuthenticationResponse> LoginAsync(LoginDto vm)
         {
             AuthenticationRequest loginrequest = _mapper.Map<AuthenticationRequest>(vm);
@@ -33,8 +32,6 @@ namespace SedisBackend.Core.Application.Services
             await _accountservice.SingOutAsync();
         }
 
-
-
         public async Task<ServiceResult> RegisterAsync(SaveUserDto vm, string origin )
         {
             RegisterRequest registerRequest = _mapper.Map<RegisterRequest>(vm);
@@ -45,7 +42,6 @@ namespace SedisBackend.Core.Application.Services
         {
             return await _accountservice.ConfirmAccountAsync(userId, token);
         }
-
 
         public async Task<ServiceResult> ForgotPasssowrdAsync(ForgotPasswordDto vm, string origin)
         {

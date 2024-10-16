@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Products;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Products;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Products
@@ -13,12 +8,8 @@ namespace WebApi.Controllers.v1.Domain.Products
     [ApiVersion("1.0")]
     public class LabTestController : BaseApiController
     {
-        private readonly ILabTestService _labTestService;
-
-        public LabTestController(ILabTestService labTestService)
-        {
-            _labTestService = labTestService;
-        }
+        private readonly IServiceManager _service;
+        public LabTestController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLabTestDto))]
@@ -28,7 +19,7 @@ namespace WebApi.Controllers.v1.Domain.Products
         {
             try
             {
-                var labTests = await _labTestService.GetAllAsync();
+                var labTests = await _service.LabTest.GetAllAsync();
 
                 if (labTests == null || labTests.Count == 0)
                 {
@@ -47,11 +38,11 @@ namespace WebApi.Controllers.v1.Domain.Products
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLabTestDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var labTest = await _labTestService.GetByIdAsync(id);
+                var labTest = await _service.LabTest.GetByIdAsync(id);
 
                 if (labTest == null)
                 {
@@ -80,7 +71,7 @@ namespace WebApi.Controllers.v1.Domain.Products
                     return BadRequest();
                 }
 
-                await _labTestService.AddAsync(dto);
+                await _service.LabTest.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -95,7 +86,7 @@ namespace WebApi.Controllers.v1.Domain.Products
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(int id, SaveLabTestDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveLabTestDto dto)
         {
             try
             {
@@ -104,7 +95,7 @@ namespace WebApi.Controllers.v1.Domain.Products
                     return BadRequest();
                 }
 
-                await _labTestService.UpdateAsync(dto, id);
+                await _service.LabTest.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -116,11 +107,11 @@ namespace WebApi.Controllers.v1.Domain.Products
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _labTestService.Delete(id);
+                await _service.LabTest.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

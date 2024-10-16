@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Health_Centers;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Health_Centers;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Health_Centers
@@ -9,12 +8,9 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
     [ApiVersion("1.0")]
     public class HealthCenterServicesController : BaseApiController
     {
-        private readonly IHealthCenterServicesService _healthCenterServicesService;
+        private readonly IServiceManager _service;
 
-        public HealthCenterServicesController(IHealthCenterServicesService healthCenterServicesService)
-        {
-            _healthCenterServicesService = healthCenterServicesService;
-        }
+        public HealthCenterServicesController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseHealthCenterServicesDto))]
@@ -24,7 +20,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         {
             try
             {
-                var healthCenters = await _healthCenterServicesService.GetAllAsync();
+                var healthCenters = await _service.HealthCenterServices.GetAllAsync();
 
                 if (healthCenters == null || healthCenters.Count == 0)
                 {
@@ -43,11 +39,11 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseHealthCenterServicesDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var helthCenter = await _healthCenterServicesService.GetByIdAsync(id);
+                var helthCenter = await _service.HealthCenterServices.GetByIdAsync(id);
 
                 if (helthCenter == null)
                 {
@@ -77,7 +73,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
                     return BadRequest();
                 }
 
-                await _healthCenterServicesService.AddAsync(dto);
+                await _service.HealthCenterServices.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -92,7 +88,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveHealthCenterServicesDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveHealthCenterServicesDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveHealthCenterServicesDto dto)
         {
             try
             {
@@ -101,7 +97,7 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
                     return BadRequest();
                 }
 
-                await _healthCenterServicesService.UpdateAsync(dto, id);
+                await _service.HealthCenterServices.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -114,11 +110,11 @@ namespace WebApi.Controllers.v1.Domain.Health_Centers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _healthCenterServicesService.Delete(id);
+                await _service.HealthCenterServices.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

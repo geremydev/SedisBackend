@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_Insurance;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Medical_Insurance
@@ -9,12 +8,8 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
     [ApiVersion("1.0")]
     public class HealthInsuranceController : BaseApiController
     {
-        private readonly IHealthInsuranceService _healthInsuranceService;
-
-        public HealthInsuranceController(IHealthInsuranceService healthInsuranceService)
-        {
-            _healthInsuranceService = healthInsuranceService;
-        }
+        private readonly IServiceManager _service;
+        public HealthInsuranceController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseHealthInsuranceDto))]
@@ -24,7 +19,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         {
             try
             {
-                var healthInsurances = await _healthInsuranceService.GetAllAsync();
+                var healthInsurances = await _service.HealthInsurance.GetAllAsync();
 
                 if (healthInsurances == null || healthInsurances.Count == 0)
                 {
@@ -43,11 +38,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseHealthInsuranceDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var helthInsurance = await _healthInsuranceService.GetByIdAsync(id);
+                var helthInsurance = await _service.HealthInsurance.GetByIdAsync(id);
 
                 if (helthInsurance == null)
                 {
@@ -76,7 +71,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
                     return BadRequest();
                 }
 
-                await _healthInsuranceService.AddAsync(dto);
+                await _service.HealthInsurance.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -91,7 +86,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(int id, SaveHealthInsuranceDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveHealthInsuranceDto dto)
         {
             try
             {
@@ -100,7 +95,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
                     return BadRequest();
                 }
 
-                await _healthInsuranceService.UpdateAsync(dto, id);
+                await _service.HealthInsurance.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -112,11 +107,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _healthInsuranceService.Delete(id);
+                await _service.HealthInsurance.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

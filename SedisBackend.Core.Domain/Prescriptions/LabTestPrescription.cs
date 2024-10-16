@@ -5,12 +5,12 @@ namespace SedisBackend.Core.Domain.Prescriptions
 {
     public class LabTestPrescription
     {
-        public int Id { get; set; }
-        public int ClinicalHistoryId { get; set; }
+        public Guid Id { get; set; }
+        public Guid ClinicalHistoryId { get; set; }
         public ClinicalHistory ClinicalHistory { get; set; }
-        public int LabTestId { get; set; }
+        public Guid LabTestId { get; set; }
         public LabTest LabTest { get; set; }
-        public int PrescriptionId { get; set; }
+        public Guid PrescriptionId { get; set; }
         public Prescription Prescription { get; set; }
         public string Status { get; set; } // Usamos el enum LabTestStatus
         public DateTime PerformedDate { get; set; }

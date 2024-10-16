@@ -17,7 +17,7 @@ namespace SedisBackend.Core.Application.Services.Domain_Services.User_Entity_Rel
             _repository = repository;
         }
 
-        public async Task<List<UserEntityRelation>> GetByUserIdAsync(string UserId)
+        public async Task<List<UserEntityRelation>> GetByUserIdAsync(Guid UserId)
         {
             var allUER = await _repository.GetAllAsync();
             var relatedUER = allUER.FindAll(e => e.UserId == UserId);

@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_Insurance;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Medical_Insurance
@@ -9,12 +8,8 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
     [ApiVersion("1.0")]
     public class PatientHealthInsuranceController : BaseApiController
     {
-        private readonly IPatientHealthInsuranceService _patientHealthInsuranceService;
-
-        public PatientHealthInsuranceController(IPatientHealthInsuranceService patientHealthInsuranceService)
-        {
-            _patientHealthInsuranceService = patientHealthInsuranceService;
-        }
+        private readonly IServiceManager _service;
+        public PatientHealthInsuranceController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientHealthInsuranceDto))]
@@ -24,7 +19,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         {
             try
             {
-                var patientHealtInsurances = await _patientHealthInsuranceService.GetAllAsync();
+                var patientHealtInsurances = await _service.PatientHealthInsurance.GetAllAsync();
 
                 if (patientHealtInsurances == null || patientHealtInsurances.Count == 0)
                 {
@@ -43,11 +38,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BasePatientHealthInsuranceDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var patientHealtInsurance = await _patientHealthInsuranceService.GetByIdAsync(id);
+                var patientHealtInsurance = await _service.PatientHealthInsurance.GetByIdAsync(id);
 
                 if (patientHealtInsurance == null)
                 {
@@ -76,7 +71,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
                     return BadRequest();
                 }
 
-                await _patientHealthInsuranceService.AddAsync(dto);
+                await _service.PatientHealthInsurance.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -91,7 +86,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         ////[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(int id, SavePatientHealthInsuranceDto dto)
+        public async Task<IActionResult> Put(Guid id, SavePatientHealthInsuranceDto dto)
         {
             try
             {
@@ -100,7 +95,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
                     return BadRequest();
                 }
 
-                await _patientHealthInsuranceService.UpdateAsync(dto, id);
+                await _service.PatientHealthInsurance.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -112,11 +107,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_Insurance
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _patientHealthInsuranceService.Delete(id);
+                await _service.PatientHealthInsurance.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

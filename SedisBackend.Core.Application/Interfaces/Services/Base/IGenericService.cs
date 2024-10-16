@@ -9,10 +9,10 @@ namespace SedisBackend.Core.Application.Interfaces.Services.Base
     {
         public Task<SaveDto> AddAsync(SaveDto vm);
         public Task<List<BaseDto>> GetAllAsync();
-        public Task<BaseDto> GetByIdAsync(int Id);
-        public Task<SaveDto> GetByIdSaveDtoAsync(int Id);
-        public Task UpdateAsync(SaveDto vm, int Id);
-        public Task Delete(int Id);
+        public Task<BaseDto> GetByIdAsync(Guid Id);
+        public Task<SaveDto> GetByIdSaveDtoAsync(Guid Id);
+        public Task UpdateAsync(SaveDto vm, Guid Id);
+        public Task Delete(Guid Id);
         Task<List<BaseDto>> FindAllAsync(Expression<Func<Model, bool>> filter);
         Task<List<BaseDto>> GetAllWithIncludeAsync(List<string> properties);
     }

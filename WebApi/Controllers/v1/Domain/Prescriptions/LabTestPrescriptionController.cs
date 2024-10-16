@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Presctiprions;
-using SedisBackend.Core.Application.Services.Domain_Services.Prescriptions;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Prescriptions
@@ -10,12 +8,8 @@ namespace WebApi.Controllers.v1.Domain.Prescriptions
     [ApiVersion("1.0")]
     public class LabTestPrescriptionController : BaseApiController
     {
-        private readonly ILabTestPrescriptionService _labTestPrescriptionService;
-
-        public LabTestPrescriptionController(ILabTestPrescriptionService labTestPrescription)
-        {
-            _labTestPrescriptionService = labTestPrescription;
-        }
+        private readonly IServiceManager _service;
+        public LabTestPrescriptionController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLabTestPrescriptionDto))]
@@ -25,7 +19,7 @@ namespace WebApi.Controllers.v1.Domain.Prescriptions
         {
             try
             {
-                var labTestPrescription = await _labTestPrescriptionService.GetAllAsync();
+                var labTestPrescription = await _service.LabTestPrescription.GetAllAsync();
 
                 if (labTestPrescription == null || labTestPrescription.Count == 0)
                 {
@@ -44,11 +38,11 @@ namespace WebApi.Controllers.v1.Domain.Prescriptions
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLabTestPrescriptionDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var labTestPrescription = await _labTestPrescriptionService.GetByIdAsync(id);
+                var labTestPrescription = await _service.LabTestPrescription.GetByIdAsync(id);
 
                 if (labTestPrescription == null)
                 {
@@ -77,7 +71,7 @@ namespace WebApi.Controllers.v1.Domain.Prescriptions
                     return BadRequest();
                 }
 
-                await _labTestPrescriptionService.AddAsync(labTestPrescription);
+                await _service.LabTestPrescription.AddAsync(labTestPrescription);
                 return NoContent();
             }
             catch (Exception ex)
@@ -91,7 +85,7 @@ namespace WebApi.Controllers.v1.Domain.Prescriptions
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveLabTestPrescriptionDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveLabTestPrescriptionDto labTestPrescription)
+        public async Task<IActionResult> Put(Guid id, SaveLabTestPrescriptionDto labTestPrescription)
         {
             try
             {
@@ -100,7 +94,7 @@ namespace WebApi.Controllers.v1.Domain.Prescriptions
                     return BadRequest();
                 }
 
-                await _labTestPrescriptionService.UpdateAsync(labTestPrescription, id);
+                await _service.LabTestPrescription.UpdateAsync(labTestPrescription, id);
                 return Ok(labTestPrescription);
             }
             catch (Exception ex)
@@ -112,11 +106,11 @@ namespace WebApi.Controllers.v1.Domain.Prescriptions
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _labTestPrescriptionService.Delete(id);
+                await _service.LabTestPrescription.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

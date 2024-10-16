@@ -2,7 +2,7 @@
 {
     public class Discapacity
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         // Tipo de discapacidad (física, sensorial, intelectual, etc.)
         public string Type { get; set; }

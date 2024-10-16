@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SedisBackend.Core.Application.Dtos.Error;
 using SedisBackend.Core.Application.Interfaces.Services;
+using SedisBackend.Core.Application.Services;
 using SedisBackend.Core.Domain.Settings;
 using SedisBackend.Infrastructure.Identity.Contexts;
 using SedisBackend.Infrastructure.Identity.Entities;
@@ -38,8 +39,6 @@ namespace SedisBackend.Infrastructure.Identity.IOC
             #endregion
 
             #region Services
-
-
             service.AddIdentity<ApplicationUser, IdentityRole>()
               .AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
 
@@ -50,7 +49,6 @@ namespace SedisBackend.Infrastructure.Identity.IOC
             });
 
             service.AddSingleton<JWTSettings>(configuration.GetSection("JWTSettings").Get<JWTSettings>());
-
 
             service.AddAuthentication(options =>
             {
@@ -101,6 +99,7 @@ namespace SedisBackend.Infrastructure.Identity.IOC
             #endregion
 
             service.AddAutoMapper(Assembly.GetExecutingAssembly());
+            service.AddScoped<IServiceManager, ServiceManager>();
             service.AddTransient<IAccountService, AccountServices>();
         }
     }

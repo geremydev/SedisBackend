@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Assistants;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Assistants;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Users.Assistant
@@ -8,12 +8,8 @@ namespace WebApi.Controllers.v1.Domain.Users.Assistant
     [ApiVersion("1.0")]
     public class AssistantController : BaseApiController
     {
-        private readonly IAssistantService _assistantService;
-
-        public AssistantController(IAssistantService doctorService)
-        {
-            _assistantService = doctorService;
-        }
+        private readonly IServiceManager _service;
+        public AssistantController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAssistantDto))]
@@ -23,7 +19,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Assistant
         {
             try
             {
-                var doctors = await _assistantService.GetAllAsync();
+                var doctors = await _service.Assistant.GetAllAsync();
 
                 if (doctors == null || doctors.Count == 0)
                 {
@@ -42,11 +38,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Assistant
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAssistantDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var doctor = await _assistantService.GetByIdAsync(id);
+                var doctor = await _service.Assistant.GetByIdAsync(id);
 
                 if (doctor == null)
                 {
@@ -74,7 +70,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Assistant
                     return BadRequest();
                 }
 
-                await _assistantService.AddAsync(dto);
+                await _service.Assistant.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -88,7 +84,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Assistant
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveAssistantDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveAssistantDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveAssistantDto dto)
         {
             try
             {
@@ -97,7 +93,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Assistant
                     return BadRequest();
                 }
 
-                await _assistantService.UpdateAsync(dto, id);
+                await _service.Assistant.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -109,11 +105,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Assistant
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _assistantService.Delete(id);
+                await _service.Assistant.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

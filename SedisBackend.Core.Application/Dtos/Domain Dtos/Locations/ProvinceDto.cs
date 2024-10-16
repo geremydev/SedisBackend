@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Locations
+﻿namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Locations
 {
     public class ProvinceDto
     {

@@ -54,9 +54,6 @@ namespace SedisBackend.WebApi.Extensions
                         }, new List<string>()
                     },
                 });*/
-
-
-
             });
         }
 

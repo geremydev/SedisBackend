@@ -1,21 +1,11 @@
-﻿using SedisBackend.Core.Domain.Prescriptions;
-using SedisBackend.Core.Domain.Products;
-using SedisBackend.Core.Domain.Users.Patients;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
-namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions
+﻿namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions
 {
     public class SaveMedicationPrescriptionDto
     {
-        public int Id { get; set; }
-        public int PatientId { get; set; }
-        public int MedicationId { get; set; }
-        public int PrescriptionId { get; set; }
+        public Guid Id { get; set; }
+        public Guid PatientId { get; set; }
+        public Guid MedicationId { get; set; }
+        public Guid PrescriptionId { get; set; }
         public DateTime? TreatmentStart { get; set; }
         public DateTime? TreatmentEnd { get; set; }
         public string Dosage { get; set; } //Debe estar en un formato estandarizado

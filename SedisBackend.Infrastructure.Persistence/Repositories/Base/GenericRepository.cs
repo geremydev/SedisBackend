@@ -47,7 +47,7 @@ namespace SedisBackend.Infrastructure.Persistence.Repositories.Base
             return await query.ToListAsync();
         }
 
-        public virtual async Task<TEntity> GetEntityByIDAsync(int Id)
+        public virtual async Task<TEntity> GetEntityByIDAsync(Guid Id)
         {
             return await _entities.FindAsync(Id);
         }
@@ -59,7 +59,7 @@ namespace SedisBackend.Infrastructure.Persistence.Repositories.Base
             return entity;
         }
 
-        public virtual async Task UpdateAsync(TEntity entity, int Id)
+        public virtual async Task UpdateAsync(TEntity entity, Guid Id)
         {
             var entry = await _context.Set<TEntity>().FindAsync(Id);
             _context.Entry(entry).CurrentValues.SetValues(entity);

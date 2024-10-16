@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Risk_Factor_Condition;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Risk_Factor_Condition;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Factor_Condition
@@ -9,13 +8,8 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Fa
     [ApiVersion("1.0")]
     public class RiskFactorController : BaseApiController
     {
-        private readonly IRiskFactorService _riskFacotryService;
-
-
-        public RiskFactorController(IRiskFactorService riskFacotryService)
-        {
-            _riskFacotryService = riskFacotryService;
-        }
+        private readonly IServiceManager _service;
+        public RiskFactorController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseRiskFactorDto))]
@@ -25,7 +19,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Fa
         {
             try
             {
-                var riskFactors = await _riskFacotryService.GetAllAsync();
+                var riskFactors = await _service.RiskFactor.GetAllAsync();
 
                 if (riskFactors == null || riskFactors.Count == 0)
                 {
@@ -44,11 +38,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Fa
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseRiskFactorDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var riskFactor = await _riskFacotryService.GetByIdAsync(id);
+                var riskFactor = await _service.RiskFactor.GetByIdAsync(id);
 
                 if (riskFactor == null)
                 {
@@ -77,7 +71,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Fa
                     return BadRequest();
                 }
 
-                await _riskFacotryService.AddAsync(dto);
+                await _service.RiskFactor.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -92,7 +86,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Fa
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Doctor")]
-        public async Task<IActionResult> Put(int id, SaveRiskFactorDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveRiskFactorDto dto)
         {
             try
             {
@@ -101,7 +95,7 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Fa
                     return BadRequest();
                 }
 
-                await _riskFacotryService.UpdateAsync(dto, id);
+                await _service.RiskFactor.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -113,11 +107,11 @@ namespace WebApi.Controllers.v1.Domain.Medical_History.Medical_Condition.Risk_Fa
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _riskFacotryService.Delete(id);
+                await _service.RiskFactor.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

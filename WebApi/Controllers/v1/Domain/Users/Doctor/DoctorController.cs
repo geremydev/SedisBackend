@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Users.Doctor
@@ -11,12 +8,8 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
     [ApiVersion("1.0")]
     public class DoctorController : BaseApiController
     {
-        private readonly IDoctorService _doctorService;
-
-        public DoctorController(IDoctorService doctorService)
-        {
-            _doctorService = doctorService;
-        }
+        private readonly IServiceManager _service;
+        public DoctorController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseDoctorDto))]
@@ -26,7 +19,9 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         {
             try
             {
-                var doctors = await _doctorService.GetAllAsync();
+                var doctors = await _service.Doctor.GetAllAsync();
+
+                Console.WriteLine(doctors);
 
                 if (doctors == null || doctors.Count == 0)
                 {
@@ -45,11 +40,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseDoctorDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var doctor = await _doctorService.GetByIdAsync(id);
+                var doctor = await _service.Doctor.GetByIdAsync(id);
 
                 if (doctor == null)
                 {
@@ -78,7 +73,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
                     return BadRequest();
                 }
 
-                await _doctorService.AddAsync(dto);
+                await _service.Doctor.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -93,7 +88,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Doctor")]
-        public async Task<IActionResult> Put(int id, SaveDoctorDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveDoctorDto dto)
         {
             try
             {
@@ -102,7 +97,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
                     return BadRequest();
                 }
 
-                await _doctorService.UpdateAsync(dto, id);
+                await _service.Doctor.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -114,11 +109,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Doctor
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _doctorService.Delete(id);
+                await _service.Doctor.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

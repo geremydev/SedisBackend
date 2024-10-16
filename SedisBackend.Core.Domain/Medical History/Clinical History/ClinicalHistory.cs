@@ -7,15 +7,16 @@ namespace SedisBackend.Core.Domain.Medical_History.Clinical_History
 {
     public class ClinicalHistory
     {
-        public int Id { get; set; }
-        public int PatientId { get; set; }
+        public Guid Id { get; set; }
+        public Guid PatientId { get; set; }
         public Patient Patient { get; set; }
-        public int DoctorId { get; set; }
+        public Guid DoctorId { get; set; }
         public Doctor Doctor { get; set; }
         public string ReasonForVisit { get; set; }
         public string CurrentHistory { get; set; }
         public string? PhysicalExamination { get; set; }
         public string? Diagnosis { get; set; }
+        public Guid PrescriptionId { get; set; }
         public Prescription? Prescription { get; set; }
         public DateTime RegisterDate { get; set; }
 

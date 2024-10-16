@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor
+﻿namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor
 {
     public class RiskFactor
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Code { get; set; } //SNOMED CT
 
         // Description of the risk factor

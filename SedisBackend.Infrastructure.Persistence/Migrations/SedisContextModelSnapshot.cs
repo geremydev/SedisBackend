@@ -24,11 +24,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Appointments.Appointment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
@@ -45,14 +43,14 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("HealthCenterId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("HealthCenterId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -63,22 +61,44 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("Appointments", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b87e571e-d964-43db-996b-e2f4f6265c46"),
+                            AppointmentDate = new DateTime(2024, 11, 10, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            AppointmentStatus = "scheduled",
+                            ConsultationRoom = "Room 101",
+                            ConsultationType = "general checkup",
+                            DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            HealthCenterId = new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"),
+                            PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950")
+                        },
+                        new
+                        {
+                            Id = new Guid("825eb1e3-62c1-4232-b301-758930e29df9"),
+                            AppointmentDate = new DateTime(2024, 11, 12, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            AppointmentStatus = "completed",
+                            ConsultationRoom = "Room 202",
+                            ConsultationType = "follow-up",
+                            DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            HealthCenterId = new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da"),
+                            PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9")
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Health_Centers.HealthCenter", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("HealthCenterCategory")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LocationId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -87,22 +107,36 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HealthCenters", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"),
+                            HealthCenterCategory = "General",
+                            LocationId = new Guid("945e98f3-80c7-4444-8d93-74b72efc78b1"),
+                            Name = "Central Health Center"
+                        },
+                        new
+                        {
+                            Id = new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da"),
+                            HealthCenterCategory = "Especializado",
+                            LocationId = new Guid("a6e819b6-3996-49d6-afc7-9b47206dcadc"),
+                            Name = "North Health Center"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Health_Centers.HealthCenterServices", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HealthCenterId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("HealthCenterId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImageURL")
                         .IsRequired()
@@ -121,36 +155,34 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Locations.Location", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("EntityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EntityType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Latitude")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 8)");
 
                     b.Property<decimal?>("Longitude")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(11, 8)");
 
-                    b.Property<int>("MunicipalityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("MunicipalityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PostalCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProvinceId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ProvinceId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("RegionId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RegionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -159,11 +191,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Allergies.Allergy", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Allergen")
                         .IsRequired()
@@ -176,24 +206,22 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Allergies.PatientAllergy", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AllergicReaction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AllergyId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AllergyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DiagnosisDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -206,11 +234,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Clinical_History.ClinicalHistory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CurrentHistory")
                         .IsRequired()
@@ -219,14 +245,17 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<string>("Diagnosis")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PhysicalExamination")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PrescriptionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReasonForVisit")
                         .IsRequired()
@@ -242,22 +271,44 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("ClinicalHistories", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("04f5b044-5052-4844-94c7-5c9b026f258a"),
+                            CurrentHistory = "No significant issues.",
+                            Diagnosis = "Hypertension",
+                            DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            PrescriptionId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            ReasonForVisit = "Routine check-up",
+                            RegisterDate = new DateTime(2024, 10, 16, 15, 49, 0, 953, DateTimeKind.Local).AddTicks(6408)
+                        },
+                        new
+                        {
+                            Id = new Guid("67232939-a019-4a3f-936e-cbe77fa4ef60"),
+                            CurrentHistory = "Feeling better.",
+                            Diagnosis = "Diabetes",
+                            DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            PrescriptionId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            ReasonForVisit = "Follow-up on medication.",
+                            RegisterDate = new DateTime(2024, 10, 16, 15, 49, 0, 953, DateTimeKind.Local).AddTicks(6457)
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Family_History.FamilyHistory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Condition")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Relationship")
                         .IsRequired()
@@ -266,8 +317,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<string>("RelativeId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RelativeId1")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("RelativeId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -280,11 +331,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition.Discapacity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -301,20 +350,18 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition.PatientDiscapacity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DiagnosisDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DiscapacityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DiscapacityId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Severity")
                         .IsRequired()
@@ -331,11 +378,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -356,11 +401,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness_Condition.PatientIllness", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DiagnosisDate")
                         .HasColumnType("datetime2");
@@ -372,15 +415,15 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IllnessId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("IllnessId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -397,17 +440,15 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor.PatientRiskFactor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RiskFactorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RiskFactorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -420,11 +461,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor.RiskFactor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AssessmentLevel")
                         .IsRequired()
@@ -449,11 +488,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Vaccines.PatientVaccine", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AppliedDoses")
                         .HasColumnType("int");
@@ -461,32 +498,26 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("LastApplicationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("VaccineId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("VaccineId1")
-                        .HasColumnType("int");
+                    b.Property<Guid>("VaccineId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("VaccineId1");
+                    b.HasIndex("VaccineId");
 
                     b.ToTable("PatientVaccines", (string)null);
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Vaccines.Vaccine", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Disease")
                         .IsRequired()
@@ -510,11 +541,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_Insurance.HealthInsurance", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CoverageLevel")
                         .IsRequired()
@@ -539,31 +568,29 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_Insurance.MedicationCoverage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("CoinsurancePercentage")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(5, 4)");
 
                     b.Property<decimal>("CopayAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<string>("CoverageStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HealthInsuranceId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("HealthInsuranceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("MedicationId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MedicationId1")
-                        .HasColumnType("int");
+                    b.Property<Guid>("MedicationId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("PriorAuthorizationRequired")
                         .HasColumnType("bit");
@@ -579,17 +606,15 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_Insurance.PatientHealthInsurance", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("HealthInsuranceId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("HealthInsuranceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PatientId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PolicyNumber")
                         .IsRequired()
@@ -606,23 +631,21 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Prescriptions.LabTestPrescription", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("ClinicalHistoryId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ClinicalHistoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LabTestId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("LabTestId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("PerformedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PrescriptionId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PrescriptionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ResultUrl")
                         .IsRequired()
@@ -655,11 +678,11 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MedicationId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("MedicationId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PrescriptionId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PrescriptionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -682,14 +705,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Prescriptions.Prescription", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClinicalHistoryId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ClinicalHistoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("OtherPrescriptions")
                         .HasColumnType("nvarchar(max)");
@@ -704,11 +725,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Products.LabTest", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TestCode")
                         .IsRequired()
@@ -725,18 +744,16 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Products.Medication", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ActiveIngredient")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Concentration")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10, 2)");
 
                     b.Property<string>("Contraindications")
                         .IsRequired()
@@ -793,22 +810,19 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.UserEntityRelation.UserEntityRelation", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("EntityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EntityRole")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -817,11 +831,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Users.Admins.Admin", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Birthdate")
                         .HasColumnType("datetime2");
@@ -830,8 +842,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HealthCenterId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("HealthCenterId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("IdCard")
                         .IsRequired()
@@ -860,11 +872,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Users.Assistants.Assistant", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Birthdate")
                         .HasColumnType("datetime2");
@@ -873,8 +883,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HealthCenterId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("HealthCenterId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("IdCard")
                         .IsRequired()
@@ -903,11 +913,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.Doctor", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Birthdate")
                         .HasColumnType("datetime2");
@@ -941,18 +949,40 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Doctors", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            Birthdate = new DateTime(1980, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "John",
+                            IdCard = "1234567890",
+                            IsActive = true,
+                            LastName = "Doe",
+                            LicenseNumber = "LIC12345678",
+                            Sex = "M"
+                        },
+                        new
+                        {
+                            Id = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            Birthdate = new DateTime(1975, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Jane",
+                            IdCard = "0987654321",
+                            IsActive = false,
+                            LastName = "Smith",
+                            LicenseNumber = "LIC98765432",
+                            Sex = "F"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.DoctorHealthCenter", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EntryHour")
                         .IsRequired()
@@ -962,8 +992,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("HealthCenterId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("HealthCenterId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -972,21 +1002,37 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("HealthCenterId");
 
                     b.ToTable("DoctorHealthCenters", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3fe6d186-36d7-4a19-8f11-e93f2ab242e0"),
+                            DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            EntryHour = "08:00:00",
+                            ExitHour = "17:00:00",
+                            HealthCenterId = new Guid("85bc224a-c53f-41db-97b8-92f703ee4452")
+                        },
+                        new
+                        {
+                            Id = new Guid("e933e060-fe8f-4026-9774-97accb2124d4"),
+                            DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            EntryHour = "09:00:00",
+                            ExitHour = "18:00:00",
+                            HealthCenterId = new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da")
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.DoctorMedicalSpecialty", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DoctorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MedicalSpecialtyId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("MedicalSpecialtyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -994,16 +1040,28 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("MedicalSpecialtyId");
 
-                    b.ToTable("DoctorMedicalSpecialities", (string)null);
+                    b.ToTable("DoctorMedicalSpecialties", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a5ebc75d-4052-4e04-b0af-de4ff82e64e0"),
+                            DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            MedicalSpecialtyId = new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef")
+                        },
+                        new
+                        {
+                            Id = new Guid("308db8b0-c508-4232-bb22-b2b41f1b3e44"),
+                            DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            MedicalSpecialtyId = new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0")
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Users.Doctors.MedicalSpecialty", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -1016,15 +1074,27 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MedicalSpecialities", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef"),
+                            Description = "Specializes in the treatment of heart conditions.",
+                            Name = "Cardiology"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0"),
+                            Description = "Focuses on the diagnosis and treatment of neurological disorders.",
+                            Name = "Neurology"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Users.Patients.Patient", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Birthdate")
                         .HasColumnType("datetime2");
@@ -1046,7 +1116,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Height")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(5, 2)");
 
                     b.Property<string>("IdCard")
                         .IsRequired()
@@ -1059,15 +1129,15 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PrimaryCarePhysicianId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PrimaryCarePhysicianId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Sex")
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
                     b.Property<decimal?>("Weight")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(5, 2)");
 
                     b.HasKey("Id");
 
@@ -1075,6 +1145,40 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Patients", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BloodType = "O+",
+                            BloodTypeLabResultURl = "http://example.com/lab-results/john-doe",
+                            EmergencyContactName = "Jane Doe",
+                            EmergencyContactPhone = "123-456-7890",
+                            FirstName = "John",
+                            Height = 180.5m,
+                            IdCard = "40211608647",
+                            IsActive = false,
+                            LastName = "Doe",
+                            Sex = " ",
+                            Weight = 75.3m
+                        },
+                        new
+                        {
+                            Id = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            BloodType = "A-",
+                            BloodTypeLabResultURl = "http://example.com/lab-results/alice-smith",
+                            EmergencyContactName = "Bob Smith",
+                            EmergencyContactPhone = "987-654-3210",
+                            FirstName = "Alice",
+                            Height = 165.2m,
+                            IdCard = "40211608648",
+                            IsActive = false,
+                            LastName = "Smith",
+                            Sex = " ",
+                            Weight = 60.8m
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Appointments.Appointment", b =>
@@ -1237,7 +1341,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.HasOne("SedisBackend.Core.Domain.Medical_History.Vaccines.Vaccine", "Vaccine")
                         .WithMany()
-                        .HasForeignKey("VaccineId1")
+                        .HasForeignKey("VaccineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Locations;
 using SedisBackend.Core.Application.Dtos.Shared_Dtos;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Locations;
 using SedisBackend.WebApi.Controllers.v1;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -11,12 +12,9 @@ namespace WebApi.Controllers.v1.Domain.Locations
     [ApiVersion("1.0")]
     public class LocationController : BaseApiController
     {
-        private readonly ILocationService _locationService;
+        private readonly IServiceManager _service;
 
-        public LocationController(ILocationService locationService)
-        {
-            _locationService = locationService;
-        }
+        public LocationController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLocationDto))]
@@ -26,7 +24,7 @@ namespace WebApi.Controllers.v1.Domain.Locations
         {
             try
             {
-                var locations = await _locationService.GetAllAsync();
+                var locations = await _service.Location.GetAllAsync();
 
                 if (locations == null || locations.Count == 0)
                 {
@@ -45,11 +43,11 @@ namespace WebApi.Controllers.v1.Domain.Locations
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLocationDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var location = await _locationService.GetByIdAsync(id);
+                var location = await _service.Location.GetByIdAsync(id);
 
                 if (location == null)
                 {
@@ -77,7 +75,7 @@ namespace WebApi.Controllers.v1.Domain.Locations
                     return BadRequest();
                 }
 
-                await _locationService.AddAsync(dto);
+                await _service.Location.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -91,7 +89,7 @@ namespace WebApi.Controllers.v1.Domain.Locations
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveLocationDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveLocationDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveLocationDto dto)
         {
             try
             {
@@ -100,7 +98,7 @@ namespace WebApi.Controllers.v1.Domain.Locations
                     return BadRequest();
                 }
 
-                await _locationService.UpdateAsync(dto, id);
+                await _service.Location.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -112,11 +110,11 @@ namespace WebApi.Controllers.v1.Domain.Locations
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _locationService.Delete(id);
+                await _service.Location.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

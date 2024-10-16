@@ -17,7 +17,7 @@ namespace SedisBackend.Core.Application.Interfaces.Services
         Task SingOutAsync();
         Task<DtoAccount> GetByIdAsync(string UserId);
         Task<ServiceResult> UpdateUserAsync(RegisterRequest request);
-        Task<ServiceResult> AddRole(string IdCard, int HealthCenterId, string Role);
+        Task<ServiceResult> AddRole(string IdCard, Guid HealthCenterId, string Role);
         Task<DomainEntitiesRelatedDto> GetDomainEntitiesByIdAsync(string Id);
     }
 }

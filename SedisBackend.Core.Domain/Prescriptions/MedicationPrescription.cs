@@ -1,14 +1,13 @@
 ﻿using SedisBackend.Core.Domain.Products;
-using SedisBackend.Core.Domain.Users.Patients;
 
 namespace SedisBackend.Core.Domain.Prescriptions
 {
     public class MedicationPrescription
     {
-        public int Id { get; set; }
-        public int  MedicationId { get; set; }
+        public Guid Id { get; set; }
+        public Guid MedicationId { get; set; }
         public Medication Medication { get; set; }
-        public int PrescriptionId { get; set; }
+        public Guid PrescriptionId { get; set; }
         public Prescription Prescription { get; set; }
         public DateTime? TreatmentStart { get; set; }
         public DateTime? TreatmentEnd { get; set; }

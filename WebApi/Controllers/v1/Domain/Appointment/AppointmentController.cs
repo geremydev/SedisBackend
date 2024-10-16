@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Appointments;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Appointment
@@ -10,12 +9,9 @@ namespace WebApi.Controllers.v1.Domain.Appointment
     //[Authorize(Roles = "Doctor, Patient")]
     public class AppointmentController : BaseApiController
     {
-        private readonly IAppointmentService _appointmentsService;
+        private readonly IServiceManager _service;
 
-        public AppointmentController(IAppointmentService appointmentService)
-        {
-            _appointmentsService = appointmentService;
-        }
+        public AppointmentController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAppointmentDto))]
@@ -25,7 +21,7 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         {
             try
             {
-                var appointments = await _appointmentsService.GetAllAsync();
+                var appointments = await _service.Appointment.GetAllAsync();
 
                 if (appointments == null || appointments.Count == 0)
                 {
@@ -44,11 +40,11 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAppointmentDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Get(int id)
+        public async Task<ActionResult> Get(Guid id)
         {
             try
             {
-                var appointments = await _appointmentsService.GetByIdAsync(id);
+                var appointments = await _service.Appointment.GetByIdAsync(id);
 
                 if (appointments == null)
                 {
@@ -76,7 +72,7 @@ namespace WebApi.Controllers.v1.Domain.Appointment
                     return BadRequest();
                 }
 
-                await _appointmentsService.AddAsync(appointment);
+                await _service.Appointment.AddAsync(appointment);
                 return NoContent();
             }
             catch (Exception ex)
@@ -90,7 +86,7 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         ////[Authorize(Roles = "Doctor, Assistant")]
-        public async Task<ActionResult> Put(int id, SaveAppointmentDto appointment)
+        public async Task<ActionResult> Put(Guid id, SaveAppointmentDto appointment)
         {
             try
             {
@@ -99,7 +95,7 @@ namespace WebApi.Controllers.v1.Domain.Appointment
                     return BadRequest();
                 }
 
-                await _appointmentsService.UpdateAsync(appointment, id);
+                await _service.Appointment.UpdateAsync(appointment, id);
                 return Ok(appointment);
             }
             catch (Exception ex)
@@ -112,7 +108,7 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAppointmentDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Patch(int id, SaveAppointmentDto appointment)
+        public async Task<ActionResult> Patch(Guid id, SaveAppointmentDto appointment)
         {
             try
             {
@@ -121,7 +117,7 @@ namespace WebApi.Controllers.v1.Domain.Appointment
                     return BadRequest();
                 }
 
-                await _appointmentsService.UpdateAsync(appointment, id);
+                await _service.Appointment.UpdateAsync(appointment, id);
                 return Ok(appointment);
             }
             catch (Exception ex)
@@ -134,12 +130,12 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Assistant")]
-        public async Task<ActionResult> DeleteAppointment(int id, SaveAppointmentDto appointment)
+        public async Task<ActionResult> DeleteAppointment(Guid id, SaveAppointmentDto appointment)
         {
             try
             {
 
-                await _appointmentsService.Delete(id);
+                await _service.Appointment.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

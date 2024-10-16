@@ -1,20 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Presctiprions;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Presctiptions
 {
-        [ApiVersion("1.0")]
+    [ApiVersion("1.0")]
     public class MedicationPrescriptionController : BaseApiController
     {
-        private readonly IMedicationPrescriptionService _medicationPrescriptionService;
-
-        public MedicationPrescriptionController(IMedicationPrescriptionService medicationPrescriptionService)
-        {
-            _medicationPrescriptionService = medicationPrescriptionService;
-        }
+        private readonly IServiceManager _service;
+        public MedicationPrescriptionController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseMedicationPrescriptionDto))]
@@ -24,7 +19,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiptions
         {
             try
             {
-                var medicationPrescriptions = await _medicationPrescriptionService.GetAllAsync();
+                var medicationPrescriptions = await _service.MedicationPrescription.GetAllAsync();
 
                 if (medicationPrescriptions == null || medicationPrescriptions.Count == 0)
                 {
@@ -43,11 +38,11 @@ namespace WebApi.Controllers.v1.Domain.Presctiptions
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseMedicationPrescriptionDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var medicationPrescription = await _medicationPrescriptionService.GetByIdAsync(id);
+                var medicationPrescription = await _service.MedicationPrescription.GetByIdAsync(id);
 
                 if (medicationPrescription == null)
                 {
@@ -76,7 +71,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiptions
                     return BadRequest();
                 }
 
-                await _medicationPrescriptionService.AddAsync(dto);
+                await _service.MedicationPrescription.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -90,7 +85,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiptions
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveMedicationPrescriptionDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(int id, SaveMedicationPrescriptionDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveMedicationPrescriptionDto dto)
         {
             try
             {
@@ -99,7 +94,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiptions
                     return BadRequest();
                 }
 
-                await _medicationPrescriptionService.UpdateAsync(dto, id);
+                await _service.MedicationPrescription.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -111,11 +106,11 @@ namespace WebApi.Controllers.v1.Domain.Presctiptions
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _medicationPrescriptionService.Delete(id);
+                await _service.MedicationPrescription.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

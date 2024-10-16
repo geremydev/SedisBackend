@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Admins;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Assistants;
+using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Admins;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Assistants;
 using SedisBackend.WebApi.Controllers.v1;
@@ -11,12 +12,8 @@ namespace WebApi.Controllers.v1.Domain.Users.Admin
     [ApiVersion("1.0")]
     public class AdminController : BaseApiController
     {
-        private readonly IAdminService _adminService;
-
-        public AdminController(IAdminService doctorService)
-        {
-            _adminService = doctorService;
-        }
+        private readonly IServiceManager _service;
+        public AdminController(IServiceManager service) => _service = service;
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAdminDto))]
@@ -26,7 +23,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Admin
         {
             try
             {
-                var doctors = await _adminService.GetAllAsync();
+                var doctors = await _service.Admin.GetAllAsync();
 
                 if (doctors == null || doctors.Count == 0)
                 {
@@ -45,11 +42,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Admin
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseAdminDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
-                var doctor = await _adminService.GetByIdAsync(id);
+                var doctor = await _service.Admin.GetByIdAsync(id);
 
                 if (doctor == null)
                 {
@@ -78,7 +75,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Admin
                     return BadRequest();
                 }
 
-                await _adminService.AddAsync(dto);
+                await _service.Admin.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -93,7 +90,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Admin
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(int id, SaveAdminDto dto)
+        public async Task<IActionResult> Put(Guid id, SaveAdminDto dto)
         {
             try
             {
@@ -102,7 +99,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Admin
                     return BadRequest();
                 }
 
-                await _adminService.UpdateAsync(dto, id);
+                await _service.Admin.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -114,11 +111,11 @@ namespace WebApi.Controllers.v1.Domain.Users.Admin
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _adminService.Delete(id);
+                await _service.Admin.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

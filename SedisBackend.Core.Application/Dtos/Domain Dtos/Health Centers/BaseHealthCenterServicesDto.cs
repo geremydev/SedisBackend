@@ -4,8 +4,8 @@ namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Health_Centers
 {
     public class BaseHealthCenterServicesDto
     {
-        public int Id { get; set; }
-        public int HealthCenterId { get; set; }
+        public Guid Id { get; set; }
+        public Guid HealthCenterId { get; set; }
         public HealthCenter HealthCenter { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

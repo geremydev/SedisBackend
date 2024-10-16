@@ -1,17 +1,10 @@
 ﻿#region usings
 
 using AutoMapper;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Health_Centers;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Locations;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Appointments;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Health_Centers;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Locations;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Allergies;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Discapacity_Condition;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Illness_Condition;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Risk_Factor_Condition;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Clinical_History;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Family_History;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Discapacity_Condition;
@@ -21,54 +14,20 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Vaccines;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Prescriptions;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Products;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.User_Entity_Relation;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Admins;
+using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Assistants;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Users;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Appointments;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Health_Centers;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Locations;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Allergies;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Clinical_History;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Family_History;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Discapacity_Condition;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Illness_Condition;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Risk_Factor_Condition;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Vaccines;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_Insurance;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Presctiprions;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Products;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
-using SedisBackend.Core.Application.Services.Domain_Services.Appointments;
-using SedisBackend.Core.Application.Services.Domain_Services.Health_Centers;
-using SedisBackend.Core.Application.Services.Domain_Services.Locations;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Allergies;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Clinical_History;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Family_History;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Medical_Condition.Discapacity_Condition;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Medical_Condition.Illness_Condition;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Medical_Condition.Risk_Factor_Condition;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Vaccines;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_Insurance;
-using SedisBackend.Core.Application.Services.Domain_Services.Prescriptions;
-using SedisBackend.Core.Application.Services.Domain_Services.Products;
-using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
-using SedisBackend.Core.Application.Services.Domain_Services.Users.Patients;
-using SedisBackend.Core.Domain.Health_Centers;
-using SedisBackend.Core.Domain.Locations;
 using SedisBackend.Core.Domain.Appointments;
 using SedisBackend.Core.Domain.Health_Centers;
 using SedisBackend.Core.Domain.Locations;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness_Condition;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
-using SedisBackend.Core.Domain.Medical_Insurance;
-using SedisBackend.Core.Domain.Prescriptions;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Medical_History.Family_History;
+using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness_Condition;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
@@ -76,14 +35,11 @@ using SedisBackend.Core.Domain.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.Medical_Insurance;
 using SedisBackend.Core.Domain.Prescriptions;
 using SedisBackend.Core.Domain.Products;
+using SedisBackend.Core.Domain.UserEntityRelation;
+using SedisBackend.Core.Domain.Users.Admins;
+using SedisBackend.Core.Domain.Users.Assistants;
 using SedisBackend.Core.Domain.Users.Doctors;
 using SedisBackend.Core.Domain.Users.Patients;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Admins;
-using SedisBackend.Core.Domain.Users.Admins;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Assistants;
-using SedisBackend.Core.Domain.Users.Assistants;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.User_Entity_Relation;
-using SedisBackend.Core.Domain.UserEntityRelation;
 
 #endregion
 
@@ -116,10 +72,10 @@ namespace SedisBackend.Core.Application.Mappings
             #region Domain Services
 
             #region Appointments
-                CreateMap<Appointment, SaveAppointmentDto>()
-                    .ReverseMap();
-                CreateMap<Appointment, BaseAppointmentDto>()
-                    .ReverseMap();
+            CreateMap<Appointment, SaveAppointmentDto>()
+                .ReverseMap();
+            CreateMap<Appointment, BaseAppointmentDto>()
+                .ReverseMap();
             #endregion
 
             #region HealthCenters

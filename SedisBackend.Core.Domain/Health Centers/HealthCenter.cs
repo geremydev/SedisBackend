@@ -7,9 +7,9 @@ namespace SedisBackend.Core.Domain.Health_Centers
 {
     public class HealthCenter
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        public int? LocationId { get; set; }
+        public Guid? LocationId { get; set; }
         public string HealthCenterCategory { get; set; } // Usando enum HealthCenterCategory 
         public ICollection<Appointment> Appointments { get; set; }
         public ICollection<DoctorHealthCenter> Doctors { get; set; }

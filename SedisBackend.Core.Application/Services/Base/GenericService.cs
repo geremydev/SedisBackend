@@ -35,24 +35,24 @@ namespace SedisBackend.Core.Application.Services.Base
             return newList;
         }
 
-        public virtual async Task<BaseDto> GetByIdAsync(int Id)
+        public virtual async Task<BaseDto> GetByIdAsync(Guid Id)
         {
             var entity = await _repository.GetEntityByIDAsync(Id);
             return _mapper.Map<BaseDto>(entity);
         }
 
-        public virtual async Task UpdateAsync(SaveDto vm, int Id)
+        public virtual async Task UpdateAsync(SaveDto vm, Guid Id)
         {
             Entity entity = _mapper.Map<Entity>(vm);
             await _repository.UpdateAsync(entity, Id);
         }
-        public virtual async Task Delete(int Id)
+        public virtual async Task Delete(Guid Id)
         {
             var entity = await _repository.GetEntityByIDAsync(Id);
             await _repository.DeleteAsync(entity);
         }
 
-        public virtual async Task<SaveDto> GetByIdSaveDtoAsync(int Id)
+        public virtual async Task<SaveDto> GetByIdSaveDtoAsync(Guid Id)
         {
             var entity = await _repository.GetEntityByIDAsync(Id);
             return _mapper.Map<SaveDto>(entity);
