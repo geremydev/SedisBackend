@@ -2,10 +2,10 @@
 
 namespace SedisBackend.Core.Domain.Prescriptions
 {
-    public class Prescription
+    public class Prescription : IBaseEntity
     {
         public Guid Id { get; set; }
-        public Guid ClinicalHistoryId { get; set; } 
+        public Guid ClinicalHistoryId { get; set; }
         public ClinicalHistory ClinicalHistory { get; set; } // Navigation property
         public ICollection<MedicationPrescription>? PrescribedMedications { get; set; }
         public ICollection<LabTestPrescription>? PrescribedLabTests { get; set; }

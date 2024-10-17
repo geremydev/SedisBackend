@@ -2,7 +2,7 @@
 
 namespace SedisBackend.Core.Domain.Medical_Insurance
 {
-    public class PatientHealthInsurance
+    public class PatientHealthInsurance : IBaseEntity
     {
         public Guid Id { get; set; }
         public string PolicyNumber { get; set; } //Numero de Poliza

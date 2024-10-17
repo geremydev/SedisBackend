@@ -2,6 +2,7 @@
 using SedisBackend.Core.Application.Interfaces.Loggers;
 using SedisBackend.Core.Application.Interfaces.Repositories.Base;
 using SedisBackend.Core.Application.Interfaces.Services.Base;
+using SedisBackend.Core.Domain;
 using System.Linq.Expressions;
 
 namespace SedisBackend.Core.Application.Services.Base
@@ -9,7 +10,7 @@ namespace SedisBackend.Core.Application.Services.Base
     public class GenericService<SaveDto, BaseDto, Entity> : IGenericService<SaveDto, BaseDto, Entity>
             where SaveDto : class
             where BaseDto : class
-            where Entity : class
+            where Entity : class, IBaseEntity
     {
         private readonly IGenericRepository<Entity> _repository;
         private readonly ILoggerManager _logger;
@@ -20,14 +21,13 @@ namespace SedisBackend.Core.Application.Services.Base
             _logger = logger;
             _repository = repository;
         }
-        public virtual async Task<SaveDto> AddAsync(SaveDto vm)
+        public virtual async Task<BaseDto> AddAsync(SaveDto vm)
         {
             Entity entity = _mapper.Map<Entity>(vm);
             //Recordar que el profesor la devolvía para atrás la entidad
             entity = await _repository.AddAsync(entity);
-
-            SaveDto svm = _mapper.Map<SaveDto>(entity);
-            return svm;
+            var baseDto = _mapper.Map<BaseDto>(entity);
+            return baseDto;
         }
 
         public virtual async Task<List<BaseDto>> GetAllAsync()

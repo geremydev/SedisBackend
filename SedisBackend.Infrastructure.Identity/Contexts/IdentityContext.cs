@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SedisBackend.Core.Domain.UserEntityRelation;
 using SedisBackend.Infrastructure.Identity.Entities;
 
 

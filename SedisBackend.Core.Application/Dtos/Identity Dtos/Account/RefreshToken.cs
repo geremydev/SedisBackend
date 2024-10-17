@@ -9,6 +9,6 @@
         public DateTime? Created { get; set; }
         public DateTime? Revoked { get; set; }
         public string? ReplaceByToken { get; set; }
-        public bool IsActive => Revoked  == null && !IsExpired;
+        public bool IsActive => Revoked == null && !IsExpired;
     }
 }

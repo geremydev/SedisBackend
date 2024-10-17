@@ -51,7 +51,7 @@ namespace SedisBackend.WebApi.Extensions
                         Name = "Ssdis - Dominican Republic",
                         Email = "sedisinford@gmail.com",
                         Url = new Uri("https://www.itla.edu.do"),
-                        
+
                     }
                 });
 

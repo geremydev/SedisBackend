@@ -2,7 +2,6 @@
 {
     public class SaveLocationDto
     {
-        public Guid Id { get; set; }
         public Guid EntityId { get; set; }
         public string EntityType { get; set; } //Doctor, Paciente, Hospital, Clinica
         public Guid MunicipalityId { get; set; }

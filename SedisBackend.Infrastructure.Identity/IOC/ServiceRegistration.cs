@@ -31,9 +31,8 @@ namespace SedisBackend.Infrastructure.Identity.IOC
             {
                 service.AddDbContext<IdentityContext>(options =>
                 {
-                    options.EnableSensitiveDataLogging();
                     options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"),
-                    m => m.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName));
+                    m => m.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)).EnableSensitiveDataLogging(true);
                 });
             }
             #endregion

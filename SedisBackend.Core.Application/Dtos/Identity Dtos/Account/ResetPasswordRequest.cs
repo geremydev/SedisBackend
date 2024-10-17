@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SedisBackend.Core.Application.Dtos.Identity_Dtos.Account
+﻿namespace SedisBackend.Core.Application.Dtos.Identity_Dtos.Account
 {
     public class ResetPasswordRequest
     {

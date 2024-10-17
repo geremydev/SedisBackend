@@ -1,10 +1,5 @@
 ﻿using SedisBackend.Core.Domain.Medical_Insurance;
 using SedisBackend.Core.Domain.Products;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_Insurance
 {

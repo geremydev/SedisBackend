@@ -4,7 +4,7 @@ using SedisBackend.Core.Domain.Users.Patients;
 
 namespace SedisBackend.Core.Domain.Medical_History.Clinical_History
 {
-    public class ClinicalHistory
+    public class ClinicalHistory : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid PatientId { get; set; }

@@ -13,7 +13,7 @@ namespace SedisBackend.Infrastructure.Persistence.Configuration
                 new Patient
                 {
                     Id = Guid.Parse("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
-                    IdCard = "40211608647",
+                    IdCard = "40211608640",
                     FirstName = "John",
                     LastName = "Doe",
                     BloodType = "O+",

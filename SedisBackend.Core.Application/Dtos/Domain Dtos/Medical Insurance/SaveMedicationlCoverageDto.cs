@@ -2,7 +2,6 @@
 {
     public class SaveMedicationlCoverageDto
     {
-        public Guid Id { get; set; }
         public Guid HealthInsuranceId { get; set; } // FK
         public Guid MedicationId { get; set; } // FK
         public string CoverageStatus { get; set; } // Usando el enum ConverageStatus

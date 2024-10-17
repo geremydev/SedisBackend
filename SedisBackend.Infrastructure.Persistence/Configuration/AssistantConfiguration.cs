@@ -18,7 +18,7 @@ namespace SedisBackend.Infrastructure.Persistence.Configuration
                     LastName = "Martínez",
                     IdCard = "0987634321",
                     IsActive = false,
-                    Birthdate = new DateTime(1975, 12, 1),
+                    Birthdate = new DateTime(1995, 12, 1),
                     Sex = 'F',
                 }
             );

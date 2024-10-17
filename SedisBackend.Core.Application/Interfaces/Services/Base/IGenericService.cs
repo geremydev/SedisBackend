@@ -7,7 +7,7 @@ namespace SedisBackend.Core.Application.Interfaces.Services.Base
         where BaseDto : class
         where Model : class
     {
-        public Task<SaveDto> AddAsync(SaveDto vm);
+        public Task<BaseDto> AddAsync(SaveDto vm);
         public Task<List<BaseDto>> GetAllAsync();
         public Task<BaseDto> GetByIdAsync(Guid Id);
         public Task<SaveDto> GetByIdSaveDtoAsync(Guid Id);

@@ -2,7 +2,7 @@
 {
     public interface IChatGPTService
     {
-        string SendQuery(string Query); 
+        string SendQuery(string Query);
         Task<string> GetChatHistorial();
     }
 }

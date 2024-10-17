@@ -134,7 +134,6 @@ namespace WebApi.Controllers.v1.Domain.Appointment
         {
             try
             {
-
                 await _service.Appointment.Delete(id);
                 return NoContent();
             }
@@ -143,6 +142,5 @@ namespace WebApi.Controllers.v1.Domain.Appointment
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-
     }
 }

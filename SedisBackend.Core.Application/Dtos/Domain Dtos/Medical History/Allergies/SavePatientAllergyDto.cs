@@ -2,7 +2,6 @@
 {
     public class SavePatientAllergyDto
     {
-        public Guid Id { get; set; }
         public Guid PatientId { get; set; }
         public Guid AllergyId { get; set; }
         public string AllergicReaction { get; set; }

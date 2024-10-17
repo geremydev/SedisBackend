@@ -2,7 +2,7 @@
 
 namespace SedisBackend.Core.Domain.Medical_History.Vaccines
 {
-    public class PatientVaccine
+    public class PatientVaccine : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid PatientId { get; set; }

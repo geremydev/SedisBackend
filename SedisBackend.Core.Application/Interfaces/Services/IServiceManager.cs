@@ -22,7 +22,7 @@ namespace SedisBackend.Core.Application.Interfaces.Services
 {
     public interface IServiceManager
     {
-        IICD11Service ICD11 { get; } 
+        IICD11Service ICD11 { get; }
 
         IAppointmentService Appointment { get; }
         IHealthCenterService HealthCenter { get; }

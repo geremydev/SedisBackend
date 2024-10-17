@@ -1,5 +1,5 @@
-﻿using SedisBackend.Core.Application.Helpers;
-using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
+﻿using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
+using SedisBackend.Core.Application.Helpers;
 
 namespace WebApi.Middlewares
 {

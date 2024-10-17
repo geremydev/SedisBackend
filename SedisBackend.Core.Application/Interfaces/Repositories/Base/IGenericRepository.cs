@@ -1,8 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using SedisBackend.Core.Domain;
+using System.Linq.Expressions;
 
 namespace SedisBackend.Core.Application.Interfaces.Repositories.Base
 {
-    public interface IGenericRepository<TEntity> where TEntity : class
+    public interface IGenericRepository<TEntity> where TEntity : class, IBaseEntity
     {
         Task<TEntity> AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity, Guid Id);

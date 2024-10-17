@@ -116,7 +116,7 @@ namespace SedisBackend.Infrastructure.Identity.Services
             {
                 HasError = true,
             };
-            var cardValidation =  await _cardValidationService.VerifyCardId(request.IdCard);
+            var cardValidation = await _cardValidationService.VerifyCardId(request.IdCard);
             if (!cardValidation.valid)
             {
                 response.Error = "Cédula inválida";
@@ -141,7 +141,7 @@ namespace SedisBackend.Infrastructure.Identity.Services
             };
 
             var patient = _mapper.Map<SavePatientDto>(request);
-            var p = await _serviceManager.Patient.AddAsync(patient);
+            var p = _mapper.Map<BasePatientDto>(await _serviceManager.Patient.AddAsync(patient));
 
             var result = await _userManager.CreateAsync(user, request.Password);
 
@@ -487,8 +487,8 @@ namespace SedisBackend.Infrastructure.Identity.Services
 
         public async Task<ServiceResult> AddRole(string IdCard, Guid HealthCenterId, string Role)
         {
-            SaveAdminDto admin = new();
-            SaveAssistantDto assistant = new();
+            BaseAdminDto admin = new();
+            BaseAssistantDto assistant = new();
             ServiceResult serviceResult = new() { HasError = false };
             SaveUserEntityRelationDto userEntityRelation = new();
 
@@ -498,26 +498,24 @@ namespace SedisBackend.Infrastructure.Identity.Services
             var specificUER = allUER.Find(u => u.EntityId == patient.Id);
             var identityUser = await GetByIdAsync(specificUER.UserId.ToString());
 
-            if(Role == RolesEnum.Admin.ToString())
+            if (Role == RolesEnum.Admin.ToString())
             {
-                admin = _mapper.Map<SaveAdminDto>(patient);
+                admin = _mapper.Map<BaseAdminDto>(patient);
                 admin.HealthCenterId = HealthCenterId;
-                admin.Id = new Guid();
             }
-            else if(Role == RolesEnum.Assistant.ToString())
+            else if (Role == RolesEnum.Assistant.ToString())
             {
-                assistant = _mapper.Map<SaveAssistantDto>(patient);
+                assistant = _mapper.Map<BaseAssistantDto>(patient);
                 assistant.HealthCenterId = HealthCenterId;
-                assistant.Id = new Guid();
             }
             //Todavía no funciona, almacena el Entity Id en la tabla UserEntityRelation como 0, pero al menos ya lo almacena y actualiza los roles.
 
             try
             {
-                if(Role == RolesEnum.Admin.ToString())
+                if (Role == RolesEnum.Admin.ToString())
                 {
-
-                    admin = await _serviceManager.Admin.AddAsync(admin);
+                    var saveAdminDto = _mapper.Map<SaveAdminDto>(admin);
+                    admin = _mapper.Map<BaseAdminDto>(await _serviceManager.Admin.AddAsync(saveAdminDto));
                     userEntityRelation = new SaveUserEntityRelationDto
                     {
                         UserId = Guid.Parse(identityUser.Id),
@@ -525,9 +523,10 @@ namespace SedisBackend.Infrastructure.Identity.Services
                         EntityRole = RolesEnum.Admin.ToString()
                     };
                 }
-                else if(Role == RolesEnum.Assistant.ToString())
+                else if (Role == RolesEnum.Assistant.ToString())
                 {
-                    assistant = await _serviceManager.Assistant.AddAsync(assistant);
+                    var saveAssitantDto = _mapper.Map<SaveAssistantDto>(assistant);
+                    assistant = _mapper.Map<BaseAssistantDto>(await _serviceManager.Assistant.AddAsync(saveAssitantDto));
                     userEntityRelation = new SaveUserEntityRelationDto
                     {
                         UserId = Guid.Parse(identityUser.Id),
@@ -537,8 +536,8 @@ namespace SedisBackend.Infrastructure.Identity.Services
                 }
 
                 await _serviceManager.UserEntityRelation.AddAsync(userEntityRelation);
-                
-                await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(identityUser.Id), Role == RolesEnum.Admin.ToString()? RolesEnum.Admin.ToString() : RolesEnum.Assistant.ToString());
+
+                await _userManager.AddToRoleAsync(await _userManager.FindByIdAsync(identityUser.Id), Role == RolesEnum.Admin.ToString() ? RolesEnum.Admin.ToString() : RolesEnum.Assistant.ToString());
 
                 serviceResult.HasError = false;
             }
@@ -566,7 +565,7 @@ namespace SedisBackend.Infrastructure.Identity.Services
                 domainEntitiesRelatedDto.Patient.IsActive = patient.IsActive;
 
             }
-            if (entitiesRelated.Exists(e=>e.EntityRole == RolesEnum.Admin.ToString()))
+            if (entitiesRelated.Exists(e => e.EntityRole == RolesEnum.Admin.ToString()))
             {
                 var uerEntity = entitiesRelated.Find(e => e.EntityRole == RolesEnum.Admin.ToString());
                 var admin = await _serviceManager.Admin.GetByIdAsync(uerEntity.EntityId);

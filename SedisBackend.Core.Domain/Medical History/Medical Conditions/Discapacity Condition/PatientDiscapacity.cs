@@ -2,7 +2,7 @@
 
 namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition
 {
-    public class PatientDiscapacity
+    public class PatientDiscapacity : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid PatientId { get; set; }

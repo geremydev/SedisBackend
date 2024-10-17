@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Locations;
-using SedisBackend.Core.Application.Dtos.Shared_Dtos;
 using SedisBackend.Core.Application.Interfaces.Services;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Locations;
 using SedisBackend.WebApi.Controllers.v1;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebApi.Controllers.v1.Domain.Locations
 {

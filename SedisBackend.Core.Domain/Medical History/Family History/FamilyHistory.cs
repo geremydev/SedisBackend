@@ -2,7 +2,7 @@
 
 namespace SedisBackend.Core.Domain.Medical_History.Family_History
 {
-    public class FamilyHistory
+    public class FamilyHistory : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid PatientId { get; set; }

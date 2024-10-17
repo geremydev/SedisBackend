@@ -2,7 +2,6 @@
 {
     public class SaveRiskFactorDto
     {
-        public Guid Id { get; set; }
         public string Code { get; set; } //SNOMED CT
 
         // Description of the risk factor

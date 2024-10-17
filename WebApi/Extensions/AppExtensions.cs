@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Swashbuckle.AspNetCore.SwaggerUI;
+﻿using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace SedisBackend.WebApi.Extensions
 {

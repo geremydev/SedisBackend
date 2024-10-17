@@ -8,12 +8,12 @@ namespace SedisBackend.Infrastructure.Shared.Services
     {
         private Uri _baseAddress { get; set; }
         private HttpClient _httpClient { get; set; } = new();
-        public CardValidationService() 
+        public CardValidationService()
         {
             _baseAddress = new Uri("https://api.digital.gob.do/v3/cedulas/");
             _httpClient.BaseAddress = _baseAddress;
         }
-        
+
         public async Task<IdVerificationDto> VerifyCardId(string IdCard)
         {
             HttpResponseMessage response = _httpClient.GetAsync(_httpClient.BaseAddress + $"{IdCard}/validate").Result;

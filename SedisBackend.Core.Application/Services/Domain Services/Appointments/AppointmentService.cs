@@ -12,6 +12,7 @@ namespace SedisBackend.Core.Application.Services.Domain_Services.Appointments
     {
         public AppointmentService(IGenericRepository<Appointment> repository, ILoggerManager logger, IMapper mapper) : base(repository, logger, mapper)
         {
+
         }
     }
 }

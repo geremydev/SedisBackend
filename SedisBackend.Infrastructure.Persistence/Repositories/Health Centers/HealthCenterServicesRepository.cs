@@ -2,11 +2,6 @@
 using SedisBackend.Core.Domain.Health_Centers;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 using SedisBackend.Infrastructure.Persistence.Repositories.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories.Health_Centers
 {

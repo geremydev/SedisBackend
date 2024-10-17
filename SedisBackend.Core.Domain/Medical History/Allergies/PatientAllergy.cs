@@ -2,7 +2,7 @@
 
 namespace SedisBackend.Core.Domain.Medical_History.Allergies
 {
-    public class PatientAllergy
+    public class PatientAllergy : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid PatientId { get; set; }

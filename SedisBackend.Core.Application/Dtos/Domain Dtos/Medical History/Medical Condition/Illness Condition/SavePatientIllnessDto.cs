@@ -2,7 +2,6 @@
 {
     public class SavePatientIllnessDto
     {
-        public Guid Id { get; set; }
         public Guid PatientId { get; set; }
         public Guid IllnessId { get; set; }
         public string DocumentURL { get; set; } //Diagnóstico Médico y así

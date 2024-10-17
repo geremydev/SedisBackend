@@ -2,7 +2,7 @@
 
 namespace SedisBackend.Core.Domain.Users.Doctors
 {
-    public class DoctorHealthCenter
+    public class DoctorHealthCenter : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid DoctorId { get; set; }

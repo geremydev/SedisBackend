@@ -2,7 +2,6 @@
 {
     public class SaveMedicationPrescriptionDto
     {
-        public Guid Id { get; set; }
         public Guid PatientId { get; set; }
         public Guid MedicationId { get; set; }
         public Guid PrescriptionId { get; set; }

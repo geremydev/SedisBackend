@@ -27,6 +27,6 @@ namespace SedisBackend.Core.Application.Services.Domain_Services.Users.Admins
             _repository = repository;
         }
 
-        
+
     }
 }

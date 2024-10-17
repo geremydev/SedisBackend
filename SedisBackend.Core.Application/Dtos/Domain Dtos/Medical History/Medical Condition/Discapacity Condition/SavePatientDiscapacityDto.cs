@@ -2,7 +2,6 @@
 {
     public class SavePatientDiscapacityDto
     {
-        public Guid Id { get; set; }
         public Guid PatientId { get; set; }
         public Guid DiscapacityId { get; set; }
         // Fecha de diagnóstico (opcional)

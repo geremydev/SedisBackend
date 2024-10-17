@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SedisBackend.Core.Application.Enums;
 using SedisBackend.Infrastructure.Identity.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SedisBackend.Infrastructure.Identity.Seeds
 {
@@ -22,14 +17,12 @@ namespace SedisBackend.Infrastructure.Identity.Seeds
             adminuser.PhoneNumberConfirmed = true;
             adminuser.ImageUrl = ".";
 
-            if (userManager.Users.All(u => u.Id != adminuser.Id))
+            var user = await userManager.FindByEmailAsync(adminuser.Email);
+
+            if (user == null)
             {
-                var user = await userManager.FindByEmailAsync(adminuser.Email);
-                if (user == null)
-                {
-                    await userManager.CreateAsync(adminuser, "Pa$$w0rd");
-                    await userManager.AddToRoleAsync(adminuser, RolesEnum.SuperAdmin.ToString());
-                }
+                await userManager.CreateAsync(adminuser, "Pa$$w0rd");
+                await userManager.AddToRoleAsync(adminuser, RolesEnum.Admin.ToString());
             }
         }
     }

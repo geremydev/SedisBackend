@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.Users
 {
-    public class BasePerson
+    public class BasePerson : IBaseEntity
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

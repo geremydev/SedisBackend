@@ -2,7 +2,6 @@
 {
     public class SaveLabTestDto
     {
-        public Guid Id { get; set; }
 
         // Name of the lab test
         public string TestName { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.Products
 {
-    public class LabTest
+    public class LabTest : IBaseEntity
     {
         public Guid Id { get; set; }
 

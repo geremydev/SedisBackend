@@ -3,7 +3,7 @@ using SedisBackend.Core.Domain.Products;
 
 namespace SedisBackend.Core.Domain.Prescriptions
 {
-    public class LabTestPrescription
+    public class LabTestPrescription : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid ClinicalHistoryId { get; set; }

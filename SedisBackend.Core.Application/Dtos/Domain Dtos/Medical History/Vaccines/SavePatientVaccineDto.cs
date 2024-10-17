@@ -2,7 +2,6 @@
 {
     public class SavePatientVaccineDto
     {
-        public Guid Id { get; set; }
         public Guid PatientId { get; set; }
         public string VaccineId { get; set; }
         public int AppliedDoses { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.Products
 {
-    public class Medication
+    public class Medication : IBaseEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -15,7 +15,7 @@
         public string SideEffects { get; set; }
         public string DrugInteractions { get; set; }
         public string Presentation { get; set; } // Detalles de presentacion (e.g., Pastillas, Jarabe, etc.)
-        public string ImageUrl { get; set; } 
-        public string NationalCode { get; set; } 
+        public string ImageUrl { get; set; }
+        public string NationalCode { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace SedisBackend.Infrastructure.Persistence.Configuration
                 {
                     Id = Guid.Parse("57efafa6-1eec-4228-b7c1-ab87fe2097da"),
                     Name = "North Health Center",
-                    LocationId = Guid.Parse("a6e819b6-3996-49d6-afc7-9b47206dcadc"), 
+                    LocationId = Guid.Parse("a6e819b6-3996-49d6-afc7-9b47206dcadc"),
                     HealthCenterCategory = "Especializado" // HealthCenterCategory.Specialized
                 }
             );

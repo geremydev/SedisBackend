@@ -2,7 +2,6 @@
 {
     public class SaveDiscapacityDto
     {
-        public Guid Id { get; set; }
 
         // Tipo de discapacidad (física, sensorial, intelectual, etc.)
         public string Type { get; set; }

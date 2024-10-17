@@ -8,23 +8,20 @@ namespace SedisBackend.Infrastructure.Identity.Seeds
     {
         public static async Task SeedAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            ApplicationUser clientuser = new();
-            clientuser.UserName = "patient";
-            clientuser.Email = "patientuser@email.com";
-            clientuser.PhoneNumber = "829-123-9811";
-            clientuser.IsActive = true;
-            clientuser.EmailConfirmed = true;
-            clientuser.PhoneNumberConfirmed = true;
-            clientuser.ImageUrl = ".";
+            ApplicationUser clientUser = new();
+            clientUser.UserName = "patient";
+            clientUser.Email = "patientuser@email.com";
+            clientUser.PhoneNumber = "829-123-9811";
+            clientUser.IsActive = true;
+            clientUser.EmailConfirmed = true;
+            clientUser.PhoneNumberConfirmed = true;
+            clientUser.ImageUrl = ".";
 
-            if (userManager.Users.All(u => u.Id != clientuser.Id))
+            var user = await userManager.FindByEmailAsync(clientUser.Email);
+            if (user == null)
             {
-                var user = await userManager.FindByEmailAsync(clientuser.Email);
-                if (user == null)
-                {
-                    await userManager.CreateAsync(clientuser, "Pa$$w0rd");
-                    await userManager.AddToRoleAsync(clientuser, RolesEnum.Patient.ToString());
-                }
+                await userManager.CreateAsync(clientUser, "Pa$$w0rd");
+                await userManager.AddToRoleAsync(clientUser, RolesEnum.Patient.ToString());
             }
         }
     }

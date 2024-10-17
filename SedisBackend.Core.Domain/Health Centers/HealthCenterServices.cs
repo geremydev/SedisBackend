@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.Health_Centers
 {
-    public class HealthCenterServices
+    public class HealthCenterServices : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid HealthCenterId { get; set; }

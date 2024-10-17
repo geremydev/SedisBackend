@@ -2,7 +2,7 @@
 
 namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor
 {
-    public class PatientRiskFactor
+    public class PatientRiskFactor : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid PatientId { get; set; }

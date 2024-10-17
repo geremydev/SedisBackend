@@ -35,7 +35,7 @@ namespace SedisBackend.Core.Application.Interfaces.Repositories
         IPatientAllergyRepository PatientAllergy { get; }
         IClinicalHistoryRepository ClinicalHistory { get; }
         IFamilyHistoryRepository FamilyHistory { get; }
-        IVaccineRepository Vaccine{ get; }
+        IVaccineRepository Vaccine { get; }
 
         // Medical Conditions
         IDiscapacityRepository Discapacity { get; }

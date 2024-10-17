@@ -2,7 +2,6 @@
 {
     public class SavePatientRiskFactorDto
     {
-        public Guid Id { get; set; }
         public Guid PatientId { get; set; }
         public Guid RiskFactorId { get; set; }
     }

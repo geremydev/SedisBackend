@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SedisBackend.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Manager : Migration
+    public partial class SeedingMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -360,11 +360,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     HealthInsuranceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    MedicationId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MedicationId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MedicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CoverageStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CopayAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    CoinsurancePercentage = table.Column<decimal>(type: "decimal(5,4)", nullable: false),
+                    CoinsurancePercentage = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
                     PriorAuthorizationRequired = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -377,8 +376,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MedicationCoverages_Medications_MedicationId1",
-                        column: x => x.MedicationId1,
+                        name: "FK_MedicationCoverages_Medications_MedicationId",
+                        column: x => x.MedicationId,
                         principalTable: "Medications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -695,8 +694,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 name: "MedicationPrescriptions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MedicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PrescriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TreatmentStart = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -721,6 +719,24 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Allergies",
+                columns: new[] { "Id", "Allergen" },
+                values: new object[,]
+                {
+                    { new Guid("33c7785e-58f4-4ab8-9f54-51bf8978963f"), "Peanuts" },
+                    { new Guid("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"), "Penicillin" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Discapacities",
+                columns: new[] { "Id", "Description", "Type" },
+                values: new object[,]
+                {
+                    { new Guid("1b54e13f-7a32-4cc1-ad6d-35298426a2fb"), "Paraplejia que afecta las extremidades inferiores.", "Física" },
+                    { new Guid("5c52a9d3-6ee2-496e-a922-139de857d9d4"), "Pérdida total de la audición en ambos oídos.", "Sensorial" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Doctors",
                 columns: new[] { "Id", "Birthdate", "FirstName", "IdCard", "IsActive", "LastName", "LicenseNumber", "Sex" },
                 values: new object[,]
@@ -739,6 +755,42 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "HealthInsurances",
+                columns: new[] { "Id", "CoverageLevel", "InsuranceCompany", "InsuranceName", "PolicyType" },
+                values: new object[,]
+                {
+                    { new Guid("7f5d5339-9de6-4ab0-b43c-d6b3d43e4d80"), "High", "VivaSalud", "Plan Familiar Salud", "Family" },
+                    { new Guid("b51ec3f9-bdc8-4a74-b43e-bf4da6e2f9b9"), "Medium", "SaludCo", "Seguro Salud Total", "Individual" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Illnesses",
+                columns: new[] { "Id", "Code", "Description", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"), "E10", "Enfermedad crónica en la que el páncreas produce poca o ninguna insulina.", "Diabetes Mellitus Tipo 1" },
+                    { new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"), "I10", "Condición de presión arterial elevada sin causa identificable.", "Hipertensión esencial (primaria)" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "LabTests",
+                columns: new[] { "Id", "TestCode", "TestName" },
+                values: new object[,]
+                {
+                    { new Guid("2b5d9a1c-4e7f-3a8c-6b9d-5f2a3e4b1f7a"), "P002", "Perfil Lipídico" },
+                    { new Guid("9d2a5e4c-8b3f-4a7d-9c5b-3f2e1b6a7d9c"), "H001", "Hemograma Completo" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Locations",
+                columns: new[] { "Id", "EntityId", "EntityType", "Latitude", "Longitude", "MunicipalityId", "PostalCode", "ProvinceId", "RegionId" },
+                values: new object[,]
+                {
+                    { new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da"), new Guid("a6e819b6-3996-49d6-afc7-9b47206dcadc"), "HealthCenter", 18.4796m, -69.9010m, new Guid("65432109-6543-6543-6543-abcdef345678"), "10202", new Guid("76543210-5432-5432-5432-abcdef234567"), new Guid("87654321-4321-4321-4321-abcdef123456") },
+                    { new Guid("945e98f3-80c7-4444-8d93-74b72efc78b1"), new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"), "HealthCenter", 18.5067m, -69.8937m, new Guid("34567890-3456-3456-3456-34567890abcd"), "10101", new Guid("23456789-2345-2345-2345-234567890abc"), new Guid("12345678-1234-1234-1234-1234567890ab") }
+                });
+
+            migrationBuilder.InsertData(
                 table: "MedicalSpecialities",
                 columns: new[] { "Id", "Description", "Name" },
                 values: new object[,]
@@ -748,12 +800,39 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Medications",
+                columns: new[] { "Id", "ActiveIngredient", "Concentration", "Contraindications", "DosageForm", "DrugInteractions", "ImageUrl", "Indications", "Name", "NationalCode", "Precautions", "Presentation", "RouteOfAdministration", "SideEffects", "UnitOfMeasurement" },
+                values: new object[,]
+                {
+                    { new Guid("a2d1c5b7-8f4e-4a6b-9c3d-5e7a1b2c9f5d"), "Metformina", 500m, "Insuficiencia renal", "Tablet", "No usar con insulina", "http://example.com/image1.jpg", "Tratamiento de diabetes tipo 2", "Metformina", "M500", "Controlar niveles de glucosa", "Tabletas en frasco", "Oral", "Náuseas, vómitos", "mg" },
+                    { new Guid("e6b5a3c7-9d4f-4a8b-7e1c-2d9f1a5b3c6d"), "Atorvastatina", 20m, "Enfermedad hepática", "Tablet", "No usar con ciertos antibióticos", "http://example.com/image2.jpg", "Reducción de colesterol", "Atorvastatina", "A020", "Controlar niveles de lípidos", "Tabletas en caja", "Oral", "Dolor muscular", "mg" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Patients",
                 columns: new[] { "Id", "Birthdate", "BloodType", "BloodTypeLabResultURl", "EmergencyContactName", "EmergencyContactPhone", "FirstName", "Height", "IdCard", "IsActive", "LastName", "PrimaryCarePhysicianId", "Sex", "Weight" },
                 values: new object[,]
                 {
-                    { new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "O+", "http://example.com/lab-results/john-doe", "Jane Doe", "123-456-7890", "John", 180.5m, "40211608647", false, "Doe", null, " ", 75.3m },
+                    { new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "O+", "http://example.com/lab-results/john-doe", "Jane Doe", "123-456-7890", "John", 180.5m, "40211608640", false, "Doe", null, " ", 75.3m },
                     { new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "A-", "http://example.com/lab-results/alice-smith", "Bob Smith", "987-654-3210", "Alice", 165.2m, "40211608648", false, "Smith", null, " ", 60.8m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RiskFactors",
+                columns: new[] { "Id", "AssessmentLevel", "Category", "Code", "Description" },
+                values: new object[,]
+                {
+                    { new Guid("454e8d39-1363-41f4-a2d2-b99fde743fbf"), "Alto", "Estilo de vida", "L123", "Consumo excesivo de alcohol" },
+                    { new Guid("6522252f-0021-433b-8174-f4e0833f859a"), "Moderado", "Genético", "G789", "Historia familiar de diabetes" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Vaccines",
+                columns: new[] { "Id", "Disease", "Doses", "Laboratory", "Name" },
+                values: new object[,]
+                {
+                    { new Guid("384e34fb-7d23-4123-a78e-13d7b0a91110"), "Influenza", 1, "Sanofi Pasteur", "Vacuna contra la gripe" },
+                    { new Guid("c28e855d-2602-423f-a4d5-26954df029da"), "COVID-19", 2, "Pfizer-BioNTech", "Vacuna COVID-19" }
                 });
 
             migrationBuilder.InsertData(
@@ -761,17 +840,22 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "AppointmentDate", "AppointmentStatus", "ConsultationRoom", "ConsultationType", "DoctorId", "HealthCenterId", "PatientId" },
                 values: new object[,]
                 {
-                    { new Guid("825eb1e3-62c1-4232-b301-758930e29df9"), new DateTime(2024, 11, 12, 10, 0, 0, 0, DateTimeKind.Unspecified), "completed", "Room 202", "follow-up", new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9") },
-                    { new Guid("b87e571e-d964-43db-996b-e2f4f6265c46"), new DateTime(2024, 11, 10, 14, 30, 0, 0, DateTimeKind.Unspecified), "scheduled", "Room 101", "general checkup", new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950") }
+                    { new Guid("1f97d2ed-1bd0-4376-a682-6d718f0c3c6a"), new DateTime(2024, 11, 10, 14, 30, 0, 0, DateTimeKind.Unspecified), "scheduled", "Room 101", "general checkup", new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950") },
+                    { new Guid("462916c2-c684-4a4c-abad-ed17a72271da"), new DateTime(2024, 11, 12, 10, 0, 0, 0, DateTimeKind.Unspecified), "completed", "Room 202", "follow-up", new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9") }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Assistants",
+                columns: new[] { "Id", "Birthdate", "FirstName", "HealthCenterId", "IdCard", "IsActive", "LastName", "Sex" },
+                values: new object[] { new Guid("9008a4eb-31c3-4b55-b4e2-4f8b36c168db"), new DateTime(1995, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ana", new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"), "0987634321", false, "Martínez", "F" });
 
             migrationBuilder.InsertData(
                 table: "ClinicalHistories",
                 columns: new[] { "Id", "CurrentHistory", "Diagnosis", "DoctorId", "PatientId", "PhysicalExamination", "PrescriptionId", "ReasonForVisit", "RegisterDate" },
                 values: new object[,]
                 {
-                    { new Guid("04f5b044-5052-4844-94c7-5c9b026f258a"), "No significant issues.", "Hypertension", new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), null, new Guid("00000000-0000-0000-0000-000000000000"), "Routine check-up", new DateTime(2024, 10, 16, 15, 49, 0, 953, DateTimeKind.Local).AddTicks(6408) },
-                    { new Guid("67232939-a019-4a3f-936e-cbe77fa4ef60"), "Feeling better.", "Diabetes", new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), null, new Guid("00000000-0000-0000-0000-000000000000"), "Follow-up on medication.", new DateTime(2024, 10, 16, 15, 49, 0, 953, DateTimeKind.Local).AddTicks(6457) }
+                    { new Guid("47d713da-eb0f-44c8-bd0d-d1882834c81b"), "Patient reports feeling better with current medication. No new symptoms.", "Diabetes", new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "\r\n                        Vital Signs: BP 140/90 mmHg, HR 82 bpm, RR 18 bpm, Temp 37.1°C.\r\n                        Anthropometry: Weight 80 kg, Height 1.80 m, BMI 24.7 kg/m².\r\n                        General: Skin warm, no cyanosis or jaundice observed.\r\n                        Cardiovascular: Heart sounds normal, no murmurs detected.\r\n                        Respiratory: Lung fields are clear to auscultation.\r\n                        Abdomen: Non-distended, no tenderness, liver and spleen not palpable.\r\n                        Extremities: No cyanosis or clubbing, peripheral pulses present.\r\n                    ", new Guid("00000000-0000-0000-0000-000000000000"), "Follow-up on medication.", new DateTime(2024, 10, 17, 15, 15, 38, 112, DateTimeKind.Local).AddTicks(6807) },
+                    { new Guid("c1aaea0c-c739-4125-a7b3-28da602de5a0"), "No significant issues. Patient reports feeling well overall.", "Hypertension", new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), "\r\n                        Vital Signs: BP 120/80 mmHg, HR 75 bpm, RR 16 bpm, Temp 36.7°C.\r\n                        Anthropometry: Weight 72 kg, Height 1.75 m, BMI 23.5 kg/m².\r\n                        General: Skin and mucosa appear healthy, no lesions observed.\r\n                        Cardiovascular: Regular rhythm, no murmurs detected.\r\n                        Respiratory: Clear breath sounds, no wheezes or crackles.\r\n                        Abdomen: Soft, non-tender, no masses or organomegaly.\r\n                        Extremities: No edema, peripheral pulses are intact.\r\n                    ", new Guid("00000000-0000-0000-0000-000000000000"), "Routine check-up", new DateTime(2021, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -779,8 +863,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "DoctorId", "EntryHour", "ExitHour", "HealthCenterId" },
                 values: new object[,]
                 {
-                    { new Guid("3fe6d186-36d7-4a19-8f11-e93f2ab242e0"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), "08:00:00", "17:00:00", new Guid("85bc224a-c53f-41db-97b8-92f703ee4452") },
-                    { new Guid("e933e060-fe8f-4026-9774-97accb2124d4"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), "09:00:00", "18:00:00", new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da") }
+                    { new Guid("2726e730-4d0f-4773-a3ab-2188a66f2faf"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), "08:00:00", "17:00:00", new Guid("85bc224a-c53f-41db-97b8-92f703ee4452") },
+                    { new Guid("8e62740e-1fb7-43d1-9f0f-9483fa02566c"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), "09:00:00", "18:00:00", new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da") }
                 });
 
             migrationBuilder.InsertData(
@@ -788,8 +872,98 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "DoctorId", "MedicalSpecialtyId" },
                 values: new object[,]
                 {
-                    { new Guid("308db8b0-c508-4232-bb22-b2b41f1b3e44"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0") },
-                    { new Guid("a5ebc75d-4052-4e04-b0af-de4ff82e64e0"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef") }
+                    { new Guid("92d1b58a-8b5d-4154-95ea-6242bd95a032"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0") },
+                    { new Guid("ac85ef57-aacb-472f-a566-3ddd9fcaa85d"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef") }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MedicationCoverages",
+                columns: new[] { "Id", "CoinsurancePercentage", "CopayAmount", "CoverageStatus", "HealthInsuranceId", "MedicationId", "PriorAuthorizationRequired" },
+                values: new object[,]
+                {
+                    { new Guid("4e3e5c9f-1db4-47a4-a853-4e5b3c4f9a1d"), 70m, 30m, "PartiallyCovered", new Guid("7f5d5339-9de6-4ab0-b43c-d6b3d43e4d80"), new Guid("e6b5a3c7-9d4f-4a8b-7e1c-2d9f1a5b3c6d"), false },
+                    { new Guid("6e3245b7-6f76-411a-93a1-2c2a4793e12e"), 80m, 50m, "Covered", new Guid("b51ec3f9-bdc8-4a74-b43e-bf4da6e2f9b9"), new Guid("a2d1c5b7-8f4e-4a6b-9c3d-5e7a1b2c9f5d"), true }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PatientAllergies",
+                columns: new[] { "Id", "AllergicReaction", "AllergyId", "DiagnosisDate", "PatientId" },
+                values: new object[,]
+                {
+                    { new Guid("a15c2d9b-d758-46b7-aceb-22a163c92a5f"), "Rash", new Guid("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"), new DateTime(2019, 11, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9") },
+                    { new Guid("e0a734b4-18bb-4c64-8f85-54487c656612"), "Anaphylaxis", new Guid("33c7785e-58f4-4ab8-9f54-51bf8978963f"), new DateTime(2020, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950") }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PatientDiscapacities",
+                columns: new[] { "Id", "DiagnosisDate", "DiscapacityId", "PatientId", "Severity" },
+                values: new object[,]
+                {
+                    { new Guid("79dad0d7-f852-486c-a369-9765aafefa86"), new DateTime(2020, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("5c52a9d3-6ee2-496e-a922-139de857d9d4"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "Moderada" },
+                    { new Guid("ae6aa623-f515-4b49-a926-5e72369cce77"), new DateTime(2018, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("1b54e13f-7a32-4cc1-ad6d-35298426a2fb"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), "Severa" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PatientHealthInsurance",
+                columns: new[] { "Id", "HealthInsuranceId", "PatientId", "PolicyNumber" },
+                values: new object[,]
+                {
+                    { new Guid("5f6b3f9a-8d5e-4b2e-ae3f-2c6a78f4f9a1"), new Guid("7f5d5339-9de6-4ab0-b43c-d6b3d43e4d80"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "P0987654321" },
+                    { new Guid("df7b9b16-ec96-4b9a-819e-df4b3c7b96c1"), new Guid("b51ec3f9-bdc8-4a74-b43e-bf4da6e2f9b9"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), "P0123456789" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PatientIllnesses",
+                columns: new[] { "Id", "DiagnosisDate", "DischargeDate", "DocumentURL", "IllnessId", "Notes", "PatientId", "Status" },
+                values: new object[,]
+                {
+                    { new Guid("4713eff6-182d-4004-bd37-f5b15d7f9851"), new DateTime(2019, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "https://example.com/document/diabetes-diagnosis.pdf", new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"), "Paciente monitoreado regularmente con niveles de glucosa controlados.", new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), "Activa" },
+                    { new Guid("5405766c-03b9-49d7-b5cc-562d9d25d2e8"), new DateTime(2021, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "https://example.com/document/hypertension-diagnosis.pdf", new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"), "Paciente responde bien al tratamiento y mantiene una presión estable.", new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "En remisión" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PatientRiskFactors",
+                columns: new[] { "Id", "PatientId", "RiskFactorId" },
+                values: new object[,]
+                {
+                    { new Guid("807afcdf-633e-44a9-b688-4f3dd50ab905"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new Guid("6522252f-0021-433b-8174-f4e0833f859a") },
+                    { new Guid("f68f3e15-994e-4c2d-a3ee-863d753032b0"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new Guid("454e8d39-1363-41f4-a2d2-b99fde743fbf") }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PatientVaccines",
+                columns: new[] { "Id", "AppliedDoses", "LastApplicationDate", "PatientId", "VaccineId" },
+                values: new object[,]
+                {
+                    { new Guid("086dd520-144e-4afe-98aa-2bf09033048c"), 1, new DateTime(2023, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new Guid("384e34fb-7d23-4123-a78e-13d7b0a91110") },
+                    { new Guid("12ae1c94-c70d-4379-8cca-e8405a814c6d"), 2, new DateTime(2021, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new Guid("c28e855d-2602-423f-a4d5-26954df029da") }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Prescriptions",
+                columns: new[] { "Id", "ClinicalHistoryId", "OtherPrescriptions" },
+                values: new object[,]
+                {
+                    { new Guid("2d7a9b5c-1e3a-4b8c-9f7e-5b3d6a1c9e7b"), new Guid("47d713da-eb0f-44c8-bd0d-d1882834c81b"), "Dieta baja en sodio" },
+                    { new Guid("3a5d9b2e-8c4a-4f7e-9d1c-3f6b2a7d8e9c"), new Guid("c1aaea0c-c739-4125-a7b3-28da602de5a0"), "Recomendación de ejercicio diario" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "LabTestPrescriptions",
+                columns: new[] { "Id", "ClinicalHistoryId", "LabTestId", "PerformedDate", "PrescriptionId", "ResultUrl", "Status" },
+                values: new object[,]
+                {
+                    { new Guid("b8a5d3f2-4e9a-6b7c-1d2f-5c9e3a7d4f8b"), new Guid("47d713da-eb0f-44c8-bd0d-d1882834c81b"), new Guid("2b5d9a1c-4e7f-3a8c-6b9d-5f2a3e4b1f7a"), new DateTime(2024, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("2d7a9b5c-1e3a-4b8c-9f7e-5b3d6a1c9e7b"), "http://example.com/results2.pdf", "Done" },
+                    { new Guid("f2d5c7a1-3e4b-8f9d-1a2c-6b3e5d9f4c7a"), new Guid("c1aaea0c-c739-4125-a7b3-28da602de5a0"), new Guid("9d2a5e4c-8b3f-4a7d-9c5b-3f2e1b6a7d9c"), new DateTime(2023, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("3a5d9b2e-8c4a-4f7e-9d1c-3f6b2a7d8e9c"), "http://example.com/results1.pdf", "Pending" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "MedicationPrescriptions",
+                columns: new[] { "Id", "Dosage", "MedicationId", "PrescriptionId", "Status", "TreatmentEnd", "TreatmentStart" },
+                values: new object[,]
+                {
+                    { new Guid("c3e2f7a9-1d4b-8f5c-9a6e-2d9b5c3a7f8e"), "500 mg cada 12 horas", new Guid("a2d1c5b7-8f4e-4a6b-9c3d-5e7a1b2c9f5d"), new Guid("3a5d9b2e-8c4a-4f7e-9d1c-3f6b2a7d8e9c"), "Consuming", new DateTime(2023, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { new Guid("d9f1c3e5-7b6a-4f2c-9a8e-3d5b7a2f8c1e"), "20 mg diario", new Guid("e6b5a3c7-9d4f-4a8b-7e1c-2d9f1a5b3c6d"), new Guid("2d7a9b5c-1e3a-4b8c-9f7e-5b3d6a1c9e7b"), "Prescribed", new DateTime(2024, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.CreateIndex(
@@ -901,9 +1075,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 column: "HealthInsuranceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MedicationCoverages_MedicationId1",
+                name: "IX_MedicationCoverages_MedicationId",
                 table: "MedicationCoverages",
-                column: "MedicationId1");
+                column: "MedicationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MedicationPrescriptions_MedicationId",

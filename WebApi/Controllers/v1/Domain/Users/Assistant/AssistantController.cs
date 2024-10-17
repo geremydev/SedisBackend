@@ -70,6 +70,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Assistant
                     return BadRequest();
                 }
 
+                // si el idcard del assistant ya existe no se podra postear, solo modificar
                 await _service.Assistant.AddAsync(dto);
                 return NoContent();
             }

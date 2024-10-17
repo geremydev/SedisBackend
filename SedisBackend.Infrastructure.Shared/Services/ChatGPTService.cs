@@ -1,6 +1,6 @@
-﻿using SedisBackend.Core.Application.Interfaces.Services.Shared_Services;
-using OpenAI_API;
+﻿using OpenAI_API;
 using OpenAI_API.Completions;
+using SedisBackend.Core.Application.Interfaces.Services.Shared_Services;
 namespace SedisBackend.Infrastructure.Shared.Services
 {
     public class ChatGPTService : IChatGPTService
@@ -36,7 +36,7 @@ Este paciente tiene esta pregunta para ti, recuerda, responde directo y conciso:
             completionRequest.Prompt = Query;
             completionRequest.Model = OpenAI_API.Models.Model.ChatGPTTurbo_16k;
             var completions = openAi.Completions.CreateCompletionAsync(completionRequest);
-            foreach(var completion in completions.Result.Completions)
+            foreach (var completion in completions.Result.Completions)
             {
                 OutputResult += completion;
             }

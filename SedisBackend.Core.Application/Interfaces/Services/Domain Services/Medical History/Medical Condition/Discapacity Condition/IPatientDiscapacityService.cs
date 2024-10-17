@@ -5,6 +5,6 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Co
 namespace SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Discapacity_Condition
 {
     public interface IPatientDiscapacityService : IGenericService<SavePatientDiscapacityDto, BasePatientDiscapacityDto, PatientDiscapacity>
-    { 
+    {
     }
 }

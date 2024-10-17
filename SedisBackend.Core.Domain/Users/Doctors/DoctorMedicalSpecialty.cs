@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.Users.Doctors
 {
-    public class DoctorMedicalSpecialty
+    public class DoctorMedicalSpecialty : IBaseEntity
     {
         //n->n relationship table between Doctor and MedicalSpecialisation
         public Guid Id { get; set; }

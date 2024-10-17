@@ -1,8 +1,6 @@
-﻿using SedisBackend.Core.Domain.Users.Patients;
-
-namespace SedisBackend.Core.Domain.Medical_Insurance
+﻿namespace SedisBackend.Core.Domain.Medical_Insurance
 {
-    public class HealthInsurance
+    public class HealthInsurance : IBaseEntity
     {
         public Guid Id { get; set; }
         public string InsuranceName { get; set; }

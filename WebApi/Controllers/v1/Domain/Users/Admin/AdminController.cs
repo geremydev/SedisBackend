@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Admins;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Assistants;
 using SedisBackend.Core.Application.Interfaces.Services;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Admins;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Assistants;
 using SedisBackend.WebApi.Controllers.v1;
 
 namespace WebApi.Controllers.v1.Domain.Users.Admin

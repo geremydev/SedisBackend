@@ -2,7 +2,6 @@
 {
     public class SaveFamilyHistoryDto
     {
-        public Guid Id { get; set; }
         public Guid PatientId { get; set; }
         public string? RelativeId { get; set; } // Nullable por si el familiar no existe
         public string Condition { get; set; }

@@ -33,7 +33,7 @@ namespace SedisBackend.Core.Application.Services
             await _accountservice.SingOutAsync();
         }
 
-        public async Task<ServiceResult> RegisterAsync(SaveUserDto vm, string origin )
+        public async Task<ServiceResult> RegisterAsync(SaveUserDto vm, string origin)
         {
             RegisterRequest registerRequest = _mapper.Map<RegisterRequest>(vm);
             return await _accountservice.RegisterUserAsync(registerRequest, origin, RolesEnum.Patient.ToString());

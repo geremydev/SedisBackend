@@ -2,7 +2,6 @@
 {
     public class SaveIllnessDto
     {
-        public Guid Id { get; set; }
 
         // Código de la enfermedad (ICD-10, SNOMED CT, etc.)
         public string Code { get; set; }

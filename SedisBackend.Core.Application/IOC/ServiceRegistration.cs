@@ -1,47 +1,9 @@
 ﻿#region usings
 
 using Microsoft.Extensions.DependencyInjection;
-using SedisBackend.Core.Application.Interfaces.Services.Base;
 using SedisBackend.Core.Application.Interfaces.Services;
-using SedisBackend.Core.Application.Services.Base;
 using SedisBackend.Core.Application.Services;
 using System.Reflection;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
-using SedisBackend.Core.Application.Services.Domain_Services.Users.Patients;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Appointments;
-using SedisBackend.Core.Application.Services.Domain_Services.Appointments;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Health_Centers;
-using SedisBackend.Core.Application.Services.Domain_Services.Health_Centers;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Locations;
-using SedisBackend.Core.Application.Services.Domain_Services.Locations;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Allergies;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Allergies;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Clinical_History;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Clinical_History;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Family_History;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Family_History;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Discapacity_Condition;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Medical_Condition.Discapacity_Condition;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Illness_Condition;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Medical_Condition.Illness_Condition;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Medical_Condition.Risk_Factor_Condition;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Medical_Condition.Risk_Factor_Condition;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_History.Vaccines;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_History.Vaccines;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Medical_Insurance;
-using SedisBackend.Core.Application.Services.Domain_Services.Medical_Insurance;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Presctiprions;
-using SedisBackend.Core.Application.Services.Domain_Services.Prescriptions;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Products;
-using SedisBackend.Core.Application.Services.Domain_Services.Products;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
-using SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.User_Entity_Relation;
-using SedisBackend.Core.Application.Services.Domain_Services.User_Entity_Relation;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Admins;
-using SedisBackend.Core.Application.Services.Domain_Services.Users.Admins;
-using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Assistants;
-using SedisBackend.Core.Application.Services.Domain_Services.Users.Assistants;
 
 #endregion
 

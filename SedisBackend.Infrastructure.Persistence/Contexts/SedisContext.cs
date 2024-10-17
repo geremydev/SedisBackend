@@ -224,13 +224,12 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
             #region Admin
             modelBuilder.Entity<Admin>().ToTable("Admins");
             #endregion
-            
+
             #region Assistant
             modelBuilder.Entity<Assistant>().ToTable("Assistants");
             #endregion
 
             #endregion
-
 
             #endregion
 
@@ -338,7 +337,23 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
             #region Relations
 
             #region Appointments    
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Patient)
+                .WithMany(p => p.Appointments)
+                .HasForeignKey(a => a.PatientId)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.Doctor)
+                .WithMany(d => d.Appointments)
+                .HasForeignKey(a => a.DoctorId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Appointment>()
+                .HasOne(a => a.HealthCenter)
+                .WithMany(p => p.Appointments)
+                .HasForeignKey(a => a.HealthCenterId)
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
             #region HealthCenters
@@ -365,7 +380,7 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
                 .WithOne(k => k.HealthCenter)
                 .HasForeignKey(k => k.HealthCenterId)
                 .OnDelete(DeleteBehavior.NoAction);
-            
+
             modelBuilder.Entity<HealthCenter>() //Los servicios deberían estar normalizados ya que el mismo servicio puede ser ofrecido por distintos Centros de salud.
                 .HasMany(k => k.Services)
                 .WithOne(k => k.HealthCenter)
@@ -466,7 +481,7 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
                 .WithOne(k => k.Patient)
                 .HasForeignKey(k => k.PatientId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             modelBuilder.Entity<Patient>()
                 .HasMany(k => k.Allergies)
                 .WithOne(k => k.Patient)
@@ -534,17 +549,17 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
             //public ICollection<DoctorMedicalSpecialty> Specialties { get; set; }
             //public ICollection<Appointment> Appointments { get; set; }
             //public ICollection<ClinicalHistory> DevelopedClinicalHistories { get; set; }
-        #endregion
+            #endregion
 
-        #endregion
+            #endregion
 
 
-        #endregion
+            #endregion
 
-        #region Properties
+            #region Properties
 
             #region Doctor
-        modelBuilder.Entity<DoctorHealthCenter>()
+            modelBuilder.Entity<DoctorHealthCenter>()
                 .Property(e => e.EntryHour)
                 .HasConversion(
                     v => TimeSpanToString(v),
@@ -558,7 +573,7 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
                     v => StringToTimeSpan(v)
                 );
             modelBuilder.Entity<Doctor>()
-                .HasIndex(p => p.IdCard) 
+                .HasIndex(p => p.IdCard)
                 .IsUnique();
             #endregion
 
@@ -573,7 +588,7 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
                 .HasIndex(p => p.IdCard)
                 .IsUnique();
             #endregion
-                
+
             #region Admin
             modelBuilder.Entity<Admin>()
                 .HasIndex(p => p.IdCard)
@@ -590,15 +605,19 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
             #endregion
 
             #region MedicationCoverage
-            modelBuilder.Entity<MedicationCoverage>()
-                .Property(mc => mc.CoinsurancePercentage)
-                .HasColumnType("decimal(5, 4)"); 
-            modelBuilder.Entity<MedicationCoverage>()
-                .Property(mc => mc.CopayAmount)
-                .HasColumnType("decimal(10, 2)");
+            modelBuilder.Entity<MedicationCoverage>(builder =>
+            {
+                builder.Property(mc => mc.CopayAmount)
+                    .HasColumnType("decimal(10, 2)")
+                    .IsRequired();
+
+                builder.Property(mc => mc.CoinsurancePercentage)
+                    .HasColumnType("decimal(5, 2)")
+                    .IsRequired();
+            });
             #endregion
 
-            #region MedicationCoverage
+            #region Medication
             modelBuilder.Entity<Medication>()
                 .Property(m => m.Concentration)
                 .HasColumnType("decimal(10, 2)");
@@ -607,7 +626,7 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
             #region Patient
             modelBuilder.Entity<Patient>()
                .Property(p => p.Height)
-               .HasColumnType("decimal(5, 2)"); 
+               .HasColumnType("decimal(5, 2)");
             modelBuilder.Entity<Patient>()
                 .Property(p => p.Weight)
                 .HasColumnType("decimal(5, 2)"); ;
@@ -615,15 +634,46 @@ namespace SedisBackend.Infrastructure.Persistence.Contexts
 
             #endregion
 
-            #region Seeding
+            #region Configurations
+
+            // Configuraciones relacionadas con el paciente y sus atributos
             modelBuilder.ApplyConfiguration(new PatientConfiguration());
-            modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
-            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+            modelBuilder.ApplyConfiguration(new PatientAllergyConfiguration());
+            modelBuilder.ApplyConfiguration(new PatientDiscapacityConfiguration());
+            modelBuilder.ApplyConfiguration(new PatientHealthInsuranceConfiguration());
+            modelBuilder.ApplyConfiguration(new PatientIllnessConfiguration());
+            modelBuilder.ApplyConfiguration(new PatientRiskFactorConfiguration());
+            modelBuilder.ApplyConfiguration(new PatientVaccineConfiguration());
+
+            // Configuraciones relacionadas con el historial clínico y prescripciones
             modelBuilder.ApplyConfiguration(new ClinicalHistoryConfiguration());
+            modelBuilder.ApplyConfiguration(new PrescriptionConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicationPrescriptionConfiguration());
+            modelBuilder.ApplyConfiguration(new LabTestPrescriptionConfiguration());
+
+            // Configuraciones relacionadas con citas y servicios médicos
+            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorConfiguration());
             modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
+
+            // Configuraciones de entidades secundarias y auxiliares
+            modelBuilder.ApplyConfiguration(new AssistantConfiguration());
+            modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());
+            modelBuilder.ApplyConfiguration(new LocationConfiguration());
+            modelBuilder.ApplyConfiguration(new AllergyConfiguration());
+            modelBuilder.ApplyConfiguration(new IllnessConfiguration());
+            modelBuilder.ApplyConfiguration(new DiscapacityConfiguration());
+            modelBuilder.ApplyConfiguration(new RiskFactorConfiguration());
+            modelBuilder.ApplyConfiguration(new VaccineConfiguration());
+
+            // Configuraciones de laboratorios y medicamentos
+            modelBuilder.ApplyConfiguration(new LabTestConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicationConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicationCoverageConfiguration());
+
             #endregion
         }
 

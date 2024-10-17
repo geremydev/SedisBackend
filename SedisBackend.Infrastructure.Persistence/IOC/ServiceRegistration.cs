@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 
 namespace SedisBackend.Infrastructure.Persistence.IOC
@@ -20,7 +19,9 @@ namespace SedisBackend.Infrastructure.Persistence.IOC
             {
                 services.AddDbContext<SedisContext>(options =>
                 {
-                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), m => m.MigrationsAssembly(typeof(SedisContext).Assembly.FullName));
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                        m => m.MigrationsAssembly(typeof(SedisContext).Assembly.FullName))
+                    .EnableSensitiveDataLogging(true);
                 });
             }
             #endregion

@@ -43,7 +43,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiptions
         {
             try
             {
-                var prescription = await  _service.Prescription.GetByIdAsync(id);
+                var prescription = await _service.Prescription.GetByIdAsync(id);
 
                 if (prescription == null)
                 {
@@ -72,7 +72,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiptions
                     return BadRequest();
                 }
 
-                await  _service.Prescription.AddAsync(dto);
+                await _service.Prescription.AddAsync(dto);
                 return NoContent();
             }
             catch (Exception ex)
@@ -95,7 +95,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiptions
                     return BadRequest();
                 }
 
-                await  _service.Prescription.UpdateAsync(dto, id);
+                await _service.Prescription.UpdateAsync(dto, id);
                 return Ok(dto);
             }
             catch (Exception ex)
@@ -111,7 +111,7 @@ namespace WebApi.Controllers.v1.Domain.Presctiptions
         {
             try
             {
-                await  _service.Prescription.Delete(id);
+                await _service.Prescription.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)

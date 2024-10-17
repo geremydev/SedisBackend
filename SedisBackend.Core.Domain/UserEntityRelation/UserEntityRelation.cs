@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.UserEntityRelation
 {
-    public class UserEntityRelation
+    public class UserEntityRelation : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }

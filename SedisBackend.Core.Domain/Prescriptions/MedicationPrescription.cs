@@ -2,7 +2,7 @@
 
 namespace SedisBackend.Core.Domain.Prescriptions
 {
-    public class MedicationPrescription
+    public class MedicationPrescription : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid MedicationId { get; set; }

@@ -72,7 +72,7 @@ namespace WebApi.Controllers
             try
             {
                 await _accountService.AddRole(CardId, HealthCenterId, Role);
-                return NoContent(); 
+                return NoContent();
             }
             catch (Exception ex)
             {

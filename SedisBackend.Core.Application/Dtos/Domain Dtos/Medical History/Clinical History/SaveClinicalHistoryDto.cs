@@ -2,7 +2,6 @@
 {
     public class SaveClinicalHistoryDto
     {
-        public Guid Id { get; set; }
         public Guid PatientId { get; set; }
         //public BasePatientDto Patient { get; set; }
         public Guid DoctorId { get; set; }

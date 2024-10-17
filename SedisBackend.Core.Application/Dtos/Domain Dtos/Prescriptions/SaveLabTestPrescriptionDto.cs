@@ -2,7 +2,6 @@
 {
     public class SaveLabTestPrescriptionDto
     {
-        public Guid Id { get; set; }
         public Guid ClinicalHistoryId { get; set; }
         public Guid LabTestId { get; set; }
         public Guid PrescriptionId { get; set; }

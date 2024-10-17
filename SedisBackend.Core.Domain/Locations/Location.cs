@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.Locations
 {
-    public class Location
+    public class Location : IBaseEntity
     {
         public Guid Id { get; set; }
         public Guid EntityId { get; set; }

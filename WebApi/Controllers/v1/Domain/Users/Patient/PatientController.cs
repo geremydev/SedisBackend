@@ -60,7 +60,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BasePatientDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        
+
         public async Task<IActionResult> Get(string includes)
         {
             try
@@ -68,7 +68,7 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
                 var list = includes.Split(",").ToList();
                 var patientList = await _service.Patient.GetAllWithIncludeAsync(list);
 
-                
+
 
                 if (patientList == null)
                 {
@@ -145,6 +145,6 @@ namespace WebApi.Controllers.v1.Domain.Users.Patient
             }
         }
 
-        
+
     }
 }

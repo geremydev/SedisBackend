@@ -3,7 +3,7 @@
     public enum FamilyTie
     {
         // Parentesco biológico
-        Mother =1,
+        Mother = 1,
         Father,
         Son,
         Daughter,

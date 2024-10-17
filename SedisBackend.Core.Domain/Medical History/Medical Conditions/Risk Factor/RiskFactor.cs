@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor
 {
-    public class RiskFactor
+    public class RiskFactor : IBaseEntity
     {
         public Guid Id { get; set; }
         public string Code { get; set; } //SNOMED CT

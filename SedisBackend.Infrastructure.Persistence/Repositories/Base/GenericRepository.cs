@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Application.Interfaces.Repositories.Base;
+using SedisBackend.Core.Domain;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 using System.Linq.Expressions;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories.Base
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IBaseEntity
     {
         private readonly SedisContext _context;
         private readonly DbSet<TEntity> _entities;
@@ -54,6 +55,7 @@ namespace SedisBackend.Infrastructure.Persistence.Repositories.Base
 
         public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
+            entity.Id = Guid.NewGuid();
             await _entities.AddAsync(entity);
             await _context.SaveChangesAsync();
             return entity;
@@ -61,8 +63,8 @@ namespace SedisBackend.Infrastructure.Persistence.Repositories.Base
 
         public virtual async Task UpdateAsync(TEntity entity, Guid Id)
         {
-            var entry = await _context.Set<TEntity>().FindAsync(Id);
-            _context.Entry(entry).CurrentValues.SetValues(entity);
+
+
             await _context.SaveChangesAsync();
         }
     }

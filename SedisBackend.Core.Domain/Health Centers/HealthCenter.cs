@@ -5,7 +5,7 @@ using SedisBackend.Core.Domain.Users.Doctors;
 
 namespace SedisBackend.Core.Domain.Health_Centers
 {
-    public class HealthCenter
+    public class HealthCenter : IBaseEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

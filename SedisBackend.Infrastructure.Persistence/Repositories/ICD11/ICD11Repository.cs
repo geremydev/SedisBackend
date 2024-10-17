@@ -31,7 +31,8 @@ namespace SedisBackend.Infrastructure.Persistence.Repositories.ICD11
                 HttpResponseMessage response = await _httpClient.GetAsync(url);
                 //response.EnsureSuccessStatusCode();
 
-                if (response.IsSuccessStatusCode) {
+                if (response.IsSuccessStatusCode)
+                {
                     // Read and parse the response content
                     var content = await response.Content.ReadAsStringAsync();
                     ICDDestinationEntity entityInfo = ParseEntityInfo(content, id);
