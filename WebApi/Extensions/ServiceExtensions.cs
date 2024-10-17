@@ -1,11 +1,39 @@
-﻿using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
+using SedisBackend.Core.Application.Interfaces.Loggers;
+using SedisBackend.Core.Application.Interfaces.Repositories;
+using SedisBackend.Core.Application.Interfaces.Services;
+using SedisBackend.Core.Application.Services;
+using SedisBackend.Infrastructure.Persistence.Repositories;
+using SedisBackend.Infrastructure.Shared;
 
 namespace SedisBackend.WebApi.Extensions
 {
     public static class ServiceExtensions
     {
+        public static void ConfigureCors(this IServiceCollection services) =>
+        services.AddCors(options => options.AddPolicy("SedisPolicy", policy =>
+        {
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+            /*.WithOrigins("http://localhost:3000")*/
+        }));
+
+        public static void ConfigureIISIntegration(this IServiceCollection services) =>
+            services.Configure<IISOptions>(options =>
+            {
+            });
+
+        public static void ConfigureLoggerService(this IServiceCollection services) =>
+            services.AddSingleton<ILoggerManager, LoggerManager>();
+
+        public static void ConfigureRepositoryManager(this IServiceCollection services) =>
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+        public static void ConfigureServiceManager(this IServiceCollection services) =>
+            services.AddScoped<IServiceManager, ServiceManager>();
         public static void AddSwaggerExtension(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddSwaggerGen(options =>

@@ -1,10 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SedisBackend.Core.Application.Interfaces.Repositories;
+using Microsoft.Extensions.Options;
 using SedisBackend.Infrastructure.Persistence.Contexts;
-using SedisBackend.Infrastructure.Persistence.Repositories;
-using Microsoft.Extensions.Http;
 
 namespace SedisBackend.Infrastructure.Persistence.IOC
 {
@@ -21,11 +19,11 @@ namespace SedisBackend.Infrastructure.Persistence.IOC
             else
             {
                 services.AddDbContext<SedisContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), m => m.MigrationsAssembly(typeof(SedisContext).Assembly.FullName)));
+                {
+                    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), m => m.MigrationsAssembly(typeof(SedisContext).Assembly.FullName));
+                });
             }
             #endregion
-            services.AddHttpClient();
-            services.AddScoped<IRepositoryManager, RepositoryManager>();
 
             /*
             #region Repositories

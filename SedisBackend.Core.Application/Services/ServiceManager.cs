@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SedisBackend.Core.Application.Interfaces.Loggers;
 using SedisBackend.Core.Application.Interfaces.Repositories;
 using SedisBackend.Core.Application.Interfaces.Services;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Appointments;
@@ -79,73 +80,74 @@ namespace SedisBackend.Core.Application.Services
         private readonly Lazy<IPatientService> _patientService;
 
         public ServiceManager(IRepositoryManager repositoryManager,
+            ILoggerManager logger,
             IMapper mapper)
         {
             _icd11Service = new Lazy<IICD11Service>(() =>
-                new ICD11Service(repositoryManager.ICD11));
+                new ICD11Service(repositoryManager.ICD11, logger));
 
             _appointmentService = new Lazy<IAppointmentService>(() =>
-                new AppointmentService(repositoryManager.Appointment, mapper));
+                new AppointmentService(repositoryManager.Appointment, logger, mapper));
             _healthCenterService = new Lazy<IHealthCenterService>(() =>
-                new HealthCenterService(repositoryManager.HealthCenter, mapper));
+                new HealthCenterService(repositoryManager.HealthCenter, logger, mapper));
             _healthCenterServicesService = new Lazy<IHealthCenterServicesService>(() =>
-                new HealthCenterServicesService(repositoryManager.HealthCenterServices, mapper));
+                new HealthCenterServicesService(repositoryManager.HealthCenterServices, logger, mapper));
             _locationService = new Lazy<ILocationService>(() =>
-                new LocationService(repositoryManager.Location, mapper));
+                new LocationService(repositoryManager.Location, logger, mapper));
             _prescriptionService = new Lazy<IPrescriptionService>(() =>
-                new PrescriptionService(repositoryManager.Prescription, mapper));
+                new PrescriptionService(repositoryManager.Prescription, logger, mapper));
             _userEntityRelationService = new Lazy<IUserEntityRelationService>(() =>
-                new UserEntityRelationService(repositoryManager.UserEntityRelation, mapper));
+                new UserEntityRelationService(repositoryManager.UserEntityRelation, logger, mapper));
             _allergyService = new Lazy<IAllergyService>(() =>
-                new AllergyService(repositoryManager.Allergy, mapper));
+                new AllergyService(repositoryManager.Allergy, logger, mapper));
             _patientAllergyService = new Lazy<IPatientAllergyService>(() =>
-                new PatientAllergyService(repositoryManager.PatientAllergy, mapper));
+                new PatientAllergyService(repositoryManager.PatientAllergy, logger, mapper));
             _clinicalHistoryService = new Lazy<IClinicalHistoryService>(() =>
-                new ClinicalHistoryService(repositoryManager.ClinicalHistory, mapper));
+                new ClinicalHistoryService(repositoryManager.ClinicalHistory, logger, mapper));
             _familyHistoryService = new Lazy<IFamilyHistoryService>(() =>
-                new FamilyHistoryService(repositoryManager.FamilyHistory, mapper));
+                new FamilyHistoryService(repositoryManager.FamilyHistory, logger, mapper));
             _vaccineService = new Lazy<IVaccineService>(() =>
-                new VaccineService(repositoryManager.Vaccine, mapper));
+                new VaccineService(repositoryManager.Vaccine, logger, mapper));
             _discapacityService = new Lazy<IDiscapacityService>(() =>
-                new DiscapacityService(repositoryManager.Discapacity, mapper));
+                new DiscapacityService(repositoryManager.Discapacity, logger, mapper));
             _patientDiscapacityService = new Lazy<IPatientDiscapacityService>(() =>
-                new PatientDiscapacityService(repositoryManager.PatientDiscapacity, mapper));
+                new PatientDiscapacityService(repositoryManager.PatientDiscapacity, logger, mapper));
             _illnessService = new Lazy<IIllnessService>(() =>
-                new IllnessService(repositoryManager.Illness, mapper));
+                new IllnessService(repositoryManager.Illness, logger, mapper));
             _patientIllnessService = new Lazy<IPatientIllnessService>(() =>
-                new PatientIllnessService(repositoryManager.PatientIllness, mapper));
+                new PatientIllnessService(repositoryManager.PatientIllness, logger, mapper));
             _riskFactorService = new Lazy<IRiskFactorService>(() =>
-                new RiskFactorService(repositoryManager.RiskFactor, mapper));
+                new RiskFactorService(repositoryManager.RiskFactor, logger, mapper));
             _patientRiskFactorService = new Lazy<IPatientRiskFactorService>(() =>
-                new PatientRiskFactorService(repositoryManager.PatientRiskFactor, mapper));
+                new PatientRiskFactorService(repositoryManager.PatientRiskFactor, logger, mapper));
             _healthInsuranceService = new Lazy<IHealthInsuranceService>(() =>
-                new HealthInsuranceService(repositoryManager.HealthInsurance, mapper));
+                new HealthInsuranceService(repositoryManager.HealthInsurance, logger, mapper));
             _medicationCoverageService = new Lazy<IMedicationCoverageService>(() =>
-                new MedicationCoverageService(repositoryManager.MedicationCoverage, mapper));
+                new MedicationCoverageService(repositoryManager.MedicationCoverage, logger, mapper));
             _medicationPrescriptionService = new Lazy<IMedicationPrescriptionService>(() =>
-                new MedicationPrescriptionService(repositoryManager.MedicationPrescription, mapper));
+                new MedicationPrescriptionService(repositoryManager.MedicationPrescription, logger, mapper));
             _patientHealthInsuranceService = new Lazy<IPatientHealthInsuranceService>(() =>
-                new PatientHealthInsuranceService(repositoryManager.PatientHealthInsurance, mapper));
+                new PatientHealthInsuranceService(repositoryManager.PatientHealthInsurance, logger, mapper));
             _labTestService = new Lazy<ILabTestService>(() =>
-                new LabTestService(repositoryManager.LabTest, mapper));
+                new LabTestService(repositoryManager.LabTest, logger, mapper));
             _labTestPrescriptionService = new Lazy<ILabTestPrescriptionService>(() =>
-                new LabTestPrescriptionService(repositoryManager.LabTestPrescription, mapper));
+                new LabTestPrescriptionService(repositoryManager.LabTestPrescription, logger, mapper));
             _medicationService = new Lazy<IMedicationService>(() =>
-                new MedicationService(repositoryManager.Medication, mapper));
+                new MedicationService(repositoryManager.Medication, logger, mapper));
             _adminService = new Lazy<IAdminService>(() =>
-                new AdminService(repositoryManager.Admin, mapper));
+                new AdminService(repositoryManager.Admin, logger, mapper));
             _assistantService = new Lazy<IAssistantService>(() =>
-                new AssistantService(repositoryManager.Assistant, mapper));
+                new AssistantService(repositoryManager.Assistant, logger, mapper));
             _doctorService = new Lazy<IDoctorService>(() =>
-                new DoctorService(repositoryManager.Doctor, mapper));
+                new DoctorService(repositoryManager.Doctor, logger, mapper));
             _doctorHealthCenterService = new Lazy<IDoctorHealthCenterService>(() =>
-                new DoctorHealthCenterService(repositoryManager.DoctorHealthCenter, mapper));
+                new DoctorHealthCenterService(repositoryManager.DoctorHealthCenter, logger, mapper));
             _doctorMedicalSpecialtyService = new Lazy<IDoctorMedicalSpecialtyService>(() =>
-                new DoctorMedicalSpecialtyService(repositoryManager.DoctorMedicalSpecialty, mapper));
+                new DoctorMedicalSpecialtyService(repositoryManager.DoctorMedicalSpecialty, logger, mapper));
             _medicalSpecialtyService = new Lazy<IMedicalSpecialtyService>(() =>
-                new MedicalSpecialtyService(repositoryManager.MedicalSpecialty, mapper));
+                new MedicalSpecialtyService(repositoryManager.MedicalSpecialty, logger, mapper));
             _patientService = new Lazy<IPatientService>(() =>
-                new PatientService(repositoryManager.Patient, mapper));
+                new PatientService(repositoryManager.Patient, logger, mapper));
         }
 
         public IICD11Service ICD11 => _icd11Service.Value;

@@ -18,10 +18,6 @@ namespace WebApi.Controllers.v1.ICD11
             {
                 return BadRequest("Query parameter 'id' is required.");
             }
-            else if (id.Length != 9)
-            {
-                return BadRequest("Query parameter 'id' must be a valid entity id.");
-            }
 
             // Define los encabezados necesarios
             var headers = new Dictionary<string, string>

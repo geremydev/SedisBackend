@@ -3,6 +3,7 @@ using SedisBackend.Core.Application.Dtos.Error;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Account;
 using SedisBackend.Core.Application.Dtos.Identity_Dtos.Users;
 using SedisBackend.Core.Application.Enums;
+using SedisBackend.Core.Application.Interfaces.Loggers;
 using SedisBackend.Core.Application.Interfaces.Services;
 
 namespace SedisBackend.Core.Application.Services
@@ -12,7 +13,7 @@ namespace SedisBackend.Core.Application.Services
         private readonly IAccountService _accountservice;
         private readonly IMapper _mapper;
 
-        public UserService(IAccountService accountservice, IMapper mapper)
+        public UserService(IAccountService accountservice, ILoggerManager logger, IMapper mapper)
         {
             _accountservice = accountservice;
             _mapper = mapper;

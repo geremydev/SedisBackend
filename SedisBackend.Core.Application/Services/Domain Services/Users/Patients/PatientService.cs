@@ -6,7 +6,7 @@ using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Con
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Medical_Condition.Risk_Factor_Condition;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Medical_History.Vaccines;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Patients;
-using SedisBackend.Core.Application.Interfaces.Repositories.Base;
+using SedisBackend.Core.Application.Interfaces.Loggers;
 using SedisBackend.Core.Application.Interfaces.Repositories.Users.Patients;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Patients;
 using SedisBackend.Core.Application.Services.Base;
@@ -18,7 +18,7 @@ namespace SedisBackend.Core.Application.Services.Domain_Services.Users.Patients
     {
         private readonly IPatientRepository _patientRepository;
         private readonly IMapper _mapper;
-        public PatientService(IPatientRepository repository, IMapper mapper) : base(repository, mapper)
+        public PatientService(IPatientRepository repository, ILoggerManager logger, IMapper mapper) : base(repository, logger, mapper)
         {
             _patientRepository = repository;
             _mapper = mapper;

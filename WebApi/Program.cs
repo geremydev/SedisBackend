@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NLog;
+using SedisBackend.Core.Application.Interfaces.Loggers;
 using SedisBackend.Core.Application.IOC;
 using SedisBackend.Infrastructure.Identity.Entities;
 using SedisBackend.Infrastructure.Identity.IOC;
@@ -7,22 +9,20 @@ using SedisBackend.Infrastructure.Identity.Seeds;
 using SedisBackend.Infrastructure.Persistence.IOC;
 using SedisBackend.Infrastructure.Shared;
 using SedisBackend.WebApi.Extensions;
+using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(new ProducesAttribute("application/json"));
-}).ConfigureApiBehaviorOptions(options =>
-{
-    options.SuppressConsumesConstraintForFormFileParameters = true;
-    options.SuppressMapClientErrors = true;
-});
+builder.Services.ConfigureCors();
+builder.Services.ConfigureIISIntegration();
+builder.Services.ConfigureLoggerService();
 
+builder.Services.AddHttpClient();
+builder.Services.ConfigureRepositoryManager();
+builder.Services.ConfigureServiceManager();
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 builder.Services.IdentityLayerRegistration(builder.Configuration);
 builder.Services.AddSharedInfrastructure(builder.Configuration);
@@ -38,14 +38,21 @@ builder.Services.AddSession();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddMvc();
 
-/*builder.Services.Configure<MvcOptions>(options =>
+builder.Services.AddControllers(options =>
 {
-    options.Filters.Add(new CorsAuthorizationFilterFactory("MyPolicy"));
-});*/
+    options.Filters.Add(new ProducesAttribute("application/json"));
+}).ConfigureApiBehaviorOptions(options =>
+{
+    options.SuppressConsumesConstraintForFormFileParameters = true;
+    options.SuppressMapClientErrors = true;
+});
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
+
+var logger = app.Services.GetRequiredService<ILoggerManager>();
+app.ConfigureExceptionHandler(logger);
 
 if (app.Environment.IsDevelopment())
 {
@@ -74,10 +81,12 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+if (app.Environment.IsProduction())
+    app.UseHsts();
+
 app.UseHttpsRedirection();
-
 app.UseRouting();
-
+app.UseCors("SedisPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwaggerExtension();

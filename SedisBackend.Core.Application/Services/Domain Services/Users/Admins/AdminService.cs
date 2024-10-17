@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Admins;
+using SedisBackend.Core.Application.Interfaces.Loggers;
 using SedisBackend.Core.Application.Interfaces.Repositories.Users.Admins;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.User_Entity_Relation;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Admins;
@@ -18,8 +19,9 @@ namespace SedisBackend.Core.Application.Services.Domain_Services.Users.Admins
         private readonly IMapper _mapper;
         private readonly IAdminRepository _repository;
         public AdminService(
-            IAdminRepository repository, 
-            IMapper mapper) : base(repository, mapper)
+            IAdminRepository repository,
+            ILoggerManager logger,
+            IMapper mapper) : base(repository, logger, mapper)
         {
             _mapper = mapper;
             _repository = repository;

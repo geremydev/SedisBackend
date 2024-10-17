@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SedisBackend.Core.Application.Interfaces.Loggers;
 using SedisBackend.Core.Application.Interfaces.Repositories.Base;
 using SedisBackend.Core.Application.Interfaces.Services.Base;
 using System.Linq.Expressions;
@@ -11,10 +12,12 @@ namespace SedisBackend.Core.Application.Services.Base
             where Entity : class
     {
         private readonly IGenericRepository<Entity> _repository;
+        private readonly ILoggerManager _logger;
         private readonly IMapper _mapper;
-        public GenericService(IGenericRepository<Entity> repository, IMapper mapper)
+        public GenericService(IGenericRepository<Entity> repository, ILoggerManager logger, IMapper mapper)
         {
             _mapper = mapper;
+            _logger = logger;
             _repository = repository;
         }
         public virtual async Task<SaveDto> AddAsync(SaveDto vm)

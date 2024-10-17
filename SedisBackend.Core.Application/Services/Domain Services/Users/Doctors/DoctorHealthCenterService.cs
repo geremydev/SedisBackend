@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SedisBackend.Core.Application.Dtos.Domain_Dtos.Users.Doctors;
+using SedisBackend.Core.Application.Interfaces.Loggers;
 using SedisBackend.Core.Application.Interfaces.Repositories.Base;
 using SedisBackend.Core.Application.Interfaces.Services.Domain_Services.Users.Doctors;
 using SedisBackend.Core.Application.Services.Base;
@@ -9,7 +10,7 @@ namespace SedisBackend.Core.Application.Services.Domain_Services.Users.Doctors
 {
     public class DoctorHealthCenterService : GenericService<SaveDoctorHealthCenterDto, BaseDoctorHealthCenterDto, DoctorHealthCenter>, IDoctorHealthCenterService
     {
-        public DoctorHealthCenterService(IGenericRepository<DoctorHealthCenter> repository, IMapper mapper) : base(repository, mapper)
+        public DoctorHealthCenterService(IGenericRepository<DoctorHealthCenter> repository, ILoggerManager logger, IMapper mapper) : base(repository, logger, mapper)
         {
         }
     }
