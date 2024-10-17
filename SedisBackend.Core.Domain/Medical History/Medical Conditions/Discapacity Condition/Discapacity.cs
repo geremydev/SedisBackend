@@ -9,7 +9,5 @@
 
         // Descripción de la discapacidad
         public string Description { get; set; }
-
     }
-
 }

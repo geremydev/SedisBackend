@@ -37,5 +37,4 @@
         FosterParent, // Padre o madre adoptivo/a
         FosterChild // Hijo o hija adoptivo/a
     }
-
 }

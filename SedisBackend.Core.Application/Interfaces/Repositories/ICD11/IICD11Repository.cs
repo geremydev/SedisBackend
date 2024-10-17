@@ -4,6 +4,7 @@ namespace SedisBackend.Core.Application.Interfaces.Repositories.ICD11
 {
     public interface IICD11Repository
     {
-        Task<ICDDestinationEntity> SearchAsync(string query, IDictionary<string, string> headers, object body = null);
+        //Task<ICDDestinationEntity> SearchAsync(string query, IDictionary<string, string> headers, object body = null);
+        Task<ICDDestinationEntity> SearchByIdAsync(string id, IDictionary<string, string> headers);
     }
 }

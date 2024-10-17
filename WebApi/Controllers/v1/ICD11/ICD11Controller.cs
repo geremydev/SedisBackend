@@ -12,29 +12,41 @@ namespace WebApi.Controllers.v1.ICD11
 
         // GET: api/icd11/search?q={query}
         [HttpGet("search")]
-        public async Task<IActionResult> Search([FromQuery] string q)
+        public async Task<IActionResult> Search([FromQuery] string id)
         {
-            if (string.IsNullOrWhiteSpace(q))
+            if (string.IsNullOrWhiteSpace(id))
             {
-                return BadRequest("Query parameter 'q' is required.");
+                return BadRequest("Query parameter 'id' is required.");
+            }
+            else if (id.Length != 9)
+            {
+                return BadRequest("Query parameter 'id' must be a valid entity id.");
             }
 
             // Define los encabezados necesarios
             var headers = new Dictionary<string, string>
             {
-                { "API-Version", "v2" },  // Cambia a la versión que necesites
-                { "Accept-Language", "en" } // Cambia a tu idioma preferido
+                { "API-Version", "v2" },
+                { "Accept-Language", "en" },
+                { "accept", "application/json" }
             };
 
             try
             {
                 // Llamar al servicio para buscar en ICD11
-                var response = await _service.ICD11.SearchAsync(q, headers);
-                return Ok(response);
+                var response = await _service.ICD11.SearchByIdAsync(id, headers);
+
+                if (response != null) return Ok(response);
+
+                return NotFound(new
+                {
+                    error = $"Entity with id '{id}' couldn't be found.",
+                });
             }
             catch (Exception ex)
             {
                 // Manejo de errores
+                Console.WriteLine(ex);
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }

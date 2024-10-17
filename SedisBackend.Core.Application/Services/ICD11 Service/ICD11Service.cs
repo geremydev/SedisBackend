@@ -13,9 +13,9 @@ namespace SedisBackend.Core.Application.Services.ICD
             _icd11Repository = icd11Repository;
         }
 
-        public async Task<ICDDestinationEntity> SearchAsync(string query, IDictionary<string, string> headers, object body = null)
+        public async Task<ICDDestinationEntity> SearchByIdAsync(string query, IDictionary<string, string> headers)
         {
-            return await _icd11Repository.SearchAsync(query, headers, body);
+            return await _icd11Repository.SearchByIdAsync(query, headers);
         }
     }
 }

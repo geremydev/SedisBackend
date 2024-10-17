@@ -11,6 +11,5 @@ namespace SedisBackend.Core.Domain.Medical_Insurance
         public string CoverageLevel { get; set; } // Usando el enum CoverageLevel
         public ICollection<MedicationCoverage> MedicationCoverages { get; set; }
         public ICollection<PatientHealthInsurance> SubscribedPatients { get; set; }
-
     }
 }

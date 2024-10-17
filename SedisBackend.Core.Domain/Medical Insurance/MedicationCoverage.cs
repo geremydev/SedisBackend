@@ -14,5 +14,4 @@ namespace SedisBackend.Core.Domain.Medical_Insurance
         public decimal CoinsurancePercentage { get; set; } // Porcentaje de lo que cubre la aseguradora
         public bool PriorAuthorizationRequired { get; set; } // Indicates if prior authorization is needed
     }
-
 }

@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SedisBackend.Core.Application.IOC;
 using SedisBackend.Infrastructure.Identity.Entities;
+using SedisBackend.Infrastructure.Identity.IOC;
 using SedisBackend.Infrastructure.Identity.Seeds;
 using SedisBackend.Infrastructure.Persistence.IOC;
-using SedisBackend.WebApi.Extensions;
-using SedisBackend.Core.Application.IOC;
-using SedisBackend.Infrastructure.Identity.IOC;
 using SedisBackend.Infrastructure.Shared;
-using Microsoft.AspNetCore.Mvc.Cors;
+using SedisBackend.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,7 +70,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-
+        Console.WriteLine(ex);
     }
 }
 

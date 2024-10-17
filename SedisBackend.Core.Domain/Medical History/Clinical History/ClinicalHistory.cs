@@ -1,5 +1,4 @@
 ﻿using SedisBackend.Core.Domain.Prescriptions;
-using SedisBackend.Core.Domain.Products;
 using SedisBackend.Core.Domain.Users.Doctors;
 using SedisBackend.Core.Domain.Users.Patients;
 

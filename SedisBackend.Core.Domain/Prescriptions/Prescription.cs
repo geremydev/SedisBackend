@@ -1,5 +1,4 @@
 ﻿using SedisBackend.Core.Domain.Medical_History.Clinical_History;
-using SedisBackend.Core.Domain.Products;
 
 namespace SedisBackend.Core.Domain.Prescriptions
 {
