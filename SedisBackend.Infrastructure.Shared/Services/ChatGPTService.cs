@@ -1,18 +1,18 @@
 ﻿using OpenAI_API;
 using OpenAI_API.Completions;
-using SedisBackend.Core.Application.Interfaces.Services.Shared_Services;
-namespace SedisBackend.Infrastructure.Shared.Services
-{
-    public class ChatGPTService : IChatGPTService
-    {
-        public Task<string> GetChatHistorial()
-        {
-            throw new NotImplementedException();
-        }
+using SedisBackend.Core.Domain.Interfaces.Services.Shared;
+namespace SedisBackend.Infrastructure.Shared.Services;
 
-        public string SendQuery(string Query)
-        {
-            string Context = $@"
+public class ChatGPTService : IChatGPTService
+{
+    public Task<string> GetChatHistorial()
+    {
+        throw new NotImplementedException();
+    }
+
+    public string SendQuery(string Query)
+    {
+        string Context = $@"
 Imagina que eres un asistente para la app Sedis, que es una plataforma en la cual se maneja historial médico
 digital del paciente y toda su información médica de manera digital para así eficientizar los servicios de salud,
 desde solicitar citas digitales, consultar servicios de hospitales, hacer compras de medicamentos y encontrar farmacias 
@@ -30,17 +30,16 @@ Este paciente tiene esta pregunta para ti, recuerda, responde directo y conciso:
 - Pregunta: {Query}
 - Respuesta:
 ";
-            string OutputResult = "";
-            var openAi = new OpenAIAPI("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");
-            CompletionRequest completionRequest = new CompletionRequest();
-            completionRequest.Prompt = Query;
-            completionRequest.Model = OpenAI_API.Models.Model.ChatGPTTurbo_16k;
-            var completions = openAi.Completions.CreateCompletionAsync(completionRequest);
-            foreach (var completion in completions.Result.Completions)
-            {
-                OutputResult += completion;
-            }
-            return OutputResult;
+        string OutputResult = "";
+        var openAi = new OpenAIAPI("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");
+        CompletionRequest completionRequest = new CompletionRequest();
+        completionRequest.Prompt = Query;
+        completionRequest.Model = OpenAI_API.Models.Model.ChatGPTTurbo_16k;
+        var completions = openAi.Completions.CreateCompletionAsync(completionRequest);
+        foreach (var completion in completions.Result.Completions)
+        {
+            OutputResult += completion;
         }
+        return OutputResult;
     }
 }

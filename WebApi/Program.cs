@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Serialization;
 using NLog;
-using SedisBackend.Core.Application.Interfaces.Loggers;
-using SedisBackend.Core.Application.IOC;
-using SedisBackend.Infrastructure.Identity.Entities;
-using SedisBackend.Infrastructure.Identity.IOC;
-using SedisBackend.Infrastructure.Identity.Seeds;
-using SedisBackend.Infrastructure.Persistence.IOC;
-using SedisBackend.Infrastructure.Shared;
-using SedisBackend.WebApi.Extensions;
+using SedisBackend.Core.Domain.Entities.Users;
+using SedisBackend.Core.Domain.Enums;
+using SedisBackend.Core.Domain.Interfaces.Loggers;
+using SedisBackend.Infrastructure.Persistence.Seeds;
+using WebApi.Extensions;
 using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,35 +21,66 @@ builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureLoggerService();
 
-builder.Services.AddHttpClient();
-builder.Services.ConfigureRepositoryManager();
-builder.Services.ConfigureServiceManager();
-
-builder.Services.AddPersistenceInfrastructure(builder.Configuration);
-builder.Services.IdentityLayerRegistration(builder.Configuration);
-builder.Services.AddSharedInfrastructure(builder.Configuration);
-builder.Services.AddApiVersioningExtension();
-builder.Services.AddApplicationLayer();
-builder.Services.AddSwaggerExtension(builder.Configuration);
-
-builder.Services.AddHealthChecks();
-builder.Services.AddSwaggerGen();
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSession();
-builder.Services.AddRouting(options => options.LowercaseUrls = true);
-builder.Services.AddMvc();
-
-builder.Services.AddControllers(options =>
+builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
-    options.Filters.Add(new ProducesAttribute("application/json"));
-}).ConfigureApiBehaviorOptions(options =>
-{
+    options.SuppressModelStateInvalidFilter = true;
     options.SuppressConsumesConstraintForFormFileParameters = true;
     options.SuppressMapClientErrors = true;
 });
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+// Not all JSON content to be handled by NewtonsoftJson
+NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
+    new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
+    .Services.BuildServiceProvider()
+    .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
+    .OfType<NewtonsoftJsonPatchInputFormatter>().First();
+
+builder.Services.AddHttpClient();
+builder.Services.ConfigureRepositoryManager();
+
+builder.Services.AddApplicationDependencies();
+builder.Services.AddPersistenceInfrastructure(builder.Configuration);
+builder.Services.AddSharedInfrastructure(builder.Configuration);
+
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
+builder.Services.ConfigureVersioning();
+
+builder.Services.AddSwaggerExtension(builder.Configuration);
+
+builder.Services.AddHealthChecks();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+    c.MapType<RolesEnum>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Enum = Enum.GetNames(typeof(RolesEnum))
+            .Select(e => new OpenApiString(e)).Cast<IOpenApiAny>().ToList()
+    });
+});
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
+builder.Services.AddControllers(config =>
+{
+    config.RespectBrowserAcceptHeader = true;
+    config.ReturnHttpNotAcceptable = true;
+    config.Filters.Add(new ProducesAttribute("application/json"));
+    config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+})
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.WriteIndented = true; // For pretty JSON format
+    })
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        //options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    })
+    .AddXmlDataContractSerializerFormatters();
 
 var app = builder.Build();
 
@@ -66,14 +99,14 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = services.GetRequiredService<UserManager<User>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
 
         await DefaultRoles.SeedAsync(userManager, roleManager);
         await AdminUser.SeedAsync(userManager, roleManager);
-        await PatientUser.SeedAsync(userManager, roleManager);
-        await AssistantUser.SeedAsync(userManager, roleManager);
-        await SuperAdmin.SeedAsync(userManager, roleManager);
+        //await PatientUser.SeedAsync(userManager, roleManager);
+        //await AssistantUser.SeedAsync(userManager, roleManager);
+        //await SuperAdmin.SeedAsync(userManager, roleManager);
     }
     catch (Exception ex)
     {
@@ -84,14 +117,24 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsProduction())
     app.UseHsts();
 
+// See the entire request body
+//app.Use(async (context, next) =>
+//{
+//    context.Request.EnableBuffering(); // Allow reading the stream multiple times
+//    var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
+//    Console.WriteLine(body); // Log the raw body
+//    context.Request.Body.Position = 0; // Reset stream position for model binding
+//    await next();
+//});
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors("SedisPolicy");
+//app.UseMiddleware<CsrfProtectionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSwaggerExtension();
 app.UseHealthChecks("/health");
-app.UseSession();
 
 app.UseEndpoints(endpoints =>
 {

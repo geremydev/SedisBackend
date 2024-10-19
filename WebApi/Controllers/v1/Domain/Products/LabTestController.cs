@@ -1,123 +1,95 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.Dtos.Domain_Dtos.Products;
-using SedisBackend.Core.Application.Interfaces.Services;
-using SedisBackend.WebApi.Controllers.v1;
+﻿using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
+using SedisBackend.Core.Application.CommandHandlers.LabTestCommandHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.LabTestHandlers;
+using SedisBackend.Core.Domain.DTO.Entities.Products.LabTest;
+using SedisBackend.Core.Domain.Interfaces.Loggers;
 
-namespace WebApi.Controllers.v1.Domain.Products
+namespace WebApi.Controllers.v1.Domain.Products;
+
+[ApiVersion("1.0")]
+public class LabTestController : BaseApiController
 {
-    [ApiVersion("1.0")]
-    public class LabTestController : BaseApiController
+    private readonly ISender _sender;
+    private readonly ILoggerManager _loggerManager;
+
+    public LabTestController(ISender sender, ILoggerManager loggerManager)
     {
-        private readonly IServiceManager _service;
-        public LabTestController(IServiceManager service) => _service = service;
+        _sender = sender;
+        _loggerManager = loggerManager;
+    }
 
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLabTestDto))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get()
+    [HttpGet(Name = "GetAllLabTests")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LabTestDto))]
+    public async Task<IActionResult> Get()
+    {
+        return Ok(await _sender.Send(new GetLabTestsQuery(false)));
+    }
+
+    [HttpGet("{id:guid}", Name = "GetLabTestById")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LabTestDto))]
+    public async Task<IActionResult> Get(Guid id)
+    {
+        return Ok(await _sender.Send(new GetLabTestQuery(id, false)));
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    //[Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Post([FromBody] LabTestForCreationDto labtest)
+    {
+        if (!ModelState.IsValid)
         {
-            try
-            {
-                var labTests = await _service.LabTest.GetAllAsync();
-
-                if (labTests == null || labTests.Count == 0)
-                {
-                    return NotFound();
-                }
-
-                return Ok(labTests);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
+            return BadRequest(ModelState);
         }
 
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BaseLabTestDto))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            try
-            {
-                var labTest = await _service.LabTest.GetByIdAsync(id);
+        var command = new CreateLabTestCommand(labtest);
+        await _sender.Send(command);
+        return NoContent();
+    }
 
-                if (labTest == null)
-                {
-                    return NotFound();
-                }
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LabTestForUpdateDto))]
+    //[Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Put(Guid id, [FromBody] LabTestForUpdateDto labTest)
+    {
+        var command = new UpdateLabTestCommand(id, labTest, true);
 
-                return Ok(labTest);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
+        await _sender.Send(command);
+        return Ok();
+    }
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Post(SaveLabTestDto dto)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
+    [HttpPatch("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LabTestForUpdateDto))]
+    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<LabTestForUpdateDto> patchDoc)
+    {
+        if (patchDoc is null)
+            return BadRequest("patchDoc object sent from client is null.");
 
-                await _service.LabTest.AddAsync(dto);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
+        var command = new PatchLabTestCommand(id, true, patchDoc);
+        var (labtestToPatch, _) = await _sender.Send(command);
 
+        return Ok(labtestToPatch);
+    }
 
-        [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SaveLabTestDto))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(Guid id, SaveLabTestDto dto)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-
-                await _service.LabTest.UpdateAsync(dto, id);
-                return Ok(dto);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
-
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            try
-            {
-                await _service.LabTest.Delete(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-            }
-        }
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var notification = new DeleteLabTestCommand(id, true);
+        await _sender.Send(notification);
+        return NoContent();
     }
 }
