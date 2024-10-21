@@ -1,4 +1,5 @@
-﻿using SedisBackend.Core.Application.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using SedisBackend.Core.Application.Interfaces.Repositories;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medical_Condition.Discapacity_Condition;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medical_Condition.Illness_Condition;
@@ -58,39 +59,45 @@ public sealed class RepositoryManager : IRepositoryManager
         //_icd11Repository = new Lazy<IICD11Repository>(() => new ICD11Repository(httpClient));
 
         _labtestRepository = new Lazy<ILabTestRepository>(() => new LabTestRepository(repositoryContext));
-        //_appointmentRepository = new Lazy<IAppointmentRepository>(() => new AppointmentRepository(repositoryContext));
-        //_healthCenterRepository = new Lazy<IHealthCenterRepository>(() => new HealthCenterRepository(repositoryContext));
-        //_healthCenterServicesRepository = new Lazy<IHealthCenterServicesRepository>(() => new HealthCenterServicesRepository(repositoryContext));
-        //_locationRepository = new Lazy<ILocationRepository>(() => new LocationRepository(repositoryContext));
-        //_prescriptionRepository = new Lazy<IPrescriptionRepository>(() => new PrescriptionRepository(repositoryContext));
-        //_userEntityRelationRepository = new Lazy<IUserEntityRelationRepository>(() => new UserEntityRelationRepository(repositoryContext));
-        //_allergyRepository = new Lazy<IAllergyRepository>(() => new AllergyRepository(repositoryContext));
-        //_patientAllergyRepository = new Lazy<IPatientAllergyRepository>(() => new PatientAllergyRepository(repositoryContext));
-        //_clinicalHistoryRepository = new Lazy<IClinicalHistoryRepository>(() => new ClinicalHistoryRepository(repositoryContext));
-        //_familyHistoryRepository = new Lazy<IFamilyHistoryRepository>(() => new FamilyHistoryRepository(repositoryContext));
-        //_vaccineRepository = new Lazy<IVaccineRepository>(() => new VaccineRepository(repositoryContext));
-        //_discapacityRepository = new Lazy<IDiscapacityRepository>(() => new DiscapacityRepository(repositoryContext));
+        _appointmentRepository = new Lazy<IAppointmentRepository>(() => new AppointmentRepository(repositoryContext));
+        _healthCenterRepository = new Lazy<IHealthCenterRepository>(() => new HealthCenterRepository(repositoryContext));
+        _healthCenterServicesRepository = new Lazy<IHealthCenterServicesRepository>(() => new HealthCenterServicesRepository(repositoryContext));
+        _locationRepository = new Lazy<ILocationRepository>(() => new LocationRepository(repositoryContext));
+        _prescriptionRepository = new Lazy<IPrescriptionRepository>(() => new PrescriptionRepository(repositoryContext));
+        _allergyRepository = new Lazy<IAllergyRepository>(() => new AllergyRepository(repositoryContext));
+        _clinicalHistoryRepository = new Lazy<IClinicalHistoryRepository>(() => new ClinicalHistoryRepository(repositoryContext));
+        _familyHistoryRepository = new Lazy<IFamilyHistoryRepository>(() => new FamilyHistoryRepository(repositoryContext));
+        _vaccineRepository = new Lazy<IVaccineRepository>(() => new VaccineRepository(repositoryContext));
+        _discapacityRepository = new Lazy<IDiscapacityRepository>(() => new DiscapacityRepository(repositoryContext));
+        _illnessRepository = new Lazy<IIllnessRepository>(() => new IllnessRepository(repositoryContext));
+        _riskFactorRepository = new Lazy<IRiskFactorRepository>(() => new RiskFactorRepository(repositoryContext));
+        _healthInsuranceRepository = new Lazy<IHealthInsuranceRepository>(() => new HealthInsuranceRepository(repositoryContext));
+        _medicationCoverageRepository = new Lazy<IMedicationCoverageRepository>(() => new MedicationCoverageRepository(repositoryContext));
+        _medicationRepository = new Lazy<IMedicationRepository>(() => new MedicationRepository(repositoryContext));
+        _adminRepository = new Lazy<IAdminRepository>(() => new AdminRepository(repositoryContext));
+        _assistantRepository = new Lazy<IAssistantRepository>(() => new AssistantRepository(repositoryContext));
+        _doctorRepository = new Lazy<IDoctorRepository>(() => new DoctorRepository(repositoryContext));
+        _medicalSpecialtyRepository = new Lazy<IMedicalSpecialtyRepository>(() => new MedicalSpecialtyRepository(repositoryContext));
+        _patientRepository = new Lazy<IPatientRepository>(() => new PatientRepository(repositoryContext));
+
         //_patientDiscapacityRepository = new Lazy<IPatientDiscapacityRepository>(() => new PatientDiscapacityRepository(repositoryContext));
-        //_illnessRepository = new Lazy<IIllnessRepository>(() => new IllnessRepository(repositoryContext));
         //_patientIllnessRepository = new Lazy<IPatientIllnessRepository>(() => new PatientIllnessRepository(repositoryContext));
-        //_riskFactorRepository = new Lazy<IRiskFactorRepository>(() => new RiskFactorRepository(repositoryContext));
         //_patientRiskFactorRepository = new Lazy<IPatientRiskFactorRepository>(() => new PatientRiskFactorRepository(repositoryContext));
-        //_healthInsuranceRepository = new Lazy<IHealthInsuranceRepository>(() => new HealthInsuranceRepository(repositoryContext));
-        //_medicationCoverageRepository = new Lazy<IMedicationCoverageRepository>(() => new MedicationCoverageRepository(repositoryContext));
         //_patientHealthInsuranceRepository = new Lazy<IPatientHealthInsuranceRepository>(() => new PatientHealthInsuranceRepository(repositoryContext));
         //_appointmentPrescriptionRepository = new Lazy<IAppointmentPrescriptionRepository>(() => new AppointmentPrescriptionRepository(repositoryContext));
-        //_medicationRepository = new Lazy<IMedicationRepository>(() => new MedicationRepository(repositoryContext));
         //_medicationPrescriptionRepository = new Lazy<IMedicationPrescriptionRepository>(() => new MedicationPrescriptionRepository(repositoryContext));
-        //_adminRepository = new Lazy<IAdminRepository>(() => new AdminRepository(repositoryContext));
-        //_assistantRepository = new Lazy<IAssistantRepository>(() => new AssistantRepository(repositoryContext));
-        //_doctorRepository = new Lazy<IDoctorRepository>(() => new DoctorRepository(repositoryContext));
         //_doctorHealthCenterRepository = new Lazy<IDoctorHealthCenterRepository>(() => new DoctorHealthCenterRepository(repositoryContext));
         //_doctorMedicalSpecialtyRepository = new Lazy<IDoctorMedicalSpecialtyRepository>(() => new DoctorMedicalSpecialtyRepository(repositoryContext));
-        //_medicalSpecialtyRepository = new Lazy<IMedicalSpecialtyRepository>(() => new MedicalSpecialtyRepository(repositoryContext));
-        //_patientRepository = new Lazy<IPatientRepository>(() => new PatientRepository(repositoryContext));
+        //_userEntityRelationRepository = new Lazy<IUserEntityRelationRepository>(() => new UserEntityRelationRepository(repositoryContext));
+        //_patientAllergyRepository = new Lazy<IPatientAllergyRepository>(() => new PatientAllergyRepository(repositoryContext));
     }
 
     public async Task SaveAsync(CancellationToken cancellationToken = default) => await _repositoryContext.SaveChangesAsync(cancellationToken);
+
+    public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        return await _repositoryContext.Database.BeginTransactionAsync(cancellationToken);
+    }
 
     public IICD11Repository ICD11 => _icd11Repository.Value;
     public IAppointmentRepository Appointment => _appointmentRepository.Value;

@@ -421,42 +421,39 @@ public class AuthenticationService : IAuthService
     }
 
     #endregion
-    public async Task<ServiceResult> AddRole(string idCard, Guid healthCenterId, RolesEnum[] roles)
+    public async Task<ServiceResult> AddRole(string idCard, Guid healthCenterId, string role)
     {
         ServiceResult response = new();
 
-        // Find the user by CardId
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == idCard);
+
         if (user == null)
         {
             response.Errors.Add(new CustomError { Code = "ADR01", Description = "User with specified CardId not found." });
             return response;
         }
 
-        // Add user roles
-        foreach (var role in roles)
+        if (!await _roleManager.RoleExistsAsync(role))
         {
-            var roleString = role.ToString();
-            if (await _roleManager.RoleExistsAsync(roleString))
+            response.Errors.Add(new CustomError { Code = "ADR02", Description = $"Role '{role}' does not exist." });
+            return response;
+        }
+
+        if (!await _userManager.IsInRoleAsync(user, role))
+        {
+            var roleResult = await _userManager.AddToRoleAsync(user, role);
+
+            if (!roleResult.Succeeded)
             {
-                var roleResult = await _userManager.AddToRoleAsync(user, roleString);
-                if (!roleResult.Succeeded)
-                {
-                    response.Succeeded = true;
-                    response.Errors.Add(new CustomError { Code = "ADR02", Description = $"Failed to assign role '{role}' to the user." });
-                    return response;
-                }
-            }
-            else
-            {
-                response.Succeeded = true;
-                response.Errors.Add(new CustomError { Code = "ADR02", Description = $"Role '{role}' does not exist." });
+                response.Errors.Add(new CustomError { Code = "ADR03", Description = $"Failed to assign role '{role}' to the user." });
                 return response;
             }
         }
-
-        // Optionally: Handle healthCenterId-related logic here
-        // (e.g., saving healthCenterId in a related entity for the user)
+        else
+        {
+            response.Errors.Add(new CustomError { Code = "ADR04", Description = $"Role '{role}' is already assigned to the user." });
+            return response;
+        }
 
         response.Succeeded = true;
         return response;

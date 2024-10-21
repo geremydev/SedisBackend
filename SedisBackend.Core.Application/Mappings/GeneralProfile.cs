@@ -8,12 +8,14 @@ using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Family_History;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Medical_Condition.Discapacity_Condition;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Medical_Condition.Illness_Condition;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Medical_Condition.Risk_Factor_Condition;
+using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.HealthInsuranceDTO;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.MedicationCoverageDTO;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_Specialty;
 using SedisBackend.Core.Domain.DTO.Entities.Prescriptions;
 using SedisBackend.Core.Domain.DTO.Entities.Products.LabTest;
 using SedisBackend.Core.Domain.DTO.Entities.Products.Medication;
+using SedisBackend.Core.Domain.DTO.Entities.Users;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Assistants;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
@@ -22,6 +24,7 @@ using SedisBackend.Core.Domain.DTO.Identity.Authentication;
 using SedisBackend.Core.Domain.DTO.Identity.Users;
 using SedisBackend.Core.Domain.Entities.Models;
 using SedisBackend.Core.Domain.Entities.Models.Products;
+using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
@@ -29,6 +32,7 @@ using SedisBackend.Core.Domain.Medical_History.Family_History;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
+using SedisBackend.Core.Domain.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.Medical_Insurance;
 
 namespace SedisBackend.Core.Application.Mappings;
@@ -90,6 +94,15 @@ public class GeneralProfile : Profile
         CreateMap<Location, LocationForCreationDto>()
             .ReverseMap();
         CreateMap<Location, LocationForUpdateDto>()
+            .ReverseMap();
+        #endregion
+
+        #region Allergies
+        CreateMap<Vaccine, VaccineDto>()
+            .ReverseMap();
+        CreateMap<Vaccine, VaccineForCreationDto>()
+            .ReverseMap();
+        CreateMap<Vaccine, VaccineForUpdateDto>()
             .ReverseMap();
         #endregion
 
@@ -179,6 +192,9 @@ public class GeneralProfile : Profile
 
         #region RiskFactor
         CreateMap<RiskFactor, RiskFactorDto>()
+            .ForMember(dest => dest.AssessmentLevel, opt => opt.MapFrom(src => src.AssessmentLevel.ToString()))
+            .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()))
+            .ForMember(dest => dest.CodeType, opt => opt.MapFrom(src => src.CodeType.ToString()))
             .ReverseMap();
         CreateMap<RiskFactor, RiskFactorForCreationDto>()
             .ReverseMap();
@@ -292,12 +308,22 @@ public class GeneralProfile : Profile
         #region Doctors
 
         #region Doctor
+        CreateMap<DoctorForCreationDto, Doctor>()
+            .ForMember(dest => dest.LicenseNumber, opt => opt.MapFrom(src => src.LicenseNumber));
+
+        CreateMap<DoctorForUpdateDto, Doctor>()
+            .ForMember(dest => dest.LicenseNumber, opt => opt.MapFrom(src => src.LicenseNumber));
+
         CreateMap<Doctor, DoctorDto>()
-                .ReverseMap();
-        CreateMap<Doctor, DoctorForCreationDto>()
-            .ReverseMap();
-        CreateMap<Doctor, DoctorForUpdateDto>()
-            .ReverseMap();
+            .ForMember(dest => dest.LicenseNumber, opt => opt.MapFrom(src => src.LicenseNumber))
+            .ForMember(dest => dest.CurrentlyWorkingHealthCenters, opt => opt.MapFrom(src => src.CurrentlyWorkingHealthCenters))
+            .ForMember(dest => dest.Specialties, opt => opt.MapFrom(src => src.Specialties))
+            .ForMember(dest => dest.Appointments, opt => opt.MapFrom(src => src.Appointments))
+            .ForMember(dest => dest.DevelopedClinicalHistories, opt => opt.MapFrom(src => src.DevelopedClinicalHistories));
+
+        CreateMap<Doctor, DoctorForCreationDto>();
+
+        CreateMap<Doctor, DoctorForUpdateDto>();
         #endregion
 
         //#region DoctorHeatlhCenter
@@ -355,9 +381,35 @@ public class GeneralProfile : Profile
             //.ForMember(dest => dest.Id, opt => opt.Ignore())
             .ReverseMap();
 
-        CreateMap<PatientDto, AdminForUpdateDto>()
-            .ReverseMap();
-        CreateMap<PatientDto, AssistantForUpdateDto>()
-            .ReverseMap();
+        //CreateMap<PatientDto, AdminForUpdateDto>()
+        //    .ReverseMap();
+        //CreateMap<PatientDto, AssistantForUpdateDto>()
+        //    .ReverseMap();
+
+
+        // For creations
+
+        //CreateMap<AdminForCreationDto, Admin>()
+        //    .ForMember(dest => dest.ApplicationUser.UserName, opt => opt.Ignore())
+        //    .ForMember(dest => dest.ApplicationUser.Email, opt => opt.Ignore());
+
+        //CreateMap<PatientForCreationDto, Patient>()
+        //    .ForMember(dest => dest.ApplicationUser.UserName, opt => opt.Ignore())
+        //    .ForMember(dest => dest.ApplicationUser.Email, opt => opt.Ignore());
+
+        //CreateMap<DoctorForCreationDto, Doctor>()
+        //    .ForMember(dest => dest.ApplicationUser.UserName, opt => opt.Ignore())  // Set username separately
+        //    .ForMember(dest => dest.ApplicationUser.Email, opt => opt.Ignore());
+
+        //CreateMap<AssistantForCreationDto, Assistant>()
+        //    .ForMember(dest => dest.ApplicationUser.UserName, opt => opt.Ignore())
+        //    .ForMember(dest => dest.ApplicationUser.Email, opt => opt.Ignore());
+
+        CreateMap<User, BaseUserDto>()
+.ReverseMap();
+        CreateMap<User, BaseUserForCreationDto>()
+                .ReverseMap();
+        CreateMap<User, BaseUserForUpdateDto>()
+                .ReverseMap();
     }
 }

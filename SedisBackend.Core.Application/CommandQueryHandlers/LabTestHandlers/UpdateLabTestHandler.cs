@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using SedisBackend.Core.Domain.DTO.Entities.Products.LabTest;
-using SedisBackend.Core.Domain.Exceptions.EntitiesExceptions;
+using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -27,7 +27,7 @@ internal sealed class UpdateLabTestHandler : IRequestHandler<UpdateLabTestComman
     {
         var labtestEntity = await _repository.LabTest.GetEntityAsync(request.Id, request.TrackChanges);
         if (labtestEntity is null)
-            throw new LabTestNotFoundException(request.Id);
+            throw new EntityNotFoundException(request.Id);
 
         _mapper.Map(request.LabTest, labtestEntity);
         await _repository.SaveAsync(cancellationToken);

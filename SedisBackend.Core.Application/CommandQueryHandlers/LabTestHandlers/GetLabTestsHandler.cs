@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using SedisBackend.Core.Domain.DTO.Entities.Products.LabTest;
-using SedisBackend.Core.Domain.Exceptions.EntitiesExceptions;
+using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.LabTestHandlers;
@@ -25,7 +25,7 @@ internal sealed class GetLabtestsHandler : IRequestHandler<GetLabTestsQuery, IEn
         var labtests = await _repository.LabTest.GetAllEntitiesAsync(request.TrackChanges);
 
         if (labtests is null || !labtests.Any())
-            throw new LabTestsNotFoundException();
+            throw new EntitiesNotFoundException();
 
         var labtestsDto = _mapper.Map<IEnumerable<LabTestDto>>(labtests);
 

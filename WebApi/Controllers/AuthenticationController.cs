@@ -176,7 +176,7 @@ public class AuthenticationController : BaseApiController
         return Ok(await _authService.ResetPasswordAsync(request));
     }
 
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpGet("validate-CardId/{cedula}", Name = "validate-idcard")]
     [SwaggerOperation(Summary = "Validar cédula de identidad",
                       Description = "Verifica la existencia de la cédula en los registros de la JCE. Inserta la cédula sin guiones.")]

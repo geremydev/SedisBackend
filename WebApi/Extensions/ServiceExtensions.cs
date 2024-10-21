@@ -139,8 +139,9 @@ public static class ServiceExtensions
                     c.HandleResponse();
                     c.Response.StatusCode = 401;
                     c.Response.ContentType = "application/json";
+
                     var errors = new List<CustomError> { new CustomError { Code = "AUTH01", Description = "You are not authorized." } };
-                    var result = JsonConvert.SerializeObject(new ServiceResult { Succeeded = true, Errors = errors });
+                    var result = JsonConvert.SerializeObject(new ServiceResult { Succeeded = false, Errors = errors });
                     return c.Response.WriteAsync(result);
                 },
                 OnForbidden = c =>
@@ -148,7 +149,7 @@ public static class ServiceExtensions
                     c.Response.StatusCode = 403;
                     c.Response.ContentType = "application/json";
                     var errors = new List<CustomError> { new CustomError { Code = "AUTH02", Description = "You are not authorized to access this resource." } };
-                    var result = JsonConvert.SerializeObject(new ServiceResult { Succeeded = true, Errors = errors });
+                    var result = JsonConvert.SerializeObject(new ServiceResult { Succeeded = false, Errors = errors });
                     return c.Response.WriteAsync(result);
                 }
             };

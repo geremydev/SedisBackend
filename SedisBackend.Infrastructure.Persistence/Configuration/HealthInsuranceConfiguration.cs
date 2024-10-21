@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SedisBackend.Core.Domain.Entities.Relations;
+using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Medical_Insurance;
 
 namespace SedisBackend.Infrastructure.Persistence.Configuration;
@@ -15,9 +16,9 @@ public class HealthInsuranceConfiguration : IEntityTypeConfiguration<HealthInsur
             {
                 Id = Guid.Parse("b51ec3f9-bdc8-4a74-b43e-bf4da6e2f9b9"),
                 InsuranceName = "Seguro Salud Total",
-                PolicyType = "Individual",
+                PolicyType = PolicyType.Individual,
                 InsuranceCompany = "SaludCo",
-                CoverageLevel = "Medium",
+                CoverageLevel = CoverageLevel.Low,
                 MedicationCoverages = new List<MedicationCoverage>(),
                 SubscribedPatients = new List<PatientHealthInsurance>()
             },
@@ -25,9 +26,9 @@ public class HealthInsuranceConfiguration : IEntityTypeConfiguration<HealthInsur
             {
                 Id = Guid.Parse("7f5d5339-9de6-4ab0-b43c-d6b3d43e4d80"),
                 InsuranceName = "Plan Familiar Salud",
-                PolicyType = "Family",
+                PolicyType = PolicyType.Family,
                 InsuranceCompany = "VivaSalud",
-                CoverageLevel = "High",
+                CoverageLevel = CoverageLevel.High,
                 MedicationCoverages = new List<MedicationCoverage>(),
                 SubscribedPatients = new List<PatientHealthInsurance>()
             }

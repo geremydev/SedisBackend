@@ -1,4 +1,5 @@
-﻿using SedisBackend.Core.Application.Interfaces.Repositories;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using SedisBackend.Core.Application.Interfaces.Repositories;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medical_Condition.Discapacity_Condition;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medical_Condition.Illness_Condition;
@@ -12,7 +13,6 @@ namespace SedisBackend.Core.Domain.Interfaces.Repositories;
 
 public interface IRepositoryManager
 {
-
     // ICD11 Repository
     IICD11Repository ICD11 { get; }
 
@@ -61,4 +61,5 @@ public interface IRepositoryManager
     IPatientRepository Patient { get; }
 
     Task SaveAsync(CancellationToken cancellationToken = default);
+    Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
 }

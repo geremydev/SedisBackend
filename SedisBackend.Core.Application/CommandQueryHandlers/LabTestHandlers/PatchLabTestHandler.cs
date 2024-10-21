@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using SedisBackend.Core.Domain.DTO.Entities.Products.LabTest;
 using SedisBackend.Core.Domain.Entities.Models.Products;
-using SedisBackend.Core.Domain.Exceptions.EntitiesExceptions;
+using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.LabTestHandlers;
@@ -27,7 +27,7 @@ internal sealed class PatchLabTestHandler
     {
         var labtestEntity = await _repository.LabTest.GetEntityAsync(request.Id, request.TrackChanges);
         if (labtestEntity is null)
-            throw new LabTestNotFoundException(request.Id);
+            throw new EntityNotFoundException(request.Id);
 
         var labtestToPatch = _mapper.Map<LabTestForUpdateDto>(labtestEntity);
 

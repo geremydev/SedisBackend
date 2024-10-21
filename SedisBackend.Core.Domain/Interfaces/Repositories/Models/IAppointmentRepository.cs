@@ -1,5 +1,7 @@
-﻿namespace SedisBackend.Core.Domain.Interfaces.Repositories.Models;
+﻿using SedisBackend.Core.Domain.Entities.Models;
 
-public interface IAppointmentRepository
+namespace SedisBackend.Core.Domain.Interfaces.Repositories.Models;
+
+public interface IAppointmentRepository : IGenericRepository<Appointment>
 {
 }

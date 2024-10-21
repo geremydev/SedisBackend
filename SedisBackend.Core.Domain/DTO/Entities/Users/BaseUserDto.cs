@@ -1,6 +1,4 @@
-﻿using SedisBackend.Core.Domain.Enums;
-
-namespace SedisBackend.Core.Domain.DTO.Entities.Users;
+﻿namespace SedisBackend.Core.Domain.DTO.Entities.Users;
 
 public record BaseUserDto
 {
@@ -10,5 +8,5 @@ public record BaseUserDto
     public string CardId { get; set; }
     public bool IsActive { get; set; }
     public DateTime Birthdate { get; set; }
-    public SexEnum Sex { get; set; }
+    public string Sex { get; set; }
 }

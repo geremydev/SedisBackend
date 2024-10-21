@@ -15,7 +15,6 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Co
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
 using SedisBackend.Core.Domain.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.Medical_Insurance;
-using SedisBackend.Infrastructure.Persistence.Configuration;
 
 namespace SedisBackend.Infrastructure.Persistence.Contexts;
 
@@ -130,7 +129,8 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
         #region Identity Tables Override
         modelBuilder.Entity<IdentityRole<Guid>>(entity => { entity.ToTable("Roles"); });
-        modelBuilder.Entity<IdentityUser<Guid>>(entity => { entity.ToTable("Users"); });
+        modelBuilder.Entity<User>()
+            .ToTable("Users"); // Todas las entidades se almacenarán en la tabla 'Users'
         modelBuilder.Entity<IdentityUserRole<Guid>>(entity => { entity.ToTable("UserRoles"); });
         modelBuilder.Entity<IdentityUserClaim<Guid>>(entity => { entity.ToTable("UserClaims"); });
         modelBuilder.Entity<IdentityRoleClaim<Guid>>(entity => { entity.ToTable("RoleClaims"); });
@@ -221,23 +221,23 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         #region Users
 
         #region Patient
-        modelBuilder.Entity<Patient>().ToTable("Patients");
+        //modelBuilder.Entity<Patient>().ToTable("Patients");
         #endregion
 
         #region Doctor
-        modelBuilder.Entity<Doctor>().ToTable("Doctors");
+        //modelBuilder.Entity<Doctor>().ToTable("Doctors");
         modelBuilder.Entity<DoctorHealthCenter>().ToTable("DoctorHealthCenters");
         modelBuilder.Entity<MedicalSpecialty>().ToTable("MedicalSpecialities");
         modelBuilder.Entity<DoctorMedicalSpecialty>().ToTable("DoctorMedicalSpecialities");
         #endregion
 
-        #region Admin
-        modelBuilder.Entity<Admin>().ToTable("Admins");
-        #endregion
+        //#region Admin
+        //modelBuilder.Entity<Admin>().ToTable("Admins");
+        //#endregion
 
-        #region Assistant
-        modelBuilder.Entity<Assistant>().ToTable("Assistants");
-        #endregion
+        //#region Assistant
+        //modelBuilder.Entity<Assistant>().ToTable("Assistants");
+        //#endregion
 
         #endregion
 
@@ -292,6 +292,10 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         #region RiskFactor
         modelBuilder.Entity<RiskFactor>().HasKey(p => p.Id);
         modelBuilder.Entity<PatientRiskFactor>().HasKey(p => p.Id);
+        modelBuilder.Entity<RiskFactor>()
+            .Property(r => r.AssessmentLevel)
+            .HasConversion<int>()  // Guardar el enum como entero
+            .HasColumnType("TINYINT");  // Usar TINYINT para optimizar el almacenamiento
         #endregion
 
         #endregion
@@ -306,9 +310,14 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.Entity<User>()
             .Property(u => u.Sex)
             .HasConversion(
-                v => v.ToString(), // Store as string
-                v => (SexEnum)Enum.Parse(typeof(SexEnum), v))
-            .HasColumnType("CHAR(1)");
+                v => v.ToString(),  // Convert enum to string for database storage
+                v => (SexEnum)Enum.Parse(typeof(SexEnum), v))  // Convert string back to enum
+            .HasColumnType("CHAR(1)"); // Specify the column type
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.CardId).IsRequired().HasMaxLength(12);
+
+        modelBuilder.Entity<User>().HasIndex(u => u.CardId).IsUnique();
 
         #region UserEntityRelation 
         modelBuilder.Entity<UserEntityRelation>()
@@ -334,11 +343,19 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         #region Users
         #region Patient
         modelBuilder.Entity<Patient>()
-            .HasBaseType<User>();
+            .HasOne(d => d.ApplicationUser)
+            .WithOne()
+            .HasForeignKey<Patient>(d => d.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
         #endregion
 
         #region Doctor
-        modelBuilder.Entity<Doctor>().HasBaseType<User>();
+        modelBuilder.Entity<Doctor>()
+            .HasOne(d => d.ApplicationUser)
+            .WithOne()
+            .HasForeignKey<Doctor>(d => d.Id)
+            .OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<MedicalSpecialty>().HasKey(p => p.Id);
         modelBuilder.Entity<DoctorMedicalSpecialty>().HasKey(p => p.Id);
         modelBuilder.Entity<DoctorHealthCenter>().HasKey(p => p.Id);
@@ -346,11 +363,19 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         #endregion
 
         #region Admin
-        modelBuilder.Entity<Admin>().HasBaseType<User>();
+        modelBuilder.Entity<Admin>()
+            .HasOne(d => d.ApplicationUser)
+            .WithOne()
+            .HasForeignKey<Admin>(d => d.Id)
+            .OnDelete(DeleteBehavior.Cascade);
         #endregion
 
         #region Assistant
-        modelBuilder.Entity<Assistant>().HasBaseType<User>();
+        modelBuilder.Entity<Assistant>()
+            .HasOne(d => d.ApplicationUser)
+            .WithOne()
+            .HasForeignKey<Assistant>(d => d.Id)
+            .OnDelete(DeleteBehavior.Cascade);
         #endregion
         #endregion
 
@@ -615,25 +640,25 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 v => StringToTimeSpan(v)
             );
         modelBuilder.Entity<Doctor>()
-            .HasIndex(p => p.CardId)
+            .HasIndex(p => p.Id)
             .IsUnique();
         #endregion
 
         #region Patient
         modelBuilder.Entity<Patient>()
-            .HasIndex(p => p.CardId)  // Consider adding an index for performance
+            .HasIndex(p => p.Id)  // Consider adding an index for performance
             .IsUnique();
         #endregion
 
         #region Assistant
         modelBuilder.Entity<Assistant>()
-            .HasIndex(p => p.CardId)
+            .HasIndex(p => p.Id)
             .IsUnique();
         #endregion
 
         #region Admin
         modelBuilder.Entity<Admin>()
-            .HasIndex(p => p.CardId)
+            .HasIndex(p => p.Id)
             .IsUnique();
         #endregion
 
@@ -679,42 +704,39 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         #region Configurations
 
         // Configuraciones relacionadas con el paciente y sus atributos
-        modelBuilder.ApplyConfiguration(new PatientConfiguration());
-        modelBuilder.ApplyConfiguration(new PatientAllergyConfiguration());
-        modelBuilder.ApplyConfiguration(new PatientDiscapacityConfiguration());
-        modelBuilder.ApplyConfiguration(new PatientHealthInsuranceConfiguration());
-        modelBuilder.ApplyConfiguration(new PatientIllnessConfiguration());
-        modelBuilder.ApplyConfiguration(new PatientRiskFactorConfiguration());
-        modelBuilder.ApplyConfiguration(new PatientVaccineConfiguration());
+        //modelBuilder.ApplyConfiguration(new PatientAllergyConfiguration());
+        //modelBuilder.ApplyConfiguration(new PatientDiscapacityConfiguration());
+        //modelBuilder.ApplyConfiguration(new PatientHealthInsuranceConfiguration());
+        //modelBuilder.ApplyConfiguration(new PatientIllnessConfiguration());
+        //modelBuilder.ApplyConfiguration(new PatientRiskFactorConfiguration());
+        //modelBuilder.ApplyConfiguration(new PatientVaccineConfiguration());
 
-        // Configuraciones relacionadas con el historial clínico y prescripciones
-        modelBuilder.ApplyConfiguration(new ClinicalHistoryConfiguration());
-        modelBuilder.ApplyConfiguration(new PrescriptionConfiguration());
-        modelBuilder.ApplyConfiguration(new MedicationPrescriptionConfiguration());
+        //// Configuraciones relacionadas con el historial clínico y prescripciones
+        //modelBuilder.ApplyConfiguration(new ClinicalHistoryConfiguration());
+        //modelBuilder.ApplyConfiguration(new PrescriptionConfiguration());
+        //modelBuilder.ApplyConfiguration(new MedicationPrescriptionConfiguration());
 
-        // Configuraciones relacionadas con citas y servicios médicos
-        modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
-        modelBuilder.ApplyConfiguration(new DoctorConfiguration());
-        modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
-        modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
+        //// Configuraciones relacionadas con citas y servicios médicos
+        //modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+        //modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
+        //modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
 
-        modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
-        modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
-        modelBuilder.ApplyConfiguration(new AppointmentPrescriptionConfiguration());
+        //modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
+        //modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
+        //modelBuilder.ApplyConfiguration(new AppointmentPrescriptionConfiguration());
 
-        // Configuraciones de entidades secundarias y auxiliares
-        modelBuilder.ApplyConfiguration(new AssistantConfiguration());
-        modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());
-        modelBuilder.ApplyConfiguration(new LocationConfiguration());
-        modelBuilder.ApplyConfiguration(new AllergyConfiguration());
-        modelBuilder.ApplyConfiguration(new IllnessConfiguration());
-        modelBuilder.ApplyConfiguration(new DiscapacityConfiguration());
-        modelBuilder.ApplyConfiguration(new RiskFactorConfiguration());
-        modelBuilder.ApplyConfiguration(new VaccineConfiguration());
+        //// Configuraciones de entidades secundarias y auxiliares
+        //modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());
+        //modelBuilder.ApplyConfiguration(new LocationConfiguration());
+        //modelBuilder.ApplyConfiguration(new AllergyConfiguration());
+        //modelBuilder.ApplyConfiguration(new IllnessConfiguration());
+        //modelBuilder.ApplyConfiguration(new DiscapacityConfiguration());
+        //modelBuilder.ApplyConfiguration(new RiskFactorConfiguration());
+        //modelBuilder.ApplyConfiguration(new VaccineConfiguration());
 
-        // Configuraciones de laboratorios y medicamentos
-        modelBuilder.ApplyConfiguration(new MedicationConfiguration());
-        modelBuilder.ApplyConfiguration(new MedicationCoverageConfiguration());
+        //// Configuraciones de laboratorios y medicamentos
+        //modelBuilder.ApplyConfiguration(new MedicationConfiguration());
+        //modelBuilder.ApplyConfiguration(new MedicationCoverageConfiguration());
 
         #endregion
     }

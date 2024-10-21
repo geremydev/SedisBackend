@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SedisBackend.Core.Domain.Exceptions.EntitiesExceptions;
+using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandHandlers.LabTestCommandHandlers;
@@ -15,7 +15,7 @@ internal sealed class DeleteLabTestHandler : IRequestHandler<DeleteLabTestComman
     {
         var labtest = await _repository.LabTest.GetEntityAsync(request.Id, request.TrackChanges);
         if (labtest is null)
-            throw new LabTestNotFoundException(request.Id);
+            throw new EntityNotFoundException(request.Id);
 
         _repository.LabTest.DeleteEntity(labtest);
         await _repository.SaveAsync(cancellationToken);
