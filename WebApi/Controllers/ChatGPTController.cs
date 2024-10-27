@@ -26,7 +26,7 @@ public class ChatGPTController : ControllerBase
     {
         try
         {
-            var response = _chatGPTService.SendQuery(query);
+            var response = await _chatGPTService.SendQuery(query);
 
             if (response.Length == 0)
             {
