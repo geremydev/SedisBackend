@@ -18,7 +18,7 @@ internal sealed class DeleteFamilyHistoryHandler : IRequestHandler<DeleteFamilyH
         if (familyHistory is null)
             throw new EntityNotFoundException(request.Id);
 
-        _repository.FamilyHistory.DeleteEntity(familyHistory);
+        familyHistory.IsDeleted = true;
         await _repository.SaveAsync(cancellationToken);
     }
 }

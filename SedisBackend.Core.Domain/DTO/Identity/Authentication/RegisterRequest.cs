@@ -35,8 +35,4 @@ public class RegisterRequest
     public string? PhoneNumber { get; set; }
     public DateTime Birthdate { get; set; }
     public SexEnum Sex { get; set; }
-    public string? BloodType { get; set; }
-    public string? EmergencyContactName { get; set; }
-    public string? EmergencyContactPhone { get; set; }
-    //public Guid? PrimaryCarePhysicianId { get; set; }
 }

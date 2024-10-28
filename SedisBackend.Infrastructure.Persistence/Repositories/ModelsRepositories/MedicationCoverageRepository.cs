@@ -19,7 +19,10 @@ internal sealed class MedicationCoverageRepository : RepositoryBase<MedicationCo
 
     public async Task<MedicationCoverage> GetEntityAsync(Guid medicationCoverageId, bool trackChanges) =>
         await FindByCondition(c => c.Id.Equals(medicationCoverageId), trackChanges)
-                            .SingleOrDefaultAsync();
+                    .Include(p => p.HealthInsurance)
+                    .Include(p => p.Medication)
+                    .AsSplitQuery()
+                    .SingleOrDefaultAsync();
 
     public void CreateEntity(MedicationCoverage medicationCoverage) => Create(medicationCoverage);
 

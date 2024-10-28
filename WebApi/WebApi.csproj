@@ -37,4 +37,8 @@
     <ProjectReference Include="..\SedisBackend.Infrastructure.Shared\SedisBackend.Infrastructure.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\v1\Analitics\" />
+  </ItemGroup>
+
 </Project>

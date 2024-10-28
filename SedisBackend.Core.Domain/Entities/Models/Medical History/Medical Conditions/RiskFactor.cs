@@ -1,4 +1,5 @@
 ﻿using SedisBackend.Core.Domain.Entities;
+using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Enums;
 
 namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
@@ -18,4 +19,5 @@ public class RiskFactor : IBaseEntity
 
     // Assessment level of the risk factor (low, moderate, high)
     public RiskFactorAssessmentLevel AssessmentLevel { get; set; }
+    public ICollection<PatientRiskFactor> PatientRiskFactors { get; set; }
 }

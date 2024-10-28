@@ -1,7 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 
-public record DoctorForCreationDto
+public record DoctorForCreationDto : BaseUserForCreationDto
 {
-    public BaseUserForCreationDto User { get; set; }
     public string LicenseNumber { get; set; }
 }

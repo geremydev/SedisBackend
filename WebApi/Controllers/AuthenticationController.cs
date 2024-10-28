@@ -31,12 +31,12 @@ public class AuthenticationController : BaseApiController
     public async Task<IActionResult> AuthenticateAsync([FromBody] AuthenticationRequest request)
     {
         var response = await _authService.AuthenticateAsync(request);
-        if (response.Succeeded)
+        if (!response.Succeeded)
         {
             return BadRequest(new FailedResponse
             {
                 Error = response.Error,
-                Succeeded = true
+                Succeeded = false
             });
         }
 
@@ -44,21 +44,19 @@ public class AuthenticationController : BaseApiController
         var cookieOptions = new CookieOptions
         {
             HttpOnly = true,
-            Secure = true, // Use in production for HTTPS
+            Secure = true,
             SameSite = SameSiteMode.Strict,
-            Expires = DateTimeOffset.UtcNow.AddDays(7) // Adjust expiry based on your requirement
+            Expires = DateTimeOffset.UtcNow.AddDays(7)
         };
 
         Response.Cookies.Append("RefreshToken", response.RefreshToken, cookieOptions);
 
-        // Return access token in the response body (handled by client-side in memory)
         return Ok(new MinimalAuthenticationResponse
         {
             AccessToken = response.JWToken,
             Id = response.Id,
-            UserName = response.UserName,
-            Email = response.Email,
-            Roles = response.Roles
+            Roles = response.Roles,
+            Succeeded = true
         });
     }
 
@@ -71,7 +69,7 @@ public class AuthenticationController : BaseApiController
         {
             return Unauthorized(new FailedResponse
             {
-                Succeeded = true,
+                Succeeded = false,
                 Error = "No refresh token provided."
             });
         }
@@ -82,7 +80,7 @@ public class AuthenticationController : BaseApiController
         {
             return Unauthorized(new FailedResponse
             {
-                Succeeded = true,
+                Succeeded = false,
                 Error = "No access token provided."
             });
         }

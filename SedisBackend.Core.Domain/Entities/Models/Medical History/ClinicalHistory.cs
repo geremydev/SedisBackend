@@ -18,6 +18,7 @@ public class ClinicalHistory : IBaseEntity
     public Guid PrescriptionId { get; set; }
     public Prescription? Prescription { get; set; }
     public DateTime RegisterDate { get; set; }
+    public bool IsDeleted { get; set; }
 
 
     /* Ejemplo de campos

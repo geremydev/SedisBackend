@@ -61,10 +61,8 @@ public class AuthenticationService : IAuthService
         return new AuthenticationResponse
         {
             Id = user.Id,
-            Email = user.Email,
-            UserName = user.UserName,
             Roles = (await _userManager.GetRolesAsync(user)).ToList(),
-            Succeeded = false,
+            Succeeded = true,
             JWToken = token,
             RefreshToken = refreshToken
         };
@@ -79,7 +77,6 @@ public class AuthenticationService : IAuthService
     {
         await _signInManager.SignOutAsync();
     }
-
 
     //GETBYID
     public async Task<ServiceResult> RegisterUserAsync(RegisterRequest request, string origin, RolesEnum userRole)
@@ -458,5 +455,4 @@ public class AuthenticationService : IAuthService
         response.Succeeded = true;
         return response;
     }
-
 }

@@ -12,4 +12,5 @@ public class FamilyHistory : IBaseEntity
     public Patient? Relative { get; set; }
     public string Condition { get; set; }
     public string Relationship { get; set; } // Usamos FamilyTie para darle valor.
+    public bool IsDeleted { get; set; }
 }

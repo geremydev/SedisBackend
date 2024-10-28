@@ -19,13 +19,16 @@ public class Patient
     public string? EmergencyContactName { get; set; }
     public string? EmergencyContactPhone { get; set; }
     public Guid? PrimaryCarePhysicianId { get; set; }
-    public ICollection<ClinicalHistory> ClinicalHistories { get; set; }
-    public ICollection<Appointment>? Appointments { get; set; }
-    public ICollection<PatientAllergy>? Allergies { get; set; }
-    public ICollection<PatientIllness>? Illnesses { get; set; }
-    public ICollection<PatientDiscapacity>? Discapacities { get; set; }
-    public ICollection<PatientRiskFactor>? RiskFactors { get; set; }
-    public ICollection<PatientVaccine>? Vaccines { get; set; }
-    public ICollection<FamilyHistory> FamilyHistories { get; set; }
+    public ICollection<ClinicalHistory> ClinicalHistories { get; set; } = new List<ClinicalHistory>();
+    public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+    public ICollection<PatientAllergy> Allergies { get; set; } = new List<PatientAllergy>();
+    public ICollection<PatientIllness> Illnesses { get; set; } = new List<PatientIllness>();
+    public ICollection<PatientDiscapacity> Discapacities { get; set; } = new List<PatientDiscapacity>();
+    public ICollection<PatientHealthInsurance> HealthInsurances { get; set; } = new List<PatientHealthInsurance>();
+    public ICollection<PatientRiskFactor> RiskFactors { get; set; } = new List<PatientRiskFactor>();
+    public ICollection<PatientVaccine> Vaccines { get; set; } = new List<PatientVaccine>();
+    public ICollection<FamilyHistory> FamilyHistories { get; set; } = new List<FamilyHistory>();
+    public bool IsActive { get; set; }
+    public bool IsDeleted { get; set; }
     public User ApplicationUser { get; set; }
 }

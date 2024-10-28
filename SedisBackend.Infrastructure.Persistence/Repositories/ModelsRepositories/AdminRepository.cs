@@ -14,11 +14,15 @@ internal sealed class AdminRepository : RepositoryBase<Admin>, IAdminRepository
 
     public async Task<IEnumerable<Admin>> GetAllEntitiesAsync(bool trackChanges) =>
         await FindAll(trackChanges)
+                    .Include(a => a.ApplicationUser)
+                    .Include(a => a.HealthCenter)
                     .OrderBy(c => c.Id)
                     .ToListAsync();
 
     public async Task<Admin> GetEntityAsync(Guid adminId, bool trackChanges) =>
         await FindByCondition(c => c.Id.Equals(adminId), trackChanges)
+                .Include(a => a.ApplicationUser)
+                .Include(a => a.HealthCenter)
                 .SingleOrDefaultAsync();
 
     public void CreateEntity(Admin admin) => Create(admin);

@@ -70,21 +70,15 @@ public class TokenService : ITokenService
 
     public async Task<string> RefreshTokenAsync(string token, string refreshToken)
     {
-        // Validate the incoming token
         var principal = GetPrincipalFromExpiredToken(token);
         var userId = principal.Claims.FirstOrDefault(x => x.Type == "uid")?.Value;
 
-        // Retrieve the user based on the user ID
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
         {
             throw new SecurityTokenException("Invalid token.");
         }
 
-        // In this example, we do not store refresh tokens in the user model.
-        // You might want to add your own logic to manage refresh tokens here.
-
-        // Create a new access token
         var newToken = await CreateToken(user);
         return newToken;
     }
@@ -98,11 +92,11 @@ public class TokenService : ITokenService
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = _key,
             ValidateIssuer = true,
-            ValidIssuer = _jwtSettings.Issuer, // Make sure _jwtSettings.Issuer is set correctly
+            ValidIssuer = _jwtSettings.Issuer,
             ValidateAudience = true,
-            ValidAudience = _jwtSettings.Audience, // Set the valid audience
-            ValidateLifetime = false, // Allow expired tokens for refresh flow
-            ClockSkew = TimeSpan.Zero // Optional: Set to zero if you don't want any clock skew
+            ValidAudience = _jwtSettings.Audience,
+            ValidateLifetime = false,
+            ClockSkew = TimeSpan.Zero
         };
 
         return tokenHandler.ValidateToken(token, validationParameters, out _);

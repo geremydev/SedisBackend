@@ -8,8 +8,8 @@ namespace SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 public record DoctorDto : BaseUserDto
 {
     public string LicenseNumber { get; set; }
-    public List<HealthCenterDto> CurrentlyWorkingHealthCenters { get; set; }
-    public List<MedicalSpecialtyDto> Specialties { get; set; }
-    public List<AppointmentDto> Appointments { get; set; }
-    public List<ClinicalHistoryDto> DevelopedClinicalHistories { get; set; }
+    public List<HealthCenterDto> CurrentlyWorkingHealthCenters { get; set; } = new List<HealthCenterDto>();
+    public List<MedicalSpecialtyDto> Specialties { get; set; } = new List<MedicalSpecialtyDto>();
+    public List<AppointmentDto> Appointments { get; set; } = new List<AppointmentDto>();
+    public List<ClinicalHistoryDto> DevelopedClinicalHistories { get; set; } = new List<ClinicalHistoryDto>();
 }

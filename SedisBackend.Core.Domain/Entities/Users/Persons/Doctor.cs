@@ -16,5 +16,7 @@ public class Doctor
     public ICollection<DoctorMedicalSpecialty> Specialties { get; set; }
     public ICollection<Appointment> Appointments { get; set; }
     public ICollection<ClinicalHistory> DevelopedClinicalHistories { get; set; }
+    public bool IsActive { get; set; }
+    public bool IsDeleted { get; set; }
     public User ApplicationUser { get; set; }
 }

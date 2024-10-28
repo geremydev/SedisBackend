@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
+using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -26,16 +27,49 @@ internal sealed class PatchDoctorHandler
     public async Task<(DoctorForUpdateDto DoctorToPatch, Doctor DoctorEntity)> Handle(
         PatchDoctorCommand request, CancellationToken cancellationToken)
     {
-        var DoctorEntity = await _repository.Doctor.GetEntityAsync(request.Id, request.TrackChanges);
-        if (DoctorEntity is null)
+        var doctorEntity = await _repository.Doctor.GetEntityAsync(request.Id, request.TrackChanges);
+
+        if (doctorEntity is null)
             throw new EntityNotFoundException(request.Id);
 
-        var DoctorToPatch = _mapper.Map<DoctorForUpdateDto>(DoctorEntity);
-        request.PatchDoc.ApplyTo(DoctorToPatch);
+        var doctorToPatch = _mapper.Map<DoctorForUpdateDto>(doctorEntity);
 
-        _mapper.Map(DoctorToPatch, DoctorEntity);
+        request.PatchDoc.ApplyTo(doctorToPatch, (error) =>
+        {
+            throw new PatchRequestException($"Error applying patch: {error.ErrorMessage}");
+        });
+
+        _mapper.Map(doctorToPatch, doctorEntity);
+
+        if (doctorEntity.ApplicationUser != null)
+        {
+            if (doctorToPatch.FirstName != null)
+                doctorEntity.ApplicationUser.FirstName = doctorToPatch.FirstName;
+
+            if (doctorToPatch.LastName != null)
+                doctorEntity.ApplicationUser.LastName = doctorToPatch.LastName;
+
+            if (doctorToPatch.CardId != null)
+                doctorEntity.ApplicationUser.CardId = doctorToPatch.CardId;
+
+            if (doctorToPatch.IsActive != null)
+                doctorEntity.ApplicationUser.IsActive = doctorToPatch.IsActive;
+
+            if (doctorToPatch.Birthdate != null)
+                doctorEntity.ApplicationUser.Birthdate = doctorToPatch.Birthdate;
+
+            if (doctorToPatch.Email != null)
+                doctorEntity.ApplicationUser.Email = doctorToPatch.Email;
+
+            if (doctorToPatch.Sex != null)
+                doctorEntity.ApplicationUser.Sex = Enum.Parse<SexEnum>(doctorToPatch.Sex, true);
+
+            if (doctorToPatch.PhoneNumber != null)
+                doctorEntity.ApplicationUser.PhoneNumber = doctorToPatch.PhoneNumber;
+        }
+
         await _repository.SaveAsync(cancellationToken);
 
-        return (DoctorToPatch, DoctorEntity);
+        return (doctorToPatch, doctorEntity);
     }
 }

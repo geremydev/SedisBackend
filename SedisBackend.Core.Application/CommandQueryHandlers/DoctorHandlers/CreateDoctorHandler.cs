@@ -1,10 +1,13 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
+using SedisBackend.Core.Domain.Enums;
+using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandHandlers.DoctorCommandHandlers;
@@ -15,7 +18,7 @@ internal sealed class CreateDoctorHandler : IRequestHandler<CreateDoctorCommand,
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
-    private readonly UserManager<User> _userManager;  // Inyecta el UserManager para gestionar los usuarios
+    private readonly UserManager<User> _userManager;
 
     public CreateDoctorHandler(IRepositoryManager repository, IMapper mapper, UserManager<User> userManager)
     {
@@ -26,48 +29,57 @@ internal sealed class CreateDoctorHandler : IRequestHandler<CreateDoctorCommand,
 
     public async Task<DoctorDto> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
     {
-        // Start a database transaction to ensure atomicity
         using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
-        // Map the request DTO (ApplicationUser) to the entity
-        var userEntity = _mapper.Map<User>(request.doctor.User);
+        var existingUser = await _userManager.Users
+            .FirstOrDefaultAsync(u => u.CardId == request.doctor.CardId || u.PhoneNumber == request.doctor.PhoneNumber, cancellationToken);
 
+        if (existingUser != null)
+        {
+            throw new UserExistsException(existingUser.CardId);
+        }
+
+        if (!Enum.TryParse<SexEnum>(request.doctor.Sex, true, out var sex))
+        {
+            throw new ArgumentException("Invalid sex value");
+        }
+
+        var userEntity = _mapper.Map<User>(request.doctor);
         userEntity.UserName = Guid.NewGuid().ToString();
-        userEntity.Email = $"{Guid.NewGuid()}@default.com";
+        userEntity.Email = request.doctor.Email;
+        userEntity.IsActive = true;
+        userEntity.Sex = sex;
+        userEntity.PhoneNumberConfirmed = false;
+        userEntity.ImageUrl = ".";
 
-        // Create the user in the Identity system
-        var userCreationResult = await _userManager.CreateAsync(userEntity, request.doctor.User.Password);
+        var userCreationResult = await _userManager.CreateAsync(userEntity, request.doctor.Password);
 
-        // Check if user creation succeeded, if not, return failure
         if (!userCreationResult.Succeeded)
         {
             var errorMessages = string.Join(", ", userCreationResult.Errors.Select(e => e.Description));
             throw new TransactionFailedException($"Error inserting a doctor: {errorMessages}");
         }
 
-        // Assign the "Doctor" role to the newly created user
         await _userManager.AddToRoleAsync(userEntity, "Doctor");
 
-        // Create the Doctor entity and link it with the ApplicationUser
         var doctorEntity = new Doctor
         {
-            Id = userEntity.Id,  // Use the same ID as ApplicationUser
+            Id = userEntity.Id,
             LicenseNumber = request.doctor.LicenseNumber,
             CurrentlyWorkingHealthCenters = new List<DoctorHealthCenter>(),
             Specialties = new List<DoctorMedicalSpecialty>()
-            // Map any other specific fields required from the request
         };
 
-        // Add Doctor entity to the context
+        var patient = new Patient
+        {
+            Id = userEntity.Id
+        };
+
+        _repository.Patient.CreateEntity(patient);
         _repository.Doctor.CreateEntity(doctorEntity);
-
-        // Save changes in the context
         await _repository.SaveAsync(cancellationToken);
-
-        // Commit the transaction after everything succeeds
         await transaction.CommitAsync(cancellationToken);
 
-        // Return the created doctor mapped to DoctorDto
         return _mapper.Map<DoctorDto>(doctorEntity);
     }
 }

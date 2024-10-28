@@ -22,6 +22,7 @@ internal sealed class GetAdminHandler : IRequestHandler<GetAdminQuery, AdminDto>
     public async Task<AdminDto> Handle(GetAdminQuery request, CancellationToken cancellationToken)
     {
         var admin = await _repository.Admin.GetEntityAsync(request.Id, request.TrackChanges);
+
         if (admin is null)
             throw new EntityNotFoundException(request.Id);
 

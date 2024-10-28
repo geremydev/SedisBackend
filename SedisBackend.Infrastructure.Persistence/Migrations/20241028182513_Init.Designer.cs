@@ -12,15 +12,15 @@ using SedisBackend.Infrastructure.Persistence.Contexts;
 namespace SedisBackend.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SedisContext))]
-    [Migration("20241020204532_init")]
-    partial class init
+    [Migration("20241028182513_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.20")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -181,6 +181,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("HealthCenterId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
@@ -193,6 +196,32 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("Appointments", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("826783f5-dd4f-419e-bb2f-4a8307c54b9b"),
+                            AppointmentDate = new DateTime(2024, 11, 10, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            AppointmentStatus = 1,
+                            ConsultationRoom = "Room 101",
+                            ConsultationType = 0,
+                            DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            HealthCenterId = new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"),
+                            IsDeleted = false,
+                            PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950")
+                        },
+                        new
+                        {
+                            Id = new Guid("5f028eff-479b-43dc-9e1b-2e6839c794f8"),
+                            AppointmentDate = new DateTime(2024, 11, 12, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            AppointmentStatus = 3,
+                            ConsultationRoom = "Room 202",
+                            ConsultationType = 1,
+                            DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            HealthCenterId = new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da"),
+                            IsDeleted = false,
+                            PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9")
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Models.HealthCenter", b =>
@@ -215,6 +244,22 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HealthCenters", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"),
+                            HealthCenterCategory = "General",
+                            LocationId = new Guid("945e98f3-80c7-4444-8d93-74b72efc78b1"),
+                            Name = "Central Health Center"
+                        },
+                        new
+                        {
+                            Id = new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da"),
+                            HealthCenterCategory = "Especializado",
+                            LocationId = new Guid("a6e819b6-3996-49d6-afc7-9b47206dcadc"),
+                            Name = "North Health Center"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Models.Location", b =>
@@ -251,6 +296,32 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Locations", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("945e98f3-80c7-4444-8d93-74b72efc78b1"),
+                            EntityId = new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"),
+                            EntityType = "HealthCenter",
+                            Latitude = 18.5067m,
+                            Longitude = -69.8937m,
+                            MunicipalityId = new Guid("34567890-3456-3456-3456-34567890abcd"),
+                            PostalCode = "10101",
+                            ProvinceId = new Guid("23456789-2345-2345-2345-234567890abc"),
+                            RegionId = new Guid("12345678-1234-1234-1234-1234567890ab")
+                        },
+                        new
+                        {
+                            Id = new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da"),
+                            EntityId = new Guid("a6e819b6-3996-49d6-afc7-9b47206dcadc"),
+                            EntityType = "HealthCenter",
+                            Latitude = 18.4796m,
+                            Longitude = -69.9010m,
+                            MunicipalityId = new Guid("65432109-6543-6543-6543-abcdef345678"),
+                            PostalCode = "10202",
+                            ProvinceId = new Guid("76543210-5432-5432-5432-abcdef234567"),
+                            RegionId = new Guid("87654321-4321-4321-4321-abcdef123456")
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Models.MedicalSpecialty", b =>
@@ -270,6 +341,20 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MedicalSpecialities", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef"),
+                            Description = "Specializes in the treatment of heart conditions.",
+                            Name = "Cardiology"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0"),
+                            Description = "Focuses on the diagnosis and treatment of neurological disorders.",
+                            Name = "Neurology"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Models.Prescription", b =>
@@ -290,6 +375,20 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Prescriptions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3a5d9b2e-8c4a-4f7e-9d1c-3f6b2a7d8e9c"),
+                            ClinicalHistoryId = new Guid("c1aaea0c-c739-4125-a7b3-28da602de5a0"),
+                            OtherPrescriptions = "Recomendación de ejercicio diario"
+                        },
+                        new
+                        {
+                            Id = new Guid("2d7a9b5c-1e3a-4b8c-9f7e-5b3d6a1c9e7b"),
+                            ClinicalHistoryId = new Guid("47d713da-eb0f-44c8-bd0d-d1882834c81b"),
+                            OtherPrescriptions = "Dieta baja en sodio"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Models.Products.LabTest", b =>
@@ -308,7 +407,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LabTests");
+                    b.ToTable("LabTests", (string)null);
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Models.Products.Medication", b =>
@@ -371,6 +470,44 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Medications", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a2d1c5b7-8f4e-4a6b-9c3d-5e7a1b2c9f5d"),
+                            ActiveIngredient = "Metformina",
+                            Concentration = 500m,
+                            Contraindications = "Insuficiencia renal",
+                            DosageForm = 2,
+                            DrugInteractions = "No usar con insulina",
+                            ImageUrl = "http://example.com/image1.jpg",
+                            Indications = "Tratamiento de diabetes tipo 2",
+                            Name = "Metformina",
+                            NationalCode = "M500",
+                            Precautions = "Controlar niveles de glucosa",
+                            Presentation = 11,
+                            RouteOfAdministration = 1,
+                            SideEffects = "Náuseas, vómitos",
+                            UnitOfMeasurement = 9
+                        },
+                        new
+                        {
+                            Id = new Guid("e6b5a3c7-9d4f-4a8b-7e1c-2d9f1a5b3c6d"),
+                            ActiveIngredient = "Atorvastatina",
+                            Concentration = 20m,
+                            Contraindications = "Enfermedad hepática",
+                            DosageForm = 2,
+                            DrugInteractions = "No usar con ciertos antibióticos",
+                            ImageUrl = "http://example.com/image2.jpg",
+                            Indications = "Reducción de colesterol",
+                            Name = "Atorvastatina",
+                            NationalCode = "A020",
+                            Precautions = "Controlar niveles de lípidos",
+                            Presentation = 4,
+                            RouteOfAdministration = 6,
+                            SideEffects = "Dolor muscular",
+                            UnitOfMeasurement = 1
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.AppointmentPrescription", b =>
@@ -408,6 +545,28 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("PrescriptionId");
 
                     b.ToTable("AppointmentPrescriptions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f2d5c7a1-3e4b-8f9d-1a2c-6b3e5d9f4c7a"),
+                            AppointmentId = new Guid("826783f5-dd4f-419e-bb2f-4a8307c54b9b"),
+                            ClinicalHistoryId = new Guid("c1aaea0c-c739-4125-a7b3-28da602de5a0"),
+                            PerformedDate = new DateTime(2023, 6, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PrescriptionId = new Guid("3a5d9b2e-8c4a-4f7e-9d1c-3f6b2a7d8e9c"),
+                            ResultUrl = "http://example.com/results1.pdf",
+                            Status = "Pending"
+                        },
+                        new
+                        {
+                            Id = new Guid("b8a5d3f2-4e9a-6b7c-1d2f-5c9e3a7d4f8b"),
+                            AppointmentId = new Guid("5f028eff-479b-43dc-9e1b-2e6839c794f8"),
+                            ClinicalHistoryId = new Guid("47d713da-eb0f-44c8-bd0d-d1882834c81b"),
+                            PerformedDate = new DateTime(2024, 2, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PrescriptionId = new Guid("2d7a9b5c-1e3a-4b8c-9f7e-5b3d6a1c9e7b"),
+                            ResultUrl = "http://example.com/results2.pdf",
+                            Status = "Done"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.DoctorHealthCenter", b =>
@@ -437,6 +596,24 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("HealthCenterId");
 
                     b.ToTable("DoctorHealthCenters", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("396ee806-6cd0-42c9-a52e-27d31be22897"),
+                            DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            EntryHour = "08:00:00",
+                            ExitHour = "17:00:00",
+                            HealthCenterId = new Guid("85bc224a-c53f-41db-97b8-92f703ee4452")
+                        },
+                        new
+                        {
+                            Id = new Guid("0caa174e-3bbc-4633-9b72-72f52127d66a"),
+                            DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            EntryHour = "09:00:00",
+                            ExitHour = "18:00:00",
+                            HealthCenterId = new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da")
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.DoctorMedicalSpecialty", b =>
@@ -457,7 +634,21 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("MedicalSpecialtyId");
 
-                    b.ToTable("DoctorMedicalSpecialities", (string)null);
+                    b.ToTable("DoctorMedicalSpecialties", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00a9360f-4464-4505-acde-f66863ee7774"),
+                            DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            MedicalSpecialtyId = new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef")
+                        },
+                        new
+                        {
+                            Id = new Guid("7a5b4c07-9d29-41e4-acb3-22ee2ea16a91"),
+                            DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            MedicalSpecialtyId = new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0")
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.HealthCenterServices", b =>
@@ -521,195 +712,302 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("PrescriptionId");
 
                     b.ToTable("MedicationPrescriptions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c3e2f7a9-1d4b-8f5c-9a6e-2d9b5c3a7f8e"),
+                            Dosage = "500 mg cada 12 horas",
+                            MedicationId = new Guid("a2d1c5b7-8f4e-4a6b-9c3d-5e7a1b2c9f5d"),
+                            PrescriptionId = new Guid("3a5d9b2e-8c4a-4f7e-9d1c-3f6b2a7d8e9c"),
+                            Status = "Consuming",
+                            TreatmentEnd = new DateTime(2023, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TreatmentStart = new DateTime(2023, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = new Guid("d9f1c3e5-7b6a-4f2c-9a8e-3d5b7a2f8c1e"),
+                            Dosage = "20 mg diario",
+                            MedicationId = new Guid("e6b5a3c7-9d4f-4a8b-7e1c-2d9f1a5b3c6d"),
+                            PrescriptionId = new Guid("2d7a9b5c-1e3a-4b8c-9f7e-5b3d6a1c9e7b"),
+                            Status = "Prescribed",
+                            TreatmentEnd = new DateTime(2024, 4, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            TreatmentStart = new DateTime(2024, 1, 5, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.PatientAllergy", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AllergyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AllergicReaction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("AllergyId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("DiagnosisDate")
-                        .HasColumnType("datetime2");
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<Guid>("PatientId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("PatientId", "AllergyId");
 
                     b.HasIndex("AllergyId");
 
-                    b.HasIndex("PatientId");
-
                     b.ToTable("PatientAllergies", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            AllergyId = new Guid("33c7785e-58f4-4ab8-9f54-51bf8978963f"),
+                            AllergicReaction = "Anaphylaxis",
+                            DiagnosisDate = new DateTime(2020, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("e0a734b4-18bb-4c64-8f85-54487c656612")
+                        },
+                        new
+                        {
+                            PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            AllergyId = new Guid("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"),
+                            AllergicReaction = "Rash",
+                            DiagnosisDate = new DateTime(2019, 11, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("a15c2d9b-d758-46b7-aceb-22a163c92a5f")
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.PatientDiscapacity", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DiagnosisDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("DiscapacityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PatientId")
+                    b.Property<DateTime?>("DiagnosisDate")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Severity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("PatientId", "DiscapacityId");
 
                     b.HasIndex("DiscapacityId");
 
-                    b.HasIndex("PatientId");
-
                     b.ToTable("PatientDiscapacities", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            DiscapacityId = new Guid("1b54e13f-7a32-4cc1-ad6d-35298426a2fb"),
+                            DiagnosisDate = new DateTime(2018, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("ae6aa623-f515-4b49-a926-5e72369cce77"),
+                            Severity = "Severa"
+                        },
+                        new
+                        {
+                            PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            DiscapacityId = new Guid("5c52a9d3-6ee2-496e-a922-139de857d9d4"),
+                            DiagnosisDate = new DateTime(2020, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("79dad0d7-f852-486c-a369-9765aafefa86"),
+                            Severity = "Moderada"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.PatientHealthInsurance", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("HealthInsuranceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PatientId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PolicyNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("PatientId", "HealthInsuranceId");
 
                     b.HasIndex("HealthInsuranceId");
 
-                    b.HasIndex("PatientId");
+                    b.ToTable("PatientHealthInsurances", (string)null);
 
-                    b.ToTable("PatientHealthInsurance");
+                    b.HasData(
+                        new
+                        {
+                            PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            HealthInsuranceId = new Guid("b51ec3f9-bdc8-4a74-b43e-bf4da6e2f9b9"),
+                            Id = new Guid("df7b9b16-ec96-4b9a-819e-df4b3c7b96c1"),
+                            PolicyNumber = "P0123456789"
+                        },
+                        new
+                        {
+                            PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            HealthInsuranceId = new Guid("7f5d5339-9de6-4ab0-b43c-d6b3d43e4d80"),
+                            Id = new Guid("5f6b3f9a-8d5e-4b2e-ae3f-2c6a78f4f9a1"),
+                            PolicyNumber = "P0987654321"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.PatientIllness", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IllnessId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DiagnosisDate")
-                        .HasColumnType("datetime2");
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<DateTime?>("DischargeDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.Property<string>("DocumentURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("IllnessId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PatientId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("PatientId", "IllnessId");
 
                     b.HasIndex("IllnessId");
 
-                    b.HasIndex("PatientId");
-
                     b.ToTable("PatientIllnesses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            IllnessId = new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"),
+                            DiagnosisDate = new DateTime(2019, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DocumentURL = "https://example.com/document/diabetes-diagnosis.pdf",
+                            Id = new Guid("c6521c3e-042f-4851-a6be-9569ce8649f4"),
+                            Notes = "Paciente monitoreado regularmente con niveles de glucosa controlados.",
+                            Status = "Activa"
+                        },
+                        new
+                        {
+                            PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            IllnessId = new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"),
+                            DiagnosisDate = new DateTime(2021, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DischargeDate = new DateTime(2022, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DocumentURL = "https://example.com/document/hypertension-diagnosis.pdf",
+                            Id = new Guid("5d974df6-18d1-4ad2-a03c-735e17a169ff"),
+                            Notes = "Paciente responde bien al tratamiento y mantiene una presión estable.",
+                            Status = "En remisión"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.PatientRiskFactor", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RiskFactorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime?>("DiagnosisDate")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
 
-                    b.HasIndex("PatientId");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PatientId", "RiskFactorId");
 
                     b.HasIndex("RiskFactorId");
 
                     b.ToTable("PatientRiskFactors", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            RiskFactorId = new Guid("454e8d39-1363-41f4-a2d2-b99fde743fbf"),
+                            Id = new Guid("f68f3e15-994e-4c2d-a3ee-863d753032b0")
+                        },
+                        new
+                        {
+                            PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            RiskFactorId = new Guid("6522252f-0021-433b-8174-f4e0833f859a"),
+                            Id = new Guid("807afcdf-633e-44a9-b688-4f3dd50ab905")
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.PatientVaccine", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AppliedDoses")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LastApplicationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("VaccineId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<int>("AppliedDoses")
+                        .HasColumnType("int");
 
-                    b.HasIndex("PatientId");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastApplicationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.HasKey("PatientId", "VaccineId");
 
                     b.HasIndex("VaccineId");
 
                     b.ToTable("PatientVaccines", (string)null);
-                });
 
-            modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.UserEntityRelation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EntityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("EntityRole")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserEntityRelation", (string)null);
+                    b.HasData(
+                        new
+                        {
+                            PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            VaccineId = new Guid("c28e855d-2602-423f-a4d5-26954df029da"),
+                            AppliedDoses = 2,
+                            Id = new Guid("12ae1c94-c70d-4379-8cca-e8405a814c6d"),
+                            LastApplicationDate = new DateTime(2021, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            VaccineId = new Guid("384e34fb-7d23-4123-a78e-13d7b0a91110"),
+                            AppliedDoses = 1,
+                            Id = new Guid("086dd520-144e-4afe-98aa-2bf09033048c"),
+                            LastApplicationDate = new DateTime(2023, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Users.Persons.Admin", b =>
@@ -720,6 +1018,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("HealthCenterId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HealthCenterId");
@@ -727,7 +1031,16 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("Admin");
+                    b.ToTable("Admins", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f86a1609-cb84-4d6a-8d8a-8e49b6b9a5b9"),
+                            HealthCenterId = new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"),
+                            IsActive = false,
+                            IsDeleted = false
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Users.Persons.Assistant", b =>
@@ -738,6 +1051,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("HealthCenterId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("HealthCenterId");
@@ -745,13 +1064,28 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("Assistant");
+                    b.ToTable("Assistants", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("37439d05-9b3b-4896-88e0-4ee7b7221a8b"),
+                            HealthCenterId = new Guid("85bc224a-c53f-41db-97b8-92f703ee4452"),
+                            IsActive = false,
+                            IsDeleted = false
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Users.Persons.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LicenseNumber")
                         .IsRequired()
@@ -762,7 +1096,23 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            IsActive = false,
+                            IsDeleted = false,
+                            LicenseNumber = "LIC12345678"
+                        },
+                        new
+                        {
+                            Id = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            IsActive = false,
+                            IsDeleted = false,
+                            LicenseNumber = "LIC98765432"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", b =>
@@ -785,6 +1135,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<decimal?>("Height")
                         .HasColumnType("decimal(5, 2)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("PrimaryCarePhysicianId")
                         .HasColumnType("uniqueidentifier");
 
@@ -796,7 +1152,33 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            BloodType = "A-",
+                            BloodTypeLabResultURl = "http://example.com/lab-results/alice-smith",
+                            EmergencyContactName = "Bob Smith",
+                            EmergencyContactPhone = "987-654-3210",
+                            Height = 165.2m,
+                            IsActive = false,
+                            IsDeleted = false,
+                            Weight = 60.8m
+                        },
+                        new
+                        {
+                            Id = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            BloodType = "O+",
+                            BloodTypeLabResultURl = "http://example.com/lab-results/john-doe",
+                            EmergencyContactName = "Jane Doe",
+                            EmergencyContactPhone = "123-456-7890",
+                            Height = 180.5m,
+                            IsActive = false,
+                            IsDeleted = false,
+                            Weight = 75.3m
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Users.User", b =>
@@ -813,7 +1195,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("CardId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -858,7 +1241,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
@@ -879,6 +1263,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CardId")
+                        .IsUnique();
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -887,7 +1277,144 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
                     b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f86a1609-cb84-4d6a-8d8a-8e49b6b9a5b9"),
+                            AccessFailedCount = 0,
+                            Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CardId = "40211608647",
+                            ConcurrencyStamp = "51840361-5547-41b8-9d8d-8cd37c459eb5",
+                            Email = "adminuser@email.com",
+                            EmailConfirmed = true,
+                            FirstName = "Brahiam",
+                            ImageUrl = ".",
+                            IsActive = true,
+                            LastName = "Montero",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAEBQzyo4q/1XP6lI/gKxdoM/Y5KTlHoQRIw4MxmK30fzoSEe3sYGO9RqMa1aI1HDVsg==",
+                            PhoneNumber = "829-143-9811",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "8c0fc94b-539e-4f58-8de0-1edcfee1b0c4",
+                            Sex = "M",
+                            TwoFactorEnabled = false,
+                            UserName = "adminuser"
+                        },
+                        new
+                        {
+                            Id = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            AccessFailedCount = 0,
+                            Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CardId = "40211608640",
+                            ConcurrencyStamp = "d8ae2bb8-f36a-40b5-bfdd-604bf6bd2855",
+                            Email = "patientuser@email.com",
+                            EmailConfirmed = true,
+                            FirstName = "John",
+                            ImageUrl = ".",
+                            IsActive = true,
+                            LastName = "Doe",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAEAi0qBtnK5ipdeX59s8cfvaK1WZh/QWsBpRtL4IiXyNyKDs3uwagxBWO5aK4jXyVyA==",
+                            PhoneNumber = "829-163-9811",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "56a3c376-e25f-4f5e-8715-a13214c3c66e",
+                            Sex = "M",
+                            TwoFactorEnabled = false,
+                            UserName = "patient"
+                        },
+                        new
+                        {
+                            Id = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            AccessFailedCount = 0,
+                            Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CardId = "40211608648",
+                            ConcurrencyStamp = "0f30ddd1-e028-493c-a714-1598a4051515",
+                            Email = "patient2@email.com",
+                            EmailConfirmed = true,
+                            FirstName = "Alice",
+                            ImageUrl = ".",
+                            IsActive = true,
+                            LastName = "Smith",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAEAmqjKXKjsN2S1RvKdNp0jk+JpqT+n0C9fK+G96Aj8rBiprr1rj/9VzYruqbCfQyeA==",
+                            PhoneNumber = "829-128-9811",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "57d810ec-e4cb-4bc1-8201-11056ff22ef6",
+                            Sex = "F",
+                            TwoFactorEnabled = false,
+                            UserName = "patient2"
+                        },
+                        new
+                        {
+                            Id = new Guid("37439d05-9b3b-4896-88e0-4ee7b7221a8b"),
+                            AccessFailedCount = 0,
+                            Birthdate = new DateTime(1995, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CardId = "0987634321",
+                            ConcurrencyStamp = "55dd3464-cba9-40ce-a432-3bc7540d9801",
+                            Email = "assistantuser@email.com",
+                            EmailConfirmed = true,
+                            FirstName = "Ana",
+                            ImageUrl = ".",
+                            IsActive = false,
+                            LastName = "Martínez",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAEPNxeXIVKvlcSUQqdemAqp34/a85RHzdqiDWV19mr6NsBN2XVaKyqpag6rezvikalw==",
+                            PhoneNumber = "829-123-9811",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "65142094-0b98-40f5-9842-ab679cb4310e",
+                            Sex = "F",
+                            TwoFactorEnabled = false,
+                            UserName = "assistantuser"
+                        },
+                        new
+                        {
+                            Id = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            AccessFailedCount = 0,
+                            Birthdate = new DateTime(1980, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CardId = "1234567890",
+                            ConcurrencyStamp = "5531360f-c791-418d-8b8a-289a47425dbb",
+                            Email = "doctoruser@email.com",
+                            EmailConfirmed = true,
+                            FirstName = "John",
+                            ImageUrl = ".",
+                            IsActive = true,
+                            LastName = "Doe",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAEMqDOQW+zjl0WKodAYYrrERD6qw1JtVwzshQcWkaf41t7PjA9DSXTigWD07yjxa6zw==",
+                            PhoneNumber = "829-123-9812",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "cce7d583-2246-4525-aef9-5a8cf6150eef",
+                            Sex = "M",
+                            TwoFactorEnabled = false,
+                            UserName = "doctoruser"
+                        },
+                        new
+                        {
+                            Id = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            AccessFailedCount = 0,
+                            Birthdate = new DateTime(1975, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CardId = "0987654321",
+                            ConcurrencyStamp = "3953fd2b-8e2b-483b-bb85-77ea25f77bac",
+                            Email = "doctoruser2@email.com",
+                            EmailConfirmed = true,
+                            FirstName = "Jane",
+                            ImageUrl = ".",
+                            IsActive = false,
+                            LastName = "Smith",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAENzJupiT7xatSWHuMBPaX4ccRbQKlvoGTvD8hH0RDUONlkexJ+t2jW0uqScbYQ49tA==",
+                            PhoneNumber = "829-123-9231",
+                            PhoneNumberConfirmed = true,
+                            SecurityStamp = "1230b598-8dc4-4fbe-a27d-44525d683608",
+                            Sex = "F",
+                            TwoFactorEnabled = false,
+                            UserName = "doctoruser2"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Allergies.Allergy", b =>
@@ -898,11 +1425,24 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Allergen")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Allergies", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("33c7785e-58f4-4ab8-9f54-51bf8978963f"),
+                            Allergen = "Peanuts"
+                        },
+                        new
+                        {
+                            Id = new Guid("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"),
+                            Allergen = "Penicillin"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Clinical_History.ClinicalHistory", b =>
@@ -920,6 +1460,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
@@ -944,6 +1487,34 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("ClinicalHistories", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c1aaea0c-c739-4125-a7b3-28da602de5a0"),
+                            CurrentHistory = "No significant issues. Patient reports feeling well overall.",
+                            Diagnosis = "Hypertension",
+                            DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
+                            IsDeleted = false,
+                            PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                            PhysicalExamination = "\r\n                        Vital Signs: BP 120/80 mmHg, HR 75 bpm, RR 16 bpm, Temp 36.7°C.\r\n                        Anthropometry: Weight 72 kg, Height 1.75 m, BMI 23.5 kg/m².\r\n                        General: Skin and mucosa appear healthy, no lesions observed.\r\n                        Cardiovascular: Regular rhythm, no murmurs detected.\r\n                        Respiratory: Clear breath sounds, no wheezes or crackles.\r\n                        Abdomen: Soft, non-tender, no masses or organomegaly.\r\n                        Extremities: No edema, peripheral pulses are intact.\r\n                    ",
+                            PrescriptionId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            ReasonForVisit = "Routine check-up",
+                            RegisterDate = new DateTime(2021, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = new Guid("47d713da-eb0f-44c8-bd0d-d1882834c81b"),
+                            CurrentHistory = "Patient reports feeling better with current medication. No new symptoms.",
+                            Diagnosis = "Diabetes",
+                            DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
+                            IsDeleted = false,
+                            PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
+                            PhysicalExamination = "\r\n                        Vital Signs: BP 140/90 mmHg, HR 82 bpm, RR 18 bpm, Temp 37.1°C.\r\n                        Anthropometry: Weight 80 kg, Height 1.80 m, BMI 24.7 kg/m².\r\n                        General: Skin warm, no cyanosis or jaundice observed.\r\n                        Cardiovascular: Heart sounds normal, no murmurs detected.\r\n                        Respiratory: Lung fields are clear to auscultation.\r\n                        Abdomen: Non-distended, no tenderness, liver and spleen not palpable.\r\n                        Extremities: No cyanosis or clubbing, peripheral pulses present.\r\n                    ",
+                            PrescriptionId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            ReasonForVisit = "Follow-up on medication.",
+                            RegisterDate = new DateTime(2024, 10, 28, 14, 25, 12, 40, DateTimeKind.Local).AddTicks(9775)
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Family_History.FamilyHistory", b =>
@@ -955,6 +1526,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<string>("Condition")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("PatientId")
                         .HasColumnType("uniqueidentifier");
@@ -991,6 +1565,20 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Discapacities", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1b54e13f-7a32-4cc1-ad6d-35298426a2fb"),
+                            Description = "Paraplejia que afecta las extremidades inferiores.",
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("5c52a9d3-6ee2-496e-a922-139de857d9d4"),
+                            Description = "Pérdida total de la audición en ambos oídos.",
+                            Type = 2
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness", b =>
@@ -1017,6 +1605,24 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Illnesses", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"),
+                            Code = "E10",
+                            CodeType = 0,
+                            Description = "Enfermedad crónica en la que el páncreas produce poca o ninguna insulina.",
+                            Name = "Diabetes Mellitus Tipo 1"
+                        },
+                        new
+                        {
+                            Id = new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"),
+                            Code = "I10",
+                            CodeType = 0,
+                            Description = "Condición de presión arterial elevada sin causa identificable.",
+                            Name = "Hipertensión esencial (primaria)"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor.RiskFactor", b =>
@@ -1025,8 +1631,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte>("AssessmentLevel")
-                        .HasColumnType("TINYINT");
+                    b.Property<int>("AssessmentLevel")
+                        .HasColumnType("int");
 
                     b.Property<int>("Category")
                         .HasColumnType("int");
@@ -1045,6 +1651,26 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RiskFactors", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("454e8d39-1363-41f4-a2d2-b99fde743fbf"),
+                            AssessmentLevel = 3,
+                            Category = 1,
+                            Code = "L123",
+                            CodeType = 0,
+                            Description = "Consumo excesivo de alcohol"
+                        },
+                        new
+                        {
+                            Id = new Guid("6522252f-0021-433b-8174-f4e0833f859a"),
+                            AssessmentLevel = 2,
+                            Category = 2,
+                            Code = "G789",
+                            CodeType = 0,
+                            Description = "Historia familiar de diabetes"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Vaccines.Vaccine", b =>
@@ -1071,6 +1697,24 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Vaccines", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c28e855d-2602-423f-a4d5-26954df029da"),
+                            Disease = "COVID-19",
+                            Doses = 2,
+                            Laboratory = "Pfizer-BioNTech",
+                            Name = "Vacuna COVID-19"
+                        },
+                        new
+                        {
+                            Id = new Guid("384e34fb-7d23-4123-a78e-13d7b0a91110"),
+                            Disease = "Influenza",
+                            Doses = 1,
+                            Laboratory = "Sanofi Pasteur",
+                            Name = "Vacuna contra la gripe"
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_Insurance.HealthInsurance", b =>
@@ -1096,6 +1740,24 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HealthInsurances", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b51ec3f9-bdc8-4a74-b43e-bf4da6e2f9b9"),
+                            CoverageLevel = 1,
+                            InsuranceCompany = "SaludCo",
+                            InsuranceName = "Seguro Salud Total",
+                            PolicyType = 0
+                        },
+                        new
+                        {
+                            Id = new Guid("7f5d5339-9de6-4ab0-b43c-d6b3d43e4d80"),
+                            CoverageLevel = 3,
+                            InsuranceCompany = "VivaSalud",
+                            InsuranceName = "Plan Familiar Salud",
+                            PolicyType = 1
+                        });
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_Insurance.MedicationCoverage", b =>
@@ -1129,6 +1791,28 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasIndex("MedicationId");
 
                     b.ToTable("MedicationCoverages", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6e3245b7-6f76-411a-93a1-2c2a4793e12e"),
+                            CoinsurancePercentage = 80m,
+                            CopayAmount = 50m,
+                            CoverageStatus = 0,
+                            HealthInsuranceId = new Guid("b51ec3f9-bdc8-4a74-b43e-bf4da6e2f9b9"),
+                            MedicationId = new Guid("a2d1c5b7-8f4e-4a6b-9c3d-5e7a1b2c9f5d"),
+                            PriorAuthorizationRequired = true
+                        },
+                        new
+                        {
+                            Id = new Guid("4e3e5c9f-1db4-47a4-a853-4e5b3c4f9a1d"),
+                            CoinsurancePercentage = 70m,
+                            CopayAmount = 30m,
+                            CoverageStatus = 1,
+                            HealthInsuranceId = new Guid("7f5d5339-9de6-4ab0-b43c-d6b3d43e4d80"),
+                            MedicationId = new Guid("e6b5a3c7-9d4f-4a8b-7e1c-2d9f1a5b3c6d"),
+                            PriorAuthorizationRequired = false
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1187,7 +1871,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SedisBackend.Core.Domain.Entities.Models.HealthCenter", "HealthCenter")
@@ -1199,8 +1883,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", "Patient")
                         .WithMany("Appointments")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Doctor");
 
@@ -1214,8 +1897,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Medical_History.Clinical_History.ClinicalHistory", "ClinicalHistory")
                         .WithOne("Prescription")
                         .HasForeignKey("SedisBackend.Core.Domain.Entities.Models.Prescription", "ClinicalHistoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("ClinicalHistory");
                 });
@@ -1225,14 +1907,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Entities.Models.Appointment", "Appointment")
                         .WithMany()
                         .HasForeignKey("AppointmentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("SedisBackend.Core.Domain.Medical_History.Clinical_History.ClinicalHistory", "ClinicalHistory")
                         .WithMany()
                         .HasForeignKey("ClinicalHistoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("SedisBackend.Core.Domain.Entities.Models.Prescription", "Prescription")
                         .WithMany("PrescribedAppointments")
@@ -1252,8 +1932,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Doctor", "Doctor")
                         .WithMany("CurrentlyWorkingHealthCenters")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("SedisBackend.Core.Domain.Entities.Models.HealthCenter", "HealthCenter")
                         .WithMany("Doctors")
@@ -1271,11 +1950,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Doctor", "Doctor")
                         .WithMany("Specialties")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("SedisBackend.Core.Domain.Entities.Models.MedicalSpecialty", "MedicalSpecialty")
-                        .WithMany()
+                        .WithMany("Doctors")
                         .HasForeignKey("MedicalSpecialtyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1318,16 +1996,15 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.PatientAllergy", b =>
                 {
                     b.HasOne("SedisBackend.Core.Domain.Medical_History.Allergies.Allergy", "Allergy")
-                        .WithMany("Patients")
+                        .WithMany("PatientAllergies")
                         .HasForeignKey("AllergyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", "Patient")
                         .WithMany("Allergies")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Allergy");
 
@@ -1337,16 +2014,15 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.PatientDiscapacity", b =>
                 {
                     b.HasOne("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition.Discapacity", "Discapacity")
-                        .WithMany()
+                        .WithMany("PatientDiscapacities")
                         .HasForeignKey("DiscapacityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", "Patient")
                         .WithMany("Discapacities")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Discapacity");
 
@@ -1362,10 +2038,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", "Patient")
-                        .WithMany()
+                        .WithMany("HealthInsurances")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("HealthInsurance");
 
@@ -1375,16 +2050,15 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Relations.PatientIllness", b =>
                 {
                     b.HasOne("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness", "Illness")
-                        .WithMany()
+                        .WithMany("PatientIllnesses")
                         .HasForeignKey("IllnessId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", "Patient")
                         .WithMany("Illnesses")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Illness");
 
@@ -1396,13 +2070,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", "Patient")
                         .WithMany("RiskFactors")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor.RiskFactor", "RiskFactor")
-                        .WithMany()
+                        .WithMany("PatientRiskFactors")
                         .HasForeignKey("RiskFactorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Patient");
@@ -1415,11 +2088,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", "Patient")
                         .WithMany("Vaccines")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("SedisBackend.Core.Domain.Medical_History.Vaccines.Vaccine", "Vaccine")
-                        .WithMany()
+                        .WithMany("PatientVaccines")
                         .HasForeignKey("VaccineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1472,7 +2144,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.User", "ApplicationUser")
                         .WithOne()
                         .HasForeignKey("SedisBackend.Core.Domain.Entities.Users.Persons.Doctor", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
@@ -1494,14 +2166,13 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Doctor", "Doctor")
                         .WithMany("DevelopedClinicalHistories")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", "Patient")
                         .WithMany("ClinicalHistories")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Doctor");
 
@@ -1513,8 +2184,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", "Patient")
                         .WithMany("FamilyHistories")
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("SedisBackend.Core.Domain.Entities.Users.Persons.Patient", "Relative")
                         .WithMany()
@@ -1557,6 +2227,11 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Navigation("Services");
                 });
 
+            modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Models.MedicalSpecialty", b =>
+                {
+                    b.Navigation("Doctors");
+                });
+
             modelBuilder.Entity("SedisBackend.Core.Domain.Entities.Models.Prescription", b =>
                 {
                     b.Navigation("PrescribedAppointments");
@@ -1587,6 +2262,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Navigation("FamilyHistories");
 
+                    b.Navigation("HealthInsurances");
+
                     b.Navigation("Illnesses");
 
                     b.Navigation("RiskFactors");
@@ -1596,12 +2273,32 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Allergies.Allergy", b =>
                 {
-                    b.Navigation("Patients");
+                    b.Navigation("PatientAllergies");
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Clinical_History.ClinicalHistory", b =>
                 {
                     b.Navigation("Prescription");
+                });
+
+            modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition.Discapacity", b =>
+                {
+                    b.Navigation("PatientDiscapacities");
+                });
+
+            modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Illness", b =>
+                {
+                    b.Navigation("PatientIllnesses");
+                });
+
+            modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor.RiskFactor", b =>
+                {
+                    b.Navigation("PatientRiskFactors");
+                });
+
+            modelBuilder.Entity("SedisBackend.Core.Domain.Medical_History.Vaccines.Vaccine", b =>
+                {
+                    b.Navigation("PatientVaccines");
                 });
 
             modelBuilder.Entity("SedisBackend.Core.Domain.Medical_Insurance.HealthInsurance", b =>

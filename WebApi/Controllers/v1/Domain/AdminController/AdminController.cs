@@ -61,10 +61,14 @@ public class AdminController : BaseApiController
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AdminForUpdateDto))]
     ////[Authorize(Roles = "Admin")]
     public async Task<IActionResult> Put(Guid id, [FromBody] AdminForUpdateDto admin)
     {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
         var command = new UpdateAdminCommand(id, admin, true);
 
         await _sender.Send(command);

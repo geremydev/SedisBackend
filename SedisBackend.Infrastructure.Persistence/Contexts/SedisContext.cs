@@ -15,6 +15,7 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Co
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
 using SedisBackend.Core.Domain.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.Medical_Insurance;
+using SedisBackend.Infrastructure.Persistence.Configuration;
 
 namespace SedisBackend.Infrastructure.Persistence.Contexts;
 
@@ -25,720 +26,679 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
     }
 
-    #region DbSet Definitions
-
-    #region Appointments
+    #region Tables
     public DbSet<Appointment> Appointments { get; set; }
-
-    #endregion
-
-    #region HealthCenters
     public DbSet<HealthCenter> HealthCenters { get; set; }
     public DbSet<HealthCenterServices> HealthCenterServices { get; set; }
-
-    #endregion
-
-    #region Medical History
-
-    #region Allergies
     public DbSet<Allergy> Allergies { get; set; }
     public DbSet<PatientAllergy> PatientAllergies { get; set; }
-    #endregion
-
-    #region Clinical History
     public DbSet<ClinicalHistory> ClinicalHistories { get; set; }
-    #endregion
-
-    #region Family History
     public DbSet<FamilyHistory> FamilyHistories { get; set; }
-
-    #endregion
-
-    #region Medical Conditions
-
-    #region Discapacity Condition
     public DbSet<Discapacity> Discapacities { get; set; }
-    public DbSet<PatientDiscapacity> PatientDiscapacities { get; set; }
-    #endregion
-
-    #region Illness Condition
-    public DbSet<Illness> illnesses { get; set; }
-    public DbSet<PatientIllness> PatientIllnesses { get; set; }
-    #endregion
-
-    #region RiskFactor
-    public DbSet<PatientRiskFactor> PatientRiskFactors { get; set; }
-    public DbSet<RiskFactor> RiskFactors { get; set; }
-    #endregion
-
-    #endregion
-
-    #region Vaccines
-    public DbSet<Vaccine> Vaccines { get; set; }
-    public DbSet<PatientVaccine> PatientVaccines { get; set; }
-    #endregion
-
-    #endregion
-
-    #region Medical Insurance
-    public DbSet<HealthInsurance> HealthInsurances { get; set; }
-    public DbSet<MedicationCoverage> MedicationCoverages { get; set; }
-    #endregion
-
-    #region Presctiption
-    public DbSet<Prescription> Prescriptions { get; set; }
-    public DbSet<MedicationPrescription> MedicationPrescriptions { get; set; }
-    public DbSet<AppointmentPrescription> AppointmentPrescriptions { get; set; }
-
-    #endregion
-
-    #region Products
     public DbSet<LabTest> LabTests { get; set; }
     public DbSet<Medication> Medications { get; set; }
-    #endregion
-
-    #region UserEntityRelation
-    public DbSet<UserEntityRelation> UserEntityRelation { get; set; }
-
-    #endregion
-
-    #region Users
-
-    #region Patient
     public DbSet<Patient> Patients { get; set; }
-    #endregion
-
-    #region Doctor
     public DbSet<Doctor> Doctors { get; set; }
-    public DbSet<DoctorHealthCenter> DoctorHealthCenters { get; set; }
+    public DbSet<Location> Locations { get; set; }
     public DbSet<MedicalSpecialty> MedicalSpecialities { get; set; }
+    public DbSet<Illness> Illnesses { get; set; }
+    public DbSet<RiskFactor> RiskFactors { get; set; }
+    public DbSet<Vaccine> Vaccines { get; set; }
+    public DbSet<HealthInsurance> HealthInsurances { get; set; }
+    public DbSet<MedicationCoverage> MedicationCoverages { get; set; }
+    public DbSet<Prescription> Prescriptions { get; set; }
+
+    public DbSet<PatientDiscapacity> PatientDiscapacities { get; set; }
+    public DbSet<PatientIllness> PatientIllnesses { get; set; }
+    public DbSet<PatientRiskFactor> PatientRiskFactors { get; set; }
+    public DbSet<PatientVaccine> PatientVaccines { get; set; }
+    public DbSet<PatientHealthInsurance> PatientHealthInsurances { get; set; }
+    public DbSet<MedicationPrescription> MedicationPrescriptions { get; set; }
+    public DbSet<AppointmentPrescription> AppointmentPrescriptions { get; set; }
+    public DbSet<DoctorHealthCenter> DoctorHealthCenters { get; set; }
     public DbSet<DoctorMedicalSpecialty> DoctorMedicalSpecialities { get; set; }
     #endregion
-
-    #endregion
-
-    #region Location
-    public DbSet<Location> Locations { get; set; }
-    #endregion
-
-    #endregion
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        #region Identity Tables Override
         modelBuilder.Entity<IdentityRole<Guid>>(entity => { entity.ToTable("Roles"); });
-        modelBuilder.Entity<User>()
-            .ToTable("Users"); // Todas las entidades se almacenarán en la tabla 'Users'
+        modelBuilder.Entity<User>().ToTable("Users");
         modelBuilder.Entity<IdentityUserRole<Guid>>(entity => { entity.ToTable("UserRoles"); });
         modelBuilder.Entity<IdentityUserClaim<Guid>>(entity => { entity.ToTable("UserClaims"); });
         modelBuilder.Entity<IdentityRoleClaim<Guid>>(entity => { entity.ToTable("RoleClaims"); });
         modelBuilder.Entity<IdentityUserLogin<Guid>>(entity => { entity.ToTable("UserLogins"); });
         modelBuilder.Entity<IdentityUserToken<Guid>>(entity => { entity.ToTable("UserTokens"); });
-        #endregion
 
-        #region Table names
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.ToTable("Users");
 
-        #region Appointments    
-        modelBuilder.Entity<Appointment>().ToTable("Appointments");
-        #endregion
+            entity.HasKey(p => p.Id);
+            entity.HasIndex(p => p.Id).IsUnique();
+            entity.HasIndex(u => u.CardId).IsUnique();
+            entity.HasIndex(u => u.PhoneNumber).IsUnique();
 
-        #region HealthCenters
-        modelBuilder.Entity<HealthCenter>().ToTable("HealthCenters");
-        modelBuilder.Entity<HealthCenterServices>().ToTable("HealthCenterServices");
-        #endregion
+            entity.Property(u => u.CardId).IsRequired().HasMaxLength(11);
+            entity.Property(u => u.PhoneNumber).IsRequired();
 
-        #region Location
-        modelBuilder.Entity<Location>().ToTable("Locations");
-        #endregion
+            entity.Property(u => u.Sex)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (SexEnum)Enum.Parse(typeof(SexEnum), v))
+                .HasColumnType("CHAR(1)");
 
-        #region Medical History
+            //entity.Ignore(u => u.UserName)
+            //.Ignore(u => u.NormalizedUserName);
+        });
 
-        #region Allergies
-        modelBuilder.Entity<Allergy>().ToTable("Allergies");
-        modelBuilder.Entity<PatientAllergy>().ToTable("PatientAllergies");
-        #endregion
+        modelBuilder.Entity<Patient>(entity =>
+        {
+            entity.ToTable("Patients");
 
-        #region Clinical History
-        modelBuilder.Entity<ClinicalHistory>().ToTable("ClinicalHistories");
-        #endregion
+            entity.HasKey(p => p.Id);
+            entity.HasIndex(p => p.Id)
+                    .IsUnique();
 
-        #region Family History
-        modelBuilder.Entity<FamilyHistory>().ToTable("FamilyHistories");
-        #endregion
+            entity.HasOne(p => p.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Patient>(p => p.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasMany(p => p.Allergies)
+                .WithOne(pa => pa.Patient)
+                .HasForeignKey(pa => pa.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.Illnesses)
+                .WithOne(pi => pi.Patient)
+                .HasForeignKey(pi => pi.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.Discapacities)
+                .WithOne(pd => pd.Patient)
+                .HasForeignKey(pd => pd.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.RiskFactors)
+                .WithOne(pr => pr.Patient)
+                .HasForeignKey(pr => pr.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.Vaccines)
+                .WithOne(pv => pv.Patient)
+                .HasForeignKey(pv => pv.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.ClinicalHistories)
+                .WithOne(ch => ch.Patient)
+                .HasForeignKey(ch => ch.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.Appointments)
+                .WithOne(a => a.Patient)
+                .HasForeignKey(a => a.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.FamilyHistories)
+                .WithOne(fh => fh.Patient)
+                .HasForeignKey(fh => fh.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.HealthInsurances)
+                .WithOne(fh => fh.Patient)
+                .HasForeignKey(fh => fh.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.Property(p => p.Height).HasColumnType("decimal(5, 2)");
+            entity.Property(p => p.Weight).HasColumnType("decimal(5, 2)");
 
-        #region Medical Conditions
+            entity.HasQueryFilter(d => !d.IsDeleted);
+        });
 
-        #region Discapacity Condition
-        modelBuilder.Entity<Discapacity>().ToTable("Discapacities");
-        modelBuilder.Entity<PatientDiscapacity>().ToTable("PatientDiscapacities");
-        #endregion
+        modelBuilder.Entity<Doctor>(entity =>
+        {
+            entity.ToTable("Doctors");
 
-        #region Illness Condition
-        modelBuilder.Entity<Illness>().ToTable("Illnesses");
-        modelBuilder.Entity<PatientIllness>().ToTable("PatientIllnesses");
+            entity.HasKey(p => p.Id);
+            entity.HasIndex(p => p.Id)
+                    .IsUnique();
 
-        #endregion
+            entity.HasOne(p => p.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Doctor>(d => d.Id)
+                .OnDelete(DeleteBehavior.NoAction);
 
-        #region RiskFactor
-        modelBuilder.Entity<RiskFactor>().ToTable("RiskFactors");
-        modelBuilder.Entity<PatientRiskFactor>().ToTable("PatientRiskFactors");
-        #endregion
+            entity.HasMany(k => k.Appointments)
+                .WithOne(k => k.Doctor)
+                .HasForeignKey(k => k.DoctorId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-        #endregion
+            entity.HasMany(k => k.CurrentlyWorkingHealthCenters)
+                .WithOne(k => k.Doctor)
+                .HasForeignKey(k => k.DoctorId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-        #region Vaccines
-        modelBuilder.Entity<PatientVaccine>().ToTable("PatientVaccines");
-        modelBuilder.Entity<Vaccine>().ToTable("Vaccines");
+            entity.HasMany(k => k.Specialties)
+               .WithOne(k => k.Doctor)
+               .HasForeignKey(k => k.DoctorId)
+               .OnDelete(DeleteBehavior.NoAction);
 
-        #endregion
+            entity.HasMany(k => k.DevelopedClinicalHistories)
+              .WithOne(k => k.Doctor)
+              .HasForeignKey(k => k.DoctorId)
+              .OnDelete(DeleteBehavior.NoAction);
 
-        #endregion
+            entity.HasQueryFilter(d => !d.IsDeleted);
+        });
 
-        #region Medical Insurance
-        modelBuilder.Entity<HealthInsurance>().ToTable("HealthInsurances");
-        modelBuilder.Entity<MedicationCoverage>().ToTable("MedicationCoverages");
-        #endregion
+        modelBuilder.Entity<Admin>(entity =>
+        {
+            entity.ToTable("Admins");
 
-        #region UserEntityRelation
+            entity.HasKey(p => p.Id);
+            entity.HasIndex(p => p.Id)
+                    .IsUnique();
 
-        modelBuilder.Entity<UserEntityRelation>().ToTable("UserEntityRelation");
+            entity.HasOne(p => p.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Admin>(d => d.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
 
-        #endregion
+        modelBuilder.Entity<Assistant>(entity =>
+        {
+            entity.ToTable("Assistants");
 
-        #region Presctiption
-        modelBuilder.Entity<MedicationPrescription>().ToTable("MedicationPrescriptions");
-        modelBuilder.Entity<AppointmentPrescription>().ToTable("AppointmentPrescriptions");
-        modelBuilder.Entity<Prescription>().ToTable("Prescriptions");
-        #endregion
+            entity.HasKey(p => p.Id);
+            entity.HasIndex(p => p.Id)
+                    .IsUnique();
 
-        #region Products
-        modelBuilder.Entity<Appointment>().ToTable("Appointments");
-        modelBuilder.Entity<Medication>().ToTable("Medications");
-        #endregion
+            entity.HasOne(p => p.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Assistant>(d => d.Id)
+                .OnDelete(DeleteBehavior.Cascade);
 
-        #region Users
+            entity.HasQueryFilter(d => !d.IsDeleted);
+        });
 
-        #region Patient
-        //modelBuilder.Entity<Patient>().ToTable("Patients");
-        #endregion
+        modelBuilder.Entity<PatientAllergy>(entity =>
+        {
+            entity.ToTable("PatientAllergies");
+            entity.HasKey(pa => new { pa.PatientId, pa.AllergyId });
+            entity.HasOne(pa => pa.Patient)
+                .WithMany(p => p.Allergies)
+                .HasForeignKey(pa => pa.PatientId)
+                .IsRequired(false);
+            entity.HasOne(pa => pa.Allergy)
+                .WithMany(a => a.PatientAllergies)
+                .HasForeignKey(pa => pa.AllergyId);
+            entity.Property(pa => pa.DiagnosisDate)
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
+        });
 
-        #region Doctor
-        //modelBuilder.Entity<Doctor>().ToTable("Doctors");
-        modelBuilder.Entity<DoctorHealthCenter>().ToTable("DoctorHealthCenters");
-        modelBuilder.Entity<MedicalSpecialty>().ToTable("MedicalSpecialities");
-        modelBuilder.Entity<DoctorMedicalSpecialty>().ToTable("DoctorMedicalSpecialities");
-        #endregion
+        modelBuilder.Entity<Allergy>(entity =>
+        {
+            entity.ToTable("Allergies");
+            entity.HasKey(a => a.Id);
 
-        //#region Admin
-        //modelBuilder.Entity<Admin>().ToTable("Admins");
-        //#endregion
+            entity.Property(a => a.Allergen)
+                .IsRequired()
+                .HasMaxLength(200);
 
-        //#region Assistant
-        //modelBuilder.Entity<Assistant>().ToTable("Assistants");
-        //#endregion
+            entity.HasMany(a => a.PatientAllergies)
+                .WithOne(pa => pa.Allergy)
+                .HasForeignKey(pa => pa.AllergyId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
 
-        #endregion
+        modelBuilder.Entity<Appointment>(entity =>
+        {
+            entity.ToTable("Appointments");
+            entity.HasKey(a => a.Id);
 
-        #endregion
+            entity.HasOne(a => a.Patient)
+                    .WithMany(p => p.Appointments)
+                    .HasForeignKey(a => a.PatientId)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-        #region Primary Keys
+            entity.HasOne(a => a.HealthCenter)
+                   .WithMany(p => p.Appointments)
+                   .HasForeignKey(a => a.HealthCenterId)
+                   .OnDelete(DeleteBehavior.NoAction);
 
-        #region Appointments    
-        modelBuilder.Entity<Appointment>().HasKey(p => p.Id);
-        #endregion
+            entity.HasQueryFilter(d => !d.IsDeleted);
+        });
 
-        #region HealthCenters
-        modelBuilder.Entity<HealthCenter>().HasKey(p => p.Id);
-        modelBuilder.Entity<HealthCenterServices>().HasKey(p => p.Id);
-        #endregion
+        modelBuilder.Entity<AppointmentPrescription>(entity =>
+        {
+            entity.ToTable("AppointmentPrescriptions");
+            entity.HasKey(ap => ap.Id);
 
-        #region Location
-        modelBuilder.Entity<Location>().HasKey(p => p.Id);
-        #endregion
-
-        #region Medical History
-        #region Allergies
-        modelBuilder.Entity<Allergy>().HasKey(p => p.Id);
-        modelBuilder.Entity<PatientAllergy>().HasKey(p => p.Id);
-        #endregion
-
-        #region Clinical History
-        modelBuilder.Entity<ClinicalHistory>().HasKey(p => p.Id);
-        #endregion
-
-        #region Family History
-        modelBuilder.Entity<FamilyHistory>().HasKey(p => p.Id);
-
-        modelBuilder.Entity<FamilyHistory>()
-            .HasOne(f => f.Relative)
+            entity.HasOne(ap => ap.ClinicalHistory)
             .WithMany()
-            .HasForeignKey(f => f.RelativeId);
-        #endregion
-
-        #region Medical Conditions
-
-        #region Discapacity Condition
-        modelBuilder.Entity<Discapacity>().HasKey(p => p.Id);
-        modelBuilder.Entity<PatientDiscapacity>().HasKey(p => p.Id);
-        #endregion
-
-        #region Illness Condition
-        modelBuilder.Entity<Illness>().HasKey(p => p.Id);
-        modelBuilder.Entity<PatientIllness>().HasKey(p => p.Id);
-        #endregion
-
-        #region RiskFactor
-        modelBuilder.Entity<RiskFactor>().HasKey(p => p.Id);
-        modelBuilder.Entity<PatientRiskFactor>().HasKey(p => p.Id);
-        modelBuilder.Entity<RiskFactor>()
-            .Property(r => r.AssessmentLevel)
-            .HasConversion<int>()  // Guardar el enum como entero
-            .HasColumnType("TINYINT");  // Usar TINYINT para optimizar el almacenamiento
-        #endregion
-
-        #endregion
-
-        #region Vaccines
-        modelBuilder.Entity<Vaccine>().HasKey(p => p.Id);
-        modelBuilder.Entity<PatientVaccine>().HasKey(p => p.Id);
-        #endregion
-
-        #endregion
-
-        modelBuilder.Entity<User>()
-            .Property(u => u.Sex)
-            .HasConversion(
-                v => v.ToString(),  // Convert enum to string for database storage
-                v => (SexEnum)Enum.Parse(typeof(SexEnum), v))  // Convert string back to enum
-            .HasColumnType("CHAR(1)"); // Specify the column type
-
-        modelBuilder.Entity<User>()
-            .Property(u => u.CardId).IsRequired().HasMaxLength(12);
-
-        modelBuilder.Entity<User>().HasIndex(u => u.CardId).IsUnique();
-
-        #region UserEntityRelation 
-        modelBuilder.Entity<UserEntityRelation>()
-        .HasKey(p => p.Id);
-        #endregion
-
-        #region Medical Insurance
-        modelBuilder.Entity<HealthInsurance>().HasKey(p => p.Id);
-        modelBuilder.Entity<MedicationCoverage>().HasKey(p => p.Id);
-        #endregion
-
-        #region Presctiption
-        modelBuilder.Entity<Prescription>().HasKey(p => p.Id);
-        modelBuilder.Entity<MedicationPrescription>().HasKey(p => p.Id);
-        modelBuilder.Entity<AppointmentPrescription>().HasKey(p => p.Id);
-        #endregion
-
-        #region Products
-        modelBuilder.Entity<Appointment>().HasKey(p => p.Id);
-        modelBuilder.Entity<Medication>().HasKey(p => p.Id);
-        #endregion
-
-        #region Users
-        #region Patient
-        modelBuilder.Entity<Patient>()
-            .HasOne(d => d.ApplicationUser)
-            .WithOne()
-            .HasForeignKey<Patient>(d => d.Id)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        #endregion
-
-        #region Doctor
-        modelBuilder.Entity<Doctor>()
-            .HasOne(d => d.ApplicationUser)
-            .WithOne()
-            .HasForeignKey<Doctor>(d => d.Id)
-            .OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<MedicalSpecialty>().HasKey(p => p.Id);
-        modelBuilder.Entity<DoctorMedicalSpecialty>().HasKey(p => p.Id);
-        modelBuilder.Entity<DoctorHealthCenter>().HasKey(p => p.Id);
-
-        #endregion
-
-        #region Admin
-        modelBuilder.Entity<Admin>()
-            .HasOne(d => d.ApplicationUser)
-            .WithOne()
-            .HasForeignKey<Admin>(d => d.Id)
-            .OnDelete(DeleteBehavior.Cascade);
-        #endregion
-
-        #region Assistant
-        modelBuilder.Entity<Assistant>()
-            .HasOne(d => d.ApplicationUser)
-            .WithOne()
-            .HasForeignKey<Assistant>(d => d.Id)
-            .OnDelete(DeleteBehavior.Cascade);
-        #endregion
-        #endregion
-
-
-        #endregion
-
-        #region Relations
-
-        #region Appointments    
-        modelBuilder.Entity<Appointment>()
-            .HasOne(a => a.Patient)
-            .WithMany(p => p.Appointments)
-            .HasForeignKey(a => a.PatientId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Appointment>()
-            .HasOne(a => a.Doctor)
-            .WithMany(d => d.Appointments)
-            .HasForeignKey(a => a.DoctorId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Appointment>()
-            .HasOne(a => a.HealthCenter)
-            .WithMany(p => p.Appointments)
-            .HasForeignKey(a => a.HealthCenterId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<AppointmentPrescription>()
-            .HasOne(ap => ap.ClinicalHistory)
-            .WithMany()  // No existe colección en ClinicalHistory
             .HasForeignKey(ap => ap.ClinicalHistoryId)
-            .OnDelete(DeleteBehavior.NoAction);  // No eliminaciones en cascada
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.NoAction);
 
-        modelBuilder.Entity<AppointmentPrescription>()
-            .HasOne(ap => ap.Appointment)
-            .WithMany()  // Esta colección existe en Appointment
+            entity.HasOne(ap => ap.Appointment)
+            .WithMany()
             .HasForeignKey(ap => ap.AppointmentId)
-            .OnDelete(DeleteBehavior.NoAction);  // No eliminaciones en cascada
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.NoAction);
 
-        modelBuilder.Entity<AppointmentPrescription>()
-            .HasOne(ap => ap.Prescription)
+            entity.HasOne(ap => ap.Prescription)
             .WithMany(p => p.PrescribedAppointments)
             .HasForeignKey(ap => ap.PrescriptionId)
-            .OnDelete(DeleteBehavior.NoAction);  // Evitar cascada
-
-        #endregion
-
-        #region HealthCenters
-        modelBuilder.Entity<HealthCenter>()
-            .HasMany(k => k.Appointments)
-            .WithOne(k => k.HealthCenter)
-            .HasForeignKey(k => k.HealthCenterId)
             .OnDelete(DeleteBehavior.NoAction);
+        });
 
-        modelBuilder.Entity<HealthCenter>()
-            .HasMany(k => k.Doctors)
-            .WithOne(k => k.HealthCenter)
-            .HasForeignKey(k => k.HealthCenterId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<HealthCenter>()
-            .HasMany(k => k.Admins)
-            .WithOne(k => k.HealthCenter)
-            .HasForeignKey(k => k.HealthCenterId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<HealthCenter>()
-            .HasMany(k => k.Assistants)
-            .WithOne(k => k.HealthCenter)
-            .HasForeignKey(k => k.HealthCenterId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<HealthCenter>() //Los servicios deberían estar normalizados ya que el mismo servicio puede ser ofrecido por distintos Centros de salud.
-            .HasMany(k => k.Services)
-            .WithOne(k => k.HealthCenter)
-            .HasForeignKey(k => k.HealthCenterId)
-            .OnDelete(DeleteBehavior.NoAction);
-        #endregion
-
-        #region Location
-        #endregion
-
-        #region Medical History
-        #region Allergies
-        modelBuilder.Entity<Allergy>()
-            .HasMany(k => k.Patients)
-            .WithOne(k => k.Allergy)
-            .HasForeignKey(k => k.AllergyId);
-        #endregion
-
-        #region Clinical History
-        modelBuilder.Entity<ClinicalHistory>()
-            .HasOne(k => k.Prescription)
-            .WithOne(k => k.ClinicalHistory)
-            .HasForeignKey<ClinicalHistory>(k => k.PrescriptionId)
-            .OnDelete(DeleteBehavior.NoAction);
-        #endregion
-
-        #region Family History
-        #endregion
-
-        #region Medical Conditions
-
-        #region Discapacity Condition
-        #endregion
-
-        #region Illness Condition
-        #endregion
-
-        #region RiskFactor
-        #endregion
-
-        #endregion
-
-        #region Vaccines
-        #endregion
-
-        #endregion
-
-        #region Medical Insurance
-        modelBuilder.Entity<HealthInsurance>()
-            .HasMany(k => k.MedicationCoverages)
-            .WithOne(k => k.HealthInsurance)
-            .HasForeignKey(k => k.HealthInsuranceId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<HealthInsurance>()
-            .HasMany(k => k.SubscribedPatients)
-            .WithOne(k => k.HealthInsurance)
-            .HasForeignKey(k => k.HealthInsuranceId)
-            .OnDelete(DeleteBehavior.Cascade);
-        #endregion
-
-        #region Presctiption
-        modelBuilder.Entity<Prescription>()
-            .HasMany(k => k.PrescribedMedications)
-            .WithOne(k => k.Prescription)
-            .HasForeignKey(k => k.PrescriptionId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Prescription>()
-            .HasMany(k => k.PrescribedAppointments)
-            .WithOne(k => k.Prescription)
-            .HasForeignKey(k => k.PrescriptionId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Prescription>()
-            .HasOne(p => p.ClinicalHistory)
-            .WithOne(k => k.Prescription)
-            .HasForeignKey<Prescription>(k => k.ClinicalHistoryId)
-            .OnDelete(DeleteBehavior.NoAction);
-        //modelBuilder.Entity<MedicationPrescription>().ToTable("MedicationPrescriptions");
-        //modelBuilder.Entity<AppointmentPrescription>().ToTable("AppointmentPrescriptions");
-
-        #endregion
-
-        #region Products
-        #endregion
-
-        #region Users
-        #region Patient
-        modelBuilder.Entity<Patient>()
-            .HasMany(k => k.ClinicalHistories)
-            .WithOne(k => k.Patient)
-            .HasForeignKey(k => k.PatientId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Patient>()
-            .HasMany(k => k.Appointments)
-            .WithOne(k => k.Patient)
-            .HasForeignKey(k => k.PatientId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Patient>()
-            .HasMany(k => k.Allergies)
-            .WithOne(k => k.Patient)
-            .HasForeignKey(k => k.PatientId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Patient>()
-            .HasMany(k => k.Illnesses)
-            .WithOne(k => k.Patient)
-            .HasForeignKey(k => k.PatientId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Patient>()
-            .HasMany(k => k.RiskFactors)
-            .WithOne(k => k.Patient)
-            .HasForeignKey(k => k.PatientId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        modelBuilder.Entity<Patient>()
-            .HasMany(k => k.Discapacities)
-            .WithOne(k => k.Patient)
-            .HasForeignKey(k => k.PatientId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Patient>()
-            .HasMany(k => k.Vaccines)
-            .WithOne(k => k.Patient)
-            .HasForeignKey(k => k.PatientId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Patient>()
-            .HasMany(k => k.FamilyHistories)
-            .WithOne(k => k.Patient)
-            .HasForeignKey(k => k.PatientId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        #endregion
-
-        #region Doctor
-        modelBuilder.Entity<Doctor>()
-            .HasMany(k => k.Appointments)
-            .WithOne(k => k.Doctor)
-            .HasForeignKey(k => k.DoctorId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Doctor>()
-            .HasMany(k => k.CurrentlyWorkingHealthCenters)
-            .WithOne(k => k.Doctor)
-            .HasForeignKey(k => k.DoctorId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Doctor>()
-           .HasMany(k => k.Specialties)
-           .WithOne(k => k.Doctor)
-           .HasForeignKey(k => k.DoctorId)
-           .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Doctor>()
-          .HasMany(k => k.DevelopedClinicalHistories)
-          .WithOne(k => k.Doctor)
-          .HasForeignKey(k => k.DoctorId)
-          .OnDelete(DeleteBehavior.Cascade);
-
-        //public ICollection<DoctorHealthCenter> CurrentlyWorkingHealthCenters { get; set; }
-        //public ICollection<DoctorMedicalSpecialty> Specialties { get; set; }
-        //public ICollection<Appointment> Appointments { get; set; }
-        //public ICollection<ClinicalHistory> DevelopedClinicalHistories { get; set; }
-        #endregion
-
-        #endregion
-
-
-        #endregion
-
-        #region Properties
-
-        #region Doctor
-        modelBuilder.Entity<DoctorHealthCenter>()
-            .Property(e => e.EntryHour)
-            .HasConversion(
-                v => TimeSpanToString(v),
-                v => StringToTimeSpan(v)
-            );
-
-        modelBuilder.Entity<DoctorHealthCenter>()
-            .Property(e => e.ExitHour)
-            .HasConversion(
-                v => TimeSpanToString(v),
-                v => StringToTimeSpan(v)
-            );
-        modelBuilder.Entity<Doctor>()
-            .HasIndex(p => p.Id)
-            .IsUnique();
-        #endregion
-
-        #region Patient
-        modelBuilder.Entity<Patient>()
-            .HasIndex(p => p.Id)  // Consider adding an index for performance
-            .IsUnique();
-        #endregion
-
-        #region Assistant
-        modelBuilder.Entity<Assistant>()
-            .HasIndex(p => p.Id)
-            .IsUnique();
-        #endregion
-
-        #region Admin
-        modelBuilder.Entity<Admin>()
-            .HasIndex(p => p.Id)
-            .IsUnique();
-        #endregion
-
-        #region Location
-        modelBuilder.Entity<Location>()
-           .Property(l => l.Latitude)
-           .HasColumnType("decimal(10, 8)");
-        modelBuilder.Entity<Location>()
-            .Property(l => l.Longitude)
-            .HasColumnType("decimal(11, 8)");
-        #endregion
-
-        #region MedicationCoverage
-        modelBuilder.Entity<MedicationCoverage>(builder =>
+        modelBuilder.Entity<HealthCenter>(entity =>
         {
-            builder.Property(mc => mc.CopayAmount)
+            entity.ToTable("HealthCenters");
+            entity.HasKey(a => a.Id);
+
+            entity.HasMany(k => k.Appointments)
+                    .WithOne(k => k.HealthCenter)
+                    .HasForeignKey(k => k.HealthCenterId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasMany(k => k.Doctors)
+                    .WithOne(k => k.HealthCenter)
+                    .HasForeignKey(k => k.HealthCenterId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasMany(k => k.Admins)
+                    .WithOne(k => k.HealthCenter)
+                    .HasForeignKey(k => k.HealthCenterId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasMany(k => k.Assistants)
+                    .WithOne(k => k.HealthCenter)
+                    .HasForeignKey(k => k.HealthCenterId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasMany(k => k.Services)
+                    .WithOne(k => k.HealthCenter)
+                    .HasForeignKey(k => k.HealthCenterId)
+                    .OnDelete(DeleteBehavior.NoAction);
+        });
+
+
+        modelBuilder.Entity<HealthCenterServices>(entity =>
+        {
+            entity.ToTable("HealthCenterServices");
+            entity.HasKey(a => a.Id);
+
+            // ...
+        });
+
+        modelBuilder.Entity<Location>(entity =>
+        {
+            entity.ToTable("Locations");
+            entity.HasKey(a => a.Id);
+
+            entity.Property(l => l.Latitude)
+                    .HasColumnType("decimal(10, 8)");
+
+            entity.Property(l => l.Longitude)
+                    .HasColumnType("decimal(11, 8)");
+        });
+
+        modelBuilder.Entity<ClinicalHistory>(entity =>
+        {
+            entity.ToTable("ClinicalHistories");
+            entity.HasKey(a => a.Id);
+
+            entity
+                .HasOne(k => k.Prescription)
+                .WithOne(k => k.ClinicalHistory)
+                .HasForeignKey<ClinicalHistory>(k => k.PrescriptionId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasQueryFilter(d => !d.IsDeleted);
+        });
+
+        modelBuilder.Entity<FamilyHistory>(entity =>
+        {
+            entity.ToTable("FamilyHistories");
+            entity.HasKey(a => a.Id);
+
+            // ...
+
+            entity.HasQueryFilter(d => !d.IsDeleted);
+        });
+
+        modelBuilder.Entity<Discapacity>(entity =>
+        {
+            entity.ToTable("Discapacities");
+            entity.HasKey(a => a.Id);
+
+            entity.Property(a => a.Type).IsRequired();
+
+            entity.HasMany(a => a.PatientDiscapacities)
+                .WithOne(pa => pa.Discapacity)
+                .HasForeignKey(pa => pa.DiscapacityId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<PatientDiscapacity>(entity =>
+        {
+            entity.ToTable("PatientDiscapacities");
+            entity.HasKey(pa => new { pa.PatientId, pa.DiscapacityId });
+
+            entity.HasOne(pa => pa.Patient)
+                .WithMany(p => p.Discapacities)
+                .HasForeignKey(pa => pa.PatientId)
+                .IsRequired(false);
+            entity.HasOne(pa => pa.Discapacity)
+                .WithMany(a => a.PatientDiscapacities)
+                .HasForeignKey(pa => pa.DiscapacityId);
+            entity.Property(pa => pa.DiagnosisDate)
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
+        });
+
+        modelBuilder.Entity<Illness>(entity =>
+        {
+            entity.ToTable("Illnesses");
+            entity.HasKey(a => a.Id);
+
+            entity.Property(a => a.CodeType).IsRequired();
+            entity.Property(a => a.Name).IsRequired();
+            entity.Property(a => a.Code).IsRequired();
+
+            entity.HasMany(a => a.PatientIllnesses)
+                .WithOne(pa => pa.Illness)
+                .HasForeignKey(pa => pa.IllnessId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<PatientIllness>(entity =>
+        {
+            entity.ToTable("PatientIllnesses");
+            entity.HasKey(pa => new { pa.PatientId, pa.IllnessId });
+
+            entity.HasOne(pa => pa.Patient)
+                .WithMany(p => p.Illnesses)
+                .HasForeignKey(pa => pa.PatientId)
+                .IsRequired(false);
+            entity.HasOne(pa => pa.Illness)
+                .WithMany(a => a.PatientIllnesses)
+                .HasForeignKey(pa => pa.IllnessId);
+            entity.Property(pa => pa.DischargeDate)
+                .HasColumnType("Date");
+            entity.Property(pa => pa.DiagnosisDate)
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
+        });
+
+        modelBuilder.Entity<RiskFactor>(entity =>
+        {
+            entity.ToTable("RiskFactors");
+            entity.HasKey(a => a.Id);
+
+            entity.Property(a => a.CodeType).IsRequired();
+            entity.Property(a => a.AssessmentLevel).IsRequired();
+            entity.Property(a => a.Code).IsRequired();
+            entity.Property(a => a.Category).IsRequired();
+
+            entity.HasMany(a => a.PatientRiskFactors)
+                .WithOne(pa => pa.RiskFactor)
+                .HasForeignKey(pa => pa.RiskFactorId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<PatientRiskFactor>(entity =>
+        {
+            entity.ToTable("PatientRiskFactors");
+            entity.HasKey(pa => new { pa.PatientId, pa.RiskFactorId });
+
+            entity.HasOne(pa => pa.Patient)
+                .WithMany(p => p.RiskFactors)
+                .HasForeignKey(pa => pa.PatientId)
+                .IsRequired(false);
+            entity.HasOne(pa => pa.RiskFactor)
+                .WithMany(a => a.PatientRiskFactors)
+                .HasForeignKey(pa => pa.RiskFactorId);
+            entity.Property(pa => pa.DiagnosisDate)
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
+        });
+
+        modelBuilder.Entity<PatientVaccine>(entity =>
+        {
+            entity.ToTable("PatientVaccines");
+            entity.HasKey(pa => new { pa.PatientId, pa.VaccineId });
+
+            entity.HasOne(pa => pa.Patient)
+                .WithMany(p => p.Vaccines)
+                .HasForeignKey(pa => pa.PatientId)
+                .IsRequired(false);
+            entity.HasOne(pa => pa.Vaccine)
+                .WithMany(a => a.PatientVaccines)
+                .HasForeignKey(pa => pa.VaccineId);
+            entity.Property(pa => pa.AppliedDoses);
+            entity.Property(pa => pa.LastApplicationDate)
+                .IsRequired()
+                .HasDefaultValueSql("GETDATE()");
+        });
+
+        modelBuilder.Entity<Vaccine>(entity =>
+        {
+            entity.ToTable("Vaccines");
+            entity.HasKey(a => a.Id);
+
+            entity.Property(a => a.Disease)
+                .IsRequired();
+
+            entity.Property(a => a.Doses)
+                .IsRequired();
+
+            entity.Property(a => a.Laboratory)
+                .IsRequired();
+
+            entity.HasMany(a => a.PatientVaccines)
+                .WithOne(pa => pa.Vaccine)
+                .HasForeignKey(pa => pa.VaccineId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<HealthInsurance>(entity =>
+        {
+            entity.ToTable("HealthInsurances");
+            entity.HasKey(a => a.Id);
+
+            // ...
+        });
+
+        modelBuilder.Entity<MedicationCoverage>(entity =>
+        {
+            entity.ToTable("MedicationCoverages");
+            entity.HasKey(a => a.Id);
+
+            // ...
+        });
+
+        modelBuilder.Entity<MedicationPrescription>(entity =>
+        {
+            entity.ToTable("MedicationPrescriptions");
+            entity.HasKey(a => a.Id);
+
+            // ...
+        });
+
+        modelBuilder.Entity<Prescription>(entity =>
+        {
+            entity.ToTable("Prescriptions");
+            entity.HasKey(a => a.Id);
+
+            entity
+                .HasMany(k => k.PrescribedMedications)
+                .WithOne(k => k.Prescription)
+                .HasForeignKey(k => k.PrescriptionId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasMany(k => k.PrescribedAppointments)
+                .WithOne(k => k.Prescription)
+                .HasForeignKey(k => k.PrescriptionId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(p => p.ClinicalHistory)
+                    .WithOne(k => k.Prescription)
+                    .HasForeignKey<Prescription>(k => k.ClinicalHistoryId)
+                    .IsRequired(false)
+                    .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<Medication>(entity =>
+        {
+            entity.ToTable("Medications");
+            entity.HasKey(a => a.Id);
+
+            entity.Property(m => m.Concentration)
+                .HasColumnType("decimal(10, 2)");
+        });
+
+        modelBuilder.Entity<LabTest>(entity =>
+        {
+            entity.ToTable("LabTests");
+            entity.HasKey(a => a.Id);
+        });
+
+        modelBuilder.Entity<MedicationCoverage>(entity =>
+        {
+            entity.Property(mc => mc.CopayAmount)
                 .HasColumnType("decimal(10, 2)")
                 .IsRequired();
 
-            builder.Property(mc => mc.CoinsurancePercentage)
+            entity.Property(mc => mc.CoinsurancePercentage)
                 .HasColumnType("decimal(5, 2)")
                 .IsRequired();
         });
-        #endregion
 
-        #region Medication
-        modelBuilder.Entity<Medication>()
-            .Property(m => m.Concentration)
-            .HasColumnType("decimal(10, 2)");
-        #endregion
+        modelBuilder.Entity<DoctorHealthCenter>(entity =>
+        {
+            entity.ToTable("DoctorHealthCenters");
+            entity.HasKey(a => a.Id);
 
-        #region Patient
-        modelBuilder.Entity<Patient>()
-           .Property(p => p.Height)
-           .HasColumnType("decimal(5, 2)");
-        modelBuilder.Entity<Patient>()
-            .Property(p => p.Weight)
-            .HasColumnType("decimal(5, 2)"); ;
-        #endregion
+            entity.HasOne(pa => pa.Doctor)
+                            .WithMany(p => p.CurrentlyWorkingHealthCenters)
+                            .HasForeignKey(pa => pa.DoctorId)
+                            .IsRequired(false);
+            entity.HasOne(pa => pa.HealthCenter)
+                .WithMany(a => a.Doctors)
+                .HasForeignKey(pa => pa.HealthCenterId);
 
-        #endregion
+            entity.Property(e => e.EntryHour)
+                .HasConversion(
+                    v => TimeSpanToString(v),
+                    v => StringToTimeSpan(v)
+                );
 
-        #region Configurations
+            entity.Property(e => e.ExitHour)
+            .HasConversion(
+                v => TimeSpanToString(v),
+                v => StringToTimeSpan(v)
+            );
+        });
+
+        modelBuilder.Entity<MedicalSpecialty>(entity =>
+        {
+            entity.ToTable("MedicalSpecialities");
+            entity.HasKey(a => a.Id);
+
+            // ...
+        });
+
+        modelBuilder.Entity<DoctorMedicalSpecialty>(entity =>
+        {
+            entity.ToTable("DoctorMedicalSpecialities");
+            entity.HasKey(a => a.Id);
+
+            entity.HasOne(pa => pa.Doctor)
+                .WithMany(p => p.Specialties)
+                .HasForeignKey(pa => pa.DoctorId)
+                .IsRequired(false);
+            entity.HasOne(pa => pa.MedicalSpecialty)
+                .WithMany(a => a.Doctors)
+                .HasForeignKey(pa => pa.MedicalSpecialtyId);
+
+            // ...
+        });
+
+        modelBuilder.Entity<HealthInsurance>(entity =>
+        {
+            entity.ToTable("HealthInsurances");
+            entity.HasKey(a => a.Id);
+
+            entity.HasMany(k => k.MedicationCoverages)
+                .WithOne(k => k.HealthInsurance)
+                .HasForeignKey(k => k.HealthInsuranceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(k => k.SubscribedPatients)
+                .WithOne(k => k.HealthInsurance)
+                .HasForeignKey(k => k.HealthInsuranceId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<PatientHealthInsurance>(entity =>
+        {
+            entity.ToTable("PatientHealthInsurances");
+            entity.HasKey(pa => new { pa.PatientId, pa.HealthInsuranceId });
+            entity.HasOne(pa => pa.Patient)
+                .WithMany(p => p.HealthInsurances)
+                .HasForeignKey(pa => pa.PatientId)
+                .IsRequired(false);
+            entity.HasOne(pa => pa.HealthInsurance)
+                .WithMany(a => a.SubscribedPatients)
+                .HasForeignKey(pa => pa.HealthInsuranceId);
+            entity.Property(pa => pa.PolicyNumber)
+                .IsRequired();
+        });
+
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new PatientConfiguration());
+        modelBuilder.ApplyConfiguration(new AdminConfiguration());
+        modelBuilder.ApplyConfiguration(new DoctorConfiguration());
+        modelBuilder.ApplyConfiguration(new AssistantConfiguration());
 
         // Configuraciones relacionadas con el paciente y sus atributos
-        //modelBuilder.ApplyConfiguration(new PatientAllergyConfiguration());
-        //modelBuilder.ApplyConfiguration(new PatientDiscapacityConfiguration());
-        //modelBuilder.ApplyConfiguration(new PatientHealthInsuranceConfiguration());
-        //modelBuilder.ApplyConfiguration(new PatientIllnessConfiguration());
-        //modelBuilder.ApplyConfiguration(new PatientRiskFactorConfiguration());
-        //modelBuilder.ApplyConfiguration(new PatientVaccineConfiguration());
+        modelBuilder.ApplyConfiguration(new PatientAllergyConfiguration());
+        modelBuilder.ApplyConfiguration(new PatientDiscapacityConfiguration());
+        modelBuilder.ApplyConfiguration(new PatientHealthInsuranceConfiguration());
+        modelBuilder.ApplyConfiguration(new PatientIllnessConfiguration());
+        modelBuilder.ApplyConfiguration(new PatientRiskFactorConfiguration());
+        modelBuilder.ApplyConfiguration(new PatientVaccineConfiguration());
 
-        //// Configuraciones relacionadas con el historial clínico y prescripciones
-        //modelBuilder.ApplyConfiguration(new ClinicalHistoryConfiguration());
-        //modelBuilder.ApplyConfiguration(new PrescriptionConfiguration());
-        //modelBuilder.ApplyConfiguration(new MedicationPrescriptionConfiguration());
+        // Configuraciones relacionadas con el historial clínico y prescripciones
+        modelBuilder.ApplyConfiguration(new ClinicalHistoryConfiguration());
+        modelBuilder.ApplyConfiguration(new PrescriptionConfiguration());
+        modelBuilder.ApplyConfiguration(new MedicationPrescriptionConfiguration());
 
-        //// Configuraciones relacionadas con citas y servicios médicos
-        //modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
-        //modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
-        //modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
+        // Configuraciones relacionadas con citas y servicios médicos
+        modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+        modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
+        modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
 
-        //modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
-        //modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
-        //modelBuilder.ApplyConfiguration(new AppointmentPrescriptionConfiguration());
+        modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
+        modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
+        modelBuilder.ApplyConfiguration(new AppointmentPrescriptionConfiguration());
 
-        //// Configuraciones de entidades secundarias y auxiliares
-        //modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());
-        //modelBuilder.ApplyConfiguration(new LocationConfiguration());
-        //modelBuilder.ApplyConfiguration(new AllergyConfiguration());
-        //modelBuilder.ApplyConfiguration(new IllnessConfiguration());
-        //modelBuilder.ApplyConfiguration(new DiscapacityConfiguration());
-        //modelBuilder.ApplyConfiguration(new RiskFactorConfiguration());
-        //modelBuilder.ApplyConfiguration(new VaccineConfiguration());
+        // Configuraciones de entidades secundarias y auxiliares
+        modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());
+        modelBuilder.ApplyConfiguration(new LocationConfiguration());
+        modelBuilder.ApplyConfiguration(new AllergyConfiguration());
+        modelBuilder.ApplyConfiguration(new IllnessConfiguration());
+        modelBuilder.ApplyConfiguration(new DiscapacityConfiguration());
+        modelBuilder.ApplyConfiguration(new RiskFactorConfiguration());
+        modelBuilder.ApplyConfiguration(new VaccineConfiguration());
 
-        //// Configuraciones de laboratorios y medicamentos
-        //modelBuilder.ApplyConfiguration(new MedicationConfiguration());
-        //modelBuilder.ApplyConfiguration(new MedicationCoverageConfiguration());
-
-        #endregion
+        // Configuraciones de laboratorios y medicamentos
+        modelBuilder.ApplyConfiguration(new MedicationConfiguration());
+        modelBuilder.ApplyConfiguration(new MedicationCoverageConfiguration());
     }
 
     private static string TimeSpanToString(TimeSpan timeSpan)

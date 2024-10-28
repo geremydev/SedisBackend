@@ -14,11 +14,15 @@ internal sealed class AssistantRepository : RepositoryBase<Assistant>, IAssistan
 
     public async Task<IEnumerable<Assistant>> GetAllEntitiesAsync(bool trackChanges) =>
         await FindAll(trackChanges)
-                    .OrderBy(c => c.Id)
-                    .ToListAsync();
+                .Include(a => a.HealthCenter)
+                .Include(a => a.ApplicationUser)
+                .OrderBy(c => c.Id)
+                .ToListAsync();
 
     public async Task<Assistant> GetEntityAsync(Guid assistantId, bool trackChanges) =>
         await FindByCondition(c => c.Id.Equals(assistantId), trackChanges)
+                .Include(a => a.HealthCenter)
+                .Include(a => a.ApplicationUser)
                 .SingleOrDefaultAsync();
 
     public void CreateEntity(Assistant assistant) => Create(assistant);

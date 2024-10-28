@@ -6,5 +6,6 @@ public enum RolesEnum
     Doctor,
     Admin,
     SuperAdmin,
-    Assistant
+    Assistant,
+    Enroller
 }

@@ -10,4 +10,5 @@ public class PatientRiskFactor : IBaseEntity
     public Patient Patient { get; set; }
     public Guid RiskFactorId { get; set; }
     public RiskFactor RiskFactor { get; set; }
+    public DateTime? DiagnosisDate { get; set; }
 }

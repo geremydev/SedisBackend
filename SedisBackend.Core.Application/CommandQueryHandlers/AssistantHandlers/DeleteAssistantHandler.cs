@@ -18,7 +18,8 @@ internal sealed class DeleteAssistantHandler : IRequestHandler<DeleteAssistantCo
         if (assistant is null)
             throw new EntityNotFoundException(request.Id);
 
-        _repository.Assistant.DeleteEntity(assistant);
+        assistant.IsDeleted = true;
+        assistant.IsActive = false;
         await _repository.SaveAsync(cancellationToken);
     }
 }

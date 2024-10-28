@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Patients;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
+using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -26,16 +27,49 @@ internal sealed class PatchPatientHandler
     public async Task<(PatientForUpdateDto PatientToPatch, Patient PatientEntity)> Handle(
         PatchPatientCommand request, CancellationToken cancellationToken)
     {
-        var PatientEntity = await _repository.Patient.GetEntityAsync(request.Id, request.TrackChanges);
-        if (PatientEntity is null)
+        var patientEntity = await _repository.Patient.GetEntityAsync(request.Id, request.TrackChanges);
+
+        if (patientEntity is null)
             throw new EntityNotFoundException(request.Id);
 
-        var PatientToPatch = _mapper.Map<PatientForUpdateDto>(PatientEntity);
-        request.PatchDoc.ApplyTo(PatientToPatch);
+        var patientToPatch = _mapper.Map<PatientForUpdateDto>(patientEntity);
 
-        _mapper.Map(PatientToPatch, PatientEntity);
+        request.PatchDoc.ApplyTo(patientToPatch, (error) =>
+        {
+            throw new PatchRequestException($"Error applying patch: {error.ErrorMessage}");
+        });
+
+        _mapper.Map(patientToPatch, patientEntity);
+
+        if (patientEntity.ApplicationUser != null)
+        {
+            if (patientToPatch.FirstName != null)
+                patientEntity.ApplicationUser.FirstName = patientToPatch.FirstName;
+
+            if (patientToPatch.LastName != null)
+                patientEntity.ApplicationUser.LastName = patientToPatch.LastName;
+
+            if (patientToPatch.CardId != null)
+                patientEntity.ApplicationUser.CardId = patientToPatch.CardId;
+
+            if (patientToPatch.IsActive != null)
+                patientEntity.ApplicationUser.IsActive = patientToPatch.IsActive;
+
+            if (patientToPatch.Birthdate != null)
+                patientEntity.ApplicationUser.Birthdate = patientToPatch.Birthdate;
+
+            if (patientToPatch.Email != null)
+                patientEntity.ApplicationUser.Email = patientToPatch.Email;
+
+            if (patientToPatch.Sex != null)
+                patientEntity.ApplicationUser.Sex = Enum.Parse<SexEnum>(patientToPatch.Sex, true);
+
+            if (patientToPatch.PhoneNumber != null)
+                patientEntity.ApplicationUser.PhoneNumber = patientToPatch.PhoneNumber;
+        }
+
         await _repository.SaveAsync(cancellationToken);
 
-        return (PatientToPatch, PatientEntity);
+        return (patientToPatch, patientEntity);
     }
 }
