@@ -7,8 +7,11 @@ using SedisBackend.Core.Application.Helpers;
 using SedisBackend.Core.Domain.DTO.Error;
 using SedisBackend.Core.Domain.DTO.Identity.Authentication;
 using SedisBackend.Core.Domain.DTO.Shared;
+using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Entities.Users;
+using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Enums;
+using SedisBackend.Core.Domain.Interfaces.Repositories;
 using SedisBackend.Core.Domain.Interfaces.Services.Identity;
 using SedisBackend.Core.Domain.Interfaces.Services.Shared;
 using System.Text;
@@ -24,13 +27,14 @@ public class AuthenticationService : IAuthService
     private readonly IEmailService _emailServices;
     private readonly ICardValidationService _cardValidationService;
     private readonly RoleManager<IdentityRole<Guid>> _roleManager;
+    private readonly IRepositoryManager _repository;
 
     private readonly ISender _sender;
 
     public AuthenticationService(UserManager<User> userManager,
         SignInManager<User> signInManager, ISender sender, IEmailService emailServices,
         IMapper mapper, ITokenService tokenService,
-        ICardValidationService cardValidationService, RoleManager<IdentityRole<Guid>> roleManager)
+        ICardValidationService cardValidationService, RoleManager<IdentityRole<Guid>> roleManager, IRepositoryManager repositoryManager)
     {
         _sender = sender;
         _signInManager = signInManager;
@@ -40,6 +44,7 @@ public class AuthenticationService : IAuthService
         _tokenService = tokenService;
         _mapper = mapper;
         _cardValidationService = cardValidationService;
+        _repository = repositoryManager;
     }
 
     public async Task<AuthenticationResponse> AuthenticateAsync(AuthenticationRequest request)
@@ -133,6 +138,21 @@ public class AuthenticationService : IAuthService
             response.Errors.Add(new CustomError { Code = "REG04", Description = "An error occurred trying to register the user." });
             return response;
         }
+
+        var patientRole = await _userManager.AddToRoleAsync(user, RolesEnum.Patient.ToString());
+
+        var patientUser = await _userManager.Users.Where(u => u.CardId == request.CardId).FirstOrDefaultAsync();
+
+        var patientEntity = new Patient
+        {
+            Id = patientUser.Id,
+            IsActive = true,
+            IsDeleted = false,
+        };
+
+        _repository.Patient.CreateEntity(patientEntity);
+
+        await _repository.SaveAsync();
 
         // Assign role to the user
         if (await _roleManager.RoleExistsAsync(userRole.ToString()))
@@ -318,19 +338,24 @@ public class AuthenticationService : IAuthService
     //USER AUTHENTICATION
 
     //CHANGE USER STATUS
-    public async Task<ServiceResult> ChangeUserStatus(RegisterRequest request)
+    public async Task<ServiceResult> ChangeUserStatus(string cardId, bool isActive)
     {
         ServiceResult response = new();
 
-        var userget = await _userManager.FindByEmailAsync(request.Email.ToString());
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == cardId);
+        if (user == null)
         {
-            userget.IsActive = request.IsActive;
+            response.Errors.Add(new CustomError { Code = "CUS01", Description = "User not found." });
+            return response;
         }
-        var result = await _userManager.UpdateAsync(userget);
+
+        user.IsActive = isActive;
+        var result = await _userManager.UpdateAsync(user);
 
         if (!result.Succeeded)
         {
-            response.Errors.Add(new CustomError { Code = "CUS01", Description = $"There was an error while trying to update the user{userget.UserName}" });
+            response.Errors.Add(new CustomError { Code = "CUS02", Description = $"There was an error while trying to update the user {user.UserName}" });
+            return response;
         }
 
         response.Succeeded = true;
@@ -412,47 +437,310 @@ public class AuthenticationService : IAuthService
         return verificationUri;
     }
 
-    public Task<ServiceResult> AddRole(string CardId, Guid HealthCenterId, RolesEnum Role)
+    // Brahiam
+
+    public async Task<ServiceResult> AddRole(string cardId, Guid healthCenterId, RolesEnum role)
     {
-        throw new NotImplementedException();
+        var response = new ServiceResult();
+        using var transaction = await _repository.BeginTransactionAsync();
+
+        try
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == cardId);
+            if (user == null)
+            {
+                response.Errors.Add(new CustomError { Code = "ADR01", Description = "Usuario no encontrado." });
+                return response;
+            }
+
+            var hc = await _repository.HealthCenter.GetEntityAsync(healthCenterId, false);
+
+            if (hc == null)
+            {
+                response.Errors.Add(new CustomError { Code = "ADR02", Description = "Centro de salud no encontrado." });
+                return response;
+            }
+
+            // Agregar nuevo rol manteniendo el rol paciente
+            if (!await _userManager.IsInRoleAsync(user, role.ToString()))
+            {
+                var addResult = await _userManager.AddToRoleAsync(user, role.ToString());
+                if (!addResult.Succeeded)
+                {
+                    throw new Exception("Error al asignar rol");
+                }
+
+                // Crear entidad del rol
+                await CreateRoleEntity(user.Id, healthCenterId, role);
+            }
+
+            await transaction.CommitAsync();
+            response.Succeeded = true;
+            return response;
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            response.Errors.Add(new CustomError { Code = "ADR03", Description = ex.Message });
+            return response;
+        }
     }
 
-    #endregion
-    public async Task<ServiceResult> AddRole(string idCard, Guid healthCenterId, string role)
+    public async Task<ServiceResult> RemoveRole(string cardId, RolesEnum role)
+    {
+        var response = new ServiceResult();
+        using var transaction = await _repository.BeginTransactionAsync();
+
+        try
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == cardId);
+            if (user == null)
+            {
+                response.Errors.Add(new CustomError { Code = "RMR01", Description = "Usuario no encontrado." });
+                return response;
+            }
+
+            // No permitir remover rol paciente
+            if (role == RolesEnum.Patient)
+            {
+                response.Errors.Add(new CustomError { Code = "RMR02", Description = "No se puede remover el rol paciente." });
+                return response;
+            }
+
+            var removeResult = await _userManager.RemoveFromRoleAsync(user, role.ToString());
+            if (!removeResult.Succeeded)
+            {
+                throw new Exception("Error al remover rol");
+            }
+
+            // Marcar como eliminado en la tabla del rol
+            await DeactivateAndDeleteRoleEntity(user.Id, role);
+
+            await transaction.CommitAsync();
+            response.Succeeded = true;
+            return response;
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            response.Errors.Add(new CustomError { Code = "RMR03", Description = ex.Message });
+            return response;
+        }
+    }
+
+    public async Task<ServiceResult> ChangeRoleStatus(string cardId, RolesEnum role, bool isActive)
+    {
+        var response = new ServiceResult();
+        using var transaction = await _repository.BeginTransactionAsync();
+
+        try
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == cardId);
+            if (user == null)
+            {
+                response.Errors.Add(new CustomError { Code = "CRS01", Description = "Usuario no encontrado." });
+                return response;
+            }
+
+            // Actualizar estado en la tabla del rol
+            await UpdateRoleEntityStatus(user.Id, role, isActive);
+
+            await transaction.CommitAsync();
+            response.Succeeded = true;
+            return response;
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            response.Errors.Add(new CustomError { Code = "CRS02", Description = ex.Message });
+            return response;
+        }
+    }
+
+    private async Task CreateRoleEntity(Guid userId, Guid healthCenterId, RolesEnum role)
+    {
+        switch (role)
+        {
+            case RolesEnum.Patient:
+                _repository.Patient.CreateEntity(new Patient
+                {
+                    Id = userId,
+                    IsActive = true,
+                    IsDeleted = false,
+                });
+                break;
+
+            //case RolesEnum.Enroller:
+            //    _repository.Enroller.CreateEntity(new Patient
+            //    {
+            //        Id = userId,
+            //        IsActive = true,
+            //        IsDeleted = false,
+            //    });
+            //    break;
+
+            case RolesEnum.Doctor:
+
+                var dhc = new DoctorHealthCenter();
+
+                dhc.DoctorId = userId;
+                dhc.HealthCenterId = healthCenterId;
+
+                _repository.Doctor.CreateEntity(new Doctor
+                {
+                    Id = userId,
+                    IsActive = true,
+                    CurrentlyWorkingHealthCenters = { dhc },
+                    IsDeleted = false,
+                });
+
+                dhc.DoctorId = userId;
+
+                break;
+
+            case RolesEnum.Assistant:
+                _repository.Assistant.CreateEntity(new Assistant
+                {
+                    Id = userId,
+                    HealthCenterId = healthCenterId,
+                    IsActive = true,
+                    IsDeleted = false,
+                });
+                break;
+
+            case RolesEnum.Admin:
+                _repository.Admin.CreateEntity(new Admin
+                {
+                    Id = userId,
+                    HealthCenterId = healthCenterId,
+                    IsActive = true,
+                    IsDeleted = false,
+                });
+                break;
+        }
+    }
+
+    private async Task DeactivateAndDeleteRoleEntity(Guid userId, RolesEnum role)
+    {
+        switch (role)
+        {
+            case RolesEnum.Doctor:
+                var doctor = await _repository.Doctor.GetEntityAsync(userId, true);
+                if (doctor != null)
+                {
+                    doctor.IsActive = false;
+                    doctor.IsDeleted = true;
+                }
+                break;
+
+            case RolesEnum.Assistant:
+                var assistant = await _repository.Assistant.GetEntityAsync(userId, true);
+                if (assistant != null)
+                {
+                    assistant.IsActive = false;
+                    assistant.IsDeleted = true;
+                }
+                break;
+
+            case RolesEnum.Admin:
+                var admin = await _repository.Admin.GetEntityAsync(userId, true);
+                if (admin != null)
+                {
+                    admin.IsActive = false;
+                    admin.IsDeleted = true;
+                }
+                break;
+        }
+
+        await _repository.SaveAsync();
+    }
+
+    private async Task UpdateRoleEntityStatus(Guid userId, RolesEnum role, bool isActive)
+    {
+        switch (role)
+        {
+            case RolesEnum.Patient:
+                var patient = await _repository.Patient.GetEntityAsync(userId, true);
+                if (patient != null)
+                {
+                    patient.IsActive = isActive;
+                }
+                break;
+
+            case RolesEnum.Doctor:
+                var doctor = await _repository.Doctor.GetEntityAsync(userId, true);
+                if (doctor != null)
+                {
+                    doctor.IsActive = isActive;
+                }
+                break;
+
+            case RolesEnum.Assistant:
+                var assistant = await _repository.Assistant.GetEntityAsync(userId, true);
+                if (assistant != null)
+                {
+                    assistant.IsActive = isActive;
+                }
+                break;
+
+            case RolesEnum.Admin:
+                var admin = await _repository.Admin.GetEntityAsync(userId, true);
+                if (admin != null)
+                {
+                    admin.IsActive = isActive;
+                }
+                break;
+        }
+
+        await _repository.SaveAsync();
+    }
+
+    public async Task<ServiceResult> DeleteUser(string cardId)
     {
         ServiceResult response = new();
 
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == idCard);
-
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == cardId);
         if (user == null)
         {
-            response.Errors.Add(new CustomError { Code = "ADR01", Description = "User with specified CardId not found." });
+            response.Errors.Add(new CustomError { Code = "DEL01", Description = "User not found." });
             return response;
         }
 
-        if (!await _roleManager.RoleExistsAsync(role))
+        var result = await _userManager.DeleteAsync(user);
+        if (!result.Succeeded)
         {
-            response.Errors.Add(new CustomError { Code = "ADR02", Description = $"Role '{role}' does not exist." });
-            return response;
-        }
-
-        if (!await _userManager.IsInRoleAsync(user, role))
-        {
-            var roleResult = await _userManager.AddToRoleAsync(user, role);
-
-            if (!roleResult.Succeeded)
-            {
-                response.Errors.Add(new CustomError { Code = "ADR03", Description = $"Failed to assign role '{role}' to the user." });
-                return response;
-            }
-        }
-        else
-        {
-            response.Errors.Add(new CustomError { Code = "ADR04", Description = $"Role '{role}' is already assigned to the user." });
+            response.Errors.Add(new CustomError { Code = "DEL02", Description = $"There was an error while trying to delete the user {user.UserName}" });
             return response;
         }
 
         response.Succeeded = true;
         return response;
     }
+
+    public async Task<ServiceResult> RestoreUser(string cardId)
+    {
+        // Esta es una implementación básica asumiendo un soft delete
+        ServiceResult response = new();
+
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == cardId);
+        if (user == null)
+        {
+            response.Errors.Add(new CustomError { Code = "RES01", Description = "User not found." });
+            return response;
+        }
+
+        user.IsActive = true;
+        var result = await _userManager.UpdateAsync(user);
+
+        if (!result.Succeeded)
+        {
+            response.Errors.Add(new CustomError { Code = "RES02", Description = $"There was an error while trying to restore the user {user.UserName}" });
+            return response;
+        }
+
+        response.Succeeded = true;
+        return response;
+    }
+
+    #endregion
 }

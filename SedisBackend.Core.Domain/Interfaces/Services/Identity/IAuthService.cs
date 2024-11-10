@@ -21,6 +21,14 @@ public interface IAuthService
     Task SingOutAsync();
     Task<DtoAccount> GetByIdAsync(string UserId);
     //Task<ServiceResult> UpdateUserAsync(RegisterRequest request);
-    Task<ServiceResult> AddRole(string CardId, Guid HealthCenterId, RolesEnum Role);
     Task<string> RefreshTokenAsync(string token, string refreshToken);
+
+
+
+    Task<ServiceResult> AddRole(string cardId, Guid healthCenterId, RolesEnum role);
+    Task<ServiceResult> RemoveRole(string cardId, RolesEnum role);
+    Task<ServiceResult> ChangeRoleStatus(string cardId, RolesEnum role, bool isActive);
+    Task<ServiceResult> ChangeUserStatus(string cardId, bool isActive);
+    Task<ServiceResult> DeleteUser(string cardId);
+    Task<ServiceResult> RestoreUser(string cardId);
 }
