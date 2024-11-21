@@ -42,7 +42,8 @@ internal sealed class CreateAdminHandler : IRequestHandler<CreateAdminCommand, A
         var adminEntity = new Admin
         {
             Id             = request.admin.UserId,
-            HealthCenterId = request.admin.HealthCenterId
+            HealthCenterId = request.admin.HealthCenterId,
+            IsActive       = true
         };
 
         _repository.Admin.CreateEntity(adminEntity);

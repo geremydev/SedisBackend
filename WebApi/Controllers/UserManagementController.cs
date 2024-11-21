@@ -1,5 +1,9 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using SedisBackend.Core.Application.CommandQueryHandlers.AdminHandlers;
+using SedisBackend.Core.Domain.DTO.Entities.Users;
+using SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 using SedisBackend.Core.Domain.DTO.Identity.Authentication;
 using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Interfaces.Services.Identity;
@@ -59,4 +63,12 @@ public class UserManagementController : ControllerBase
         return result.Succeeded ? NoContent() : BadRequest(result.Errors);
     }
 
+    [HttpPost("change-user-status")]
+    [SwaggerOperation(Summary = "Cambiar estado de usuario",
+        Description = "Activa o inactiva al usuario")]
+    public async Task<IActionResult> ChangeUserStatus(Guid Id, bool isActive)
+    {
+        var result = await _authService.ChangeUserStatus(Id, isActive);
+        return result.Succeeded ? NoContent() : BadRequest(result.Errors);
+    }
 }

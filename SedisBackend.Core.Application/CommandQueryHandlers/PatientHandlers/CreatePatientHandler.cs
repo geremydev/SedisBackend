@@ -52,6 +52,7 @@ internal sealed class CreatePatientHandler : IRequestHandler<CreatePatientComman
             RiskFactors = new List<PatientRiskFactor>(),
             Vaccines = new List<PatientVaccine>(),
             FamilyHistories = new List<FamilyHistory>(),
+            IsActive = true
         };
 
         _repository.Patient.CreateEntity(patientEntity);

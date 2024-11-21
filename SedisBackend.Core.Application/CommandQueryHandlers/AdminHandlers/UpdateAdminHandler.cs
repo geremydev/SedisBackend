@@ -34,9 +34,15 @@ internal sealed class UpdateAdminHandler : IRequestHandler<UpdateAdminCommand, U
             throw new EntityNotFoundException(request.Id);
 
         var adminEntity = await _repository.Admin.GetEntityAsync(request.Id, true);
-
-
         adminEntity.HealthCenterId = request.Admin.HealthCenterId;
+        if (adminEntity.IsActive != request.Admin.IsActive)
+        {
+            adminEntity.IsActive = request.Admin.IsActive;
+            if (adminEntity.IsActive)
+                await _userManager.AddToRoleAsync(existingUser, "Admin");
+            else
+                await _userManager.RemoveFromRoleAsync(existingUser, "Admin");
+        }
 
         await _repository.SaveAsync(cancellationToken);
         await transaction.CommitAsync(cancellationToken);

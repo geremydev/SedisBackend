@@ -1,6 +1,8 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 
-public record DoctorForUpdateDto : BaseUserForUpdateDto
+public record DoctorForUpdateDto
 {
+    public bool IsActive { get; set; }
     public string LicenseNumber { get; set; }
+    public ICollection<Guid> CurrentlyWorkingHealthCenters { get; set; }
 }

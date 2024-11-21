@@ -33,31 +33,20 @@ internal sealed class UpdateDoctorHandler : IRequestHandler<UpdateDoctorCommand,
         if (existingUser is null)
             throw new EntityNotFoundException(request.Id);
 
-        SexEnum sex;
-
-        if (Enum.TryParse(request.Doctor.Sex.ToString(), out sex))
-        {
             var doctorEntity = await _repository.Doctor.GetEntityAsync(request.Id, true);
 
-            doctorEntity.ApplicationUser.FirstName = request.Doctor.FirstName;
-            doctorEntity.ApplicationUser.LastName = request.Doctor.LastName;
-            doctorEntity.ApplicationUser.CardId = request.Doctor.CardId;
-            doctorEntity.ApplicationUser.IsActive = request.Doctor.IsActive;
-            doctorEntity.ApplicationUser.Birthdate = request.Doctor.Birthdate;
-            doctorEntity.ApplicationUser.Sex = sex;
-            doctorEntity.ApplicationUser.Email = request.Doctor.Email;
-            doctorEntity.ApplicationUser.EmailConfirmed = false;
-            doctorEntity.ApplicationUser.PhoneNumber = request.Doctor.PhoneNumber;
-            doctorEntity.ApplicationUser.PhoneNumberConfirmed = false;
-            doctorEntity.ApplicationUser.ImageUrl = request.Doctor.ImageUrl;
+            if (doctorEntity.IsActive != request.Doctor.IsActive)
+            {
+                doctorEntity.IsActive = request.Doctor.IsActive;
+                if (doctorEntity.IsActive)
+                    await _userManager.AddToRoleAsync(existingUser, "Doctor");
+                else
+                    await _userManager.RemoveFromRoleAsync(existingUser, "Doctor");
+            }
+        doctorEntity.ApplicationUser.PhoneNumberConfirmed = false;
 
             await _repository.SaveAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
-        }
-        else
-        {
-            throw new ArgumentException("Invalid sex value");
-        }
 
         return Unit.Value;
     }

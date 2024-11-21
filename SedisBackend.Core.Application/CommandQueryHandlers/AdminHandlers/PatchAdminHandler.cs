@@ -57,22 +57,21 @@ internal sealed class PatchAdminHandler
         // Update the nested ApplicationUser properties if they are not null
         if (adminEntity.ApplicationUser != null)
         {
-            
-
-            if (adminToPatch.IsActive != null)
+            if (adminEntity.IsActive != adminToPatch.IsActive)
             {
-                if (adminEntity.IsActive == true && adminToPatch.IsActive == false)
-                {
-                    adminEntity.IsActive = adminToPatch.IsActive;
+                adminEntity.IsActive = adminToPatch.IsActive;
 
-                    var currentUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == adminEntity.Id, cancellationToken);
+                var currentUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == adminEntity.Id, cancellationToken);
 
+                if (adminEntity.IsActive)
+                    await _userManager.AddToRoleAsync(currentUser, "Admin");
+                else
                     await _userManager.RemoveFromRoleAsync(currentUser, "Admin");
-                }
             }
+
             if(adminToPatch.HealthCenterId != null)
             {
-                //adminEntity.ApplicationUser.Health
+                adminEntity.HealthCenterId = adminToPatch.HealthCenterId;
             }
         }
 

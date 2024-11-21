@@ -1,7 +1,10 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Assistants;
+using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
@@ -17,18 +20,19 @@ internal sealed class PatchAssistantHandler
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
-
-    public PatchAssistantHandler(IRepositoryManager repository, IMapper mapper)
+    private readonly UserManager<User> _userManager;
+    public PatchAssistantHandler(IRepositoryManager repository, IMapper mapper, UserManager<User> userManager)
     {
         _repository = repository;
         _mapper = mapper;
+        _userManager = userManager;
     }
 
     public async Task<(AssistantForUpdateDto AssistantToPatch, Assistant AssistantEntity)> Handle(
         PatchAssistantCommand request, CancellationToken cancellationToken)
     {
         var assistantEntity = await _repository.Assistant.GetEntityAsync(request.Id, request.TrackChanges);
-
+        var originalIsActive = assistantEntity.IsActive;
         if (assistantEntity is null)
             throw new EntityNotFoundException(request.Id);
 
@@ -40,32 +44,24 @@ internal sealed class PatchAssistantHandler
         });
 
         _mapper.Map(assistantToPatch, assistantEntity);
+        assistantEntity.IsActive = originalIsActive;
 
         if (assistantEntity.ApplicationUser != null)
         {
-            if (assistantToPatch.FirstName != null)
-                assistantEntity.ApplicationUser.FirstName = assistantToPatch.FirstName;
+            if (assistantEntity.IsActive != null)
+            {
+                if (assistantEntity.IsActive != assistantToPatch.IsActive)
+                {
+                    assistantEntity.IsActive = assistantToPatch.IsActive;
 
-            if (assistantToPatch.LastName != null)
-                assistantEntity.ApplicationUser.LastName = assistantToPatch.LastName;
+                    var currentUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == assistantEntity.Id, cancellationToken);
 
-            if (assistantToPatch.CardId != null)
-                assistantEntity.ApplicationUser.CardId = assistantToPatch.CardId;
-
-            if (assistantToPatch.IsActive != null)
-                assistantEntity.ApplicationUser.IsActive = assistantToPatch.IsActive;
-
-            if (assistantToPatch.Birthdate != null)
-                assistantEntity.ApplicationUser.Birthdate = assistantToPatch.Birthdate;
-
-            if (assistantToPatch.Email != null)
-                assistantEntity.ApplicationUser.Email = assistantToPatch.Email;
-
-            if (assistantToPatch.Sex != null)
-                assistantEntity.ApplicationUser.Sex = Enum.Parse<SexEnum>(assistantToPatch.Sex, true);
-
-            if (assistantToPatch.PhoneNumber != null)
-                assistantEntity.ApplicationUser.PhoneNumber = assistantToPatch.PhoneNumber;
+                    if(assistantEntity.IsActive) 
+                        await _userManager.AddToRoleAsync(currentUser, "Assistant");
+                    else
+                        await _userManager.RemoveFromRoleAsync(currentUser, "Assistant");
+                }   
+            }
         }
 
         await _repository.SaveAsync(cancellationToken);

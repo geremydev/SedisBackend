@@ -33,32 +33,27 @@ internal sealed class UpdatePatientHandler : IRequestHandler<UpdatePatientComman
         if (existingUser is null)
             throw new EntityNotFoundException(request.Id);
 
-        SexEnum sex;
-
-        if (Enum.TryParse(request.Patient.Sex.ToString(), out sex))
-        {
             var patientEntity = await _repository.Patient.GetEntityAsync(request.Id, true);
+            
+            patientEntity.BloodType = request.Patient.BloodType;
+            patientEntity.EmergencyContactName = request.Patient.EmergencyContactName;
+            patientEntity.EmergencyContactPhone = request.Patient.EmergencyContactPhone;
+            patientEntity.Height = request.Patient.Height;
+            patientEntity.Weight = request.Patient.Weight;
+            patientEntity.PrimaryCarePhysicianId = request.Patient.PrimaryCarePhysicianId;
 
-            patientEntity.ApplicationUser.FirstName = request.Patient.FirstName;
-            patientEntity.ApplicationUser.LastName = request.Patient.LastName;
-            patientEntity.ApplicationUser.CardId = request.Patient.CardId;
-            patientEntity.ApplicationUser.IsActive = request.Patient.IsActive;
-            patientEntity.ApplicationUser.Birthdate = request.Patient.Birthdate;
-            patientEntity.ApplicationUser.Sex = sex;
-            patientEntity.ApplicationUser.Email = request.Patient.Email;
-            patientEntity.ApplicationUser.EmailConfirmed = false;
-            patientEntity.ApplicationUser.PhoneNumber = request.Patient.PhoneNumber;
-            patientEntity.ApplicationUser.PhoneNumberConfirmed = false;
-            patientEntity.ApplicationUser.ImageUrl = request.Patient.ImageUrl;
+            if (patientEntity.IsActive != request.Patient.IsActive)
+            {
+                patientEntity.IsActive = request.Patient.IsActive;
+                if (patientEntity.IsActive)
+                    await _userManager.AddToRoleAsync(existingUser, "Patient");
+                else
+                    await _userManager.RemoveFromRoleAsync(existingUser, "Patient");
+            }
 
             await _repository.SaveAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
-        }
-        else
-        {
-            throw new ArgumentException("Invalid sex value");
-        }
-
+        
         return Unit.Value;
     }
 }

@@ -1,7 +1,10 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
+using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
@@ -17,18 +20,19 @@ internal sealed class PatchDoctorHandler
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
-
-    public PatchDoctorHandler(IRepositoryManager repository, IMapper mapper)
+    private readonly UserManager<User> _userManager;
+    public PatchDoctorHandler(IRepositoryManager repository, IMapper mapper, UserManager<User> userManager)
     {
         _repository = repository;
         _mapper = mapper;
+        _userManager = userManager;
     }
 
     public async Task<(DoctorForUpdateDto DoctorToPatch, Doctor DoctorEntity)> Handle(
         PatchDoctorCommand request, CancellationToken cancellationToken)
     {
         var doctorEntity = await _repository.Doctor.GetEntityAsync(request.Id, request.TrackChanges);
-
+        var originalIsActive = doctorEntity.IsActive;
         if (doctorEntity is null)
             throw new EntityNotFoundException(request.Id);
 
@@ -40,32 +44,22 @@ internal sealed class PatchDoctorHandler
         });
 
         _mapper.Map(doctorToPatch, doctorEntity);
-
+        doctorEntity.IsActive = originalIsActive;
         if (doctorEntity.ApplicationUser != null)
         {
-            if (doctorToPatch.FirstName != null)
-                doctorEntity.ApplicationUser.FirstName = doctorToPatch.FirstName;
-
-            if (doctorToPatch.LastName != null)
-                doctorEntity.ApplicationUser.LastName = doctorToPatch.LastName;
-
-            if (doctorToPatch.CardId != null)
-                doctorEntity.ApplicationUser.CardId = doctorToPatch.CardId;
-
             if (doctorToPatch.IsActive != null)
-                doctorEntity.ApplicationUser.IsActive = doctorToPatch.IsActive;
+            {
+                if (doctorEntity.IsActive != doctorToPatch.IsActive)
+                {
+                    doctorEntity.IsActive = doctorToPatch.IsActive;
 
-            if (doctorToPatch.Birthdate != null)
-                doctorEntity.ApplicationUser.Birthdate = doctorToPatch.Birthdate;
-
-            if (doctorToPatch.Email != null)
-                doctorEntity.ApplicationUser.Email = doctorToPatch.Email;
-
-            if (doctorToPatch.Sex != null)
-                doctorEntity.ApplicationUser.Sex = Enum.Parse<SexEnum>(doctorToPatch.Sex, true);
-
-            if (doctorToPatch.PhoneNumber != null)
-                doctorEntity.ApplicationUser.PhoneNumber = doctorToPatch.PhoneNumber;
+                    var currentUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == doctorEntity.Id, cancellationToken);
+                    if(doctorEntity.IsActive)
+                        await _userManager.AddToRoleAsync(currentUser, "Doctor");
+                    else
+                        await _userManager.RemoveFromRoleAsync(currentUser, "Doctor");
+                }
+            }
         }
 
         await _repository.SaveAsync(cancellationToken);

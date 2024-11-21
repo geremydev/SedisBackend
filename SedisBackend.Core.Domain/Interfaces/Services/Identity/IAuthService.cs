@@ -1,4 +1,6 @@
-﻿using SedisBackend.Core.Domain.DTO.Error;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using SedisBackend.Core.Domain.DTO.Entities.Users;
+using SedisBackend.Core.Domain.DTO.Error;
 using SedisBackend.Core.Domain.DTO.Identity.Authentication;
 using SedisBackend.Core.Domain.Enums;
 
@@ -9,7 +11,6 @@ public interface IAuthService
     //Task<IdentityResult> RegisterUser(RegisterRequest registerRequest);
     //Task<bool> ValidateUser(AuthenticationRequest authenticationRequest);
     //Task<JwtSecurityToken> CreateToken(User user);
-    Task<ServiceResult> ChangeUserStatus(RegisterRequest request);
     Task<DtoAccount> GetByEmail(string Email);
     Task Remove(DtoAccount account);
     Task<List<DtoAccount>> GetAllUsers();
@@ -28,8 +29,9 @@ public interface IAuthService
     Task<ServiceResult> AddRole(string cardId, Guid healthCenterId, RolesEnum role);
     Task<ServiceResult> RemoveRole(string cardId, RolesEnum role);
     Task<ServiceResult> ChangeRoleStatus(string cardId, RolesEnum role, bool isActive);
-    Task<ServiceResult> ChangeUserStatus(string cardId, bool isActive);
+    Task<ServiceResult> ChangeUserStatus(Guid Id, bool isActive);
     Task<ServiceResult> DeleteUser(string cardId);
     Task<ServiceResult> RestoreUser(string cardId);
     Task<ServiceResult> CreateUser(CreateUserRequest request);
+    //Task<ServiceResult> Patch(JsonPatchDocument<BaseUserForUpdateDto> patchDoc, Guid id);
 }

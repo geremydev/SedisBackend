@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Application.Helpers;
+using SedisBackend.Core.Domain.DTO.Entities.Users;
 using SedisBackend.Core.Domain.DTO.Error;
 using SedisBackend.Core.Domain.DTO.Identity.Authentication;
 using SedisBackend.Core.Domain.DTO.Shared;
@@ -59,7 +61,14 @@ public class AuthenticationService : IAuthService
                 Error = "Invalid identification number or password."
             };
         }
-
+        if(user != null && user.IsActive == false)
+        {
+            return new AuthenticationResponse
+            {
+                Succeeded = false,
+                Error = "User inactivated, please contact an Admin."
+            };
+        }
         var token = await _tokenService.CreateToken(user);
         var refreshToken = _tokenService.GenerateRefreshToken().Token;
 
@@ -338,11 +347,11 @@ public class AuthenticationService : IAuthService
     //USER AUTHENTICATION
 
     //CHANGE USER STATUS
-    public async Task<ServiceResult> ChangeUserStatus(string cardId, bool isActive)
+    public async Task<ServiceResult> ChangeUserStatus(Guid Id, bool isActive)
     {
         ServiceResult response = new();
 
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == cardId);
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == Id);
         if (user == null)
         {
             response.Errors.Add(new CustomError { Code = "CUS01", Description = "User not found." });
@@ -350,6 +359,35 @@ public class AuthenticationService : IAuthService
         }
 
         user.IsActive = isActive;
+
+        if(user.IsActive == false) //Si se inactiva el user entonces inactiva todos los roles que tiene asignado
+        {
+            var userRoles = (await _userManager.GetRolesAsync(user)).ToList();
+            foreach (var role in userRoles) 
+            {
+                switch (role)
+                {
+                    case "Admin":
+                        var admin = await _repository.Admin.GetEntityAsync(user.Id, true);
+                        admin.IsActive = false;
+                        break;
+                    case "Assistant":
+                        var assistant = await _repository.Assistant.GetEntityAsync(user.Id, true);
+                        assistant.IsActive = false;
+                        break;
+                    case "Patient":
+                        var patient = await _repository.Patient.GetEntityAsync(user.Id, true);
+                        patient.IsActive = false;
+                        break;
+                    case "Doctor":
+                        var doctor = await _repository.Doctor.GetEntityAsync(user.Id, true);
+                        doctor.IsActive = false;
+                        break;
+                }
+            }
+            await _repository.SaveAsync();
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
+        }
         var result = await _userManager.UpdateAsync(user);
 
         if (!result.Succeeded)
@@ -786,11 +824,68 @@ public class AuthenticationService : IAuthService
         response.Succeeded = true;
         return response;
     }
-
-    public Task<ServiceResult> ChangeUserStatus(RegisterRequest request)
+/*
+    public async Task<ServiceResult> Patch(Guid Id, BaseUserForUpdateDto dto)
     {
-        throw new NotImplementedException();
-    }
+        var result = new ServiceResult() { Succeeded = true };
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == Id);
+        if (user == null)
+        {
+            throw new ArgumentException("User not found");
+        }
+        // Update user properties if they are not null or empty
+        if (!string.IsNullOrWhiteSpace(dto.FirstName))
+            user.FirstName = dto.FirstName;
+        if (!string.IsNullOrWhiteSpace(dto.LastName))
+            user.LastName = dto.LastName;
+        if (!string.IsNullOrWhiteSpace(dto.Email))
+            user.Email = dto.Email;
+        if (!string.IsNullOrWhiteSpace(dto.PhoneNumber))
+            user.PhoneNumber = dto.PhoneNumber;
+        if (!string.IsNullOrWhiteSpace(dto.ImageUrl))
+            user.ImageUrl = dto.ImageUrl;
+        if (dto.IsActive != null)
+        {
+            if (user.IsActive != dto.IsActive)
+            {
+                if(dto.IsActive == false)
+                {
+                    var roles = (await _userManager.GetRolesAsync(user)).ToList();
+                    
+                }
+            }
+        }
+            
+        if (dto.Birthdate != default)
+            user.Birthdate = dto.Birthdate;
+        if (!string.IsNullOrWhiteSpace(dto.Sex))
+            if (dto.Sex == "m")
+                user.Sex = SexEnum.M;
+            else
+                user.Sex = SexEnum.F;
+        *//*// Update password if provided
+        if (!string.IsNullOrWhiteSpace(dto.Password))
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _userManager.ResetPasswordAsync(user, token, dto.Password);
+        }*//*
+        var data = await _userManager.UpdateAsync(user);
+        if (!data.Succeeded)
+        {
+            result.Succeeded = false;
+            result.Errors = new List<CustomError>();
+            foreach (var item in data.Errors)
+            {
+                result.Errors.Add(
+                    new CustomError()
+                    {
+                        Code = item.Code,
+                        Description = item.Description
+                    });
+            }
+        }
+        return result;
+    }*/
 
     #endregion
 }

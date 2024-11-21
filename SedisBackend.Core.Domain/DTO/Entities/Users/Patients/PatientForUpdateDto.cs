@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Users.Patients;
 
-public record PatientForUpdateDto : BaseUserForUpdateDto
+public record PatientForUpdateDto
 {
     public string BloodType { get; set; }
     public string? BloodTypeLabResultURl { get; set; }
@@ -9,4 +9,5 @@ public record PatientForUpdateDto : BaseUserForUpdateDto
     public string? EmergencyContactName { get; set; }
     public string? EmergencyContactPhone { get; set; }
     public Guid? PrimaryCarePhysicianId { get; set; }
+    public bool IsActive { get; set; }
 }

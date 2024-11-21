@@ -27,6 +27,7 @@ using SedisBackend.Core.Domain.Entities.Models.Products;
 using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
+using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Medical_History.Family_History;
@@ -321,6 +322,15 @@ public class GeneralProfile : Profile
 
         #region Users
 
+        CreateMap<User, BaseUserForUpdateDto>()
+            .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex.ToString()))
+            .ReverseMap()
+            .ForMember(dest => dest.Sex, opt => opt.MapFrom(src =>
+                src.Sex == "m" ? SexEnum.M :
+                src.Sex == "f" ? SexEnum.F :
+                SexEnum.M));
+
+
         #region Patients
         CreateMap<Patient, PatientDto>()
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.ApplicationUser.FirstName))
@@ -375,13 +385,6 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());
 
         CreateMap<Doctor, DoctorForUpdateDto>()
-            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.ApplicationUser.FirstName))
-            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.ApplicationUser.LastName))
-            .ForMember(dest => dest.CardId, opt => opt.MapFrom(src => src.ApplicationUser.CardId))
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
-            .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.ApplicationUser.Birthdate))
-            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.ApplicationUser.PhoneNumber))
-            .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.ApplicationUser.Sex.ToString()))
             .ReverseMap()
             .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());
         #endregion
@@ -470,13 +473,6 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());
 
         CreateMap<Assistant, AssistantForUpdateDto>()
-            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.ApplicationUser.FirstName))
-            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.ApplicationUser.LastName))
-            .ForMember(dest => dest.CardId, opt => opt.MapFrom(src => src.ApplicationUser.CardId))
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
-            .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.ApplicationUser.Birthdate))
-            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.ApplicationUser.PhoneNumber))
-            .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.ApplicationUser.Sex.ToString()))
             .ForMember(dest => dest.HealthCenterId, opt => opt.MapFrom(src => src.HealthCenterId))
             .ReverseMap()
             .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());

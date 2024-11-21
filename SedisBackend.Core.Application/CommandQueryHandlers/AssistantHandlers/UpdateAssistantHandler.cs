@@ -33,32 +33,15 @@ internal sealed class UpdateAssistantHandler : IRequestHandler<UpdateAssistantCo
         if (existingUser is null)
             throw new EntityNotFoundException(request.Id);
 
-        SexEnum sex;
-
-        if (Enum.TryParse(request.Assistant.Sex.ToString(), out sex))
+        var asisstantEntity = await _repository.Assistant.GetEntityAsync(request.Id, true);
+        asisstantEntity.HealthCenterId = request.Assistant.HealthCenterId;
+        if(asisstantEntity.IsActive != request.Assistant.IsActive)
         {
-            var assistantEntity = await _repository.Assistant.GetEntityAsync(request.Id, true);
-
-            assistantEntity.ApplicationUser.FirstName = request.Assistant.FirstName;
-            assistantEntity.ApplicationUser.LastName = request.Assistant.LastName;
-            assistantEntity.ApplicationUser.CardId = request.Assistant.CardId;
-            assistantEntity.ApplicationUser.IsActive = request.Assistant.IsActive;
-            assistantEntity.ApplicationUser.Birthdate = request.Assistant.Birthdate;
-            assistantEntity.ApplicationUser.Sex = sex;
-            assistantEntity.ApplicationUser.Email = request.Assistant.Email;
-            assistantEntity.ApplicationUser.EmailConfirmed = false;
-            assistantEntity.ApplicationUser.PhoneNumber = request.Assistant.PhoneNumber;
-            assistantEntity.ApplicationUser.PhoneNumberConfirmed = false;
-            assistantEntity.ApplicationUser.ImageUrl = request.Assistant.ImageUrl;
-
-            assistantEntity.HealthCenterId = request.Assistant.HealthCenterId;
-
-            await _repository.SaveAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
-        }
-        else
-        {
-            throw new ArgumentException("Invalid sex value");
+            asisstantEntity.IsActive = request.Assistant.IsActive;
+            if (asisstantEntity.IsActive)
+                await _userManager.AddToRoleAsync(existingUser, "Assistant");
+            else
+                await _userManager.RemoveFromRoleAsync(existingUser, "Assistant");
         }
 
         return Unit.Value;
