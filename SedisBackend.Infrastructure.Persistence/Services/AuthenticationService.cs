@@ -396,6 +396,51 @@ public class AuthenticationService : IAuthService
         return response;
     }
 
+    public async Task<ServiceResult> CreateUser(CreateUserRequest request)
+    {
+        ServiceResult response = new();
+        // Create the new user
+        var user = new User
+        {
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            CardId = request.CardId,
+            Birthdate = request.Birthdate,
+            Sex = request.Sex == "m" ? SexEnum.M : SexEnum.F,
+            ImageUrl = request.ImageUrl,
+            UserName = request.UserName,
+            EmailConfirmed = false,
+            PhoneNumberConfirmed = false,
+            TwoFactorEnabled = false,
+            LockoutEnabled = false,
+            SecurityStamp = Guid.NewGuid().ToString(),
+            Email = request.Email,
+            IsActive = request.IsActive,
+            PhoneNumber = request.PhoneNumber,
+        };
+
+        var result = await _userManager.CreateAsync(user, request.Password);
+
+        if (!result.Succeeded)
+        {
+            response.Errors.Add(new CustomError { Code = "REG04", Description = "An error occurred trying to register the user." });
+            return response;
+        }
+
+
+        // Send email verification
+        var verificationURI = await SendVerificationUri(user, "https://localhost:7254/");
+        await _emailServices.SendAsync(new EmailRequest
+        {
+            To = user.Email,
+            Body = $"Please confirm your account by visiting this URL: {verificationURI}",
+            Subject = "Confirm registration"
+        });
+
+        response.Succeeded = true;
+        return response;
+    }
+
 
     //REGISTER USER
 
@@ -740,6 +785,11 @@ public class AuthenticationService : IAuthService
 
         response.Succeeded = true;
         return response;
+    }
+
+    public Task<ServiceResult> ChangeUserStatus(RegisterRequest request)
+    {
+        throw new NotImplementedException();
     }
 
     #endregion

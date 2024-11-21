@@ -34,67 +34,35 @@ internal sealed class CreatePatientHandler : IRequestHandler<CreatePatientComman
     {
         using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
-        var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == request.patient.CardId || u.PhoneNumber == request.patient.PhoneNumber);
+        var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.patient.UserId);
 
-        if (existingUser != null)
+        if (existingUser == null)
         {
-            throw new UserExistsException(existingUser.CardId);
+            throw new UserNotFoundException(request.patient.UserId.ToString());
         }
 
-        SexEnum sex;
-
-        if (Enum.TryParse<SexEnum>(request.patient.Sex.ToString(), out sex))
+        var patientEntity = new Patient
         {
-            var userEntity = new User
-            {
-                FirstName = request.patient.FirstName,
-                LastName = request.patient.LastName,
-                CardId = request.patient.CardId,
-                IsActive = true,
-                Birthdate = request.patient.Birthdate,
-                Sex = sex,
-                UserName = null,
-                Email = request.patient.Email,
-                PhoneNumber = request.patient.PhoneNumber,
-                EmailConfirmed = false,
-                PhoneNumberConfirmed = false,
-                ImageUrl = request.patient.ImageUrl
-            };
+            Id = request.patient.UserId,
+            ClinicalHistories = new List<ClinicalHistory>(),
+            Appointments = new List<Appointment>(),
+            Allergies = new List<PatientAllergy>(),
+            Illnesses = new List<PatientIllness>(),
+            Discapacities = new List<PatientDiscapacity>(),
+            RiskFactors = new List<PatientRiskFactor>(),
+            Vaccines = new List<PatientVaccine>(),
+            FamilyHistories = new List<FamilyHistory>(),
+        };
 
-            var userCreationResult = await _userManager.CreateAsync(userEntity, request.patient.Password);
+        _repository.Patient.CreateEntity(patientEntity);
 
-            if (!userCreationResult.Succeeded)
-            {
-                var errorMessages = string.Join(", ", userCreationResult.Errors.Select(e => e.Description));
-                throw new TransactionFailedException($"Error inserting an patient: {errorMessages}");
-            }
+        await _repository.SaveAsync(cancellationToken);
 
-            await _userManager.AddToRoleAsync(userEntity, RolesEnum.Patient.ToString());
+        await _userManager.AddToRoleAsync(existingUser, "Patient");
 
-            var patientEntity = new Patient
-            {
-                Id = userEntity.Id,
-                ClinicalHistories = new List<ClinicalHistory>(),
-                Appointments = new List<Appointment>(),
-                Allergies = new List<PatientAllergy>(),
-                Illnesses = new List<PatientIllness>(),
-                Discapacities = new List<PatientDiscapacity>(),
-                RiskFactors = new List<PatientRiskFactor>(),
-                Vaccines = new List<PatientVaccine>(),
-                FamilyHistories = new List<FamilyHistory>(),
-            };
+        await transaction.CommitAsync(cancellationToken);
 
-            _repository.Patient.CreateEntity(patientEntity);
-
-            await _repository.SaveAsync(cancellationToken);
-
-            await transaction.CommitAsync(cancellationToken);
-
-            return _mapper.Map<PatientDto>(patientEntity);
-        }
-        else
-        {
-            throw new ArgumentException("Invalid sex value");
-        }
+        return _mapper.Map<PatientDto>(patientEntity);
+        
     }
 }

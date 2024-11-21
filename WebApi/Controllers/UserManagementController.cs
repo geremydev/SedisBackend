@@ -37,6 +37,16 @@ public class UserManagementController : ControllerBase
         var result = await _authService.AddRole(request.CardId, request.HealthCenterId, request.Role);
         return result.Succeeded ? NoContent() : BadRequest(result.Errors);
     }
+    
+    
+    [HttpPost("create-user")]
+    [SwaggerOperation(Summary = "Crear usuario",
+        Description = "Crea un nuevo usuario sin rol asignado.")]
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
+    {
+        var result = await _authService.CreateUser(request);
+        return result.Succeeded ? NoContent() : BadRequest(result.Errors);
+    }
 
     [HttpDelete("roles/{role}")]
     [SwaggerOperation(Summary = "Remover rol de usuario",
@@ -48,4 +58,5 @@ public class UserManagementController : ControllerBase
         var result = await _authService.RemoveRole(cardId, role);
         return result.Succeeded ? NoContent() : BadRequest(result.Errors);
     }
+
 }

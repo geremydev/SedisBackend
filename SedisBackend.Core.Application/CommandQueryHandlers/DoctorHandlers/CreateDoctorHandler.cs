@@ -32,52 +32,26 @@ internal sealed class CreateDoctorHandler : IRequestHandler<CreateDoctorCommand,
         using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
         var existingUser = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.CardId == request.doctor.CardId || u.PhoneNumber == request.doctor.PhoneNumber, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == request.doctor.UserId, cancellationToken);
 
-        if (existingUser != null)
+        if (existingUser == null)
         {
-            throw new UserExistsException(existingUser.CardId);
+            throw new UserNotFoundException(request.doctor.UserId.ToString());
         }
 
-        if (!Enum.TryParse<SexEnum>(request.doctor.Sex, true, out var sex))
-        {
-            throw new ArgumentException("Invalid sex value");
-        }
-
-        var userEntity = _mapper.Map<User>(request.doctor);
-        userEntity.UserName = Guid.NewGuid().ToString();
-        userEntity.Email = request.doctor.Email;
-        userEntity.IsActive = true;
-        userEntity.Sex = sex;
-        userEntity.PhoneNumberConfirmed = false;
-        userEntity.ImageUrl = ".";
-
-        var userCreationResult = await _userManager.CreateAsync(userEntity, request.doctor.Password);
-
-        if (!userCreationResult.Succeeded)
-        {
-            var errorMessages = string.Join(", ", userCreationResult.Errors.Select(e => e.Description));
-            throw new TransactionFailedException($"Error inserting a doctor: {errorMessages}");
-        }
-
-        await _userManager.AddToRoleAsync(userEntity, "Doctor");
 
         var doctorEntity = new Doctor
         {
-            Id = userEntity.Id,
+            Id = request.doctor.UserId,
             LicenseNumber = request.doctor.LicenseNumber,
             CurrentlyWorkingHealthCenters = new List<DoctorHealthCenter>(),
             Specialties = new List<DoctorMedicalSpecialty>()
         };
 
-        var patient = new Patient
-        {
-            Id = userEntity.Id
-        };
 
-        _repository.Patient.CreateEntity(patient);
         _repository.Doctor.CreateEntity(doctorEntity);
         await _repository.SaveAsync(cancellationToken);
+        await _userManager.AddToRoleAsync(existingUser, "Doctor");
         await transaction.CommitAsync(cancellationToken);
 
         return _mapper.Map<DoctorDto>(doctorEntity);

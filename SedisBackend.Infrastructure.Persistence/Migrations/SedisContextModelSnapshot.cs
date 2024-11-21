@@ -597,7 +597,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("396ee806-6cd0-42c9-a52e-27d31be22897"),
+                            Id = new Guid("32abd089-92ad-40c0-89a6-cb52ea875809"),
                             DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
                             EntryHour = "08:00:00",
                             ExitHour = "17:00:00",
@@ -605,7 +605,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0caa174e-3bbc-4633-9b72-72f52127d66a"),
+                            Id = new Guid("f3fae443-e8e0-4c46-8a1b-837bb06a3895"),
                             DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
                             EntryHour = "09:00:00",
                             ExitHour = "18:00:00",
@@ -636,13 +636,13 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("00a9360f-4464-4505-acde-f66863ee7774"),
+                            Id = new Guid("c6a6da44-e5a9-4a2d-84b7-722e983023f0"),
                             DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
                             MedicalSpecialtyId = new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef")
                         },
                         new
                         {
-                            Id = new Guid("7a5b4c07-9d29-41e4-acb3-22ee2ea16a91"),
+                            Id = new Guid("075c5bb2-da60-48c7-8eed-ee4624b4daad"),
                             DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
                             MedicalSpecialtyId = new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0")
                         });
@@ -908,7 +908,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IllnessId = new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"),
                             DiagnosisDate = new DateTime(2019, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DocumentURL = "https://example.com/document/diabetes-diagnosis.pdf",
-                            Id = new Guid("c6521c3e-042f-4851-a6be-9569ce8649f4"),
+                            Id = new Guid("7270f999-7cc5-4cfb-b159-1b732826db15"),
                             Notes = "Paciente monitoreado regularmente con niveles de glucosa controlados.",
                             Status = "Activa"
                         },
@@ -919,7 +919,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             DiagnosisDate = new DateTime(2021, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DischargeDate = new DateTime(2022, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DocumentURL = "https://example.com/document/hypertension-diagnosis.pdf",
-                            Id = new Guid("5d974df6-18d1-4ad2-a03c-735e17a169ff"),
+                            Id = new Guid("8d833c99-76ae-4ad9-a809-c3c235df1ece"),
                             Notes = "Paciente responde bien al tratamiento y mantiene una presión estable.",
                             Status = "En remisión"
                         });
@@ -1286,7 +1286,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CardId = "40211608647",
-                            ConcurrencyStamp = "51840361-5547-41b8-9d8d-8cd37c459eb5",
+                            ConcurrencyStamp = "2be47bea-7da8-4670-845f-681c1c4bccb9",
                             Email = "adminuser@email.com",
                             EmailConfirmed = true,
                             FirstName = "Brahiam",
@@ -1294,10 +1294,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = true,
                             LastName = "Montero",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEBQzyo4q/1XP6lI/gKxdoM/Y5KTlHoQRIw4MxmK30fzoSEe3sYGO9RqMa1aI1HDVsg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEF/nzBU/YjJaVZvNqKXw9LlEAtljjh2/LF/5g5z2rYNaysBSK9ZMWyrstUQs18Vfw==",
                             PhoneNumber = "829-143-9811",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "8c0fc94b-539e-4f58-8de0-1edcfee1b0c4",
+                            SecurityStamp = "d87e7cdf-6314-4dcf-9875-e394eda81f24",
                             Sex = "M",
                             TwoFactorEnabled = false,
                             UserName = "adminuser"
@@ -1307,8 +1307,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             Id = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CardId = "40211608640",
-                            ConcurrencyStamp = "d8ae2bb8-f36a-40b5-bfdd-604bf6bd2855",
+                            CardId = "40211608641",
+                            ConcurrencyStamp = "987234b4-5298-49a9-8d25-b1d7333a94d1",
                             Email = "patientuser@email.com",
                             EmailConfirmed = true,
                             FirstName = "John",
@@ -1316,10 +1316,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = true,
                             LastName = "Doe",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEAi0qBtnK5ipdeX59s8cfvaK1WZh/QWsBpRtL4IiXyNyKDs3uwagxBWO5aK4jXyVyA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJn4znV4gisTbUKK7MGViog0MriX/0TS1YA7nmj1furokan7Z8M+28oL0HZzfQc0LA==",
                             PhoneNumber = "829-163-9811",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "56a3c376-e25f-4f5e-8715-a13214c3c66e",
+                            SecurityStamp = "63907549-a8f6-41f9-9e07-55ad0e6b0c9f",
                             Sex = "M",
                             TwoFactorEnabled = false,
                             UserName = "patient"
@@ -1330,7 +1330,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CardId = "40211608648",
-                            ConcurrencyStamp = "0f30ddd1-e028-493c-a714-1598a4051515",
+                            ConcurrencyStamp = "772673d1-f9b0-4fae-a51f-3d1d2fad0722",
                             Email = "patient2@email.com",
                             EmailConfirmed = true,
                             FirstName = "Alice",
@@ -1338,10 +1338,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = true,
                             LastName = "Smith",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEAmqjKXKjsN2S1RvKdNp0jk+JpqT+n0C9fK+G96Aj8rBiprr1rj/9VzYruqbCfQyeA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDw6b6ftmPtavm1TvJrBa/D90zCclQK7a9LrIOVyb3N3oNuqGYlDWyDA1MhBQdES+A==",
                             PhoneNumber = "829-128-9811",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "57d810ec-e4cb-4bc1-8201-11056ff22ef6",
+                            SecurityStamp = "06a081f4-54fb-489a-80c7-bfb932836239",
                             Sex = "F",
                             TwoFactorEnabled = false,
                             UserName = "patient2"
@@ -1352,7 +1352,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1995, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CardId = "0987634321",
-                            ConcurrencyStamp = "55dd3464-cba9-40ce-a432-3bc7540d9801",
+                            ConcurrencyStamp = "2d0a1e3a-fd25-48ad-b8da-b764fe44c6b9",
                             Email = "assistantuser@email.com",
                             EmailConfirmed = true,
                             FirstName = "Ana",
@@ -1360,10 +1360,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = false,
                             LastName = "Martínez",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEPNxeXIVKvlcSUQqdemAqp34/a85RHzdqiDWV19mr6NsBN2XVaKyqpag6rezvikalw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEE7odLa86VrxJ3P2Itxb5ZgN3FN6V7xoY8jjd/4X10RMdQrlYq8fbg3+Lw1y7VXg7g==",
                             PhoneNumber = "829-123-9811",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "65142094-0b98-40f5-9842-ab679cb4310e",
+                            SecurityStamp = "2d6b9d0b-9dc7-49fb-8f7a-689f36637214",
                             Sex = "F",
                             TwoFactorEnabled = false,
                             UserName = "assistantuser"
@@ -1373,8 +1373,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             Id = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1980, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CardId = "1234567890",
-                            ConcurrencyStamp = "5531360f-c791-418d-8b8a-289a47425dbb",
+                            CardId = "40211608640",
+                            ConcurrencyStamp = "92a15b12-14a8-4560-bf92-6144377b7679",
                             Email = "doctoruser@email.com",
                             EmailConfirmed = true,
                             FirstName = "John",
@@ -1382,10 +1382,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = true,
                             LastName = "Doe",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEMqDOQW+zjl0WKodAYYrrERD6qw1JtVwzshQcWkaf41t7PjA9DSXTigWD07yjxa6zw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEDXHwLM5QVt3wg8Knokb9CVQPi3pK5EySySoaoXqg/zVBDrobz+gFGtaI2tCtHtLQ==",
                             PhoneNumber = "829-123-9812",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "cce7d583-2246-4525-aef9-5a8cf6150eef",
+                            SecurityStamp = "38445e53-1b13-4047-9f57-5376eb8e5cda",
                             Sex = "M",
                             TwoFactorEnabled = false,
                             UserName = "doctoruser"
@@ -1396,7 +1396,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1975, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CardId = "0987654321",
-                            ConcurrencyStamp = "3953fd2b-8e2b-483b-bb85-77ea25f77bac",
+                            ConcurrencyStamp = "2fa33d12-cce3-4eea-8b21-6ba68375b523",
                             Email = "doctoruser2@email.com",
                             EmailConfirmed = true,
                             FirstName = "Jane",
@@ -1404,10 +1404,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = false,
                             LastName = "Smith",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAENzJupiT7xatSWHuMBPaX4ccRbQKlvoGTvD8hH0RDUONlkexJ+t2jW0uqScbYQ49tA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENaQfqotw6n44b94KAUMoJL0G4HI52GWDdXvt9u77YBFbV4U6v7jYqRb5JgFKb1Rug==",
                             PhoneNumber = "829-123-9231",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "1230b598-8dc4-4fbe-a27d-44525d683608",
+                            SecurityStamp = "6eef3b62-7621-4c37-bc30-e5c4fff76d92",
                             Sex = "F",
                             TwoFactorEnabled = false,
                             UserName = "doctoruser2"
@@ -1510,7 +1510,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             PhysicalExamination = "\r\n                        Vital Signs: BP 140/90 mmHg, HR 82 bpm, RR 18 bpm, Temp 37.1°C.\r\n                        Anthropometry: Weight 80 kg, Height 1.80 m, BMI 24.7 kg/m².\r\n                        General: Skin warm, no cyanosis or jaundice observed.\r\n                        Cardiovascular: Heart sounds normal, no murmurs detected.\r\n                        Respiratory: Lung fields are clear to auscultation.\r\n                        Abdomen: Non-distended, no tenderness, liver and spleen not palpable.\r\n                        Extremities: No cyanosis or clubbing, peripheral pulses present.\r\n                    ",
                             PrescriptionId = new Guid("00000000-0000-0000-0000-000000000000"),
                             ReasonForVisit = "Follow-up on medication.",
-                            RegisterDate = new DateTime(2024, 10, 28, 14, 25, 12, 40, DateTimeKind.Local).AddTicks(9775)
+                            RegisterDate = new DateTime(2024, 11, 19, 23, 11, 14, 327, DateTimeKind.Local).AddTicks(6943)
                         });
                 });
 

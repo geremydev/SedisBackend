@@ -31,4 +31,5 @@ public interface IAuthService
     Task<ServiceResult> ChangeUserStatus(string cardId, bool isActive);
     Task<ServiceResult> DeleteUser(string cardId);
     Task<ServiceResult> RestoreUser(string cardId);
+    Task<ServiceResult> CreateUser(CreateUserRequest request);
 }

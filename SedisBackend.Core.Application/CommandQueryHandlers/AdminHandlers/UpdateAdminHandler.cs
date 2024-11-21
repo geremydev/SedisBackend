@@ -33,32 +33,14 @@ internal sealed class UpdateAdminHandler : IRequestHandler<UpdateAdminCommand, U
         if (existingUser is null)
             throw new EntityNotFoundException(request.Id);
 
-        SexEnum sex;
+        var adminEntity = await _repository.Admin.GetEntityAsync(request.Id, true);
 
-        if (Enum.TryParse(request.Admin.Sex.ToString(), out sex))
-        {
-            var adminEntity = await _repository.Admin.GetEntityAsync(request.Id, true);
 
-            adminEntity.ApplicationUser.FirstName = request.Admin.FirstName;
-            adminEntity.ApplicationUser.LastName = request.Admin.LastName;
-            adminEntity.ApplicationUser.CardId = request.Admin.CardId;
-            adminEntity.ApplicationUser.IsActive = request.Admin.IsActive;
-            adminEntity.ApplicationUser.Birthdate = request.Admin.Birthdate;
-            adminEntity.ApplicationUser.Sex = sex;
-            //adminEntity.ApplicationUser.Email = request.Admin.Email;
-            adminEntity.ApplicationUser.PhoneNumber = request.Admin.PhoneNumber;
-            adminEntity.ApplicationUser.PhoneNumberConfirmed = false;
-            //adminEntity.ApplicationUser.ImageUrl = request.Admin.ImageUrl;
+        adminEntity.HealthCenterId = request.Admin.HealthCenterId;
 
-            adminEntity.HealthCenterId = request.Admin.HealthCenterId;
-
-            await _repository.SaveAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
-        }
-        else
-        {
-            throw new ArgumentException("Invalid sex value");
-        }
+        await _repository.SaveAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+       
 
         return Unit.Value;
     }

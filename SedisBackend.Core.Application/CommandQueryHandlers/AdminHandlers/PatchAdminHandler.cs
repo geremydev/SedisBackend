@@ -1,7 +1,10 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
+using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
@@ -17,11 +20,13 @@ internal sealed class PatchAdminHandler
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
+    private readonly UserManager<User> _userManager;
 
-    public PatchAdminHandler(IRepositoryManager repository, IMapper mapper)
+    public PatchAdminHandler(IRepositoryManager repository, IMapper mapper, UserManager<User> userManager)
     {
         _repository = repository;
         _mapper = mapper;
+        _userManager = userManager;
     }
 
     public async Task<(AdminForUpdateDto AdminToPatch, Admin AdminEntity)> Handle(
@@ -29,6 +34,7 @@ internal sealed class PatchAdminHandler
     {
         // Retrieve the Admin entity from the repository
         var adminEntity = await _repository.Admin.GetEntityAsync(request.Id, request.TrackChanges);
+        var originalIsActive = adminEntity.IsActive;
 
         // Check if the Admin entity exists
         if (adminEntity is null)
@@ -46,33 +52,28 @@ internal sealed class PatchAdminHandler
 
         // Map the updated DTO back to the Admin entity
         _mapper.Map(adminToPatch, adminEntity);
+        adminEntity.IsActive = originalIsActive;        //Esto es porque no encuentro por qué se resetea el isActive so this is wrong but later i'm gonna fix it
 
         // Update the nested ApplicationUser properties if they are not null
         if (adminEntity.ApplicationUser != null)
         {
-            if (adminToPatch.FirstName != null)
-                adminEntity.ApplicationUser.FirstName = adminToPatch.FirstName;
-
-            if (adminToPatch.LastName != null)
-                adminEntity.ApplicationUser.LastName = adminToPatch.LastName;
-
-            if (adminToPatch.CardId != null)
-                adminEntity.ApplicationUser.CardId = adminToPatch.CardId;
+            
 
             if (adminToPatch.IsActive != null)
-                adminEntity.ApplicationUser.IsActive = adminToPatch.IsActive;
+            {
+                if (adminEntity.IsActive == true && adminToPatch.IsActive == false)
+                {
+                    adminEntity.IsActive = adminToPatch.IsActive;
 
-            if (adminToPatch.Birthdate != null)
-                adminEntity.ApplicationUser.Birthdate = adminToPatch.Birthdate;
+                    var currentUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == adminEntity.Id, cancellationToken);
 
-            if (adminToPatch.Email != null)
-                adminEntity.ApplicationUser.Email = adminToPatch.Email;
-
-            if (adminToPatch.Sex != null)
-                adminEntity.ApplicationUser.Sex = Enum.Parse<SexEnum>(adminToPatch.Sex, true);
-
-            if (adminToPatch.PhoneNumber != null)
-                adminEntity.ApplicationUser.PhoneNumber = adminToPatch.PhoneNumber;
+                    await _userManager.RemoveFromRoleAsync(currentUser, "Admin");
+                }
+            }
+            if(adminToPatch.HealthCenterId != null)
+            {
+                //adminEntity.ApplicationUser.Health
+            }
         }
 
         // Save changes to the repository

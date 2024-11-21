@@ -31,52 +31,24 @@ internal sealed class CreateAssistantHandler : IRequestHandler<CreateAssistantCo
         using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
         var existingUser = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.CardId == request.assistant.CardId || u.PhoneNumber == request.assistant.PhoneNumber, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == request.assistant.UserId, cancellationToken);
 
-        if (existingUser != null)
+        if (existingUser == null)
         {
-            throw new UserExistsException(existingUser.CardId);
+            throw new UserNotFoundException(request.assistant.UserId.ToString());
         }
-
-        if (!Enum.TryParse<SexEnum>(request.assistant.Sex, true, out var sex))
-        {
-            throw new ArgumentException("Invalid sex value");
-        }
-
-        var userEntity = _mapper.Map<User>(request.assistant);
-        userEntity.UserName = null;
-        userEntity.Email = request.assistant.Email;
-        userEntity.EmailConfirmed = false;
-        userEntity.IsActive = true;
-        userEntity.Sex = sex;
-        userEntity.PhoneNumberConfirmed = false;
-        userEntity.ImageUrl = ".";
-
-        var userCreationResult = await _userManager.CreateAsync(userEntity, request.assistant.Password);
-
-        if (!userCreationResult.Succeeded)
-        {
-            var errorMessages = string.Join(", ", userCreationResult.Errors.Select(e => e.Description));
-            throw new TransactionFailedException($"Error inserting an assistant: {errorMessages}");
-        }
-
-        await _userManager.AddToRoleAsync(userEntity, RolesEnum.Assistant.ToString());
-
         var assistantEntity = new Assistant
         {
-            Id = userEntity.Id,
+            Id = request.assistant.UserId,
             HealthCenterId = request.assistant.HealthCenterId
         };
 
-        var patient = new Patient
-        {
-            Id = userEntity.Id
-        };
-
-        _repository.Patient.CreateEntity(patient);
         _repository.Assistant.CreateEntity(assistantEntity);
 
         await _repository.SaveAsync(cancellationToken);
+
+        await _userManager.AddToRoleAsync(existingUser, "Assistant");
+
 
         await transaction.CommitAsync(cancellationToken);
 

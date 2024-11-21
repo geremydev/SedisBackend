@@ -30,61 +30,29 @@ internal sealed class CreateAdminHandler : IRequestHandler<CreateAdminCommand, A
     {
         using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
-        // Separar lo del numero de telefono luego si es necesario porque realmente se pueden tener varios
-        var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.CardId == request.admin.CardId || u.PhoneNumber == request.admin.PhoneNumber);
+        // Validar que el usuario exista
+        var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.admin.UserId);
 
-        if (existingUser != null)
+        if (existingUser == null)
         {
-            throw new UserExistsException(existingUser.CardId);
+            throw new UserNotFoundException(request.admin.UserId.ToString());
         }
+            
 
-        SexEnum sex;
-
-        if (Enum.TryParse<SexEnum>(request.admin.Sex.ToString(), out sex))
+        var adminEntity = new Admin
         {
-            var userEntity = new User
-            {
-                FirstName = request.admin.FirstName,
-                LastName = request.admin.LastName,
-                CardId = request.admin.CardId,
-                IsActive = true,
-                Birthdate = request.admin.Birthdate,
-                Sex = sex,
-                UserName = null,
-                Email = request.admin.Email,
-                PhoneNumber = request.admin.PhoneNumber,
-                EmailConfirmed = false,
-                PhoneNumberConfirmed = false,
-                ImageUrl = request.admin.ImageUrl
-            };
+            Id             = request.admin.UserId,
+            HealthCenterId = request.admin.HealthCenterId
+        };
 
-            var userCreationResult = await _userManager.CreateAsync(userEntity, request.admin.Password);
+        _repository.Admin.CreateEntity(adminEntity);
 
-            if (!userCreationResult.Succeeded)
-            {
-                var errorMessages = string.Join(", ", userCreationResult.Errors.Select(e => e.Description));
-                throw new TransactionFailedException($"Error inserting an admin: {errorMessages}");
-            }
+        await _repository.SaveAsync(cancellationToken);
 
-            await _userManager.AddToRoleAsync(userEntity, RolesEnum.Admin.ToString());
+        await _userManager.AddToRoleAsync(existingUser, "admin");
 
-            var adminEntity = new Admin
-            {
-                Id = userEntity.Id,
-                HealthCenterId = request.admin.HealthCenterId
-            };
+        await transaction.CommitAsync(cancellationToken);
 
-            _repository.Admin.CreateEntity(adminEntity);
-
-            await _repository.SaveAsync(cancellationToken);
-
-            await transaction.CommitAsync(cancellationToken);
-
-            return _mapper.Map<AdminDto>(adminEntity);
-        }
-        else
-        {
-            throw new ArgumentException("Invalid sex value");
-        }
+        return _mapper.Map<AdminDto>(adminEntity);
     }
 }

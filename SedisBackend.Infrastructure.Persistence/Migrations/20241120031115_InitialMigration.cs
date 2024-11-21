@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SedisBackend.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -935,12 +935,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "Birthdate", "CardId", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "ImageUrl", "IsActive", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Sex", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("37439d05-9b3b-4896-88e0-4ee7b7221a8b"), 0, new DateTime(1995, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0987634321", "55dd3464-cba9-40ce-a432-3bc7540d9801", "assistantuser@email.com", true, "Ana", ".", false, "Martínez", false, null, null, null, "AQAAAAIAAYagAAAAEPNxeXIVKvlcSUQqdemAqp34/a85RHzdqiDWV19mr6NsBN2XVaKyqpag6rezvikalw==", "829-123-9811", true, "65142094-0b98-40f5-9842-ab679cb4310e", "F", false, "assistantuser" },
-                    { new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), 0, new DateTime(1980, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "1234567890", "5531360f-c791-418d-8b8a-289a47425dbb", "doctoruser@email.com", true, "John", ".", true, "Doe", false, null, null, null, "AQAAAAIAAYagAAAAEMqDOQW+zjl0WKodAYYrrERD6qw1JtVwzshQcWkaf41t7PjA9DSXTigWD07yjxa6zw==", "829-123-9812", true, "cce7d583-2246-4525-aef9-5a8cf6150eef", "M", false, "doctoruser" },
-                    { new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608640", "d8ae2bb8-f36a-40b5-bfdd-604bf6bd2855", "patientuser@email.com", true, "John", ".", true, "Doe", false, null, null, null, "AQAAAAIAAYagAAAAEAi0qBtnK5ipdeX59s8cfvaK1WZh/QWsBpRtL4IiXyNyKDs3uwagxBWO5aK4jXyVyA==", "829-163-9811", true, "56a3c376-e25f-4f5e-8715-a13214c3c66e", "M", false, "patient" },
-                    { new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608648", "0f30ddd1-e028-493c-a714-1598a4051515", "patient2@email.com", true, "Alice", ".", true, "Smith", false, null, null, null, "AQAAAAIAAYagAAAAEAmqjKXKjsN2S1RvKdNp0jk+JpqT+n0C9fK+G96Aj8rBiprr1rj/9VzYruqbCfQyeA==", "829-128-9811", true, "57d810ec-e4cb-4bc1-8201-11056ff22ef6", "F", false, "patient2" },
-                    { new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), 0, new DateTime(1975, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0987654321", "3953fd2b-8e2b-483b-bb85-77ea25f77bac", "doctoruser2@email.com", true, "Jane", ".", false, "Smith", false, null, null, null, "AQAAAAIAAYagAAAAENzJupiT7xatSWHuMBPaX4ccRbQKlvoGTvD8hH0RDUONlkexJ+t2jW0uqScbYQ49tA==", "829-123-9231", true, "1230b598-8dc4-4fbe-a27d-44525d683608", "F", false, "doctoruser2" },
-                    { new Guid("f86a1609-cb84-4d6a-8d8a-8e49b6b9a5b9"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608647", "51840361-5547-41b8-9d8d-8cd37c459eb5", "adminuser@email.com", true, "Brahiam", ".", true, "Montero", false, null, null, null, "AQAAAAIAAYagAAAAEBQzyo4q/1XP6lI/gKxdoM/Y5KTlHoQRIw4MxmK30fzoSEe3sYGO9RqMa1aI1HDVsg==", "829-143-9811", true, "8c0fc94b-539e-4f58-8de0-1edcfee1b0c4", "M", false, "adminuser" }
+                    { new Guid("37439d05-9b3b-4896-88e0-4ee7b7221a8b"), 0, new DateTime(1995, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0987634321", "2d0a1e3a-fd25-48ad-b8da-b764fe44c6b9", "assistantuser@email.com", true, "Ana", ".", false, "Martínez", false, null, null, null, "AQAAAAIAAYagAAAAEE7odLa86VrxJ3P2Itxb5ZgN3FN6V7xoY8jjd/4X10RMdQrlYq8fbg3+Lw1y7VXg7g==", "829-123-9811", true, "2d6b9d0b-9dc7-49fb-8f7a-689f36637214", "F", false, "assistantuser" },
+                    { new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), 0, new DateTime(1980, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608640", "92a15b12-14a8-4560-bf92-6144377b7679", "doctoruser@email.com", true, "John", ".", true, "Doe", false, null, null, null, "AQAAAAIAAYagAAAAEEDXHwLM5QVt3wg8Knokb9CVQPi3pK5EySySoaoXqg/zVBDrobz+gFGtaI2tCtHtLQ==", "829-123-9812", true, "38445e53-1b13-4047-9f57-5376eb8e5cda", "M", false, "doctoruser" },
+                    { new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608641", "987234b4-5298-49a9-8d25-b1d7333a94d1", "patientuser@email.com", true, "John", ".", true, "Doe", false, null, null, null, "AQAAAAIAAYagAAAAEJn4znV4gisTbUKK7MGViog0MriX/0TS1YA7nmj1furokan7Z8M+28oL0HZzfQc0LA==", "829-163-9811", true, "63907549-a8f6-41f9-9e07-55ad0e6b0c9f", "M", false, "patient" },
+                    { new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608648", "772673d1-f9b0-4fae-a51f-3d1d2fad0722", "patient2@email.com", true, "Alice", ".", true, "Smith", false, null, null, null, "AQAAAAIAAYagAAAAEDw6b6ftmPtavm1TvJrBa/D90zCclQK7a9LrIOVyb3N3oNuqGYlDWyDA1MhBQdES+A==", "829-128-9811", true, "06a081f4-54fb-489a-80c7-bfb932836239", "F", false, "patient2" },
+                    { new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), 0, new DateTime(1975, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0987654321", "2fa33d12-cce3-4eea-8b21-6ba68375b523", "doctoruser2@email.com", true, "Jane", ".", false, "Smith", false, null, null, null, "AQAAAAIAAYagAAAAENaQfqotw6n44b94KAUMoJL0G4HI52GWDdXvt9u77YBFbV4U6v7jYqRb5JgFKb1Rug==", "829-123-9231", true, "6eef3b62-7621-4c37-bc30-e5c4fff76d92", "F", false, "doctoruser2" },
+                    { new Guid("f86a1609-cb84-4d6a-8d8a-8e49b6b9a5b9"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608647", "2be47bea-7da8-4670-845f-681c1c4bccb9", "adminuser@email.com", true, "Brahiam", ".", true, "Montero", false, null, null, null, "AQAAAAIAAYagAAAAEEF/nzBU/YjJaVZvNqKXw9LlEAtljjh2/LF/5g5z2rYNaysBSK9ZMWyrstUQs18Vfw==", "829-143-9811", true, "d87e7cdf-6314-4dcf-9875-e394eda81f24", "M", false, "adminuser" }
                 });
 
             migrationBuilder.InsertData(
@@ -1003,7 +1003,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "CurrentHistory", "Diagnosis", "DoctorId", "IsDeleted", "PatientId", "PhysicalExamination", "PrescriptionId", "ReasonForVisit", "RegisterDate" },
                 values: new object[,]
                 {
-                    { new Guid("47d713da-eb0f-44c8-bd0d-d1882834c81b"), "Patient reports feeling better with current medication. No new symptoms.", "Diabetes", new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), false, new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "\r\n                        Vital Signs: BP 140/90 mmHg, HR 82 bpm, RR 18 bpm, Temp 37.1°C.\r\n                        Anthropometry: Weight 80 kg, Height 1.80 m, BMI 24.7 kg/m².\r\n                        General: Skin warm, no cyanosis or jaundice observed.\r\n                        Cardiovascular: Heart sounds normal, no murmurs detected.\r\n                        Respiratory: Lung fields are clear to auscultation.\r\n                        Abdomen: Non-distended, no tenderness, liver and spleen not palpable.\r\n                        Extremities: No cyanosis or clubbing, peripheral pulses present.\r\n                    ", new Guid("00000000-0000-0000-0000-000000000000"), "Follow-up on medication.", new DateTime(2024, 10, 28, 14, 25, 12, 40, DateTimeKind.Local).AddTicks(9775) },
+                    { new Guid("47d713da-eb0f-44c8-bd0d-d1882834c81b"), "Patient reports feeling better with current medication. No new symptoms.", "Diabetes", new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), false, new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "\r\n                        Vital Signs: BP 140/90 mmHg, HR 82 bpm, RR 18 bpm, Temp 37.1°C.\r\n                        Anthropometry: Weight 80 kg, Height 1.80 m, BMI 24.7 kg/m².\r\n                        General: Skin warm, no cyanosis or jaundice observed.\r\n                        Cardiovascular: Heart sounds normal, no murmurs detected.\r\n                        Respiratory: Lung fields are clear to auscultation.\r\n                        Abdomen: Non-distended, no tenderness, liver and spleen not palpable.\r\n                        Extremities: No cyanosis or clubbing, peripheral pulses present.\r\n                    ", new Guid("00000000-0000-0000-0000-000000000000"), "Follow-up on medication.", new DateTime(2024, 11, 19, 23, 11, 14, 327, DateTimeKind.Local).AddTicks(6943) },
                     { new Guid("c1aaea0c-c739-4125-a7b3-28da602de5a0"), "No significant issues. Patient reports feeling well overall.", "Hypertension", new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), false, new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), "\r\n                        Vital Signs: BP 120/80 mmHg, HR 75 bpm, RR 16 bpm, Temp 36.7°C.\r\n                        Anthropometry: Weight 72 kg, Height 1.75 m, BMI 23.5 kg/m².\r\n                        General: Skin and mucosa appear healthy, no lesions observed.\r\n                        Cardiovascular: Regular rhythm, no murmurs detected.\r\n                        Respiratory: Clear breath sounds, no wheezes or crackles.\r\n                        Abdomen: Soft, non-tender, no masses or organomegaly.\r\n                        Extremities: No edema, peripheral pulses are intact.\r\n                    ", new Guid("00000000-0000-0000-0000-000000000000"), "Routine check-up", new DateTime(2021, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
@@ -1012,8 +1012,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "DoctorId", "EntryHour", "ExitHour", "HealthCenterId" },
                 values: new object[,]
                 {
-                    { new Guid("0caa174e-3bbc-4633-9b72-72f52127d66a"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), "09:00:00", "18:00:00", new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da") },
-                    { new Guid("396ee806-6cd0-42c9-a52e-27d31be22897"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), "08:00:00", "17:00:00", new Guid("85bc224a-c53f-41db-97b8-92f703ee4452") }
+                    { new Guid("32abd089-92ad-40c0-89a6-cb52ea875809"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), "08:00:00", "17:00:00", new Guid("85bc224a-c53f-41db-97b8-92f703ee4452") },
+                    { new Guid("f3fae443-e8e0-4c46-8a1b-837bb06a3895"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), "09:00:00", "18:00:00", new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da") }
                 });
 
             migrationBuilder.InsertData(
@@ -1021,8 +1021,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "DoctorId", "MedicalSpecialtyId" },
                 values: new object[,]
                 {
-                    { new Guid("00a9360f-4464-4505-acde-f66863ee7774"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef") },
-                    { new Guid("7a5b4c07-9d29-41e4-acb3-22ee2ea16a91"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0") }
+                    { new Guid("075c5bb2-da60-48c7-8eed-ee4624b4daad"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0") },
+                    { new Guid("c6a6da44-e5a9-4a2d-84b7-722e983023f0"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef") }
                 });
 
             migrationBuilder.InsertData(
@@ -1057,8 +1057,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "IllnessId", "PatientId", "DiagnosisDate", "DischargeDate", "DocumentURL", "Id", "Notes", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new DateTime(2019, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "https://example.com/document/diabetes-diagnosis.pdf", new Guid("c6521c3e-042f-4851-a6be-9569ce8649f4"), "Paciente monitoreado regularmente con niveles de glucosa controlados.", "Activa" },
-                    { new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new DateTime(2021, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "https://example.com/document/hypertension-diagnosis.pdf", new Guid("5d974df6-18d1-4ad2-a03c-735e17a169ff"), "Paciente responde bien al tratamiento y mantiene una presión estable.", "En remisión" }
+                    { new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new DateTime(2019, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "https://example.com/document/diabetes-diagnosis.pdf", new Guid("7270f999-7cc5-4cfb-b159-1b732826db15"), "Paciente monitoreado regularmente con niveles de glucosa controlados.", "Activa" },
+                    { new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new DateTime(2021, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "https://example.com/document/hypertension-diagnosis.pdf", new Guid("8d833c99-76ae-4ad9-a809-c3c235df1ece"), "Paciente responde bien al tratamiento y mantiene una presión estable.", "En remisión" }
                 });
 
             migrationBuilder.InsertData(
