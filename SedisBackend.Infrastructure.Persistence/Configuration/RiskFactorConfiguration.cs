@@ -14,7 +14,7 @@ public class RiskFactorConfiguration : IEntityTypeConfiguration<RiskFactor>
             new RiskFactor
             {
                 Id = Guid.Parse("454e8d39-1363-41f4-a2d2-b99fde743fbf"),
-                Code = "L123",
+                IcdCode = "L123",
                 Description = "Consumo excesivo de alcohol",
                 Category = RiskFactorCategory.Lifestyle,
                 AssessmentLevel = RiskFactorAssessmentLevel.High
@@ -22,7 +22,7 @@ public class RiskFactorConfiguration : IEntityTypeConfiguration<RiskFactor>
             new RiskFactor
             {
                 Id = Guid.Parse("6522252f-0021-433b-8174-f4e0833f859a"),
-                Code = "G789",
+                IcdCode = "G789",
                 Description = "Historia familiar de diabetes",
                 Category = RiskFactorCategory.Genetic,
                 AssessmentLevel = RiskFactorAssessmentLevel.Moderate

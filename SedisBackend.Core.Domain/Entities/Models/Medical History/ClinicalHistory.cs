@@ -11,6 +11,8 @@ public class ClinicalHistory : IBaseEntity
     public Patient Patient { get; set; }
     public Guid DoctorId { get; set; }
     public Doctor Doctor { get; set; }
+    public Guid AppointmentId { get; set; }
+    public Appointment? Appointment { get; set; }
     public string ReasonForVisit { get; set; }
     public string CurrentHistory { get; set; }
     public string? PhysicalExamination { get; set; }
@@ -18,7 +20,8 @@ public class ClinicalHistory : IBaseEntity
     public Guid PrescriptionId { get; set; }
     public Prescription? Prescription { get; set; }
     public DateTime RegisterDate { get; set; }
-    public bool IsDeleted { get; set; }
+    public bool IsActive { get; set; }
+   
 
 
     /* Ejemplo de campos

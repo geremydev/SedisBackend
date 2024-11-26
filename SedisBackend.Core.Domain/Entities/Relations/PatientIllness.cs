@@ -3,9 +3,8 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
 
 namespace SedisBackend.Core.Domain.Entities.Relations;
 
-public class PatientIllness : IBaseEntity
+public class PatientIllness 
 {
-    public Guid Id { get; set; }
     public Guid PatientId { get; set; }
     public Patient Patient { get; set; }
     public Guid IllnessId { get; set; }

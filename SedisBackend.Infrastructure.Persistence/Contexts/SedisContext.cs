@@ -357,7 +357,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasQueryFilter(d => !d.IsDeleted);
+            entity.HasQueryFilter(d => d.IsActive);
         });
 
         modelBuilder.Entity<FamilyHistory>(entity =>
@@ -406,8 +406,8 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasKey(a => a.Id);
 
             entity.Property(a => a.CodeType).IsRequired();
-            entity.Property(a => a.Name).IsRequired();
-            entity.Property(a => a.Code).IsRequired();
+            entity.Property(a => a.Title).IsRequired();
+            entity.Property(a => a.IcdCode).IsRequired();
 
             entity.HasMany(a => a.PatientIllnesses)
                 .WithOne(pa => pa.Illness)
@@ -441,7 +441,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             entity.Property(a => a.CodeType).IsRequired();
             entity.Property(a => a.AssessmentLevel).IsRequired();
-            entity.Property(a => a.Code).IsRequired();
+            entity.Property(a => a.IcdCode).IsRequired();
             entity.Property(a => a.Category).IsRequired();
 
             entity.HasMany(a => a.PatientRiskFactors)

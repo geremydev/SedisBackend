@@ -18,6 +18,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IcdCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Allergen = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
@@ -72,7 +73,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IcdCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CodeType = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -625,8 +626,11 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AllergyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Allergen = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AllergicReaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DiagnosisDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
+                    DiagnosisDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -651,7 +655,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     DiscapacityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DiagnosisDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
-                    Severity = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Severity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -675,7 +681,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     HealthInsuranceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PolicyNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PolicyNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -728,7 +735,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     PatientId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RiskFactorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DiagnosisDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
+                    DiagnosisDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -753,7 +761,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     VaccineId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AppliedDoses = table.Column<int>(type: "int", nullable: false),
-                    LastApplicationDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
+                    LastApplicationDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -851,11 +860,11 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Allergies",
-                columns: new[] { "Id", "Allergen" },
+                columns: new[] { "Id", "Allergen", "IcdCode" },
                 values: new object[,]
                 {
-                    { new Guid("33c7785e-58f4-4ab8-9f54-51bf8978963f"), "Peanuts" },
-                    { new Guid("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"), "Penicillin" }
+                    { new Guid("33c7785e-58f4-4ab8-9f54-51bf8978963f"), "Peanuts", "123123" },
+                    { new Guid("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"), "Penicillin", "123123" }
                 });
 
             migrationBuilder.InsertData(
@@ -887,11 +896,11 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
             migrationBuilder.InsertData(
                 table: "Illnesses",
-                columns: new[] { "Id", "Code", "CodeType", "Description", "Name" },
+                columns: new[] { "Id", "CodeType", "Description", "IcdCode", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"), "E10", 0, "Enfermedad crónica en la que el páncreas produce poca o ninguna insulina.", "Diabetes Mellitus Tipo 1" },
-                    { new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"), "I10", 0, "Condición de presión arterial elevada sin causa identificable.", "Hipertensión esencial (primaria)" }
+                    { new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"), 0, "Enfermedad crónica en la que el páncreas produce poca o ninguna insulina.", "E10", "Diabetes Mellitus Tipo 1" },
+                    { new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"), 0, "Condición de presión arterial elevada sin causa identificable.", "I10", "Hipertensión esencial (primaria)" }
                 });
 
             migrationBuilder.InsertData(
@@ -935,12 +944,12 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "Birthdate", "CardId", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "ImageUrl", "IsActive", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Sex", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("37439d05-9b3b-4896-88e0-4ee7b7221a8b"), 0, new DateTime(1995, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0987634321", "9fe2443b-7516-4662-af45-48c5320ec171", "assistantuser@email.com", true, "Ana", ".", false, "Martínez", false, null, null, null, "AQAAAAIAAYagAAAAECDWUjoNIwdCgysbLGVxcjfvSDSunPnaR0NFfHkw306qQroXPEymgqej3SvT+JufvA==", "829-123-9811", true, "a8274bc1-b949-46ec-9519-4747ec38322c", "F", false, "assistantuser" },
-                    { new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), 0, new DateTime(1980, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608640", "3a527a46-d07a-49a3-a36b-5fd08275bea4", "doctoruser@email.com", true, "John", ".", true, "Doe", false, null, null, null, "AQAAAAIAAYagAAAAEDLNhMpfnvoYEqsjzvuK1no1SVEW/3UC/wJof+uKmtWY8UWibw9Ijl3fKd1DxhiwbA==", "829-123-9812", true, "25cc8b2f-35a0-4597-a218-17b1e4ebb899", "M", false, "doctoruser" },
-                    { new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608641", "876f944f-68b5-48d7-a718-f0f2938d22a0", "patientuser@email.com", true, "John", ".", true, "Doe", false, null, null, null, "AQAAAAIAAYagAAAAEL14RWHRBQJnBXywriaEjK2YADy3VVDCRYiiRQfGD9LtyzHmYy1UXY9IQ13VMhkBMw==", "829-163-9811", true, "a8eea935-9ade-4f73-9651-f079bff96958", "M", false, "patient" },
-                    { new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608648", "cdcc714e-a293-4281-ae79-47486fc8eee3", "patient2@email.com", true, "Alice", ".", true, "Smith", false, null, null, null, "AQAAAAIAAYagAAAAEHbyHwHigagGJ6eNUFpEW9Gog67KZv2ditXTGIgP9kPEEgw8JZ6DTkzv28E3mrJJKw==", "829-128-9811", true, "cf1b5bf5-a330-49f6-8e6d-26132de3a0a2", "F", false, "patient2" },
-                    { new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), 0, new DateTime(1975, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0987654321", "5346f31d-d51a-4926-891d-314f0b09fa2c", "doctoruser2@email.com", true, "Jane", ".", false, "Smith", false, null, null, null, "AQAAAAIAAYagAAAAEAvFCa7ZqCR6xWP3yxvffbcl7tGwtEAvsnKQpa0pvBSfSGcFzbdaY7IeW3fJqincZA==", "829-123-9231", true, "83502f63-1098-4530-9135-b1f592e7ded3", "F", false, "doctoruser2" },
-                    { new Guid("f86a1609-cb84-4d6a-8d8a-8e49b6b9a5b9"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608647", "34c2c6ad-bd68-4e7b-a047-5b0a61255b89", "adminuser@email.com", true, "Brahiam", ".", true, "Montero", false, null, null, null, "AQAAAAIAAYagAAAAEDLadqie9IksHubuIif+Qqn3qNyx0bA0/d8VEOYd0M313eFXyFiNs91nriktJkwfIQ==", "829-143-9811", true, "ca2414ba-ef46-4de8-8bed-318031192df1", "M", false, "adminuser" }
+                    { new Guid("37439d05-9b3b-4896-88e0-4ee7b7221a8b"), 0, new DateTime(1995, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0987634321", "6bec2a65-97b5-4691-a37a-8c3989f6ef6e", "assistantuser@email.com", true, "Ana", ".", false, "Martínez", false, null, null, null, "AQAAAAIAAYagAAAAECfKjpcmJPEHRG8EgZzCZbChJTfbW3dCxqJtBm2vPoNkMpZqVXOh4TBqlR/sOap2jg==", "829-123-9811", true, "b456edbb-1537-465d-b71d-bd51d2569180", "F", false, "assistantuser" },
+                    { new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), 0, new DateTime(1980, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608640", "d2f16904-5a68-476c-894a-86f90e4d14e9", "doctoruser@email.com", true, "John", ".", true, "Doe", false, null, null, null, "AQAAAAIAAYagAAAAEIpRjmHq1ZEvGHId32I+dGBKJtE0pUvjYFWDxn630tqH6ferd+4TzsR09iVwAnRlRQ==", "829-123-9812", true, "7f3d1029-a441-4e90-b872-38cc01f1ceb2", "M", false, "doctoruser" },
+                    { new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608641", "81b32b5b-0ddd-4cbe-87f4-9019991f2b7d", "patientuser@email.com", true, "John", ".", true, "Doe", false, null, null, null, "AQAAAAIAAYagAAAAEHGDhBdrGXyM6SjbnYFoDyS/jDj+MIZNXXXL9K6wySBgiYqA986yQcx0SonRb9F58A==", "829-163-9811", true, "e62ddea1-a960-4510-946c-9e378ad9d601", "M", false, "patient" },
+                    { new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608648", "fe737e19-0acf-4b83-bc5f-001bbb43b512", "patient2@email.com", true, "Alice", ".", true, "Smith", false, null, null, null, "AQAAAAIAAYagAAAAELaElCtF68O9Kix1fSYAa8TVE+74hPzqWHZpxu2g3sAkna2H1tdPPlZAr2USBirIdw==", "829-128-9811", true, "8b6abd34-e838-4ada-86f3-6706b61a0632", "F", false, "patient2" },
+                    { new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), 0, new DateTime(1975, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "0987654321", "992df307-02f6-4a73-804d-ea6a05b2721e", "doctoruser2@email.com", true, "Jane", ".", false, "Smith", false, null, null, null, "AQAAAAIAAYagAAAAEMdFe2DmH1ptvpuT0YFmAlKw5QhEtGxzoIDD/Z30zsKV0fjQic7inIFsoAKyjx4+Zw==", "829-123-9231", true, "2c7ae9e8-7fde-4b65-9244-e81b31ea6977", "F", false, "doctoruser2" },
+                    { new Guid("f86a1609-cb84-4d6a-8d8a-8e49b6b9a5b9"), 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "40211608647", "2b62fd86-efb4-4ea6-8e1a-8af769880621", "adminuser@email.com", true, "Brahiam", ".", true, "Montero", false, null, null, null, "AQAAAAIAAYagAAAAEK9jiB+uDX3cpXyfn6ZomFaiNWhBuXf7Ux1ZkbmuS2cMVdTdPB+OVu9EnTY26EkYkg==", "829-143-9811", true, "d1b79c6c-90e8-469a-ab3f-c491a1cc036a", "M", false, "adminuser" }
                 });
 
             migrationBuilder.InsertData(
@@ -1003,7 +1012,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "CurrentHistory", "Diagnosis", "DoctorId", "IsDeleted", "PatientId", "PhysicalExamination", "PrescriptionId", "ReasonForVisit", "RegisterDate" },
                 values: new object[,]
                 {
-                    { new Guid("47d713da-eb0f-44c8-bd0d-d1882834c81b"), "Patient reports feeling better with current medication. No new symptoms.", "Diabetes", new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), false, new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "\r\n                        Vital Signs: BP 140/90 mmHg, HR 82 bpm, RR 18 bpm, Temp 37.1°C.\r\n                        Anthropometry: Weight 80 kg, Height 1.80 m, BMI 24.7 kg/m².\r\n                        General: Skin warm, no cyanosis or jaundice observed.\r\n                        Cardiovascular: Heart sounds normal, no murmurs detected.\r\n                        Respiratory: Lung fields are clear to auscultation.\r\n                        Abdomen: Non-distended, no tenderness, liver and spleen not palpable.\r\n                        Extremities: No cyanosis or clubbing, peripheral pulses present.\r\n                    ", new Guid("00000000-0000-0000-0000-000000000000"), "Follow-up on medication.", new DateTime(2024, 11, 21, 9, 5, 40, 226, DateTimeKind.Local).AddTicks(8205) },
+                    { new Guid("47d713da-eb0f-44c8-bd0d-d1882834c81b"), "Patient reports feeling better with current medication. No new symptoms.", "Diabetes", new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), false, new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "\r\n                        Vital Signs: BP 140/90 mmHg, HR 82 bpm, RR 18 bpm, Temp 37.1°C.\r\n                        Anthropometry: Weight 80 kg, Height 1.80 m, BMI 24.7 kg/m².\r\n                        General: Skin warm, no cyanosis or jaundice observed.\r\n                        Cardiovascular: Heart sounds normal, no murmurs detected.\r\n                        Respiratory: Lung fields are clear to auscultation.\r\n                        Abdomen: Non-distended, no tenderness, liver and spleen not palpable.\r\n                        Extremities: No cyanosis or clubbing, peripheral pulses present.\r\n                    ", new Guid("00000000-0000-0000-0000-000000000000"), "Follow-up on medication.", new DateTime(2024, 11, 26, 10, 32, 0, 464, DateTimeKind.Local).AddTicks(4252) },
                     { new Guid("c1aaea0c-c739-4125-a7b3-28da602de5a0"), "No significant issues. Patient reports feeling well overall.", "Hypertension", new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), false, new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), "\r\n                        Vital Signs: BP 120/80 mmHg, HR 75 bpm, RR 16 bpm, Temp 36.7°C.\r\n                        Anthropometry: Weight 72 kg, Height 1.75 m, BMI 23.5 kg/m².\r\n                        General: Skin and mucosa appear healthy, no lesions observed.\r\n                        Cardiovascular: Regular rhythm, no murmurs detected.\r\n                        Respiratory: Clear breath sounds, no wheezes or crackles.\r\n                        Abdomen: Soft, non-tender, no masses or organomegaly.\r\n                        Extremities: No edema, peripheral pulses are intact.\r\n                    ", new Guid("00000000-0000-0000-0000-000000000000"), "Routine check-up", new DateTime(2021, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
@@ -1012,8 +1021,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "DoctorId", "EntryHour", "ExitHour", "HealthCenterId" },
                 values: new object[,]
                 {
-                    { new Guid("4c4a196f-1441-443a-8298-5f3b0592e4ac"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), "09:00:00", "18:00:00", new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da") },
-                    { new Guid("9a507aa6-7309-4fd6-a4fd-90c9cfa7d947"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), "08:00:00", "17:00:00", new Guid("85bc224a-c53f-41db-97b8-92f703ee4452") }
+                    { new Guid("8edbaf29-5df0-4014-93d6-1a4d12c506ca"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), "09:00:00", "18:00:00", new Guid("57efafa6-1eec-4228-b7c1-ab87fe2097da") },
+                    { new Guid("e88a1aff-ec0d-429d-ab3b-4a62dafef800"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), "08:00:00", "17:00:00", new Guid("85bc224a-c53f-41db-97b8-92f703ee4452") }
                 });
 
             migrationBuilder.InsertData(
@@ -1021,35 +1030,35 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "Id", "DoctorId", "MedicalSpecialtyId" },
                 values: new object[,]
                 {
-                    { new Guid("459e962f-d6fd-4ad8-a304-399ace5955a2"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef") },
-                    { new Guid("bb10fa08-d70c-4905-adc0-7bf35165ba30"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0") }
+                    { new Guid("93003508-bcd0-4e53-99c9-abee314f99c1"), new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0") },
+                    { new Guid("9ebe84ff-4955-4092-883d-060fbb4b0a37"), new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef") }
                 });
 
             migrationBuilder.InsertData(
                 table: "PatientAllergies",
-                columns: new[] { "AllergyId", "PatientId", "AllergicReaction", "DiagnosisDate", "Id" },
+                columns: new[] { "AllergyId", "PatientId", "Allergen", "AllergicReaction", "Description", "DiagnosisDate", "Id", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("33c7785e-58f4-4ab8-9f54-51bf8978963f"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), "Anaphylaxis", new DateTime(2020, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("e0a734b4-18bb-4c64-8f85-54487c656612") },
-                    { new Guid("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "Rash", new DateTime(2019, 11, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a15c2d9b-d758-46b7-aceb-22a163c92a5f") }
+                    { new Guid("33c7785e-58f4-4ab8-9f54-51bf8978963f"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), "Peanuts", "Anaphylaxis", "Cuadro anafiláctivo grave", new DateTime(2020, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("e0a734b4-18bb-4c64-8f85-54487c656612"), true },
+                    { new Guid("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "Penicilin", "Rash", "Rash grave", new DateTime(2019, 11, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("a15c2d9b-d758-46b7-aceb-22a163c92a5f"), true }
                 });
 
             migrationBuilder.InsertData(
                 table: "PatientDiscapacities",
-                columns: new[] { "DiscapacityId", "PatientId", "DiagnosisDate", "Id", "Severity" },
+                columns: new[] { "DiscapacityId", "PatientId", "Description", "DiagnosisDate", "Id", "Severity", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("1b54e13f-7a32-4cc1-ad6d-35298426a2fb"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new DateTime(2018, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("ae6aa623-f515-4b49-a926-5e72369cce77"), "Severa" },
-                    { new Guid("5c52a9d3-6ee2-496e-a922-139de857d9d4"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new DateTime(2020, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("79dad0d7-f852-486c-a369-9765aafefa86"), "Moderada" }
+                    { new Guid("1b54e13f-7a32-4cc1-ad6d-35298426a2fb"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), "Description", new DateTime(2018, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("ae6aa623-f515-4b49-a926-5e72369cce77"), "Severa", true },
+                    { new Guid("5c52a9d3-6ee2-496e-a922-139de857d9d4"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), "Description", new DateTime(2020, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("79dad0d7-f852-486c-a369-9765aafefa86"), "Moderada", true }
                 });
 
             migrationBuilder.InsertData(
                 table: "PatientHealthInsurances",
-                columns: new[] { "HealthInsuranceId", "PatientId", "Id", "PolicyNumber" },
+                columns: new[] { "HealthInsuranceId", "PatientId", "Id", "PolicyNumber", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("b51ec3f9-bdc8-4a74-b43e-bf4da6e2f9b9"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new Guid("df7b9b16-ec96-4b9a-819e-df4b3c7b96c1"), "P0123456789" },
-                    { new Guid("7f5d5339-9de6-4ab0-b43c-d6b3d43e4d80"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new Guid("5f6b3f9a-8d5e-4b2e-ae3f-2c6a78f4f9a1"), "P0987654321" }
+                    { new Guid("b51ec3f9-bdc8-4a74-b43e-bf4da6e2f9b9"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new Guid("df7b9b16-ec96-4b9a-819e-df4b3c7b96c1"), "P0123456789", true },
+                    { new Guid("7f5d5339-9de6-4ab0-b43c-d6b3d43e4d80"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new Guid("5f6b3f9a-8d5e-4b2e-ae3f-2c6a78f4f9a1"), "P0987654321", true }
                 });
 
             migrationBuilder.InsertData(
@@ -1057,26 +1066,26 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                 columns: new[] { "IllnessId", "PatientId", "DiagnosisDate", "DischargeDate", "DocumentURL", "Id", "Notes", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new DateTime(2019, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "https://example.com/document/diabetes-diagnosis.pdf", new Guid("c556acb9-ce43-46e2-a370-bc3b8b07108d"), "Paciente monitoreado regularmente con niveles de glucosa controlados.", "Activa" },
-                    { new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new DateTime(2021, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "https://example.com/document/hypertension-diagnosis.pdf", new Guid("3c4d7dcf-c3f5-4b3f-9476-43203dfd65b9"), "Paciente responde bien al tratamiento y mantiene una presión estable.", "En remisión" }
+                    { new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"), new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new DateTime(2019, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "https://example.com/document/diabetes-diagnosis.pdf", new Guid("f96d4a51-984d-43d6-9ccd-2c4c54d3465c"), "Paciente monitoreado regularmente con niveles de glucosa controlados.", "Activa" },
+                    { new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"), new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new DateTime(2021, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "https://example.com/document/hypertension-diagnosis.pdf", new Guid("7facd453-0419-4fa1-bd80-c4901d62853f"), "Paciente responde bien al tratamiento y mantiene una presión estable.", "En remisión" }
                 });
 
             migrationBuilder.InsertData(
                 table: "PatientRiskFactors",
-                columns: new[] { "PatientId", "RiskFactorId", "Id" },
+                columns: new[] { "PatientId", "RiskFactorId", "Id", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new Guid("454e8d39-1363-41f4-a2d2-b99fde743fbf"), new Guid("f68f3e15-994e-4c2d-a3ee-863d753032b0") },
-                    { new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new Guid("6522252f-0021-433b-8174-f4e0833f859a"), new Guid("807afcdf-633e-44a9-b688-4f3dd50ab905") }
+                    { new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new Guid("454e8d39-1363-41f4-a2d2-b99fde743fbf"), new Guid("f68f3e15-994e-4c2d-a3ee-863d753032b0"), true },
+                    { new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new Guid("6522252f-0021-433b-8174-f4e0833f859a"), new Guid("807afcdf-633e-44a9-b688-4f3dd50ab905"), true }
                 });
 
             migrationBuilder.InsertData(
                 table: "PatientVaccines",
-                columns: new[] { "PatientId", "VaccineId", "AppliedDoses", "Id", "LastApplicationDate" },
+                columns: new[] { "PatientId", "VaccineId", "AppliedDoses", "Id", "LastApplicationDate", "Status" },
                 values: new object[,]
                 {
-                    { new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new Guid("c28e855d-2602-423f-a4d5-26954df029da"), 2, new Guid("12ae1c94-c70d-4379-8cca-e8405a814c6d"), new DateTime(2021, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new Guid("384e34fb-7d23-4123-a78e-13d7b0a91110"), 1, new Guid("086dd520-144e-4afe-98aa-2bf09033048c"), new DateTime(2023, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"), new Guid("c28e855d-2602-423f-a4d5-26954df029da"), 2, new Guid("12ae1c94-c70d-4379-8cca-e8405a814c6d"), new DateTime(2021, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), true },
+                    { new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"), new Guid("384e34fb-7d23-4123-a78e-13d7b0a91110"), 1, new Guid("086dd520-144e-4afe-98aa-2bf09033048c"), new DateTime(2023, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), true }
                 });
 
             migrationBuilder.InsertData(

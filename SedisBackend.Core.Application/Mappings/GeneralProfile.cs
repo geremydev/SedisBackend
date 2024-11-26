@@ -117,6 +117,55 @@ public class GeneralProfile : Profile
             .ReverseMap();
         CreateMap<Allergy, AllergyForUpdateDto>()
             .ReverseMap();
+
+        CreateMap<PatientAllergy, PatientAllergyDto>()
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
+            .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
+            .ForMember(dest => dest.DiagnosisDate, opt => opt.MapFrom(src => src.DiagnosisDate))
+            .ForMember(dest => dest.AllergicReaction, opt => opt.MapFrom(src => src.AllergicReaction))
+            .ForMember(dest => dest.Allergen, opt => opt.MapFrom(src => src.Allergy.Allergen))
+            .ReverseMap()
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
+            .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
+            .ForMember(dest => dest.Allergen, opt => opt.MapFrom(src => src.Allergen))
+            .ForMember(dest => dest.DiagnosisDate, opt => opt.MapFrom(src => src.DiagnosisDate))
+            .ForMember(dest => dest.AllergicReaction, opt => opt.MapFrom(src => src.AllergicReaction))
+            .ForMember(dest => dest.Patient, opt => opt.Ignore())
+            .ForMember(dest => dest.Allergy, opt => opt.Ignore())
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+
+        CreateMap<PatientAllergy, PatientAllergyForCreationDto>()
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
+            .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
+            .ForMember(dest => dest.DiagnosisDate, opt => opt.MapFrom(src => src.DiagnosisDate))
+            .ForMember(dest => dest.AllergicReaction, opt => opt.MapFrom(src => src.AllergicReaction))
+            .ForMember(dest => dest.Allergen, opt => opt.MapFrom(src => src.Allergy.Allergen))
+            .ReverseMap()
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
+            .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
+            .ForMember(dest => dest.DiagnosisDate, opt => opt.MapFrom(src => src.DiagnosisDate))
+            .ForMember(dest => dest.AllergicReaction, opt => opt.MapFrom(src => src.AllergicReaction))
+            .ForMember(dest => dest.Patient, opt => opt.Ignore())
+            .ForMember(dest => dest.Allergy, opt => opt.Ignore())
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+        
+        CreateMap<PatientAllergy, PatientAllergyForUpdateDto>()
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
+            .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
+            .ForMember(dest => dest.DiagnosisDate, opt => opt.MapFrom(src => src.DiagnosisDate))
+            .ForMember(dest => dest.AllergicReaction, opt => opt.MapFrom(src => src.AllergicReaction))
+            .ForMember(dest => dest.Allergen, opt => opt.MapFrom(src => src.Allergy.Allergen))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+            .ReverseMap()
+            .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
+            .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
+            .ForMember(dest => dest.DiagnosisDate, opt => opt.MapFrom(src => src.DiagnosisDate))
+            .ForMember(dest => dest.AllergicReaction, opt => opt.MapFrom(src => src.AllergicReaction))
+            .ForMember(dest => dest.Patient, opt => opt.Ignore())
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+            .ForMember(dest => dest.Allergy, opt => opt.Ignore())
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
         #endregion
 
         //#region PatientAllergies

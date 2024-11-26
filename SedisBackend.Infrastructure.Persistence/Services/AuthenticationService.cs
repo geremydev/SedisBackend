@@ -78,7 +78,8 @@ public class AuthenticationService : IAuthService
             Roles = (await _userManager.GetRolesAsync(user)).ToList(),
             Succeeded = true,
             JWToken = token,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
+            CurrentRole = null
         };
     }
 
@@ -822,6 +823,45 @@ public class AuthenticationService : IAuthService
         }
 
         response.Succeeded = true;
+        return response;
+    }
+
+    public async Task<MinimalAuthenticationResponse> SetCurrentRole(Guid Id, string Role)
+    {
+        MinimalAuthenticationResponse response = new();
+        var user = await _userManager.Users.FirstOrDefaultAsync(e => e.Id == Id && e.IsActive);
+        if (user != null)
+        {
+            var userRoles = (await _userManager.GetRolesAsync(user)).ToList();
+            var token = await _tokenService.CreateToken(user);
+            var refreshToken = _tokenService.GenerateRefreshToken().Token;
+            if (userRoles.Contains(Role))
+            {
+                return new MinimalAuthenticationResponse
+                {
+                    Id = user.Id,
+                    Roles = userRoles,
+                    Succeeded = true,
+                    AccessToken = token,
+                    CurrentRole = Role
+                };
+            }
+            else
+                return new MinimalAuthenticationResponse
+                {
+                    Id = user.Id,
+                    Roles = userRoles,
+                    Succeeded = false,
+                    CurrentRole = Role,
+                    Error = "The subbmited role does not exist or the user don't posesses it."
+                };
+        }
+        else
+        {
+            response.Succeeded = false;
+            response.Error = "User not found.";
+        }
+
         return response;
     }
 /*

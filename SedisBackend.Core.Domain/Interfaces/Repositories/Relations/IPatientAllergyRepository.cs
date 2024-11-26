@@ -2,6 +2,7 @@
 
 namespace SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
 
-public interface IPatientAllergyRepository : IGenericRepository<PatientAllergy>
+public interface IPatientAllergyRepository : IGenericRelationalRepository<PatientAllergy>
 {
+    Task<PatientAllergy> GetEntityAsync(Guid patientId, Guid allergyId, bool trackChanges);
 }

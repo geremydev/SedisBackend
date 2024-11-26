@@ -71,4 +71,13 @@ public class UserManagementController : ControllerBase
         var result = await _authService.ChangeUserStatus(Id, isActive);
         return result.Succeeded ? NoContent() : BadRequest(result.Errors);
     }
+
+    [HttpPost("set-selected-role")]
+    [SwaggerOperation(Summary = "Seleccionar el rol con el que el usuario va a interactuar con el sistema.",
+        Description = "")]
+    public async Task<IActionResult> SetCurrentRole(Guid Id, string Role)
+    {
+        var result = await _authService.SetCurrentRole(Id, Role);
+        return result.Succeeded ? Ok(result ): BadRequest(result.Error);
+    }
 }

@@ -3,9 +3,8 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Co
 
 namespace SedisBackend.Core.Domain.Entities.Relations;
 
-public class PatientDiscapacity : IBaseEntity
+public class PatientDiscapacity 
 {
-    public Guid Id { get; set; }
     public Guid PatientId { get; set; }
     public Patient Patient { get; set; }
     public Guid DiscapacityId { get; set; }
@@ -15,4 +14,7 @@ public class PatientDiscapacity : IBaseEntity
 
     // Nivel de severidad (leve, moderada, severa) (opcional)
     public string Severity { get; set; }
+    public string Description { get; set; }
+    public bool Status { get; set; }
+
 }

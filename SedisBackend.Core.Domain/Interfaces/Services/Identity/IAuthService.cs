@@ -33,5 +33,6 @@ public interface IAuthService
     Task<ServiceResult> DeleteUser(string cardId);
     Task<ServiceResult> RestoreUser(string cardId);
     Task<ServiceResult> CreateUser(CreateUserRequest request);
+    Task<MinimalAuthenticationResponse> SetCurrentRole(Guid Id, string Role);
     //Task<ServiceResult> Patch(JsonPatchDocument<BaseUserForUpdateDto> patchDoc, Guid id);
 }

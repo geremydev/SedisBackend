@@ -7,9 +7,7 @@ namespace SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Facto
 public class RiskFactor : IBaseEntity
 {
     public Guid Id { get; set; }
-    public string Code { get; set; } // Por ejemplo, "77176002" para tabaquismo en SNOMED CT
-
-    public RiskFactorCodeType CodeType { get; set; } //SNOMED CT
+    public string IcdCode { get; set; } // Por ejemplo, "77176002" para tabaquismo en SNOMED CT
 
     // Description of the risk factor
     public string Description { get; set; }

@@ -6,7 +6,6 @@ namespace SedisBackend.Core.Domain.Entities.Models;
 
 public class Appointment : IBaseEntity
 {
-    [Key]
     public Guid Id { get; set; }
     public Guid PatientId { get; set; }
     public Patient Patient { get; set; }

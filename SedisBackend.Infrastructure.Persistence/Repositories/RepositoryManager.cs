@@ -79,6 +79,7 @@ public sealed class RepositoryManager : IRepositoryManager
         _doctorRepository = new Lazy<IDoctorRepository>(() => new DoctorRepository(repositoryContext));
         _medicalSpecialtyRepository = new Lazy<IMedicalSpecialtyRepository>(() => new MedicalSpecialtyRepository(repositoryContext));
         _patientRepository = new Lazy<IPatientRepository>(() => new PatientRepository(repositoryContext));
+        _patientAllergyRepository = new Lazy<IPatientAllergyRepository>(()=> new PatientAllergyRepository(repositoryContext));
 
         //_patientDiscapacityRepository = new Lazy<IPatientDiscapacityRepository>(() => new PatientDiscapacityRepository(repositoryContext));
         //_patientIllnessRepository = new Lazy<IPatientIllnessRepository>(() => new PatientIllnessRepository(repositoryContext));

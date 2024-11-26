@@ -13,12 +13,14 @@ public class AllergyConfiguration : IEntityTypeConfiguration<Allergy>
             new Allergy
             {
                 Id = Guid.Parse("33c7785e-58f4-4ab8-9f54-51bf8978963f"),
-                Allergen = "Peanuts"
+                Allergen = "Peanuts",
+                IcdCode = "123123"
             },
             new Allergy
             {
                 Id = Guid.Parse("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"),
-                Allergen = "Penicillin"
+                Allergen = "Penicillin",
+                IcdCode = "123123"
             }
         );
     }

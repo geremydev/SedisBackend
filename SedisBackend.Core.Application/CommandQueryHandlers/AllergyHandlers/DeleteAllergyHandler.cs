@@ -6,11 +6,11 @@ namespace SedisBackend.Core.Application.CommandHandlers.AllergyCommandHandlers;
 
 public record DeleteAllergyCommand(Guid Id, bool TrackChanges) : IRequest;
 
-internal sealed class DeleteAllergyHandler : IRequestHandler<DeleteAllergyCommand>
+internal sealed class DeletePatientAllergyHandler : IRequestHandler<DeleteAllergyCommand>
 {
     private readonly IRepositoryManager _repository;
 
-    public DeleteAllergyHandler(IRepositoryManager repository) => _repository = repository;
+    public DeletePatientAllergyHandler(IRepositoryManager repository) => _repository = repository;
 
     public async Task Handle(DeleteAllergyCommand request, CancellationToken cancellationToken)
     {

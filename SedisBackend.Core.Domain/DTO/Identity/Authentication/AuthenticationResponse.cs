@@ -8,6 +8,7 @@ public class AuthenticationResponse
     public string? Error { get; set; }
     public string? JWToken { get; set; }
     public string? RefreshToken { get; set; }
+    public string? CurrentRole { get; set; }
 }
 
 public class MinimalAuthenticationResponse
@@ -17,6 +18,7 @@ public class MinimalAuthenticationResponse
     public List<string> Roles { get; set; }
     public bool Succeeded { get; set; }
     public string? Error { get; set; }
+    public string? CurrentRole { get; set; }
 }
 
 public class FailedResponse

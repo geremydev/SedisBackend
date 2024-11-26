@@ -597,7 +597,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9a507aa6-7309-4fd6-a4fd-90c9cfa7d947"),
+                            Id = new Guid("e88a1aff-ec0d-429d-ab3b-4a62dafef800"),
                             DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
                             EntryHour = "08:00:00",
                             ExitHour = "17:00:00",
@@ -605,7 +605,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4c4a196f-1441-443a-8298-5f3b0592e4ac"),
+                            Id = new Guid("8edbaf29-5df0-4014-93d6-1a4d12c506ca"),
                             DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
                             EntryHour = "09:00:00",
                             ExitHour = "18:00:00",
@@ -636,13 +636,13 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("459e962f-d6fd-4ad8-a304-399ace5955a2"),
+                            Id = new Guid("9ebe84ff-4955-4092-883d-060fbb4b0a37"),
                             DoctorId = new Guid("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
                             MedicalSpecialtyId = new Guid("f1a2b3c4-d5e6-789f-0123-456789abcdef")
                         },
                         new
                         {
-                            Id = new Guid("bb10fa08-d70c-4905-adc0-7bf35165ba30"),
+                            Id = new Guid("93003508-bcd0-4e53-99c9-abee314f99c1"),
                             DoctorId = new Guid("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
                             MedicalSpecialtyId = new Guid("a1b2c3d4-e5f6-7890-1234-56789abcdef0")
                         });
@@ -741,7 +741,15 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("AllergyId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Allergen")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("AllergicReaction")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -754,6 +762,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.HasKey("PatientId", "AllergyId");
 
                     b.HasIndex("AllergyId");
@@ -765,17 +776,23 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         {
                             PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
                             AllergyId = new Guid("33c7785e-58f4-4ab8-9f54-51bf8978963f"),
+                            Allergen = "Peanuts",
                             AllergicReaction = "Anaphylaxis",
+                            Description = "Cuadro anafiláctivo grave",
                             DiagnosisDate = new DateTime(2020, 5, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Id = new Guid("e0a734b4-18bb-4c64-8f85-54487c656612")
+                            Id = new Guid("e0a734b4-18bb-4c64-8f85-54487c656612"),
+                            Status = true
                         },
                         new
                         {
                             PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
                             AllergyId = new Guid("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"),
+                            Allergen = "Penicilin",
                             AllergicReaction = "Rash",
+                            Description = "Rash grave",
                             DiagnosisDate = new DateTime(2019, 11, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Id = new Guid("a15c2d9b-d758-46b7-aceb-22a163c92a5f")
+                            Id = new Guid("a15c2d9b-d758-46b7-aceb-22a163c92a5f"),
+                            Status = true
                         });
                 });
 
@@ -786,6 +803,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
 
                     b.Property<Guid>("DiscapacityId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DiagnosisDate")
                         .IsRequired()
@@ -800,6 +821,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.HasKey("PatientId", "DiscapacityId");
 
                     b.HasIndex("DiscapacityId");
@@ -811,17 +835,21 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         {
                             PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
                             DiscapacityId = new Guid("1b54e13f-7a32-4cc1-ad6d-35298426a2fb"),
+                            Description = "Description",
                             DiagnosisDate = new DateTime(2018, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = new Guid("ae6aa623-f515-4b49-a926-5e72369cce77"),
-                            Severity = "Severa"
+                            Severity = "Severa",
+                            Status = true
                         },
                         new
                         {
                             PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
                             DiscapacityId = new Guid("5c52a9d3-6ee2-496e-a922-139de857d9d4"),
+                            Description = "Description",
                             DiagnosisDate = new DateTime(2020, 11, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = new Guid("79dad0d7-f852-486c-a369-9765aafefa86"),
-                            Severity = "Moderada"
+                            Severity = "Moderada",
+                            Status = true
                         });
                 });
 
@@ -840,6 +868,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.HasKey("PatientId", "HealthInsuranceId");
 
                     b.HasIndex("HealthInsuranceId");
@@ -852,14 +883,16 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
                             HealthInsuranceId = new Guid("b51ec3f9-bdc8-4a74-b43e-bf4da6e2f9b9"),
                             Id = new Guid("df7b9b16-ec96-4b9a-819e-df4b3c7b96c1"),
-                            PolicyNumber = "P0123456789"
+                            PolicyNumber = "P0123456789",
+                            Status = true
                         },
                         new
                         {
                             PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
                             HealthInsuranceId = new Guid("7f5d5339-9de6-4ab0-b43c-d6b3d43e4d80"),
                             Id = new Guid("5f6b3f9a-8d5e-4b2e-ae3f-2c6a78f4f9a1"),
-                            PolicyNumber = "P0987654321"
+                            PolicyNumber = "P0987654321",
+                            Status = true
                         });
                 });
 
@@ -908,7 +941,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IllnessId = new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"),
                             DiagnosisDate = new DateTime(2019, 4, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DocumentURL = "https://example.com/document/diabetes-diagnosis.pdf",
-                            Id = new Guid("c556acb9-ce43-46e2-a370-bc3b8b07108d"),
+                            Id = new Guid("f96d4a51-984d-43d6-9ccd-2c4c54d3465c"),
                             Notes = "Paciente monitoreado regularmente con niveles de glucosa controlados.",
                             Status = "Activa"
                         },
@@ -919,7 +952,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             DiagnosisDate = new DateTime(2021, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DischargeDate = new DateTime(2022, 3, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DocumentURL = "https://example.com/document/hypertension-diagnosis.pdf",
-                            Id = new Guid("3c4d7dcf-c3f5-4b3f-9476-43203dfd65b9"),
+                            Id = new Guid("7facd453-0419-4fa1-bd80-c4901d62853f"),
                             Notes = "Paciente responde bien al tratamiento y mantiene una presión estable.",
                             Status = "En remisión"
                         });
@@ -942,6 +975,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.HasKey("PatientId", "RiskFactorId");
 
                     b.HasIndex("RiskFactorId");
@@ -953,13 +989,15 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         {
                             PatientId = new Guid("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
                             RiskFactorId = new Guid("454e8d39-1363-41f4-a2d2-b99fde743fbf"),
-                            Id = new Guid("f68f3e15-994e-4c2d-a3ee-863d753032b0")
+                            Id = new Guid("f68f3e15-994e-4c2d-a3ee-863d753032b0"),
+                            Status = true
                         },
                         new
                         {
                             PatientId = new Guid("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
                             RiskFactorId = new Guid("6522252f-0021-433b-8174-f4e0833f859a"),
-                            Id = new Guid("807afcdf-633e-44a9-b688-4f3dd50ab905")
+                            Id = new Guid("807afcdf-633e-44a9-b688-4f3dd50ab905"),
+                            Status = true
                         });
                 });
 
@@ -982,6 +1020,9 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
                     b.HasKey("PatientId", "VaccineId");
 
                     b.HasIndex("VaccineId");
@@ -995,7 +1036,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             VaccineId = new Guid("c28e855d-2602-423f-a4d5-26954df029da"),
                             AppliedDoses = 2,
                             Id = new Guid("12ae1c94-c70d-4379-8cca-e8405a814c6d"),
-                            LastApplicationDate = new DateTime(2021, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            LastApplicationDate = new DateTime(2021, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = true
                         },
                         new
                         {
@@ -1003,7 +1045,8 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             VaccineId = new Guid("384e34fb-7d23-4123-a78e-13d7b0a91110"),
                             AppliedDoses = 1,
                             Id = new Guid("086dd520-144e-4afe-98aa-2bf09033048c"),
-                            LastApplicationDate = new DateTime(2023, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            LastApplicationDate = new DateTime(2023, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = true
                         });
                 });
 
@@ -1286,7 +1329,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CardId = "40211608647",
-                            ConcurrencyStamp = "34c2c6ad-bd68-4e7b-a047-5b0a61255b89",
+                            ConcurrencyStamp = "2b62fd86-efb4-4ea6-8e1a-8af769880621",
                             Email = "adminuser@email.com",
                             EmailConfirmed = true,
                             FirstName = "Brahiam",
@@ -1294,10 +1337,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = true,
                             LastName = "Montero",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEDLadqie9IksHubuIif+Qqn3qNyx0bA0/d8VEOYd0M313eFXyFiNs91nriktJkwfIQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK9jiB+uDX3cpXyfn6ZomFaiNWhBuXf7Ux1ZkbmuS2cMVdTdPB+OVu9EnTY26EkYkg==",
                             PhoneNumber = "829-143-9811",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "ca2414ba-ef46-4de8-8bed-318031192df1",
+                            SecurityStamp = "d1b79c6c-90e8-469a-ab3f-c491a1cc036a",
                             Sex = "M",
                             TwoFactorEnabled = false,
                             UserName = "adminuser"
@@ -1308,7 +1351,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CardId = "40211608641",
-                            ConcurrencyStamp = "876f944f-68b5-48d7-a718-f0f2938d22a0",
+                            ConcurrencyStamp = "81b32b5b-0ddd-4cbe-87f4-9019991f2b7d",
                             Email = "patientuser@email.com",
                             EmailConfirmed = true,
                             FirstName = "John",
@@ -1316,10 +1359,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = true,
                             LastName = "Doe",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEL14RWHRBQJnBXywriaEjK2YADy3VVDCRYiiRQfGD9LtyzHmYy1UXY9IQ13VMhkBMw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHGDhBdrGXyM6SjbnYFoDyS/jDj+MIZNXXXL9K6wySBgiYqA986yQcx0SonRb9F58A==",
                             PhoneNumber = "829-163-9811",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "a8eea935-9ade-4f73-9651-f079bff96958",
+                            SecurityStamp = "e62ddea1-a960-4510-946c-9e378ad9d601",
                             Sex = "M",
                             TwoFactorEnabled = false,
                             UserName = "patient"
@@ -1330,7 +1373,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CardId = "40211608648",
-                            ConcurrencyStamp = "cdcc714e-a293-4281-ae79-47486fc8eee3",
+                            ConcurrencyStamp = "fe737e19-0acf-4b83-bc5f-001bbb43b512",
                             Email = "patient2@email.com",
                             EmailConfirmed = true,
                             FirstName = "Alice",
@@ -1338,10 +1381,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = true,
                             LastName = "Smith",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEHbyHwHigagGJ6eNUFpEW9Gog67KZv2ditXTGIgP9kPEEgw8JZ6DTkzv28E3mrJJKw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELaElCtF68O9Kix1fSYAa8TVE+74hPzqWHZpxu2g3sAkna2H1tdPPlZAr2USBirIdw==",
                             PhoneNumber = "829-128-9811",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "cf1b5bf5-a330-49f6-8e6d-26132de3a0a2",
+                            SecurityStamp = "8b6abd34-e838-4ada-86f3-6706b61a0632",
                             Sex = "F",
                             TwoFactorEnabled = false,
                             UserName = "patient2"
@@ -1352,7 +1395,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1995, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CardId = "0987634321",
-                            ConcurrencyStamp = "9fe2443b-7516-4662-af45-48c5320ec171",
+                            ConcurrencyStamp = "6bec2a65-97b5-4691-a37a-8c3989f6ef6e",
                             Email = "assistantuser@email.com",
                             EmailConfirmed = true,
                             FirstName = "Ana",
@@ -1360,10 +1403,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = false,
                             LastName = "Martínez",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAECDWUjoNIwdCgysbLGVxcjfvSDSunPnaR0NFfHkw306qQroXPEymgqej3SvT+JufvA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECfKjpcmJPEHRG8EgZzCZbChJTfbW3dCxqJtBm2vPoNkMpZqVXOh4TBqlR/sOap2jg==",
                             PhoneNumber = "829-123-9811",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "a8274bc1-b949-46ec-9519-4747ec38322c",
+                            SecurityStamp = "b456edbb-1537-465d-b71d-bd51d2569180",
                             Sex = "F",
                             TwoFactorEnabled = false,
                             UserName = "assistantuser"
@@ -1374,7 +1417,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1980, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CardId = "40211608640",
-                            ConcurrencyStamp = "3a527a46-d07a-49a3-a36b-5fd08275bea4",
+                            ConcurrencyStamp = "d2f16904-5a68-476c-894a-86f90e4d14e9",
                             Email = "doctoruser@email.com",
                             EmailConfirmed = true,
                             FirstName = "John",
@@ -1382,10 +1425,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = true,
                             LastName = "Doe",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEDLNhMpfnvoYEqsjzvuK1no1SVEW/3UC/wJof+uKmtWY8UWibw9Ijl3fKd1DxhiwbA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIpRjmHq1ZEvGHId32I+dGBKJtE0pUvjYFWDxn630tqH6ferd+4TzsR09iVwAnRlRQ==",
                             PhoneNumber = "829-123-9812",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "25cc8b2f-35a0-4597-a218-17b1e4ebb899",
+                            SecurityStamp = "7f3d1029-a441-4e90-b872-38cc01f1ceb2",
                             Sex = "M",
                             TwoFactorEnabled = false,
                             UserName = "doctoruser"
@@ -1396,7 +1439,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             AccessFailedCount = 0,
                             Birthdate = new DateTime(1975, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             CardId = "0987654321",
-                            ConcurrencyStamp = "5346f31d-d51a-4926-891d-314f0b09fa2c",
+                            ConcurrencyStamp = "992df307-02f6-4a73-804d-ea6a05b2721e",
                             Email = "doctoruser2@email.com",
                             EmailConfirmed = true,
                             FirstName = "Jane",
@@ -1404,10 +1447,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             IsActive = false,
                             LastName = "Smith",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEAvFCa7ZqCR6xWP3yxvffbcl7tGwtEAvsnKQpa0pvBSfSGcFzbdaY7IeW3fJqincZA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMdFe2DmH1ptvpuT0YFmAlKw5QhEtGxzoIDD/Z30zsKV0fjQic7inIFsoAKyjx4+Zw==",
                             PhoneNumber = "829-123-9231",
                             PhoneNumberConfirmed = true,
-                            SecurityStamp = "83502f63-1098-4530-9135-b1f592e7ded3",
+                            SecurityStamp = "2c7ae9e8-7fde-4b65-9244-e81b31ea6977",
                             Sex = "F",
                             TwoFactorEnabled = false,
                             UserName = "doctoruser2"
@@ -1425,6 +1468,10 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("IcdCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Allergies", (string)null);
@@ -1433,12 +1480,14 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         new
                         {
                             Id = new Guid("33c7785e-58f4-4ab8-9f54-51bf8978963f"),
-                            Allergen = "Peanuts"
+                            Allergen = "Peanuts",
+                            IcdCode = "123123"
                         },
                         new
                         {
                             Id = new Guid("b0fa92b6-1a21-4e9e-845e-e2d5bbfe5e1d"),
-                            Allergen = "Penicillin"
+                            Allergen = "Penicillin",
+                            IcdCode = "123123"
                         });
                 });
 
@@ -1510,7 +1559,7 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                             PhysicalExamination = "\r\n                        Vital Signs: BP 140/90 mmHg, HR 82 bpm, RR 18 bpm, Temp 37.1°C.\r\n                        Anthropometry: Weight 80 kg, Height 1.80 m, BMI 24.7 kg/m².\r\n                        General: Skin warm, no cyanosis or jaundice observed.\r\n                        Cardiovascular: Heart sounds normal, no murmurs detected.\r\n                        Respiratory: Lung fields are clear to auscultation.\r\n                        Abdomen: Non-distended, no tenderness, liver and spleen not palpable.\r\n                        Extremities: No cyanosis or clubbing, peripheral pulses present.\r\n                    ",
                             PrescriptionId = new Guid("00000000-0000-0000-0000-000000000000"),
                             ReasonForVisit = "Follow-up on medication.",
-                            RegisterDate = new DateTime(2024, 11, 21, 9, 5, 40, 226, DateTimeKind.Local).AddTicks(8205)
+                            RegisterDate = new DateTime(2024, 11, 26, 10, 32, 0, 464, DateTimeKind.Local).AddTicks(4252)
                         });
                 });
 
@@ -1584,14 +1633,14 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("CodeType")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IcdCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1607,17 +1656,17 @@ namespace SedisBackend.Infrastructure.Persistence.Migrations
                         new
                         {
                             Id = new Guid("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"),
-                            Code = "E10",
                             CodeType = 0,
                             Description = "Enfermedad crónica en la que el páncreas produce poca o ninguna insulina.",
+                            IcdCode = "E10",
                             Name = "Diabetes Mellitus Tipo 1"
                         },
                         new
                         {
                             Id = new Guid("99c26293-7562-4d6a-9aa1-260bedb215a6"),
-                            Code = "I10",
                             CodeType = 0,
                             Description = "Condición de presión arterial elevada sin causa identificable.",
+                            IcdCode = "I10",
                             Name = "Hipertensión esencial (primaria)"
                         });
                 });

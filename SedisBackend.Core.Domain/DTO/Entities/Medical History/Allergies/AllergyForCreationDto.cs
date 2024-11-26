@@ -2,5 +2,6 @@
 
 public record AllergyForCreationDto
 {
-    public string Allergen { get; set; }
+    public Guid AllergyId { get; set; }
+    public string Allergen {  get; set; }
 }
