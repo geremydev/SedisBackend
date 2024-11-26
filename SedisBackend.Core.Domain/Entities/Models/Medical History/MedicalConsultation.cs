@@ -1,12 +1,17 @@
 ﻿using SedisBackend.Core.Domain.Entities;
 using SedisBackend.Core.Domain.Entities.Models;
+using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
+using SedisBackend.Core.Domain.Medical_History.Allergies;
+using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
+using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
+using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
 
 namespace SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
-public class ClinicalHistory : IBaseEntity
+public class MedicalConsultation : IBaseEntity
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } //Unique cause there can exist multiple consultation between one patient and a doctor
     public Guid PatientId { get; set; }
     public Patient Patient { get; set; }
     public Guid DoctorId { get; set; }
@@ -16,11 +21,16 @@ public class ClinicalHistory : IBaseEntity
     public string ReasonForVisit { get; set; }
     public string CurrentHistory { get; set; }
     public string? PhysicalExamination { get; set; }
-    public string? Diagnosis { get; set; }
-    public Guid PrescriptionId { get; set; }
-    public Prescription? Prescription { get; set; }
-    public DateTime RegisterDate { get; set; }
-    public bool IsActive { get; set; }
+    public ICollection<Allergy>? Allergies { get; set; }
+    public ICollection<Discapacity>? Discapacities { get; set; }
+    public ICollection<Illness>? Illness { get; set; }
+    public ICollection<RiskFactor>? RiskFactors { get; set; }
+
+    public ICollection<PatientMedication> PatientMedications { get; set; }
+    public ICollection<PatientLabTest> PatientLabTests { get; set; }
+    public DateTime? CreatedDate { get; set; }
+    public DateTime? LastModifiedDate { get; set; }
+    public string Status { get; set; }
    
 
 

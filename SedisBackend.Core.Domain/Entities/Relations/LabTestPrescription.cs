@@ -7,7 +7,7 @@ public class AppointmentPrescription : IBaseEntity
 {
     public Guid Id { get; set; }
     public Guid ClinicalHistoryId { get; set; }
-    public ClinicalHistory ClinicalHistory { get; set; }
+    public MedicalConsultation ClinicalHistory { get; set; }
     public Guid AppointmentId { get; set; }
     public Appointment Appointment { get; set; }
     public Guid PrescriptionId { get; set; }

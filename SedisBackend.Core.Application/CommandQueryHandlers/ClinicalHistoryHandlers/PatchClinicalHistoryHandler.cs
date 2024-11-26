@@ -9,10 +9,10 @@ using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 namespace SedisBackend.Core.Application.CommandQueryHandlers.ClinicalHistoryHandlers;
 
 public sealed record PatchClinicalHistoryCommand(Guid Id, bool TrackChanges, JsonPatchDocument<ClinicalHistoryForUpdateDto> PatchDoc)
-    : IRequest<(ClinicalHistoryForUpdateDto ClinicalHistoryToPatch, ClinicalHistory ClinicalHistoryEntity)>;
+    : IRequest<(ClinicalHistoryForUpdateDto ClinicalHistoryToPatch, MedicalConsultation ClinicalHistoryEntity)>;
 
 internal sealed class PatchClinicalHistoryHandler
-    : IRequestHandler<PatchClinicalHistoryCommand, (ClinicalHistoryForUpdateDto ClinicalHistoryToPatch, ClinicalHistory ClinicalHistoryEntity)>
+    : IRequestHandler<PatchClinicalHistoryCommand, (ClinicalHistoryForUpdateDto ClinicalHistoryToPatch, MedicalConsultation ClinicalHistoryEntity)>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
@@ -23,7 +23,7 @@ internal sealed class PatchClinicalHistoryHandler
         _mapper = mapper;
     }
 
-    public async Task<(ClinicalHistoryForUpdateDto ClinicalHistoryToPatch, ClinicalHistory ClinicalHistoryEntity)> Handle(
+    public async Task<(ClinicalHistoryForUpdateDto ClinicalHistoryToPatch, MedicalConsultation ClinicalHistoryEntity)> Handle(
         PatchClinicalHistoryCommand request, CancellationToken cancellationToken)
     {
         var ClinicalHistoryEntity = await _repository.ClinicalHistory.GetEntityAsync(request.Id, request.TrackChanges);

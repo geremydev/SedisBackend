@@ -177,9 +177,9 @@ public class GeneralProfile : Profile
         //#endregion
 
         #region Clinical History
-        CreateMap<ClinicalHistory, ClinicalHistoryDto>()
+        CreateMap<MedicalConsultation, ClinicalHistoryDto>()
             .ReverseMap();
-        CreateMap<ClinicalHistory, ClinicalHistoryForUpdateDto>()
+        CreateMap<MedicalConsultation, ClinicalHistoryForUpdateDto>()
                 .ReverseMap();
         //CreateMap<ClinicalHistory, ClinicalHistoryDto>()
         //        .ForMember(p => p.Patient, opt => opt.Ignore())

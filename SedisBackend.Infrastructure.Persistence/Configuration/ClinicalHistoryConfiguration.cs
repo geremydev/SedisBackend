@@ -4,15 +4,15 @@ using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
 namespace SedisBackend.Infrastructure.Persistence.Configuration;
 
-public class ClinicalHistoryConfiguration : IEntityTypeConfiguration<ClinicalHistory>
+public class ClinicalHistoryConfiguration : IEntityTypeConfiguration<MedicalConsultation>
 {
-    public void Configure(EntityTypeBuilder<ClinicalHistory> builder)
+    public void Configure(EntityTypeBuilder<MedicalConsultation> builder)
     {
         builder.ToTable("ClinicalHistories");
 
         builder.HasData
         (
-            new ClinicalHistory
+            new MedicalConsultation
             {
                 Id = Guid.Parse("c1aaea0c-c739-4125-a7b3-28da602de5a0"),
                 PatientId = Guid.Parse("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
@@ -31,7 +31,7 @@ public class ClinicalHistoryConfiguration : IEntityTypeConfiguration<ClinicalHis
                 Diagnosis = "Hypertension",
                 RegisterDate = DateTime.Parse("2021-03-10")
             },
-            new ClinicalHistory
+            new MedicalConsultation
             {
                 Id = Guid.Parse("47d713da-eb0f-44c8-bd0d-d1882834c81b"),
                 PatientId = Guid.Parse("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),

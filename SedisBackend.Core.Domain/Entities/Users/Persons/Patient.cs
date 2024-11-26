@@ -19,7 +19,8 @@ public class Patient
     public string? EmergencyContactName { get; set; }
     public string? EmergencyContactPhone { get; set; }
     public Guid? PrimaryCarePhysicianId { get; set; }
-    public ICollection<ClinicalHistory> ClinicalHistories { get; set; }
+    public Doctor PrimaryCarePhysician { get; set; }
+    public ICollection<MedicalConsultation> ClinicalHistories { get; set; }
     public ICollection<Appointment> Appointments { get; set; }
     public ICollection<PatientAllergy> Allergies { get; set; }
     public ICollection<PatientIllness> Illnesses { get; set; } 

@@ -7,7 +7,7 @@ public class Prescription : IBaseEntity
 {
     public Guid Id { get; set; }
     public Guid ClinicalHistoryId { get; set; }
-    public ClinicalHistory ClinicalHistory { get; set; } // Navigation property
+    public MedicalConsultation ClinicalHistory { get; set; } // Navigation property
     public ICollection<MedicationPrescription>? PrescribedMedications { get; set; }
     public ICollection<AppointmentPrescription>? PrescribedAppointments { get; set; }
     public string? OtherPrescriptions { get; set; }

@@ -32,7 +32,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<HealthCenterServices> HealthCenterServices { get; set; }
     public DbSet<Allergy> Allergies { get; set; }
     public DbSet<PatientAllergy> PatientAllergies { get; set; }
-    public DbSet<ClinicalHistory> ClinicalHistories { get; set; }
+    public DbSet<MedicalConsultation> ClinicalHistories { get; set; }
     public DbSet<FamilyHistory> FamilyHistories { get; set; }
     public DbSet<Discapacity> Discapacities { get; set; }
     public DbSet<LabTest> LabTests { get; set; }
@@ -345,7 +345,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                     .HasColumnType("decimal(11, 8)");
         });
 
-        modelBuilder.Entity<ClinicalHistory>(entity =>
+        modelBuilder.Entity<MedicalConsultation>(entity =>
         {
             entity.ToTable("ClinicalHistories");
             entity.HasKey(a => a.Id);
@@ -353,7 +353,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity
                 .HasOne(k => k.Prescription)
                 .WithOne(k => k.ClinicalHistory)
-                .HasForeignKey<ClinicalHistory>(k => k.PrescriptionId)
+                .HasForeignKey<MedicalConsultation>(k => k.PrescriptionId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 

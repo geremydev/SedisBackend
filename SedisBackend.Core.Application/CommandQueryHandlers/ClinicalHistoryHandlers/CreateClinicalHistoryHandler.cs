@@ -21,7 +21,7 @@ internal sealed class CreateClinicalHistoryHandler : IRequestHandler<CreateClini
 
     public async Task<ClinicalHistoryDto> Handle(CreateClinicalHistoryCommand request, CancellationToken cancellationToken)
     {
-        var clinicalHistoryEntity = _mapper.Map<ClinicalHistory>(request.clinicalHistory);
+        var clinicalHistoryEntity = _mapper.Map<MedicalConsultation>(request.clinicalHistory);
         _repository.ClinicalHistory.CreateEntity(clinicalHistoryEntity);
         await _repository.SaveAsync(cancellationToken);
 

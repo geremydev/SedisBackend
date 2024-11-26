@@ -10,7 +10,5 @@ public class Discapacity : IBaseEntity
     public string IcdCode { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
-    // Tipo de discapacidad (física, sensorial, intelectual, etc.)
-    public DiscapacityType Type { get; set; }
     public ICollection<PatientDiscapacity> PatientDiscapacities { get; set; }
 }

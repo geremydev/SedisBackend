@@ -5,23 +5,23 @@ using SedisBackend.Infrastructure.Persistence.Contexts;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories.ModelsRepositories;
 
-internal sealed class ClinicalHistoryRepository : RepositoryBase<ClinicalHistory>, IClinicalHistoryRepository
+internal sealed class ClinicalHistoryRepository : RepositoryBase<MedicalConsultation>, IClinicalHistoryRepository
 {
     public ClinicalHistoryRepository(SedisContext repositoryContext)
     : base(repositoryContext)
     {
     }
 
-    public async Task<IEnumerable<ClinicalHistory>> GetAllEntitiesAsync(bool trackChanges) =>
+    public async Task<IEnumerable<MedicalConsultation>> GetAllEntitiesAsync(bool trackChanges) =>
         await FindAll(trackChanges)
                     .OrderBy(c => c.Id)
                     .ToListAsync();
 
-    public async Task<ClinicalHistory> GetEntityAsync(Guid clinicalHistoryId, bool trackChanges) =>
+    public async Task<MedicalConsultation> GetEntityAsync(Guid clinicalHistoryId, bool trackChanges) =>
         await FindByCondition(c => c.Id.Equals(clinicalHistoryId), trackChanges)
                             .SingleOrDefaultAsync();
 
-    public void CreateEntity(ClinicalHistory clinicalHistory) => Create(clinicalHistory);
+    public void CreateEntity(MedicalConsultation clinicalHistory) => Create(clinicalHistory);
 
-    public void DeleteEntity(ClinicalHistory clinicalHistory) => Delete(clinicalHistory);
+    public void DeleteEntity(MedicalConsultation clinicalHistory) => Delete(clinicalHistory);
 }
