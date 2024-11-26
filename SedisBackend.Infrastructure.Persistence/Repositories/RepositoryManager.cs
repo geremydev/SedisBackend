@@ -70,6 +70,7 @@ public sealed class RepositoryManager : IRepositoryManager
         _vaccineRepository = new Lazy<IVaccineRepository>(() => new VaccineRepository(repositoryContext));
         _discapacityRepository = new Lazy<IDiscapacityRepository>(() => new DiscapacityRepository(repositoryContext));
         _illnessRepository = new Lazy<IIllnessRepository>(() => new IllnessRepository(repositoryContext));
+        _patientIllnessRepository = new Lazy<IPatientIllnessRepository>(() => new PatientIllnessRespository(repositoryContext));
         _riskFactorRepository = new Lazy<IRiskFactorRepository>(() => new RiskFactorRepository(repositoryContext));
         _healthInsuranceRepository = new Lazy<IHealthInsuranceRepository>(() => new HealthInsuranceRepository(repositoryContext));
         _medicationCoverageRepository = new Lazy<IMedicationCoverageRepository>(() => new MedicationCoverageRepository(repositoryContext));

@@ -104,11 +104,13 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .WithOne()
                 .HasForeignKey<Patient>(p => p.Id)
                 .OnDelete(DeleteBehavior.Cascade);
+
             entity.HasMany(p => p.Allergies)
                 .WithOne(pa => pa.Patient)
                 .HasForeignKey(pa => pa.PatientId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
+
             entity.HasMany(p => p.Illnesses)
                 .WithOne(pi => pi.Patient)
                 .HasForeignKey(pi => pi.PatientId)

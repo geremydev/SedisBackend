@@ -341,7 +341,7 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.ApplicationUser.Sex.ToString()))
             .ForMember(dest => dest.PrimaryCarePhysicianId, opt => opt.MapFrom(src => src.PrimaryCarePhysicianId))
             .ForMember(dest => dest.Allergies, opt => opt.MapFrom(src => src.Allergies.Select(a => a.Allergy)))
-            .ForMember(dest => dest.Illnesses, opt => opt.MapFrom(src => src.Illnesses.Select(i => i.Illness)))
+            .ForMember(dest => dest.Illnesses, opt => opt.MapFrom(src => src.Illnesses.Select(a=>a.Illness)))
             .ForMember(dest => dest.Discapacities, opt => opt.MapFrom(src => src.Discapacities.Select(d => d.Discapacity)))
             .ForMember(dest => dest.RiskFactors, opt => opt.MapFrom(src => src.RiskFactors.Select(r => r.RiskFactor)))
             .ForMember(dest => dest.Vaccines, opt => opt.MapFrom(src => src.Vaccines.Select(v => v.Vaccine)))

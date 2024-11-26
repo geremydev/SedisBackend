@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Application.Helpers;
-using SedisBackend.Core.Domain.DTO.Entities.Users;
 using SedisBackend.Core.Domain.DTO.Error;
 using SedisBackend.Core.Domain.DTO.Identity.Authentication;
 using SedisBackend.Core.Domain.DTO.Shared;
@@ -352,6 +350,7 @@ public class AuthenticationService : IAuthService
         ServiceResult response = new();
 
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == Id);
+
         if (user == null)
         {
             response.Errors.Add(new CustomError { Code = "CUS01", Description = "User not found." });
