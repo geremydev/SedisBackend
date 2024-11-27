@@ -152,7 +152,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.Property(p => p.Height).HasColumnType("decimal(5, 2)");
             entity.Property(p => p.Weight).HasColumnType("decimal(5, 2)");
 
-            entity.HasQueryFilter(d => !d.IsDeleted);
+            //entity.HasQueryFilter(d => !d.IsDeleted);
         });
 
         modelBuilder.Entity<Doctor>(entity =>
@@ -188,7 +188,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
               .HasForeignKey(k => k.DoctorId)
               .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasQueryFilter(d => !d.IsDeleted);
+            //entity.HasQueryFilter(d => !d.IsDeleted);
         });
 
         modelBuilder.Entity<Admin>(entity =>
@@ -218,7 +218,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasForeignKey<Assistant>(d => d.Id)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasQueryFilter(d => !d.IsDeleted);
+            //entity.HasQueryFilter(d => !d.IsDeleted);
         });
 
         modelBuilder.Entity<PatientAllergy>(entity =>
@@ -267,7 +267,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                    .HasForeignKey(a => a.HealthCenterId)
                    .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasQueryFilter(d => !d.IsDeleted);
+            //entity.HasQueryFilter(d => !d.IsDeleted);
         });
 
         modelBuilder.Entity<AppointmentPrescription>(entity =>
@@ -357,7 +357,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasQueryFilter(d => d.IsActive);
+            //entity.HasQueryFilter(d => d.IsActive);
         });
 
         modelBuilder.Entity<FamilyHistory>(entity =>
@@ -367,7 +367,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             // ...
 
-            entity.HasQueryFilter(d => !d.IsDeleted);
+            //entity.HasQueryFilter(d => !d.IsDeleted);
         });
 
         modelBuilder.Entity<Discapacity>(entity =>
@@ -415,6 +415,8 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .OnDelete(DeleteBehavior.NoAction);
         });
 
+        // Brahiam...
+
         modelBuilder.Entity<PatientIllness>(entity =>
         {
             entity.ToTable("PatientIllnesses");
@@ -423,15 +425,22 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasOne(pa => pa.Patient)
                 .WithMany(p => p.Illnesses)
                 .HasForeignKey(pa => pa.PatientId)
-                .IsRequired(false);
+                .IsRequired();
+
             entity.HasOne(pa => pa.Illness)
                 .WithMany(a => a.PatientIllnesses)
                 .HasForeignKey(pa => pa.IllnessId);
-            entity.Property(pa => pa.DischargeDate)
-                .HasColumnType("Date");
+
+            entity.Property(pi => pi.DocumentURL).HasMaxLength(2048);
+            entity.Property(pi => pi.Status).HasMaxLength(50).HasDefaultValueSql("Activo").IsRequired();
+            entity.Property(pi => pi.Notes);
+
             entity.Property(pa => pa.DiagnosisDate)
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");
+
+            entity.Property(pa => pa.DischargeDate)
+                .HasColumnType("Date");
         });
 
         modelBuilder.Entity<RiskFactor>(entity =>
@@ -439,10 +448,10 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.ToTable("RiskFactors");
             entity.HasKey(a => a.Id);
 
-            entity.Property(a => a.CodeType).IsRequired();
-            entity.Property(a => a.AssessmentLevel).IsRequired();
             entity.Property(a => a.IcdCode).IsRequired();
-            entity.Property(a => a.Category).IsRequired();
+            entity.Property(a => a.Title).IsRequired();
+            entity.Property(a => a.IcdCode).IsRequired();
+            entity.Property(a => a.Description).IsRequired();
 
             entity.HasMany(a => a.PatientRiskFactors)
                 .WithOne(pa => pa.RiskFactor)
@@ -458,13 +467,17 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasOne(pa => pa.Patient)
                 .WithMany(p => p.RiskFactors)
                 .HasForeignKey(pa => pa.PatientId)
-                .IsRequired(false);
+                .IsRequired();
+
             entity.HasOne(pa => pa.RiskFactor)
                 .WithMany(a => a.PatientRiskFactors)
                 .HasForeignKey(pa => pa.RiskFactorId);
+
             entity.Property(pa => pa.DiagnosisDate)
-                .IsRequired()
-                .HasDefaultValueSql("GETDATE()");
+                .HasDefaultValueSql("GETDATE()")
+                .IsRequired();
+
+            entity.Property(pi => pi.Status).HasMaxLength(50).HasDefaultValueSql("Activo").IsRequired();
         });
 
         modelBuilder.Entity<PatientVaccine>(entity =>
@@ -475,14 +488,19 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasOne(pa => pa.Patient)
                 .WithMany(p => p.Vaccines)
                 .HasForeignKey(pa => pa.PatientId)
-                .IsRequired(false);
+                .IsRequired();
+
             entity.HasOne(pa => pa.Vaccine)
                 .WithMany(a => a.PatientVaccines)
                 .HasForeignKey(pa => pa.VaccineId);
-            entity.Property(pa => pa.AppliedDoses);
+
+            entity.Property(pa => pa.AppliedDoses).IsRequired();
+
             entity.Property(pa => pa.LastApplicationDate)
-                .IsRequired()
-                .HasDefaultValueSql("GETDATE()");
+                .HasDefaultValueSql("GETDATE()")
+                .IsRequired();
+
+            entity.Property(pi => pi.Status).HasMaxLength(50).HasDefaultValue(false).IsRequired();
         });
 
         modelBuilder.Entity<Vaccine>(entity =>
@@ -490,7 +508,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.ToTable("Vaccines");
             entity.HasKey(a => a.Id);
 
-            entity.Property(a => a.Disease)
+            entity.Property(a => a.Name)
                 .IsRequired();
 
             entity.Property(a => a.Doses)
@@ -502,7 +520,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasMany(a => a.PatientVaccines)
                 .WithOne(pa => pa.Vaccine)
                 .HasForeignKey(pa => pa.VaccineId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<HealthInsurance>(entity =>
@@ -510,7 +528,27 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.ToTable("HealthInsurances");
             entity.HasKey(a => a.Id);
 
-            // ...
+            entity.Property(a => a.InsuranceName)
+                .IsRequired();
+
+            entity.Property(a => a.PolicyType)
+                .IsRequired();
+
+            entity.Property(a => a.InsuranceCompany)
+                .IsRequired();
+
+            entity.Property(a => a.CoverageLevel)
+                .IsRequired();
+
+            entity.HasMany(a => a.MedicationCoverages)
+                .WithOne(hi => hi.HealthInsurance)
+                .HasForeignKey(hi => hi.HealthInsuranceId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasMany(a => a.SubscribedPatients)
+                .WithOne(hi => hi.HealthInsurance)
+                .HasForeignKey(hi => hi.HealthInsuranceId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<MedicationCoverage>(entity =>
@@ -518,57 +556,13 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.ToTable("MedicationCoverages");
             entity.HasKey(a => a.Id);
 
-            // ...
-        });
+            entity.HasOne(mc => mc.HealthInsurance)
+                .WithMany(mc => mc.MedicationCoverages)
+                .HasForeignKey(mc => mc.HealthInsuranceId)
+                .IsRequired();
 
-        modelBuilder.Entity<MedicationPrescription>(entity =>
-        {
-            entity.ToTable("MedicationPrescriptions");
-            entity.HasKey(a => a.Id);
-
-            // ...
-        });
-
-        modelBuilder.Entity<Prescription>(entity =>
-        {
-            entity.ToTable("Prescriptions");
-            entity.HasKey(a => a.Id);
-
-            entity
-                .HasMany(k => k.PrescribedMedications)
-                .WithOne(k => k.Prescription)
-                .HasForeignKey(k => k.PrescriptionId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            entity.HasMany(k => k.PrescribedAppointments)
-                .WithOne(k => k.Prescription)
-                .HasForeignKey(k => k.PrescriptionId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            entity.HasOne(p => p.ClinicalHistory)
-                    .WithOne(k => k.Prescription)
-                    .HasForeignKey<Prescription>(k => k.ClinicalHistoryId)
-                    .IsRequired(false)
-                    .OnDelete(DeleteBehavior.NoAction);
-        });
-
-        modelBuilder.Entity<Medication>(entity =>
-        {
-            entity.ToTable("Medications");
-            entity.HasKey(a => a.Id);
-
-            entity.Property(m => m.Concentration)
-                .HasColumnType("decimal(10, 2)");
-        });
-
-        modelBuilder.Entity<LabTest>(entity =>
-        {
-            entity.ToTable("LabTests");
-            entity.HasKey(a => a.Id);
-        });
-
-        modelBuilder.Entity<MedicationCoverage>(entity =>
-        {
+            entity.HasOne(mc => mc.Medication).WithMany(m => m.Coverages).HasForeignKey(mc => mc.MedicationId).IsRequired();
+            entity.Property(mc => mc.CoverageStatus).HasConversion<string>().IsRequired();
             entity.Property(mc => mc.CopayAmount)
                 .HasColumnType("decimal(10, 2)")
                 .IsRequired();
@@ -576,40 +570,96 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.Property(mc => mc.CoinsurancePercentage)
                 .HasColumnType("decimal(5, 2)")
                 .IsRequired();
+
+            entity.Property(mc => mc.PriorAuthorizationRequired)
+                .IsRequired();
         });
 
-        modelBuilder.Entity<DoctorHealthCenter>(entity =>
+        modelBuilder.Entity<Medication>(entity =>
         {
-            entity.ToTable("DoctorHealthCenters");
-            entity.HasKey(a => a.Id);
+            entity.ToTable("Medications");
 
-            entity.HasOne(pa => pa.Doctor)
-                            .WithMany(p => p.CurrentlyWorkingHealthCenters)
-                            .HasForeignKey(pa => pa.DoctorId)
-                            .IsRequired(false);
-            entity.HasOne(pa => pa.HealthCenter)
-                .WithMany(a => a.Doctors)
-                .HasForeignKey(pa => pa.HealthCenterId);
+            entity.HasKey(m => m.Id);
 
-            entity.Property(e => e.EntryHour)
-                .HasConversion(
-                    v => TimeSpanToString(v),
-                    v => StringToTimeSpan(v)
-                );
+            entity.Property(m => m.Name)
+                .HasMaxLength(255)
+                .IsRequired();
 
-            entity.Property(e => e.ExitHour)
-            .HasConversion(
-                v => TimeSpanToString(v),
-                v => StringToTimeSpan(v)
-            );
+            entity.Property(m => m.DosageForm)
+                .HasConversion<string>()
+                .IsRequired();
+
+            entity.Property(m => m.ActiveIngredient)
+                .HasMaxLength(500);
+
+            entity.Property(m => m.Concentration)
+                .HasColumnType("decimal(10, 2)")
+                .IsRequired();
+
+            entity.Property(m => m.UnitOfMeasurement)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            entity.Property(m => m.RouteOfAdministration)
+                .HasMaxLength(255)
+                .IsRequired();
+
+            entity.Property(m => m.Indications)
+                .HasMaxLength(2000);
+
+            entity.Property(m => m.Contraindications)
+                .HasMaxLength(2000);
+
+            entity.Property(m => m.Precautions)
+                .HasMaxLength(2000);
+
+            entity.Property(m => m.SideEffects)
+                .HasMaxLength(2000);
+
+            entity.Property(m => m.DrugInteractions)
+                .HasMaxLength(2000);
+
+            entity.Property(m => m.Presentation)
+                .HasMaxLength(500);
+
+            entity.Property(m => m.ImageUrl)
+                .HasMaxLength(2048);
+
+            entity.Property(m => m.NationalCode)
+                .HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<LabTest>(entity =>
+        {
+            entity.ToTable("LabTests");
+
+            entity.HasKey(lt => lt.Id);
+
+            entity.Property(lt => lt.TestName)
+                .HasMaxLength(255)
+                .IsRequired();
+
+            entity.Property(lt => lt.TestCode)
+                .HasMaxLength(100);
         });
 
         modelBuilder.Entity<MedicalSpecialty>(entity =>
         {
-            entity.ToTable("MedicalSpecialities");
-            entity.HasKey(a => a.Id);
+            entity.ToTable("MedicalSpecialties");
 
-            // ...
+            entity.HasKey(ms => ms.Id);
+
+            entity.Property(ms => ms.Name)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            entity.Property(ms => ms.Description)
+                .HasMaxLength(1000);
+
+            entity.HasMany(ms => ms.Doctors)
+                .WithOne(dms => dms.MedicalSpecialty)
+                .HasForeignKey(dms => dms.MedicalSpecialtyId)
+                .IsRequired();
         });
 
         modelBuilder.Entity<DoctorMedicalSpecialty>(entity =>
@@ -617,46 +667,66 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.ToTable("DoctorMedicalSpecialities");
             entity.HasKey(a => a.Id);
 
-            entity.HasOne(pa => pa.Doctor)
-                .WithMany(p => p.Specialties)
-                .HasForeignKey(pa => pa.DoctorId)
-                .IsRequired(false);
-            entity.HasOne(pa => pa.MedicalSpecialty)
-                .WithMany(a => a.Doctors)
-                .HasForeignKey(pa => pa.MedicalSpecialtyId);
+            entity.HasOne(dms => dms.Doctor)
+                    .WithMany(d => d.Specialties)
+                    .HasForeignKey(dms => dms.DoctorId)
+                    .IsRequired();
 
-            // ...
+            entity.HasOne(dms => dms.MedicalSpecialty)
+                .WithMany(ms => ms.Doctors)
+                .HasForeignKey(dms => dms.MedicalSpecialtyId)
+                .IsRequired();
         });
 
         modelBuilder.Entity<HealthInsurance>(entity =>
         {
             entity.ToTable("HealthInsurances");
-            entity.HasKey(a => a.Id);
 
-            entity.HasMany(k => k.MedicationCoverages)
-                .WithOne(k => k.HealthInsurance)
-                .HasForeignKey(k => k.HealthInsuranceId)
-                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasKey(hi => hi.Id);
 
-            entity.HasMany(k => k.SubscribedPatients)
-                .WithOne(k => k.HealthInsurance)
-                .HasForeignKey(k => k.HealthInsuranceId)
-                .OnDelete(DeleteBehavior.Cascade);
+            entity.Property(hi => hi.InsuranceName)
+                .HasMaxLength(255)
+                .IsRequired();
+
+            entity.Property(hi => hi.PolicyType)
+                .HasMaxLength(100)
+                .IsRequired();
+
+            entity.Property(hi => hi.InsuranceCompany)
+                .HasMaxLength(255);
+
+            entity.Property(hi => hi.CoverageLevel)
+                .HasMaxLength(100);
+
+            entity.HasMany(hi => hi.MedicationCoverages)
+                .WithOne(mc => mc.HealthInsurance)
+                .HasForeignKey(mc => mc.HealthInsuranceId);
+
+            entity.HasMany(hi => hi.SubscribedPatients)
+                .WithOne(ph => ph.HealthInsurance)
+                .HasForeignKey(ph => ph.HealthInsuranceId);
         });
 
         modelBuilder.Entity<PatientHealthInsurance>(entity =>
         {
             entity.ToTable("PatientHealthInsurances");
-            entity.HasKey(pa => new { pa.PatientId, pa.HealthInsuranceId });
-            entity.HasOne(pa => pa.Patient)
-                .WithMany(p => p.HealthInsurances)
-                .HasForeignKey(pa => pa.PatientId)
-                .IsRequired(false);
-            entity.HasOne(pa => pa.HealthInsurance)
-                .WithMany(a => a.SubscribedPatients)
-                .HasForeignKey(pa => pa.HealthInsuranceId);
-            entity.Property(pa => pa.PolicyNumber)
+
+            entity.HasKey(ph => new { ph.PatientId, ph.HealthInsuranceId });
+
+            entity.Property(ph => ph.PolicyNumber)
+                .HasMaxLength(50)
                 .IsRequired();
+
+            entity.Property(ph => ph.Status)
+                .IsRequired();
+
+            entity.HasOne(ph => ph.Patient)
+                .WithMany(p => p.HealthInsurances)
+                .HasForeignKey(ph => ph.PatientId);
+
+            entity.HasOne(ph => ph.HealthInsurance)
+                .WithMany(hi => hi.SubscribedPatients)
+                .HasForeignKey(ph => ph.HealthInsuranceId);
         });
 
         modelBuilder.ApplyConfiguration(new UserConfiguration());
