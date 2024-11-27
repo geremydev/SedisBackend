@@ -2,6 +2,6 @@
 
 namespace SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
 
-public interface IAppointmentPrescriptionRepository : IGenericRepository<AppointmentPrescription>
+public interface IPatientLabTestPrescriptionRepository : IGenericRepository<PatientLabTestPrescription>
 {
 }

@@ -24,10 +24,10 @@ public class MedicalConsultation : IBaseEntity
     public ICollection<Appointment>? Appointments { get; set; }
     public ICollection<PatientAllergy>? Allergies { get; set; }
     public ICollection<PatientDiscapacity>? Discapacities { get; set; }
-    public ICollection<PatientIllness>? Illness { get; set; }
+    public ICollection<PatientIllness>? Illnesses { get; set; }
     public ICollection<PatientRiskFactor>? RiskFactors { get; set; }
-    public ICollection<PatientMedication> PatientMedications { get; set; }
-    public ICollection<PatientLabTest> PatientLabTests { get; set; }
+    public ICollection<PatientMedicationPrescription> PatientMedications { get; set; }
+    public ICollection<PatientLabTestPrescription> PatientLabTests { get; set; }
     public ICollection<PatientVaccine> PatientVaccines { get; set; }
     public DateTime? CreatedDate { get; set; }
     public DateTime? LastModifiedDate { get; set; }

@@ -1,4 +1,5 @@
 ﻿using SedisBackend.Core.Domain.Entities.Users.Persons;
+using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
 
 namespace SedisBackend.Core.Domain.Entities.Relations;
@@ -16,5 +17,7 @@ public class PatientDiscapacity
     public string Severity { get; set; }
     public string Description { get; set; }
     public bool Status { get; set; }
+    public Guid MedicalConsultationId { get; set; }
+    public MedicalConsultation MedicalConsultation { get; set; }
 
 }

@@ -43,10 +43,8 @@ public interface IRepositoryManager
     IPatientHealthInsuranceRepository PatientHealthInsurance { get; }
 
     // Prescription
-    IAppointmentPrescriptionRepository AppointmentPrescription { get; }
-    IMedicationPrescriptionRepository MedicationPrescription { get; }
-    IPrescriptionRepository Prescription { get; }
-
+    IPatientMedicationPrescriptionRepository PatientMedicationPrescriptionRepository { get; }
+    IPatientLabTestPrescriptionRepository PatientLabTestPrescription { get; }
     // Products
     ILabTestRepository LabTest { get; }
     IMedicationRepository Medication { get; }
@@ -56,7 +54,6 @@ public interface IRepositoryManager
     IAssistantRepository Assistant { get; }
     IDoctorRepository Doctor { get; }
     IDoctorMedicalSpecialtyRepository DoctorMedicalSpecialty { get; }
-    IDoctorHealthCenterRepository DoctorHealthCenter { get; }
     IMedicalSpecialtyRepository MedicalSpecialty { get; }
     IPatientRepository Patient { get; }
 
