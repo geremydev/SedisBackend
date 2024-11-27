@@ -1,5 +1,6 @@
 ﻿using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
+using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
 namespace SedisBackend.Core.Domain.Entities.Relations;
 
@@ -14,4 +15,6 @@ public class PatientAllergy
     public DateTime? DiagnosisDate { get; set; }
     public string? Description { get; set; }
     public bool Status { get; set; }
+    public Guid MedicalConsultationId { get; set; }
+    public MedicalConsultation MedicalConsultation { get; set; }
 }
