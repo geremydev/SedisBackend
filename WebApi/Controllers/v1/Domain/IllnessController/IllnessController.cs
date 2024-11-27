@@ -58,7 +58,7 @@ public class IllnessController : BaseApiController
         return NoContent();
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("{id:guid}", Name = "PutIllnessById")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IllnessForUpdateDto))]
@@ -71,7 +71,7 @@ public class IllnessController : BaseApiController
         return Ok();
     }
 
-    [HttpPatch("{id:guid}")]
+    [HttpPatch("{id:guid}", Name = "PatchIllnessById")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IllnessForUpdateDto))]
