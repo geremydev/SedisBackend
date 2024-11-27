@@ -365,3 +365,4 @@ FodyWeavers.xsd
 /WebApi/appsettings.json
 /WebApi/appsettings.json
 /WebApi/internal_logs/internallog.txt
+/SedisBackend.Infrastructure.Persistence/Migrations
