@@ -42,6 +42,9 @@ public interface IRepositoryManager
     IMedicationCoverageRepository MedicationCoverage { get; }
     IPatientHealthInsuranceRepository PatientHealthInsurance { get; }
 
+    // Prescription
+    IPatientMedicationPrescriptionRepository PatientMedicationPrescriptionRepository { get; }
+    IPatientLabTestPrescriptionRepository PatientLabTestPrescription { get; }
     // Products
     ILabTestRepository LabTest { get; }
     IMedicationRepository Medication { get; }

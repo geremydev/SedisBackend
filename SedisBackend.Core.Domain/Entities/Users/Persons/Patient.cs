@@ -26,9 +26,9 @@ public class Patient
     public ICollection<PatientIllness>? Illnesses { get; set; } 
     public ICollection<PatientDiscapacity>? Discapacities { get; set; }
     public ICollection<PatientRiskFactor>? RiskFactors { get; set; } 
-    public ICollection<PatientMedication>? Medications { get; set; } 
+    public ICollection<PatientMedicationPrescription>? Medications { get; set; } 
     public ICollection<PatientHealthInsurance>? HealthInsurances { get; set; }
-    public ICollection<PatientLabTest>? LabTests { get; set; } 
+    public ICollection<PatientLabTestPrescription>? LabTests { get; set; } 
     public ICollection<FamilyHistory>? FamilyHistories { get; set; } 
     public ICollection<PatientVaccine>? Vaccines { get; set; } 
 
