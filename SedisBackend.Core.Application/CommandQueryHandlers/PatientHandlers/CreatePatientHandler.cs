@@ -7,7 +7,6 @@ using SedisBackend.Core.Domain.Entities.Models;
 using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
@@ -52,7 +51,7 @@ internal sealed class CreatePatientHandler : IRequestHandler<CreatePatientComman
             RiskFactors = new List<PatientRiskFactor>(),
             Vaccines = new List<PatientVaccine>(),
             FamilyHistories = new List<FamilyHistory>(),
-            IsActive = true
+            Status = true
         };
 
         _repository.Patient.CreateEntity(patientEntity);
@@ -64,6 +63,6 @@ internal sealed class CreatePatientHandler : IRequestHandler<CreatePatientComman
         await transaction.CommitAsync(cancellationToken);
 
         return _mapper.Map<PatientDto>(patientEntity);
-        
+
     }
 }

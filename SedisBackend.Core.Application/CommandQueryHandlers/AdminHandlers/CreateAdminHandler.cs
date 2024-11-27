@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -37,13 +36,13 @@ internal sealed class CreateAdminHandler : IRequestHandler<CreateAdminCommand, A
         {
             throw new UserNotFoundException(request.admin.UserId.ToString());
         }
-            
+
 
         var adminEntity = new Admin
         {
-            Id             = request.admin.UserId,
+            Id = request.admin.UserId,
             HealthCenterId = request.admin.HealthCenterId,
-            IsActive       = true
+            Status = true
         };
 
         _repository.Admin.CreateEntity(adminEntity);

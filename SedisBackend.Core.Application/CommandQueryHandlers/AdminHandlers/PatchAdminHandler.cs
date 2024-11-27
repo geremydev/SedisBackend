@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -34,7 +33,7 @@ internal sealed class PatchAdminHandler
     {
         // Retrieve the Admin entity from the repository
         var adminEntity = await _repository.Admin.GetEntityAsync(request.Id, request.TrackChanges);
-        var originalIsActive = adminEntity.IsActive;
+        var originalIsActive = adminEntity.Status;
 
         // Check if the Admin entity exists
         if (adminEntity is null)
@@ -52,24 +51,24 @@ internal sealed class PatchAdminHandler
 
         // Map the updated DTO back to the Admin entity
         _mapper.Map(adminToPatch, adminEntity);
-        adminEntity.IsActive = originalIsActive;        //Esto es porque no encuentro por qué se resetea el isActive so this is wrong but later i'm gonna fix it
+        adminEntity.Status = originalIsActive;        //Esto es porque no encuentro por qué se resetea el isActive so this is wrong but later i'm gonna fix it
 
         // Update the nested ApplicationUser properties if they are not null
         if (adminEntity.ApplicationUser != null)
         {
-            if (adminEntity.IsActive != adminToPatch.IsActive)
+            if (adminEntity.Status != adminToPatch.Status)
             {
-                adminEntity.IsActive = adminToPatch.IsActive;
+                adminEntity.Status = adminToPatch.Status;
 
                 var currentUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == adminEntity.Id, cancellationToken);
 
-                if (adminEntity.IsActive)
+                if (adminEntity.Status)
                     await _userManager.AddToRoleAsync(currentUser, "Admin");
                 else
                     await _userManager.RemoveFromRoleAsync(currentUser, "Admin");
             }
 
-            if(adminToPatch.HealthCenterId != null)
+            if (adminToPatch.HealthCenterId != null)
             {
                 adminEntity.HealthCenterId = adminToPatch.HealthCenterId;
             }

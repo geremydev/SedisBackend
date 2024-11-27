@@ -46,14 +46,11 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<Vaccine> Vaccines { get; set; }
     public DbSet<HealthInsurance> HealthInsurances { get; set; }
     public DbSet<MedicationCoverage> MedicationCoverages { get; set; }
-    public DbSet<Prescription> Prescriptions { get; set; }
-
     public DbSet<PatientDiscapacity> PatientDiscapacities { get; set; }
     public DbSet<PatientIllness> PatientIllnesses { get; set; }
     public DbSet<PatientRiskFactor> PatientRiskFactors { get; set; }
     public DbSet<PatientVaccine> PatientVaccines { get; set; }
     public DbSet<PatientHealthInsurance> PatientHealthInsurances { get; set; }
-    public DbSet<MedicationPrescription> MedicationPrescriptions { get; set; }
     public DbSet<DoctorMedicalSpecialty> DoctorMedicalSpecialities { get; set; }
     #endregion
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -467,7 +464,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasForeignKey(pa => pa.IllnessId);
 
             entity.Property(pi => pi.DocumentURL).HasMaxLength(2048);
-            entity.Property(pi => pi.Status).HasMaxLength(50).HasDefaultValueSql("Activo").IsRequired();
+            entity.Property(pi => pi.Status).HasMaxLength(50).HasDefaultValue("Activo").IsRequired();
             entity.Property(pi => pi.Notes);
 
             entity.Property(pa => pa.DiagnosisDate)
@@ -597,7 +594,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .IsRequired();
 
             entity.HasOne(mc => mc.Medication).WithMany(m => m.Coverages).HasForeignKey(mc => mc.MedicationId).IsRequired();
-            entity.Property(mc => mc.CoverageStatus).HasConversion<string>().IsRequired();
+            entity.Property(mc => mc.CoverageStatus).IsRequired();
             entity.Property(mc => mc.CopayAmount)
                 .HasColumnType("decimal(10, 2)")
                 .IsRequired();
@@ -621,7 +618,6 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .IsRequired();
 
             entity.Property(m => m.DosageForm)
-                .HasConversion<string>()
                 .IsRequired();
 
             entity.Property(m => m.ActiveIngredient)
@@ -703,9 +699,9 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasKey(a => a.Id);
 
             entity.HasOne(dms => dms.Doctor)
-                    .WithMany(d => d.Specialties)
-                    .HasForeignKey(dms => dms.DoctorId)
-                    .IsRequired();
+                .WithMany(d => d.Specialties)
+                .HasForeignKey(dms => dms.DoctorId)
+                .IsRequired();
 
             entity.HasOne(dms => dms.MedicalSpecialty)
                 .WithMany(ms => ms.Doctors)
@@ -778,11 +774,6 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.ApplyConfiguration(new PatientRiskFactorConfiguration());
         modelBuilder.ApplyConfiguration(new PatientVaccineConfiguration());
 
-        // Configuraciones relacionadas con el historial clínico y prescripciones
-        modelBuilder.ApplyConfiguration(new ClinicalHistoryConfiguration());
-        modelBuilder.ApplyConfiguration(new PrescriptionConfiguration());
-        modelBuilder.ApplyConfiguration(new MedicationPrescriptionConfiguration());
-
         // Configuraciones relacionadas con citas y servicios médicos
         modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
         modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
@@ -790,7 +781,6 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
         //modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
         modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
-        modelBuilder.ApplyConfiguration(new AppointmentPrescriptionConfiguration());
 
         // Configuraciones de entidades secundarias y auxiliares
         modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());

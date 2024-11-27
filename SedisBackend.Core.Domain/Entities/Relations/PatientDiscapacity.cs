@@ -3,7 +3,7 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Co
 
 namespace SedisBackend.Core.Domain.Entities.Relations;
 
-public class PatientDiscapacity 
+public class PatientDiscapacity
 {
     public Guid PatientId { get; set; }
     public Patient Patient { get; set; }
@@ -16,5 +16,4 @@ public class PatientDiscapacity
     public string Severity { get; set; }
     public string Description { get; set; }
     public bool Status { get; set; }
-
 }

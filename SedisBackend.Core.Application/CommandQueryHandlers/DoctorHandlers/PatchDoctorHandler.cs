@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -32,7 +31,7 @@ internal sealed class PatchDoctorHandler
         PatchDoctorCommand request, CancellationToken cancellationToken)
     {
         var doctorEntity = await _repository.Doctor.GetEntityAsync(request.Id, request.TrackChanges);
-        var originalIsActive = doctorEntity.IsActive;
+        var originalIsActive = doctorEntity.Status;
         if (doctorEntity is null)
             throw new EntityNotFoundException(request.Id);
 
@@ -44,17 +43,17 @@ internal sealed class PatchDoctorHandler
         });
 
         _mapper.Map(doctorToPatch, doctorEntity);
-        doctorEntity.IsActive = originalIsActive;
+        doctorEntity.Status = originalIsActive;
         if (doctorEntity.ApplicationUser != null)
         {
             if (doctorToPatch.IsActive != null)
             {
-                if (doctorEntity.IsActive != doctorToPatch.IsActive)
+                if (doctorEntity.Status != doctorToPatch.IsActive)
                 {
-                    doctorEntity.IsActive = doctorToPatch.IsActive;
+                    doctorEntity.Status = doctorToPatch.IsActive;
 
                     var currentUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == doctorEntity.Id, cancellationToken);
-                    if(doctorEntity.IsActive)
+                    if (doctorEntity.Status)
                         await _userManager.AddToRoleAsync(currentUser, "Doctor");
                     else
                         await _userManager.RemoveFromRoleAsync(currentUser, "Doctor");

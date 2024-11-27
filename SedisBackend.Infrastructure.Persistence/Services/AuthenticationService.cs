@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Application.Helpers;
-using SedisBackend.Core.Domain.DTO.Entities.Users;
 using SedisBackend.Core.Domain.DTO.Error;
 using SedisBackend.Core.Domain.DTO.Identity.Authentication;
 using SedisBackend.Core.Domain.DTO.Shared;
-using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Enums;
@@ -61,7 +58,7 @@ public class AuthenticationService : IAuthService
                 Error = "Invalid identification number or password."
             };
         }
-        if(user != null && user.IsActive == false)
+        if (user != null && user.IsActive == false)
         {
             return new AuthenticationResponse
             {
@@ -156,8 +153,7 @@ public class AuthenticationService : IAuthService
         var patientEntity = new Patient
         {
             Id = patientUser.Id,
-            IsActive = true,
-            IsDeleted = false,
+            Status = true,
         };
 
         _repository.Patient.CreateEntity(patientEntity);
@@ -361,16 +357,16 @@ public class AuthenticationService : IAuthService
 
         user.IsActive = isActive;
 
-        if(user.IsActive == false) //Si se inactiva el user entonces inactiva todos los roles que tiene asignado
+        if (user.IsActive == false) //Si se inactiva el user entonces inactiva todos los roles que tiene asignado
         {
             var userRoles = (await _userManager.GetRolesAsync(user)).ToList();
-            foreach (var role in userRoles) 
+            foreach (var role in userRoles)
             {
                 switch (role)
                 {
                     case "Admin":
                         var admin = await _repository.Admin.GetEntityAsync(user.Id, true);
-                        admin.IsActive = false;
+                        admin.Status = false;
                         break;
                     case "Assistant":
                         var assistant = await _repository.Assistant.GetEntityAsync(user.Id, true);
@@ -378,11 +374,11 @@ public class AuthenticationService : IAuthService
                         break;
                     case "Patient":
                         var patient = await _repository.Patient.GetEntityAsync(user.Id, true);
-                        patient.IsActive = false;
+                        patient.Status = false;
                         break;
                     case "Doctor":
                         var doctor = await _repository.Doctor.GetEntityAsync(user.Id, true);
-                        doctor.IsActive = false;
+                        doctor.Status = false;
                         break;
                 }
             }
@@ -649,8 +645,7 @@ public class AuthenticationService : IAuthService
                 _repository.Patient.CreateEntity(new Patient
                 {
                     Id = userId,
-                    IsActive = true,
-                    IsDeleted = false,
+                    Status = true,
                 });
                 break;
 
@@ -665,20 +660,11 @@ public class AuthenticationService : IAuthService
 
             case RolesEnum.Doctor:
 
-                var dhc = new DoctorHealthCenter();
-
-                dhc.DoctorId = userId;
-                dhc.HealthCenterId = healthCenterId;
-
                 _repository.Doctor.CreateEntity(new Doctor
                 {
                     Id = userId,
-                    IsActive = true,
-                    CurrentlyWorkingHealthCenters = { dhc },
-                    IsDeleted = false,
+                    Status = true,
                 });
-
-                dhc.DoctorId = userId;
 
                 break;
 
@@ -697,8 +683,7 @@ public class AuthenticationService : IAuthService
                 {
                     Id = userId,
                     HealthCenterId = healthCenterId,
-                    IsActive = true,
-                    IsDeleted = false,
+                    Status = true,
                 });
                 break;
         }
@@ -712,8 +697,7 @@ public class AuthenticationService : IAuthService
                 var doctor = await _repository.Doctor.GetEntityAsync(userId, true);
                 if (doctor != null)
                 {
-                    doctor.IsActive = false;
-                    doctor.IsDeleted = true;
+                    doctor.Status = false;
                 }
                 break;
 
@@ -730,8 +714,7 @@ public class AuthenticationService : IAuthService
                 var admin = await _repository.Admin.GetEntityAsync(userId, true);
                 if (admin != null)
                 {
-                    admin.IsActive = false;
-                    admin.IsDeleted = true;
+                    admin.Status = false;
                 }
                 break;
         }
@@ -747,7 +730,7 @@ public class AuthenticationService : IAuthService
                 var patient = await _repository.Patient.GetEntityAsync(userId, true);
                 if (patient != null)
                 {
-                    patient.IsActive = isActive;
+                    patient.Status = isActive;
                 }
                 break;
 
@@ -755,7 +738,7 @@ public class AuthenticationService : IAuthService
                 var doctor = await _repository.Doctor.GetEntityAsync(userId, true);
                 if (doctor != null)
                 {
-                    doctor.IsActive = isActive;
+                    doctor.Status = isActive;
                 }
                 break;
 
@@ -771,7 +754,7 @@ public class AuthenticationService : IAuthService
                 var admin = await _repository.Admin.GetEntityAsync(userId, true);
                 if (admin != null)
                 {
-                    admin.IsActive = isActive;
+                    admin.Status = isActive;
                 }
                 break;
         }
@@ -864,68 +847,68 @@ public class AuthenticationService : IAuthService
 
         return response;
     }
-/*
-    public async Task<ServiceResult> Patch(Guid Id, BaseUserForUpdateDto dto)
-    {
-        var result = new ServiceResult() { Succeeded = true };
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == Id);
-        if (user == null)
+    /*
+        public async Task<ServiceResult> Patch(Guid Id, BaseUserForUpdateDto dto)
         {
-            throw new ArgumentException("User not found");
-        }
-        // Update user properties if they are not null or empty
-        if (!string.IsNullOrWhiteSpace(dto.FirstName))
-            user.FirstName = dto.FirstName;
-        if (!string.IsNullOrWhiteSpace(dto.LastName))
-            user.LastName = dto.LastName;
-        if (!string.IsNullOrWhiteSpace(dto.Email))
-            user.Email = dto.Email;
-        if (!string.IsNullOrWhiteSpace(dto.PhoneNumber))
-            user.PhoneNumber = dto.PhoneNumber;
-        if (!string.IsNullOrWhiteSpace(dto.ImageUrl))
-            user.ImageUrl = dto.ImageUrl;
-        if (dto.IsActive != null)
-        {
-            if (user.IsActive != dto.IsActive)
+            var result = new ServiceResult() { Succeeded = true };
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == Id);
+            if (user == null)
             {
-                if(dto.IsActive == false)
+                throw new ArgumentException("User not found");
+            }
+            // Update user properties if they are not null or empty
+            if (!string.IsNullOrWhiteSpace(dto.FirstName))
+                user.FirstName = dto.FirstName;
+            if (!string.IsNullOrWhiteSpace(dto.LastName))
+                user.LastName = dto.LastName;
+            if (!string.IsNullOrWhiteSpace(dto.Email))
+                user.Email = dto.Email;
+            if (!string.IsNullOrWhiteSpace(dto.PhoneNumber))
+                user.PhoneNumber = dto.PhoneNumber;
+            if (!string.IsNullOrWhiteSpace(dto.ImageUrl))
+                user.ImageUrl = dto.ImageUrl;
+            if (dto.IsActive != null)
+            {
+                if (user.IsActive != dto.IsActive)
                 {
-                    var roles = (await _userManager.GetRolesAsync(user)).ToList();
-                    
+                    if(dto.IsActive == false)
+                    {
+                        var roles = (await _userManager.GetRolesAsync(user)).ToList();
+
+                    }
                 }
             }
-        }
-            
-        if (dto.Birthdate != default)
-            user.Birthdate = dto.Birthdate;
-        if (!string.IsNullOrWhiteSpace(dto.Sex))
-            if (dto.Sex == "m")
-                user.Sex = SexEnum.M;
-            else
-                user.Sex = SexEnum.F;
-        *//*// Update password if provided
-        if (!string.IsNullOrWhiteSpace(dto.Password))
-        {
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            await _userManager.ResetPasswordAsync(user, token, dto.Password);
-        }*//*
-        var data = await _userManager.UpdateAsync(user);
-        if (!data.Succeeded)
-        {
-            result.Succeeded = false;
-            result.Errors = new List<CustomError>();
-            foreach (var item in data.Errors)
+
+            if (dto.Birthdate != default)
+                user.Birthdate = dto.Birthdate;
+            if (!string.IsNullOrWhiteSpace(dto.Sex))
+                if (dto.Sex == "m")
+                    user.Sex = SexEnum.M;
+                else
+                    user.Sex = SexEnum.F;
+            *//*// Update password if provided
+            if (!string.IsNullOrWhiteSpace(dto.Password))
             {
-                result.Errors.Add(
-                    new CustomError()
-                    {
-                        Code = item.Code,
-                        Description = item.Description
-                    });
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                await _userManager.ResetPasswordAsync(user, token, dto.Password);
+            }*//*
+            var data = await _userManager.UpdateAsync(user);
+            if (!data.Succeeded)
+            {
+                result.Succeeded = false;
+                result.Errors = new List<CustomError>();
+                foreach (var item in data.Errors)
+                {
+                    result.Errors.Add(
+                        new CustomError()
+                        {
+                            Code = item.Code,
+                            Description = item.Description
+                        });
+                }
             }
-        }
-        return result;
-    }*/
+            return result;
+        }*/
 
     #endregion
 }

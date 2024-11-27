@@ -9,5 +9,5 @@ public record PatientForUpdateDto
     public string? EmergencyContactName { get; set; }
     public string? EmergencyContactPhone { get; set; }
     public Guid? PrimaryCarePhysicianId { get; set; }
-    public bool IsActive { get; set; }
+    public bool Status { get; set; }
 }

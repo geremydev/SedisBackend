@@ -12,7 +12,6 @@ public class PatientIllnessConfiguration : IEntityTypeConfiguration<PatientIllne
         (
             new PatientIllness
             {
-                Id = Guid.NewGuid(),
                 PatientId = Guid.Parse("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
                 IllnessId = Guid.Parse("1097ba6f-7f4d-4fcc-ae34-f89cf70930a4"),
                 DocumentURL = "https://example.com/document/diabetes-diagnosis.pdf",
@@ -22,7 +21,6 @@ public class PatientIllnessConfiguration : IEntityTypeConfiguration<PatientIllne
             },
             new PatientIllness
             {
-                Id = Guid.NewGuid(),
                 PatientId = Guid.Parse("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
                 IllnessId = Guid.Parse("99c26293-7562-4d6a-9aa1-260bedb215a6"),
                 DocumentURL = "https://example.com/document/hypertension-diagnosis.pdf",

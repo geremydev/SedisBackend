@@ -18,7 +18,7 @@ internal sealed class DeleteClinicalHistoryHandler : IRequestHandler<DeleteClini
         if (clinicalHistory is null)
             throw new EntityNotFoundException(request.Id);
 
-        clinicalHistory.IsActive = false;
+        clinicalHistory.Status = "Deleted";
         await _repository.SaveAsync(cancellationToken);
     }
 }

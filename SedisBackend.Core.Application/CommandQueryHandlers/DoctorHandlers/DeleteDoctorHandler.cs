@@ -18,8 +18,7 @@ internal sealed class DeleteDoctorHandler : IRequestHandler<DeleteDoctorCommand>
         if (doctor is null)
             throw new EntityNotFoundException(request.Id);
 
-        doctor.IsDeleted = true;
-        doctor.IsActive = false;
+        doctor.Status = false;
         await _repository.SaveAsync(cancellationToken);
     }
 }

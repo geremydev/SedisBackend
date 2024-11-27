@@ -3,9 +3,7 @@
 public record RiskFactorDto
 {
     public Guid Id { get; set; }
-    public string Code { get; set; }
-    public string CodeType { get; set; }
+    public string IcdCode { get; set; }
+    public string Title { get; set; }
     public string Description { get; set; }
-    public string Category { get; set; }
-    public string AssessmentLevel { get; set; }
 }

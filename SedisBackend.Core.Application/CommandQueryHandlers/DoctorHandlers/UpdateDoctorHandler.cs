@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 using SedisBackend.Core.Domain.Entities.Users;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -33,20 +32,20 @@ internal sealed class UpdateDoctorHandler : IRequestHandler<UpdateDoctorCommand,
         if (existingUser is null)
             throw new EntityNotFoundException(request.Id);
 
-            var doctorEntity = await _repository.Doctor.GetEntityAsync(request.Id, true);
+        var doctorEntity = await _repository.Doctor.GetEntityAsync(request.Id, true);
 
-            if (doctorEntity.IsActive != request.Doctor.IsActive)
-            {
-                doctorEntity.IsActive = request.Doctor.IsActive;
-                if (doctorEntity.IsActive)
-                    await _userManager.AddToRoleAsync(existingUser, "Doctor");
-                else
-                    await _userManager.RemoveFromRoleAsync(existingUser, "Doctor");
-            }
+        if (doctorEntity.Status != request.Doctor.IsActive)
+        {
+            doctorEntity.Status = request.Doctor.IsActive;
+            if (doctorEntity.Status)
+                await _userManager.AddToRoleAsync(existingUser, "Doctor");
+            else
+                await _userManager.RemoveFromRoleAsync(existingUser, "Doctor");
+        }
         doctorEntity.ApplicationUser.PhoneNumberConfirmed = false;
 
-            await _repository.SaveAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
+        await _repository.SaveAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
 
         return Unit.Value;
     }

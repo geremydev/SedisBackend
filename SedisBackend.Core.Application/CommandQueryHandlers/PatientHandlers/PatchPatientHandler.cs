@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Patients;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -32,7 +31,7 @@ internal sealed class PatchPatientHandler
         PatchPatientCommand request, CancellationToken cancellationToken)
     {
         var patientEntity = await _repository.Patient.GetEntityAsync(request.Id, request.TrackChanges);
-        var originalIsActive = patientEntity.IsActive;
+        var originalIsActive = patientEntity.Status;
         if (patientEntity is null)
             throw new EntityNotFoundException(request.Id);
 
@@ -44,47 +43,47 @@ internal sealed class PatchPatientHandler
         });
 
         _mapper.Map(patientToPatch, patientEntity);
-        patientEntity.IsActive = originalIsActive;
+        patientEntity.Status = originalIsActive;
         if (patientEntity.ApplicationUser != null)
         {
-            if (patientToPatch.IsActive != null)
+            if (patientToPatch.Status != null)
             {
-                if (!patientEntity.IsActive == patientToPatch.IsActive)
+                if (!patientEntity.Status == patientToPatch.Status)
                 {
-                    patientEntity.IsActive = patientToPatch.IsActive;
+                    patientEntity.Status = patientToPatch.Status;
 
                     var currentUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == patientEntity.Id, cancellationToken);
-                    if (patientEntity.IsActive == true)
+                    if (patientEntity.Status == true)
                         await _userManager.AddToRoleAsync(currentUser, "Patient");
                     else
                         await _userManager.RemoveFromRoleAsync(currentUser, "Patient");
                 }
             }
-            if(patientEntity.BloodType != null)
+            if (patientEntity.BloodType != null)
             {
                 patientEntity.BloodType = patientToPatch.BloodType;
             }
-            if(patientEntity.BloodTypeLabResultURl != null)
+            if (patientEntity.BloodTypeLabResultURl != null)
             {
                 patientEntity.BloodTypeLabResultURl = patientToPatch.BloodTypeLabResultURl;
             }
-            if(patientEntity.Height != null)
+            if (patientEntity.Height != null)
             {
                 patientEntity.Height = patientToPatch.Height;
             }
-            if(patientEntity.Weight != null)
+            if (patientEntity.Weight != null)
             {
                 patientEntity.Weight = patientToPatch.Weight;
             }
-            if(patientEntity.EmergencyContactName != null)
+            if (patientEntity.EmergencyContactName != null)
             {
                 patientEntity.EmergencyContactName = patientToPatch.EmergencyContactName;
             }
-            if(patientEntity.EmergencyContactPhone != null)
+            if (patientEntity.EmergencyContactPhone != null)
             {
                 patientEntity.EmergencyContactPhone = patientToPatch.EmergencyContactPhone;
             }
-            if (patientEntity.PrimaryCarePhysicianId != null) 
+            if (patientEntity.PrimaryCarePhysicianId != null)
             {
                 patientEntity.PrimaryCarePhysicianId = patientToPatch.PrimaryCarePhysicianId;
             }

@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 using SedisBackend.Core.Domain.Entities.Users;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -35,10 +34,10 @@ internal sealed class UpdateAdminHandler : IRequestHandler<UpdateAdminCommand, U
 
         var adminEntity = await _repository.Admin.GetEntityAsync(request.Id, true);
         adminEntity.HealthCenterId = request.Admin.HealthCenterId;
-        if (adminEntity.IsActive != request.Admin.IsActive)
+        if (adminEntity.Status != request.Admin.Status)
         {
-            adminEntity.IsActive = request.Admin.IsActive;
-            if (adminEntity.IsActive)
+            adminEntity.Status = request.Admin.Status;
+            if (adminEntity.Status)
                 await _userManager.AddToRoleAsync(existingUser, "Admin");
             else
                 await _userManager.RemoveFromRoleAsync(existingUser, "Admin");
@@ -46,7 +45,7 @@ internal sealed class UpdateAdminHandler : IRequestHandler<UpdateAdminCommand, U
 
         await _repository.SaveAsync(cancellationToken);
         await transaction.CommitAsync(cancellationToken);
-       
+
 
         return Unit.Value;
     }

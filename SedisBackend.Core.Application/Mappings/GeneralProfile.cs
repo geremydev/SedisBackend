@@ -12,7 +12,6 @@ using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.HealthInsuranceDTO;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.MedicationCoverageDTO;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_Specialty;
-using SedisBackend.Core.Domain.DTO.Entities.Prescriptions;
 using SedisBackend.Core.Domain.DTO.Entities.Products.LabTest;
 using SedisBackend.Core.Domain.DTO.Entities.Products.Medication;
 using SedisBackend.Core.Domain.DTO.Entities.Users;
@@ -123,7 +122,6 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
             .ForMember(dest => dest.DiagnosisDate, opt => opt.MapFrom(src => src.DiagnosisDate))
             .ForMember(dest => dest.AllergicReaction, opt => opt.MapFrom(src => src.AllergicReaction))
-            .ForMember(dest => dest.Allergen, opt => opt.MapFrom(src => src.Allergy.Allergen))
             .ReverseMap()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
             .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
@@ -140,7 +138,6 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
             .ForMember(dest => dest.DiagnosisDate, opt => opt.MapFrom(src => src.DiagnosisDate))
             .ForMember(dest => dest.AllergicReaction, opt => opt.MapFrom(src => src.AllergicReaction))
-            .ForMember(dest => dest.Allergen, opt => opt.MapFrom(src => src.Allergy.Allergen))
             .ReverseMap()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
             .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
@@ -149,13 +146,12 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.Patient, opt => opt.Ignore())
             .ForMember(dest => dest.Allergy, opt => opt.Ignore())
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
-        
+
         CreateMap<PatientAllergy, PatientAllergyForUpdateDto>()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
             .ForMember(dest => dest.AllergyId, opt => opt.MapFrom(src => src.AllergyId))
             .ForMember(dest => dest.DiagnosisDate, opt => opt.MapFrom(src => src.DiagnosisDate))
             .ForMember(dest => dest.AllergicReaction, opt => opt.MapFrom(src => src.AllergicReaction))
-            .ForMember(dest => dest.Allergen, opt => opt.MapFrom(src => src.Allergy.Allergen))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
             .ReverseMap()
             .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
@@ -243,9 +239,9 @@ public class GeneralProfile : Profile
 
         #region RiskFactor
         CreateMap<RiskFactor, RiskFactorDto>()
-            .ForMember(dest => dest.AssessmentLevel, opt => opt.MapFrom(src => src.AssessmentLevel.ToString()))
-            .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()))
-            .ForMember(dest => dest.CodeType, opt => opt.MapFrom(src => src.CodeType.ToString()))
+            .ForMember(dest => dest.IcdCode, opt => opt.MapFrom(src => src.IcdCode))
+            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
             .ReverseMap();
         CreateMap<RiskFactor, RiskFactorForCreationDto>()
             .ReverseMap();
@@ -320,33 +316,6 @@ public class GeneralProfile : Profile
             .ReverseMap();
         #endregion
 
-        #region Prescriptions
-
-        #region Prescription
-        CreateMap<Prescription, PrescriptionDto>()
-            .ReverseMap();
-        CreateMap<Prescription, PrescriptionForCreationDto>()
-            .ReverseMap();
-        CreateMap<Prescription, PrescriptionForUpdateDto>()
-            .ReverseMap();
-        #endregion
-
-        //#region MedicationPrescription
-        //CreateMap<MedicationPrescription, BaseMedicationPrescriptionDto>()
-        //    .ReverseMap();
-        //CreateMap<MedicationPrescription, SaveMedicationPrescriptionDto>()
-        //    .ReverseMap();
-        //#endregion
-
-        //#region AppointmentPrescription
-        //CreateMap<AppointmentPrescription, BaseAppointmentPrescriptionDto>()
-        //        .ReverseMap();
-        //CreateMap<AppointmentPrescription, SaveAppointmentPrescriptionDto>()
-        //    .ReverseMap();
-        //#endregion
-
-        #endregion
-
         #region Products
 
         #region Medication
@@ -385,7 +354,7 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.ApplicationUser.FirstName))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.ApplicationUser.LastName))
             .ForMember(dest => dest.CardId, opt => opt.MapFrom(src => src.ApplicationUser.CardId))
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.Status))
             .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.ApplicationUser.Birthdate))
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.ApplicationUser.Sex.ToString()))
             .ForMember(dest => dest.PrimaryCarePhysicianId, opt => opt.MapFrom(src => src.PrimaryCarePhysicianId))
@@ -415,12 +384,12 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.ApplicationUser.FirstName))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.ApplicationUser.LastName))
             .ForMember(dest => dest.CardId, opt => opt.MapFrom(src => src.ApplicationUser.CardId))
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.Status))
             .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.ApplicationUser.Birthdate))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.ApplicationUser.PhoneNumber))
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.ApplicationUser.Sex.ToString()))
             .ForMember(dest => dest.LicenseNumber, opt => opt.MapFrom(src => src.LicenseNumber))
-            .ForMember(dest => dest.CurrentlyWorkingHealthCenters, opt => opt.MapFrom(src => src.CurrentlyWorkingHealthCenters))
+            .ForMember(dest => dest.CurrentlyWorkingHealthCenter, opt => opt.MapFrom(src => src.CurrentlyWorkingHealthCenter))
             .ForMember(dest => dest.Specialties, opt => opt.MapFrom(src => src.Specialties))
             .ForMember(dest => dest.Appointments, opt => opt.MapFrom(src => src.Appointments))
             .ForMember(dest => dest.DevelopedClinicalHistories, opt => opt.MapFrom(src => src.MedicalConsultations))
@@ -436,24 +405,6 @@ public class GeneralProfile : Profile
         CreateMap<Doctor, DoctorForUpdateDto>()
             .ReverseMap()
             .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());
-        #endregion
-
-        #region DoctorHeatlhCenter
-        CreateMap<DoctorHealthCenter, HealthCenterDto>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.HealthCenter.Name))
-            .ForMember(dest => dest.LocationId, opt => opt.MapFrom(src => src.HealthCenter.LocationId))
-            .ForMember(dest => dest.HealthCenterCategory, opt => opt.MapFrom(src => src.HealthCenter.HealthCenterCategory))
-            .ReverseMap();
-        CreateMap<DoctorHealthCenter, HealthCenterForCreationDto>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.HealthCenter.Name))
-            .ForMember(dest => dest.LocationId, opt => opt.MapFrom(src => src.HealthCenter.LocationId))
-            .ForMember(dest => dest.HealthCenterCategory, opt => opt.MapFrom(src => src.HealthCenter.HealthCenterCategory))
-            .ReverseMap();
-        CreateMap<DoctorHealthCenter, HealthCenterForUpdateDto>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.HealthCenter.Name))
-            .ForMember(dest => dest.LocationId, opt => opt.MapFrom(src => src.HealthCenter.LocationId))
-            .ForMember(dest => dest.HealthCenterCategory, opt => opt.MapFrom(src => src.HealthCenter.HealthCenterCategory))
-            .ReverseMap();
         #endregion
 
         #region DoctorMedicalSpecialty
@@ -479,7 +430,7 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.ApplicationUser.FirstName))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.ApplicationUser.LastName))
             .ForMember(dest => dest.CardId, opt => opt.MapFrom(src => src.ApplicationUser.CardId))
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive))
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.Status))
             .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.ApplicationUser.Birthdate))
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.ApplicationUser.Sex.ToString()))
             .ForMember(dest => dest.HealthCenter, opt => opt.MapFrom(src => src.HealthCenter))
@@ -496,8 +447,8 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.HealthCenterId, opt => opt.MapFrom(src => src.HealthCenterId))
             .ReverseMap()
             .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore()) // Ignore ApplicationUser for reverse mapping
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsActive));
-        
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+
 
         CreateMap<AdminDto, AdminForUpdateDto>()
            .ReverseMap();

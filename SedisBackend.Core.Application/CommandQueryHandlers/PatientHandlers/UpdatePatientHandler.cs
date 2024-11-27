@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Patients;
 using SedisBackend.Core.Domain.Entities.Users;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -33,27 +32,27 @@ internal sealed class UpdatePatientHandler : IRequestHandler<UpdatePatientComman
         if (existingUser is null)
             throw new EntityNotFoundException(request.Id);
 
-            var patientEntity = await _repository.Patient.GetEntityAsync(request.Id, true);
-            
-            patientEntity.BloodType = request.Patient.BloodType;
-            patientEntity.EmergencyContactName = request.Patient.EmergencyContactName;
-            patientEntity.EmergencyContactPhone = request.Patient.EmergencyContactPhone;
-            patientEntity.Height = request.Patient.Height;
-            patientEntity.Weight = request.Patient.Weight;
-            patientEntity.PrimaryCarePhysicianId = request.Patient.PrimaryCarePhysicianId;
+        var patientEntity = await _repository.Patient.GetEntityAsync(request.Id, true);
 
-            if (patientEntity.IsActive != request.Patient.IsActive)
-            {
-                patientEntity.IsActive = request.Patient.IsActive;
-                if (patientEntity.IsActive)
-                    await _userManager.AddToRoleAsync(existingUser, "Patient");
-                else
-                    await _userManager.RemoveFromRoleAsync(existingUser, "Patient");
-            }
+        patientEntity.BloodType = request.Patient.BloodType;
+        patientEntity.EmergencyContactName = request.Patient.EmergencyContactName;
+        patientEntity.EmergencyContactPhone = request.Patient.EmergencyContactPhone;
+        patientEntity.Height = request.Patient.Height;
+        patientEntity.Weight = request.Patient.Weight;
+        patientEntity.PrimaryCarePhysicianId = request.Patient.PrimaryCarePhysicianId;
 
-            await _repository.SaveAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
-        
+        if (patientEntity.Status != request.Patient.Status)
+        {
+            patientEntity.Status = request.Patient.Status;
+            if (patientEntity.Status)
+                await _userManager.AddToRoleAsync(existingUser, "Patient");
+            else
+                await _userManager.RemoveFromRoleAsync(existingUser, "Patient");
+        }
+
+        await _repository.SaveAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+
         return Unit.Value;
     }
 }

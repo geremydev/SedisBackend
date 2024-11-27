@@ -20,9 +20,8 @@ internal sealed class DoctorRepository : RepositoryBase<Doctor>, IDoctorReposito
     public async Task<Doctor> GetEntityAsync(Guid doctorId, bool trackChanges) =>
         await FindByCondition(c => c.Id.Equals(doctorId), trackChanges)
                     .Include(p => p.Appointments)
-                    .Include(p => p.CurrentlyWorkingHealthCenters)
-                        .ThenInclude(hc => hc.HealthCenter)
-                    .Include(p => p.DevelopedClinicalHistories)
+                    .Include(p => p.CurrentlyWorkingHealthCenter)
+                    .Include(p => p.MedicalConsultations)
                     .Include(p => p.ApplicationUser)
                     .Include(p => p.Specialties)
                         .ThenInclude(pa => pa.MedicalSpecialty)

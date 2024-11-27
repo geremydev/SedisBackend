@@ -18,7 +18,7 @@ internal sealed class DeleteAppointmentHandler : IRequestHandler<DeleteAppointme
         if (appointment is null)
             throw new EntityNotFoundException(request.Id);
 
-        appointment.IsDeleted = true;
+        appointment.Status = "Deleted";
         await _repository.SaveAsync(cancellationToken);
     }
 }

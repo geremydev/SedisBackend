@@ -18,8 +18,7 @@ internal sealed class DeleteAdminHandler : IRequestHandler<DeleteAdminCommand>
         if (admin is null)
             throw new EntityNotFoundException(request.Id);
 
-        admin.IsDeleted = true;
-        admin.IsActive = false;
+        admin.Status = false;
         //_repository.Admin.DeleteEntity(admin);
         await _repository.SaveAsync(cancellationToken);
     }

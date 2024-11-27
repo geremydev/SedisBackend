@@ -10,8 +10,6 @@ public class AppointmentPrescription : IBaseEntity
     public MedicalConsultation Medicalconsultation { get; set; }
     public Guid AppointmentId { get; set; }
     public Appointment Appointment { get; set; }
-    public Guid PrescriptionId { get; set; }
-    public Prescription Prescription { get; set; }
     public string Status { get; set; } // Usamos el enum AppointmentStatus
     public DateTime PerformedDate { get; set; }
     public string ResultUrl { get; set; }

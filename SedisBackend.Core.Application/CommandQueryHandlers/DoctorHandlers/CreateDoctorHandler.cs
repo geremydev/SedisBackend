@@ -6,7 +6,6 @@ using SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -29,6 +28,7 @@ internal sealed class CreateDoctorHandler : IRequestHandler<CreateDoctorCommand,
 
     public async Task<DoctorDto> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
     {
+        // TODO mandar el id del healthcenter que pertenece el doctor
         using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
         var existingUser = await _userManager.Users
@@ -39,14 +39,12 @@ internal sealed class CreateDoctorHandler : IRequestHandler<CreateDoctorCommand,
             throw new UserNotFoundException(request.doctor.UserId.ToString());
         }
 
-
         var doctorEntity = new Doctor
         {
             Id = request.doctor.UserId,
             LicenseNumber = request.doctor.LicenseNumber,
-            CurrentlyWorkingHealthCenters = new List<DoctorHealthCenter>(),
             Specialties = new List<DoctorMedicalSpecialty>(),
-            IsActive = true
+            Status = true
         };
 
 
