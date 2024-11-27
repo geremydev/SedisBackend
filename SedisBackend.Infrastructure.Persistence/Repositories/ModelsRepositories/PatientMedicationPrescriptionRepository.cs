@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SedisBackend.Infrastructure.Persistence.Repositories.RelationsRepositories;
+namespace SedisBackend.Infrastructure.Persistence.Repositories.ModelsRepositories;
 internal class PatientMedicationPrescriptionRepository : RepositoryBase<PatientMedicationPrescription>, IPatientMedicationPrescriptionRepository
 {
     public PatientMedicationPrescriptionRepository(SedisContext repositoryContext) : base(repositoryContext)

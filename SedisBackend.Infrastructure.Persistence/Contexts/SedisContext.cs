@@ -382,7 +382,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
         modelBuilder.Entity<MedicalConsultation>(entity =>
         {
-            entity.ToTable("ClinicalHistories");
+            entity.ToTable("MedicalConsultations");
             entity.HasKey(a => a.Id);
 
             modelBuilder.Entity<MedicalConsultation>()
@@ -590,7 +590,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasDefaultValueSql("GETDATE()")
                 .IsRequired();
 
-            entity.Property(pi => pi.Status).HasMaxLength(50).HasDefaultValueSql("Activo").IsRequired();
+            entity.Property(pi => pi.Status).HasMaxLength(50).HasDefaultValue("Activo").IsRequired();
         });
 
         modelBuilder.Entity<PatientVaccine>(entity =>
