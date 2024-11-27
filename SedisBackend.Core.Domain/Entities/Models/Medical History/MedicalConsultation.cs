@@ -6,6 +6,7 @@ using SedisBackend.Core.Domain.Medical_History.Allergies;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
+using SedisBackend.Core.Domain.Medical_History.Vaccines;
 
 namespace SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
@@ -17,17 +18,17 @@ public class MedicalConsultation : IBaseEntity
     public Guid DoctorId { get; set; }
     public Doctor Doctor { get; set; }
     public Guid AppointmentId { get; set; }
-    public Appointment? Appointment { get; set; }
     public string ReasonForVisit { get; set; }
     public string CurrentHistory { get; set; }
     public string? PhysicalExamination { get; set; }
-    public ICollection<Allergy>? Allergies { get; set; }
-    public ICollection<Discapacity>? Discapacities { get; set; }
-    public ICollection<Illness>? Illness { get; set; }
-    public ICollection<RiskFactor>? RiskFactors { get; set; }
-
+    public ICollection<Appointment>? Appointments { get; set; }
+    public ICollection<PatientAllergy>? Allergies { get; set; }
+    public ICollection<PatientDiscapacity>? Discapacities { get; set; }
+    public ICollection<PatientIllness>? Illness { get; set; }
+    public ICollection<PatientRiskFactor>? RiskFactors { get; set; }
     public ICollection<PatientMedication> PatientMedications { get; set; }
     public ICollection<PatientLabTest> PatientLabTests { get; set; }
+    public ICollection<PatientVaccine> PatientVaccines { get; set; }
     public DateTime? CreatedDate { get; set; }
     public DateTime? LastModifiedDate { get; set; }
     public string Status { get; set; }

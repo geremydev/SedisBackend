@@ -44,7 +44,7 @@ internal sealed class CreatePatientHandler : IRequestHandler<CreatePatientComman
         var patientEntity = new Patient
         {
             Id = request.patient.UserId,
-            ClinicalHistories = new List<MedicalConsultation>(),
+            MedicalConsultations = new List<MedicalConsultation>(),
             Appointments = new List<Appointment>(),
             Allergies = new List<PatientAllergy>(),
             Illnesses = new List<PatientIllness>(),

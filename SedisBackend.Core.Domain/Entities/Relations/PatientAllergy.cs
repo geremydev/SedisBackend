@@ -13,6 +13,5 @@ public class PatientAllergy
     public string? AllergicReaction { get; set; }
     public DateTime? DiagnosisDate { get; set; }
     public string? Description { get; set; }
-    public 
     public bool Status { get; set; }
 }

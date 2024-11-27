@@ -10,6 +10,6 @@ public class PatientRiskFactor
     public Guid RiskFactorId { get; set; }
     public RiskFactor RiskFactor { get; set; }
     public DateTime? DiagnosisDate { get; set; }
-    public bool Status { get; set; }
+    public string Status { get; set; }
 
 }

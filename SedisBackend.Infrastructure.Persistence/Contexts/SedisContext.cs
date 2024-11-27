@@ -99,14 +99,24 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasKey(p => p.Id);
             entity.HasIndex(p => p.Id)
                     .IsUnique();
-
-            entity.HasOne(p => p.ApplicationUser)
-                .WithOne()
-                .HasForeignKey<Patient>(p => p.Id)
-                .OnDelete(DeleteBehavior.Cascade);
-            entity.HasMany(p => p.Allergies)
+            entity.HasOne(p => p.PrimaryCarePhysician)
+                .WithMany(pa => pa.PrimaryCarePatients)
+                .HasForeignKey(pa => pa.PrimaryCarePhysicianId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.MedicalConsultations)
                 .WithOne(pa => pa.Patient)
                 .HasForeignKey(pa => pa.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.Appointments)
+                .WithOne(pa => pa.Patient)
+                .HasForeignKey(pa => pa.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.Allergies)
+                .WithOne(a => a.Patient)
+                .HasForeignKey(a => a.PatientId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
             entity.HasMany(p => p.Illnesses)
@@ -119,27 +129,13 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasForeignKey(pd => pd.PatientId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
+            
             entity.HasMany(p => p.RiskFactors)
                 .WithOne(pr => pr.Patient)
                 .HasForeignKey(pr => pr.PatientId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
-            entity.HasMany(p => p.Vaccines)
-                .WithOne(pv => pv.Patient)
-                .HasForeignKey(pv => pv.PatientId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction);
-            entity.HasMany(p => p.ClinicalHistories)
-                .WithOne(ch => ch.Patient)
-                .HasForeignKey(ch => ch.PatientId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction);
-            entity.HasMany(p => p.Appointments)
-                .WithOne(a => a.Patient)
-                .HasForeignKey(a => a.PatientId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction);
-            entity.HasMany(p => p.FamilyHistories)
+            entity.HasMany(p => p.Medications)
                 .WithOne(fh => fh.Patient)
                 .HasForeignKey(fh => fh.PatientId)
                 .IsRequired(false)
@@ -149,10 +145,29 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasForeignKey(fh => fh.PatientId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.LabTests)
+                .WithOne(pv => pv.Patient)
+                .HasForeignKey(pv => pv.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.FamilyHistories)
+                .WithOne(fh => fh.Patient)
+                .HasForeignKey(fh => fh.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasMany(p => p.Vaccines)
+                .WithOne(fh => fh.Patient)
+                .HasForeignKey(fh => fh.PatientId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
             entity.Property(p => p.Height).HasColumnType("decimal(5, 2)");
             entity.Property(p => p.Weight).HasColumnType("decimal(5, 2)");
 
-            entity.HasQueryFilter(d => !d.IsDeleted);
+            //entity.HasQueryFilter(d => !d.Status);
+            entity.HasOne(p => p.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Patient>(p => p.Id)
+                .OnDelete(DeleteBehavior.Cascade);
         });
 
         modelBuilder.Entity<Doctor>(entity =>
@@ -163,19 +178,16 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasIndex(p => p.Id)
                     .IsUnique();
 
-            entity.HasOne(p => p.ApplicationUser)
-                .WithOne()
-                .HasForeignKey<Doctor>(d => d.Id)
-                .OnDelete(DeleteBehavior.NoAction);
+            
 
             entity.HasMany(k => k.Appointments)
                 .WithOne(k => k.Doctor)
                 .HasForeignKey(k => k.DoctorId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasMany(k => k.CurrentlyWorkingHealthCenters)
-                .WithOne(k => k.Doctor)
-                .HasForeignKey(k => k.DoctorId)
+            entity.HasOne(k => k.CurrentlyWorkingHealthCenter)
+                .WithMany(k => k.Doctors)
+                .HasForeignKey(k => k.CurrentlyWorkingHealthCenterId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             entity.HasMany(k => k.Specialties)
@@ -183,12 +195,20 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                .HasForeignKey(k => k.DoctorId)
                .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasMany(k => k.DevelopedClinicalHistories)
+            entity.HasMany(k => k.MedicalConsultations)
               .WithOne(k => k.Doctor)
               .HasForeignKey(k => k.DoctorId)
               .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasQueryFilter(d => !d.IsDeleted);
+            entity.HasMany(k => k.PrimaryCarePatients)
+              .WithOne(k => k.PrimaryCarePhysician)
+              .HasForeignKey(k => k.PrimaryCarePhysicianId)
+              .OnDelete(DeleteBehavior.NoAction);
+            //entity.HasQueryFilter(d => !d.Status);
+            entity.HasOne(p => p.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Doctor>(d => d.Id)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<Admin>(entity =>
@@ -198,6 +218,10 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasKey(p => p.Id);
             entity.HasIndex(p => p.Id)
                     .IsUnique();
+            entity.HasOne(a=>a.HealthCenter)
+            .WithMany(h=>h.Admins)
+            .HasForeignKey(e=>e.HealthCenterId)
+            .OnDelete(DeleteBehavior.NoAction);
 
             entity.HasOne(p => p.ApplicationUser)
                 .WithOne()
@@ -212,7 +236,10 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasKey(p => p.Id);
             entity.HasIndex(p => p.Id)
                     .IsUnique();
-
+            entity.HasOne(a => a.HealthCenter)
+                .WithMany(h => h.Assistants)
+                .HasForeignKey(e => e.HealthCenterId)
+                .OnDelete(DeleteBehavior.NoAction);
             entity.HasOne(p => p.ApplicationUser)
                 .WithOne()
                 .HasForeignKey<Assistant>(d => d.Id)
@@ -242,9 +269,14 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.ToTable("Allergies");
             entity.HasKey(a => a.Id);
 
-            entity.Property(a => a.Allergen)
-                .IsRequired()
-                .HasMaxLength(200);
+            entity.Property(a => a.Title)
+                .IsRequired();
+
+            entity.Property(a => a.Description)
+                .IsRequired();
+
+            entity.Property(a => a.IcdCode)
+                .IsRequired();
 
             entity.HasMany(a => a.PatientAllergies)
                 .WithOne(pa => pa.Allergy)
@@ -267,7 +299,11 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                    .HasForeignKey(a => a.HealthCenterId)
                    .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasQueryFilter(d => !d.IsDeleted);
+            entity.HasOne(a=>a.MedicalConsultation)
+                .WithMany(a=> a.Appointments)
+                .HasForeignKey(a=>a.MedicalConsultationId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<AppointmentPrescription>(entity =>
@@ -277,7 +313,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             entity.HasOne(ap => ap.ClinicalHistory)
             .WithMany()
-            .HasForeignKey(ap => ap.ClinicalHistoryId)
+            .HasForeignKey(ap => ap.MedicalconsultationId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
 
@@ -545,7 +581,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasForeignKey(k => k.PrescriptionId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            entity.HasOne(p => p.ClinicalHistory)
+            entity.HasOne(p => p.MedicalConsultation)
                     .WithOne(k => k.Prescription)
                     .HasForeignKey<Prescription>(k => k.ClinicalHistoryId)
                     .IsRequired(false)

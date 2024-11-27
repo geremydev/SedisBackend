@@ -1,5 +1,6 @@
 ﻿
 using SedisBackend.Core.Domain.Entities.Models.Products;
+using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
 namespace SedisBackend.Core.Domain.Entities.Relations;
@@ -7,6 +8,7 @@ public class PatientMedication : IBaseEntity
 {
     public Guid Id { get; set; }
     public Guid PatientId { get; set; }
+    public Patient Patient { get; set; }
     public Guid MedicationId { get; set; }
     public Medication Medication { get; set; }
     public Guid? MedicalConsultationId { get; set; }

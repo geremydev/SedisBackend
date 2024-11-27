@@ -423,7 +423,7 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.CurrentlyWorkingHealthCenters, opt => opt.MapFrom(src => src.CurrentlyWorkingHealthCenters))
             .ForMember(dest => dest.Specialties, opt => opt.MapFrom(src => src.Specialties))
             .ForMember(dest => dest.Appointments, opt => opt.MapFrom(src => src.Appointments))
-            .ForMember(dest => dest.DevelopedClinicalHistories, opt => opt.MapFrom(src => src.DevelopedClinicalHistories))
+            .ForMember(dest => dest.DevelopedClinicalHistories, opt => opt.MapFrom(src => src.MedicalConsultations))
             .ReverseMap()
             .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());
 
