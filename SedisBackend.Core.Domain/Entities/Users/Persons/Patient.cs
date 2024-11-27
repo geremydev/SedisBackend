@@ -20,16 +20,18 @@ public class Patient
     public string? EmergencyContactPhone { get; set; }
     public Guid? PrimaryCarePhysicianId { get; set; }
     public Doctor PrimaryCarePhysician { get; set; }
-    public ICollection<MedicalConsultation> ClinicalHistories { get; set; }
-    public ICollection<Appointment> Appointments { get; set; }
-    public ICollection<PatientAllergy> Allergies { get; set; }
-    public ICollection<PatientIllness> Illnesses { get; set; } 
-    public ICollection<PatientDiscapacity> Discapacities { get; set; }
-    public ICollection<PatientHealthInsurance> HealthInsurances { get; set; }
-    public ICollection<PatientRiskFactor> RiskFactors { get; set; } 
-    public ICollection<PatientVaccine> Vaccines { get; set; } 
-    public ICollection<FamilyHistory> FamilyHistories { get; set; } 
-    public bool IsActive { get; set; }
-    public bool IsDeleted { get; set; }
+    public ICollection<MedicalConsultation>? MedicalConsultations { get; set; } 
+    public ICollection<Appointment>? Appointments { get; set; }
+    public ICollection<PatientAllergy>? Allergies { get; set; }
+    public ICollection<PatientIllness>? Illnesses { get; set; } 
+    public ICollection<PatientDiscapacity>? Discapacities { get; set; }
+    public ICollection<PatientRiskFactor>? RiskFactors { get; set; } 
+    public ICollection<PatientMedication>? Medications { get; set; } 
+    public ICollection<PatientHealthInsurance>? HealthInsurances { get; set; }
+    public ICollection<PatientLabTest>? LabTests { get; set; } 
+    public ICollection<FamilyHistory>? FamilyHistories { get; set; } 
+    public ICollection<PatientVaccine>? Vaccines { get; set; } 
+
+    public bool Status { get; set; }
     public User? ApplicationUser { get; set; }
 }

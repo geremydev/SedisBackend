@@ -16,8 +16,8 @@ public class Doctor
     public HealthCenter CurrentlyWorkingHealthCenter { get; set; }
     public ICollection<DoctorMedicalSpecialty> Specialties { get; set; }
     public ICollection<Appointment> Appointments { get; set; }
-    public ICollection<MedicalConsultation> DevelopedClinicalHistories { get; set; }
-    public bool IsActive { get; set; }
-    public bool IsDeleted { get; set; }
+    public ICollection<MedicalConsultation> MedicalConsultations { get; set; }
+    public ICollection<Patient> PrimaryCarePatients { get; set; }
+    public bool Status {  get; set; }
     public User ApplicationUser { get; set; }
 }

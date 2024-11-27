@@ -13,5 +13,5 @@ public class HealthCenter : IBaseEntity
     public ICollection<Doctor> Doctors { get; set; }
     public ICollection<Admin> Admins { get; set; }
     public ICollection<Assistant> Assistants { get; set; }
-    public ICollection<HealthCenterServices> Services { get; set; }
+    public ICollection<HealthCenterServices> HealthCenterServices { get; set; }
 }

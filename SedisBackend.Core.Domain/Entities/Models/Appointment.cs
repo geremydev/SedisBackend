@@ -15,9 +15,8 @@ public class Appointment : IBaseEntity
     public DateTime AppointmentDate { get; set; }
     public Guid HealthCenterId { get; set; }
     public HealthCenter HealthCenter { get; set; }
-    public string AppointmentStatus { get; set; } // Indicates the current status of the appointment (e.g., scheduled, canceled, completed)
+    public string Status { get; set; } // Indicates the current status of the appointment (e.g., scheduled, canceled, completed)
     public string ConsultationRoom { get; set; }
     public Guid? MedicalConsultationId { get; set; }
-    public MedicalConsultation MedicalConsultation { get; set; }
-    public bool Status { get; set; }
+    public MedicalConsultation? MedicalConsultation { get; set; }
 }
