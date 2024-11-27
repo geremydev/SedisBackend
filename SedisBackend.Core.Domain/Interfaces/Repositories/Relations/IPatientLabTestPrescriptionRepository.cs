@@ -1,7 +1,6 @@
 ﻿using SedisBackend.Core.Domain.Entities.Relations;
 
 namespace SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
-
-public interface IPatientLabTestPrescriptionRepository : IGenericRepository<PatientLabTestPrescription>
+public interface IPatientLabTestPrescriptionRepository : IGenericRelationalRepository<PatientLabTestPrescription>
 {
 }

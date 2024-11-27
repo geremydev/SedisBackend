@@ -15,11 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SedisBackend.Core.Domain\SedisBackend.Core.Domain.csproj" />
+    <Folder Include="CommandQueryHandlers\UserHandlers\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CommandQueryHandlers\UserHandlers\" />
+    <ProjectReference Include="..\SedisBackend.Core.Domain\SedisBackend.Core.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -16,7 +16,6 @@ public interface IRepositoryManager
     // ICD11 Repository
     IICD11Repository ICD11 { get; }
 
-    IAppointmentRepository Appointment { get; }
     IHealthCenterRepository HealthCenter { get; }
     IHealthCenterServicesRepository HealthCenterServices { get; }
     ILocationRepository Location { get; }

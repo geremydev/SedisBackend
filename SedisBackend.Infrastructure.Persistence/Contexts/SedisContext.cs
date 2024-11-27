@@ -15,7 +15,6 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Co
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
 using SedisBackend.Core.Domain.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.Medical_Insurance;
-using SedisBackend.Infrastructure.Persistence.Configuration;
 
 namespace SedisBackend.Infrastructure.Persistence.Contexts;
 
@@ -388,7 +387,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             modelBuilder.Entity<MedicalConsultation>()
                  .HasOne(mc => mc.Patient)
-                 .WithMany(p => p.MedicalConsultations) 
+                 .WithMany(p => p.MedicalConsultations)
                  .HasForeignKey(mc => mc.PatientId)
                  .IsRequired()
                  .OnDelete(DeleteBehavior.Restrict);
@@ -461,11 +460,11 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasOne(fh => fh.Patient)
                 .WithMany(p => p.FamilyHistories)
                 .HasForeignKey(fh => fh.PatientId)
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<FamilyHistory>()
                 .HasOne(fh => fh.Relative)
-                .WithMany() 
+                .WithMany()
                 .HasForeignKey(fh => fh.RelativeId)
                 .OnDelete(DeleteBehavior.NoAction);
 
