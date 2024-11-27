@@ -4,7 +4,7 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
 
 namespace SedisBackend.Core.Domain.Entities.Relations;
 
-public class PatientIllness 
+public class PatientIllness
 {
     public Guid PatientId { get; set; }
     public Patient Patient { get; set; }
@@ -20,5 +20,4 @@ public class PatientIllness
     public string Notes { get; set; }
     public Guid MedicalConsultationId { get; set; }
     public MedicalConsultation MedicalConsultation { get; set; }
-
 }

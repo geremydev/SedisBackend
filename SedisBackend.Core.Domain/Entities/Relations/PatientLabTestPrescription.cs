@@ -1,5 +1,4 @@
-﻿using SedisBackend.Core.Domain.Entities.Models;
-using SedisBackend.Core.Domain.Entities.Models.Products;
+﻿using SedisBackend.Core.Domain.Entities.Models.Products;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
@@ -17,7 +16,7 @@ public class PatientLabTestPrescription : IBaseEntity
     public Guid LabTestId { get; set; }
     public LabTest LabTest { get; set; }
     public DateTime? PerformedDate { get; set; }
-    public DateTime? InvalidationDate {  get; set; } 
+    public DateTime? InvalidationDate { get; set; }
     public string Status { get; set; } // Usamos el enum AppointmentStatus
     public Guid LabTechId { get; set; }
     public LabTech LabTech { get; set; }

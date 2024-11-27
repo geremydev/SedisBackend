@@ -53,6 +53,7 @@ public sealed class RepositoryManager : IRepositoryManager
     private readonly Lazy<IRegistratorRepository> _registratorRepository;
     private readonly Lazy<IPatientMedicationPrescriptionRepository> _patientMedicationPrescriptionRepository;
     private readonly Lazy<IPatientLabTestPrescriptionRepository> _patientLabTestPrescriptionRepository;
+    private readonly Lazy<IPatientVaccineRepository> _patientVaccineRepository;
 
 
     public RepositoryManager(SedisContext repositoryContext, HttpClient httpClient)
@@ -85,17 +86,15 @@ public sealed class RepositoryManager : IRepositoryManager
         _registratorRepository = new Lazy<IRegistratorRepository>(() => new RegistratorRepository(repositoryContext));
         _patientAllergyRepository = new Lazy<IPatientAllergyRepository>(() => new PatientAllergyRepository(repositoryContext));
 
+        _patientVaccineRepository = new Lazy<IPatientVaccineRepository>(() => new PatientVaccineRepository(repositoryContext));
         _patientDiscapacityRepository = new Lazy<IPatientDiscapacityRepository>(() => new PatientDiscapacityRepository(repositoryContext));
         _patientIllnessRepository = new Lazy<IPatientIllnessRepository>(() => new PatientIllnessRepository(repositoryContext));
-        //_patientRiskFactorRepository = new Lazy<IPatientRiskFactorRepository>(() => new PatientRiskFactorRepository(repositoryContext));
-        //_patientHealthInsuranceRepository = new Lazy<IPatientHealthInsuranceRepository>(() => new PatientHealthInsuranceRepository(repositoryContext));
-        //_appointmentPrescriptionRepository = new Lazy<IAppointmentPrescriptionRepository>(() => new AppointmentPrescriptionRepository(repositoryContext));
-        //_medicationPrescriptionRepository = new Lazy<IMedicationPrescriptionRepository>(() => new MedicationPrescriptionRepository(repositoryContext));
-        //_doctorMedicalSpecialtyRepository = new Lazy<IDoctorMedicalSpecialtyRepository>(() => new DoctorMedicalSpecialtyRepository(repositoryContext));
-        //_userEntityRelationRepository = new Lazy<IUserEntityRelationRepository>(() => new UserEntityRelationRepository(repositoryContext));
-        _patientAllergyRepository = new Lazy<IPatientAllergyRepository>(() => new PatientAllergyRepository(repositoryContext));
+        _patientRiskFactorRepository = new Lazy<IPatientRiskFactorRepository>(() => new PatientRiskFactorRepository(repositoryContext));
+        _patientHealthInsuranceRepository = new Lazy<IPatientHealthInsuranceRepository>(() => new PatientHealthInsuranceRepository(repositoryContext));
+        _doctorMedicalSpecialtyRepository = new Lazy<IDoctorMedicalSpecialtyRepository>(() => new DoctorMedicalSpecialtyRepository(repositoryContext));
         _patientMedicationPrescriptionRepository = new Lazy<IPatientMedicationPrescriptionRepository>(() => new PatientMedicationPrescriptionRepository(repositoryContext));
         _patientLabTestPrescriptionRepository = new Lazy<IPatientLabTestPrescriptionRepository>(() => new PatientLabTestPrescriptionRepository(repositoryContext));
+        //_userEntityRelationRepository = new Lazy<IUserEntityRelationRepository>(() => new UserEntityRelationRepository(repositoryContext));
     }
 
     public async Task SaveAsync(CancellationToken cancellationToken = default) => await _repositoryContext.SaveChangesAsync(cancellationToken);
@@ -136,8 +135,7 @@ public sealed class RepositoryManager : IRepositoryManager
     public IPatientRepository Patient => _patientRepository.Value;
     public IRegistratorRepository Registrator => _registratorRepository.Value;
     public ILabTechRepository LabTech => _labTechRepository.Value;
-
     public IPatientMedicationPrescriptionRepository PatientMedicationPrescriptionRepository => _patientMedicationPrescriptionRepository.Value;
-
     public IPatientLabTestPrescriptionRepository PatientLabTestPrescription => _patientLabTestPrescriptionRepository.Value;
+    public IPatientVaccineRepository PatientVaccineRepository => _patientVaccineRepository.Value;
 }

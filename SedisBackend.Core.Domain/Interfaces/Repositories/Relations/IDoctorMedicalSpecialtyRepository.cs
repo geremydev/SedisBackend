@@ -2,6 +2,8 @@
 
 namespace SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
 
-public interface IDoctorMedicalSpecialtyRepository : IGenericRepository<DoctorMedicalSpecialty>
+public interface IDoctorMedicalSpecialtyRepository : IGenericRelationalRepository<DoctorMedicalSpecialty>
 {
+    Task<IEnumerable<DoctorMedicalSpecialty>> GetByDoctor(Guid doctorId, bool trackChanges);
+    Task<IEnumerable<DoctorMedicalSpecialty>> GetByMedicalSpecialty(Guid medicalSpecialtyId, bool trackChanges);
 }

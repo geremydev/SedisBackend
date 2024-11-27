@@ -28,4 +28,12 @@ internal sealed class PatientDiscapacityRepository : RepositoryBase<PatientDisca
     public void CreateEntity(PatientDiscapacity pd) => Create(pd);
 
     public void DeleteEntity(PatientDiscapacity pd) => Delete(pd);
+
+    public async Task<PatientDiscapacity> GetEntityAsync(Guid patientId, Guid discapacityId, bool trackChanges)
+    {
+        return await FindByCondition(c => c.PatientId.Equals(patientId) && c.DiscapacityId.Equals(discapacityId), trackChanges)
+                        .Include(a => a.Patient)
+                        .Include(a => a.MedicalConsultation)
+                        .Include(a => a.Discapacity).SingleOrDefaultAsync();
+    }
 }

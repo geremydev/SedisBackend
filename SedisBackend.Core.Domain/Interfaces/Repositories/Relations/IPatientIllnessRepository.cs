@@ -2,11 +2,8 @@
 
 namespace SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
 
-public interface IPatientIllnessRepository
+public interface IPatientIllnessRepository : IGenericRelationalRepository<PatientIllness>
 {
-    Task<IEnumerable<PatientIllness>> GetAllEntitiesAsync(bool trackChanges);
-    Task<IEnumerable<PatientIllness>> GetPatientIllnesses(Guid patientId, bool trackChanges);
-    Task<IEnumerable<PatientIllness>> GetPatientsWithIllness(string illnessICDCode, bool trackChanges);
-    void CreateEntity(PatientIllness entity);
-    void DeleteEntity(PatientIllness entity);
+    Task<IEnumerable<PatientIllness>> GetByPatient(Guid patientId, bool trackChanges);
+    Task<IEnumerable<PatientIllness>> GetByIllness(string illnessICDCode, bool trackChanges);
 }
