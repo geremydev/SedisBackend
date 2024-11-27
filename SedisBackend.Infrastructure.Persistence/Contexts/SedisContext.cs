@@ -127,7 +127,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasForeignKey(pd => pd.PatientId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
-            
+
             entity.HasMany(p => p.RiskFactors)
                 .WithOne(pr => pr.Patient)
                 .HasForeignKey(pr => pr.PatientId)
@@ -176,7 +176,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasIndex(p => p.Id)
                     .IsUnique();
 
-            
+
 
             entity.HasMany(k => k.Appointments)
                 .WithOne(k => k.Doctor)
@@ -216,9 +216,9 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasKey(p => p.Id);
             entity.HasIndex(p => p.Id)
                     .IsUnique();
-            entity.HasOne(a=>a.HealthCenter)
-            .WithMany(h=>h.Admins)
-            .HasForeignKey(e=>e.HealthCenterId)
+            entity.HasOne(a => a.HealthCenter)
+            .WithMany(h => h.Admins)
+            .HasForeignKey(e => e.HealthCenterId)
             .OnDelete(DeleteBehavior.NoAction);
 
             entity.HasOne(p => p.ApplicationUser)
@@ -298,9 +298,9 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                    .OnDelete(DeleteBehavior.NoAction)
                    .IsRequired();
 
-            entity.HasOne(a=>a.MedicalConsultation)
-                .WithMany(a=> a.Appointments)
-                .HasForeignKey(a=>a.MedicalConsultationId)
+            entity.HasOne(a => a.MedicalConsultation)
+                .WithMany(a => a.Appointments)
+                .HasForeignKey(a => a.MedicalConsultationId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -310,7 +310,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .IsRequired();
         });
 
-        
+
 
         modelBuilder.Entity<HealthCenter>(entity =>
         {
@@ -346,11 +346,11 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
 
             entity.HasOne(hcs => hcs.HealthCenter)
-                .WithMany(hc => hc.HealthCenterServices) 
-                .HasForeignKey(hcs => hcs.HealthCenterId); 
+                .WithMany(hc => hc.HealthCenterServices)
+                .HasForeignKey(hcs => hcs.HealthCenterId);
 
             entity.HasOne(hcs => hcs.Service)
-                .WithMany(s => s.HealthCenterServices) 
+                .WithMany(s => s.HealthCenterServices)
                 .HasForeignKey(hcs => hcs.ServiceId);
         });
 
@@ -392,12 +392,6 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction);
 
-            entity
-                .HasMany(k => k.Allergies)
-                .WithOne(k => k.)
-                .HasForeignKey(k => k.MedicalConsultationId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.NoAction);
             //entity.HasQueryFilter(d => d.IsActive);
         });
 
@@ -416,7 +410,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.ToTable("Discapacities");
             entity.HasKey(a => a.Id);
 
-            entity.Property(a => a.Type).IsRequired();
+            entity.Property(a => a.IcdCode).IsRequired();
 
             entity.HasMany(a => a.PatientDiscapacities)
                 .WithOne(pa => pa.Discapacity)
@@ -446,7 +440,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.ToTable("Illnesses");
             entity.HasKey(a => a.Id);
 
-            entity.Property(a => a.CodeType).IsRequired();
+            entity.Property(a => a.IcdCode).IsRequired();
             entity.Property(a => a.Title).IsRequired();
             entity.Property(a => a.IcdCode).IsRequired();
 
@@ -794,7 +788,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
         modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
 
-        modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
+        //modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
         modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
         modelBuilder.ApplyConfiguration(new AppointmentPrescriptionConfiguration());
 
