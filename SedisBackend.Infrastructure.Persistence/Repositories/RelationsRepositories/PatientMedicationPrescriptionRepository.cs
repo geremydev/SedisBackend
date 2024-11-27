@@ -3,11 +3,6 @@ using SedisBackend.Core.Domain.Entities.Models.Products;
 using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
 using SedisBackend.Infrastructure.Persistence.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories.RelationsRepositories;
 internal class PatientMedicationPrescriptionRepository : RepositoryBase<PatientMedicationPrescription>, IPatientMedicationPrescriptionRepository
@@ -25,6 +20,3 @@ internal class PatientMedicationPrescriptionRepository : RepositoryBase<PatientM
         await FindByCondition(c => c.Id.Equals(entityId), trackChanges)
                             .SingleOrDefaultAsync();
 }
-
-
-
