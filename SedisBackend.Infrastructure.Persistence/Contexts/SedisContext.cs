@@ -32,13 +32,14 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<HealthCenterServices> HealthCenterServices { get; set; }
     public DbSet<Allergy> Allergies { get; set; }
     public DbSet<PatientAllergy> PatientAllergies { get; set; }
-    public DbSet<MedicalConsultation> ClinicalHistories { get; set; }
+    public DbSet<MedicalConsultation> MedicalConsultations { get; set; }
     public DbSet<FamilyHistory> FamilyHistories { get; set; }
     public DbSet<Discapacity> Discapacities { get; set; }
     public DbSet<LabTest> LabTests { get; set; }
     public DbSet<Medication> Medications { get; set; }
     public DbSet<Patient> Patients { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
+    public DbSet<LabTech> LabTechs { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<MedicalSpecialty> MedicalSpecialities { get; set; }
     public DbSet<Illness> Illnesses { get; set; }
@@ -46,14 +47,11 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<Vaccine> Vaccines { get; set; }
     public DbSet<HealthInsurance> HealthInsurances { get; set; }
     public DbSet<MedicationCoverage> MedicationCoverages { get; set; }
-    public DbSet<Prescription> Prescriptions { get; set; }
-
     public DbSet<PatientDiscapacity> PatientDiscapacities { get; set; }
     public DbSet<PatientIllness> PatientIllnesses { get; set; }
     public DbSet<PatientRiskFactor> PatientRiskFactors { get; set; }
     public DbSet<PatientVaccine> PatientVaccines { get; set; }
     public DbSet<PatientHealthInsurance> PatientHealthInsurances { get; set; }
-    public DbSet<MedicationPrescription> MedicationPrescriptions { get; set; }
     public DbSet<DoctorMedicalSpecialty> DoctorMedicalSpecialities { get; set; }
     #endregion
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -165,7 +163,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasOne(p => p.ApplicationUser)
                 .WithOne()
                 .HasForeignKey<Patient>(p => p.Id)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<Doctor>(entity =>
@@ -224,7 +222,20 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasOne(p => p.ApplicationUser)
                 .WithOne()
                 .HasForeignKey<Admin>(d => d.Id)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<LabTech>(entity =>
+        {
+            entity.ToTable("LabTechs");
+
+            entity.HasKey(p => p.Id);
+            entity.HasIndex(p => p.Id)
+                    .IsUnique();
+            entity.HasOne(p => p.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<LabTech>(d => d.Id)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<Assistant>(entity =>
@@ -260,6 +271,10 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.Property(pa => pa.DiagnosisDate)
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");
+            entity.HasOne(pa => pa.MedicalConsultation)
+                .WithMany(a => a.Allergies)
+                .HasForeignKey(pa => pa.AllergyId)
+                .IsRequired(false);
         });
 
         modelBuilder.Entity<Allergy>(entity =>
@@ -371,24 +386,66 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.ToTable("ClinicalHistories");
             entity.HasKey(a => a.Id);
 
-            entity
-                .HasOne(k => k.Patient)
-                .WithMany(k => k.MedicalConsultations)
-                .HasForeignKey(k => k.PatientId)
+            modelBuilder.Entity<MedicalConsultation>()
+                 .HasOne(mc => mc.Patient)
+                 .WithMany(p => p.MedicalConsultations) 
+                 .HasForeignKey(mc => mc.PatientId)
+                 .IsRequired()
+                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<MedicalConsultation>()
+                .HasOne(mc => mc.Doctor)
+                .WithMany(d => d.MedicalConsultations)
+                .HasForeignKey(mc => mc.DoctorId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<MedicalConsultation>()
+                .HasMany(mc => mc.Appointments)
+                .WithOne(a => a.MedicalConsultation)
+                .HasForeignKey(a => a.MedicalConsultationId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction);
 
-            entity
-                .HasOne(k => k.Doctor)
-                .WithMany(k => k.MedicalConsultations)
-                .HasForeignKey(k => k.DoctorId)
+            modelBuilder.Entity<MedicalConsultation>()
+                .HasMany(mc => mc.Allergies)
+                .WithOne(a => a.MedicalConsultation)
+                .HasForeignKey(a => a.MedicalConsultationId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction);
 
-            entity
-                .HasMany(k => k.Appointments)
-                .WithOne(k => k.MedicalConsultation)
-                .HasForeignKey(k => k.MedicalConsultationId)
+            modelBuilder.Entity<MedicalConsultation>()
+                .HasMany(mc => mc.Discapacities)
+                .WithOne(d => d.MedicalConsultation)
+                .HasForeignKey(d => d.MedicalConsultationId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MedicalConsultation>()
+                .HasMany(mc => mc.Illnesses)
+                .WithOne(i => i.MedicalConsultation)
+                .HasForeignKey(i => i.MedicalConsultationId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MedicalConsultation>()
+                .HasMany(mc => mc.RiskFactors)
+                .WithOne(rf => rf.MedicalConsultation)
+                .HasForeignKey(rf => rf.MedicalConsultationId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MedicalConsultation>()
+                .HasMany(mc => mc.PatientMedications)
+                .WithOne(pm => pm.MedicalConsultation)
+                .HasForeignKey(pm => pm.MedicalConsultationId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MedicalConsultation>()
+                .HasMany(mc => mc.PatientLabTests)
+                .WithOne(plt => plt.MedicalConsultation)
+                .HasForeignKey(plt => plt.MedicalConsultationId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -400,7 +457,17 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.ToTable("FamilyHistories");
             entity.HasKey(a => a.Id);
 
-            // ...
+            modelBuilder.Entity<FamilyHistory>()
+                .HasOne(fh => fh.Patient)
+                .WithMany(p => p.FamilyHistories)
+                .HasForeignKey(fh => fh.PatientId)
+                .OnDelete(DeleteBehavior.NoAction); 
+
+            modelBuilder.Entity<FamilyHistory>()
+                .HasOne(fh => fh.Relative)
+                .WithMany() 
+                .HasForeignKey(fh => fh.RelativeId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             //entity.HasQueryFilter(d => !d.IsDeleted);
         });
@@ -433,6 +500,9 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.Property(pa => pa.DiagnosisDate)
                 .IsRequired()
                 .HasDefaultValueSql("GETDATE()");
+            entity.HasOne(pa => pa.MedicalConsultation)
+                .WithMany(a => a.Discapacities)
+                .HasForeignKey(pa => pa.DiscapacityId);
         });
 
         modelBuilder.Entity<Illness>(entity =>
@@ -465,6 +535,11 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasOne(pa => pa.Illness)
                 .WithMany(a => a.PatientIllnesses)
                 .HasForeignKey(pa => pa.IllnessId);
+
+            entity.HasOne(pa => pa.MedicalConsultation)
+                .WithMany(a => a.Illnesses)
+                .HasForeignKey(pa => pa.IllnessId)
+                .IsRequired(false);
 
             entity.Property(pi => pi.DocumentURL).HasMaxLength(2048);
             entity.Property(pi => pi.Status).HasMaxLength(50).HasDefaultValueSql("Activo").IsRequired();
@@ -506,6 +581,10 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             entity.HasOne(pa => pa.RiskFactor)
                 .WithMany(a => a.PatientRiskFactors)
+                .HasForeignKey(pa => pa.RiskFactorId);
+
+            entity.HasOne(pa => pa.MedicalConsultation)
+                .WithMany(a => a.RiskFactors)
                 .HasForeignKey(pa => pa.RiskFactorId);
 
             entity.Property(pa => pa.DiagnosisDate)
@@ -764,7 +843,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasForeignKey(ph => ph.HealthInsuranceId);
         });
 
-        modelBuilder.ApplyConfiguration(new UserConfiguration());
+        /*modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new PatientConfiguration());
         modelBuilder.ApplyConfiguration(new AdminConfiguration());
         modelBuilder.ApplyConfiguration(new DoctorConfiguration());
@@ -779,9 +858,9 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.ApplyConfiguration(new PatientVaccineConfiguration());
 
         // Configuraciones relacionadas con el historial clínico y prescripciones
-        modelBuilder.ApplyConfiguration(new ClinicalHistoryConfiguration());
-        modelBuilder.ApplyConfiguration(new PrescriptionConfiguration());
-        modelBuilder.ApplyConfiguration(new MedicationPrescriptionConfiguration());
+        modelBuilder.ApplyConfiguration(new MedicalConsultationConfiguration());
+        *//*modelBuilder.ApplyConfiguration(new PrescriptionConfiguration());
+        modelBuilder.ApplyConfiguration(new MedicationPrescriptionConfiguration());*//*
 
         // Configuraciones relacionadas con citas y servicios médicos
         modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
@@ -790,7 +869,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
         //modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
         modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
-        modelBuilder.ApplyConfiguration(new AppointmentPrescriptionConfiguration());
+        //modelBuilder.ApplyConfiguration(new PatientLabTestPrescriptionConfiguration());
 
         // Configuraciones de entidades secundarias y auxiliares
         modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());
@@ -803,7 +882,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
         // Configuraciones de laboratorios y medicamentos
         modelBuilder.ApplyConfiguration(new MedicationConfiguration());
-        modelBuilder.ApplyConfiguration(new MedicationCoverageConfiguration());
+        modelBuilder.ApplyConfiguration(new MedicationCoverageConfiguration());*/
     }
 
     private static string TimeSpanToString(TimeSpan timeSpan)
