@@ -12,6 +12,7 @@ using SedisBackend.Core.Domain.Interfaces.Repositories.Users;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 using SedisBackend.Infrastructure.Persistence.Repositories.ModelsRepositories;
 using SedisBackend.Infrastructure.Persistence.Repositories.RelationsRepositories;
+using SedisBackend.Infrastructure.Persistence.Repositories.UserRepositories;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories;
 
@@ -48,6 +49,8 @@ public sealed class RepositoryManager : IRepositoryManager
     private readonly Lazy<IDoctorMedicalSpecialtyRepository> _doctorMedicalSpecialtyRepository;
     private readonly Lazy<IMedicalSpecialtyRepository> _medicalSpecialtyRepository;
     private readonly Lazy<IPatientRepository> _patientRepository;
+    private readonly Lazy<ILabTechRepository> _labTechRepository;
+    private readonly Lazy<IRegistratorRepository> _registratorRepository;
     private readonly Lazy<IPatientMedicationPrescriptionRepository> _patientMedicationPrescriptionRepository;
     private readonly Lazy<IPatientLabTestPrescriptionRepository> _patientLabTestPrescriptionRepository;
 
@@ -78,6 +81,8 @@ public sealed class RepositoryManager : IRepositoryManager
         _doctorRepository = new Lazy<IDoctorRepository>(() => new DoctorRepository(repositoryContext));
         _medicalSpecialtyRepository = new Lazy<IMedicalSpecialtyRepository>(() => new MedicalSpecialtyRepository(repositoryContext));
         _patientRepository = new Lazy<IPatientRepository>(() => new PatientRepository(repositoryContext));
+        _labTechRepository = new Lazy<ILabTechRepository>(() => new LabTechRepository(repositoryContext));
+        _registratorRepository = new Lazy<IRegistratorRepository>(() => new RegistratorRepository(repositoryContext));
         _patientAllergyRepository = new Lazy<IPatientAllergyRepository>(() => new PatientAllergyRepository(repositoryContext));
 
         _patientDiscapacityRepository = new Lazy<IPatientDiscapacityRepository>(() => new PatientDiscapacityRepository(repositoryContext));
@@ -129,6 +134,8 @@ public sealed class RepositoryManager : IRepositoryManager
     public IDoctorMedicalSpecialtyRepository DoctorMedicalSpecialty => _doctorMedicalSpecialtyRepository.Value;
     public IMedicalSpecialtyRepository MedicalSpecialty => _medicalSpecialtyRepository.Value;
     public IPatientRepository Patient => _patientRepository.Value;
+    public IRegistratorRepository Registrator => _registratorRepository.Value;
+    public ILabTechRepository LabTech => _labTechRepository.Value;
 
     public IPatientMedicationPrescriptionRepository PatientMedicationPrescriptionRepository => _patientMedicationPrescriptionRepository.Value;
 

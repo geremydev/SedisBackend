@@ -27,6 +27,8 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
     #region Tables
     public DbSet<Appointment> Appointments { get; set; }
+    public DbSet<Admin> Admin { get; set; }
+    public DbSet<Registrator> Registrators { get; set; }
     public DbSet<HealthCenter> HealthCenters { get; set; }
     public DbSet<HealthCenterServices> HealthCenterServices { get; set; }
     public DbSet<Allergy> Allergies { get; set; }
@@ -224,6 +226,24 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .OnDelete(DeleteBehavior.NoAction);
         });
 
+        modelBuilder.Entity<Registrator>(entity =>
+        {
+            entity.ToTable("Registrators");
+
+            entity.HasKey(p => p.Id);
+            entity.HasIndex(p => p.Id)
+                    .IsUnique();
+            entity.HasOne(a => a.HealthCenter)
+            .WithMany(h => h.Registrators)
+            .HasForeignKey(e => e.HealthCenterId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(p => p.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Registrator>(d => d.Id)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
         modelBuilder.Entity<LabTech>(entity =>
         {
             entity.ToTable("LabTechs");
@@ -342,6 +362,11 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                     .OnDelete(DeleteBehavior.NoAction);
 
             entity.HasMany(k => k.Admins)
+                    .WithOne(k => k.HealthCenter)
+                    .HasForeignKey(k => k.HealthCenterId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasMany(k => k.Registrators)
                     .WithOne(k => k.HealthCenter)
                     .HasForeignKey(k => k.HealthCenterId)
                     .OnDelete(DeleteBehavior.NoAction);
@@ -754,6 +779,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.Property(lt => lt.TestCode)
                 .HasMaxLength(100);
         });
+
 
         modelBuilder.Entity<MedicalSpecialty>(entity =>
         {

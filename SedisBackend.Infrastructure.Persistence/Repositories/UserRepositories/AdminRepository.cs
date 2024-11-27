@@ -3,7 +3,7 @@ using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Users;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 
-namespace SedisBackend.Infrastructure.Persistence.Repositories.ModelsRepositories;
+namespace SedisBackend.Infrastructure.Persistence.Repositories.UserRepositories;
 
 internal sealed class AdminRepository : RepositoryBase<Admin>, IAdminRepository
 {
