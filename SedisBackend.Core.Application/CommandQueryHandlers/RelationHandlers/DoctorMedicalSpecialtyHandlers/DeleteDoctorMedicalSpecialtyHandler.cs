@@ -4,15 +4,15 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.MedicalSpecialtyHandlers;
 
-public record DeleteMedicalSpecialtyCommand(Guid DoctorId, Guid MedicalSpecialtyId, bool TrackChanges) : IRequest;
+public record DeleteDoctorMedicalSpecialtyCommand(Guid DoctorId, Guid MedicalSpecialtyId, bool TrackChanges) : IRequest;
 
-internal sealed class DeleteHealthCenterServiceHandler : IRequestHandler<DeleteMedicalSpecialtyCommand>
+internal sealed class DeleteHealthCenterServiceHandler : IRequestHandler<DeleteDoctorMedicalSpecialtyCommand>
 {
     private readonly IRepositoryManager _repository;
 
     public DeleteHealthCenterServiceHandler(IRepositoryManager repository) => _repository = repository;
 
-    public async Task Handle(DeleteMedicalSpecialtyCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteDoctorMedicalSpecialtyCommand request, CancellationToken cancellationToken)
     {
         var doctorMedicalSpecialty = await _repository.DoctorMedicalSpecialty.GetEntityAsync(request.DoctorId, request.MedicalSpecialtyId, request.TrackChanges);
         if (doctorMedicalSpecialty is null)

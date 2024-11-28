@@ -908,21 +908,5 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.ApplyConfiguration(new PatientLabTestPrescriptionConfiguration());
         modelBuilder.ApplyConfiguration(new PatientRiskFactorConfiguration());
         modelBuilder.ApplyConfiguration(new PatientVaccineConfiguration());
-
-    }
-
-    private static string TimeSpanToString(TimeSpan timeSpan)
-    {
-        return timeSpan.ToString(@"hh\:mm\:ss");
-    }
-
-    private static TimeSpan StringToTimeSpan(string timeString)
-    {
-        if (TimeSpan.TryParse(timeString, out var timeSpan))
-        {
-            return timeSpan;
-        }
-
-        return TimeSpan.Zero;
     }
 }

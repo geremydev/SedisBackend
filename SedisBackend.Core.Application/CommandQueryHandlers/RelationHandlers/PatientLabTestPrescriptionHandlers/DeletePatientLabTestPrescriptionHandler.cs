@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using SedisBackend.Core.Domain.DTO.Entities.PatientLabTestPrescription;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientLabTestPrescriptionHandlers;
 
-public sealed record DeletePatientLabTestPrescriptionCommand(Guid patientId, Guid LabTestPrescriptionId, PatientLabTestPrescriptionForUpdateDto PatientLabTestPrescription, bool TrackChanges) : IRequest<Unit>;
+public sealed record DeletePatientLabTestPrescriptionCommand(Guid patientId, Guid LabTestPrescriptionId, bool TrackChanges) : IRequest<Unit>;
 
 public class DeletePatientMedicationPrescriptionHandler
 {
@@ -19,7 +18,7 @@ public class DeletePatientMedicationPrescriptionHandler
         _mapper = mapper;
     }
 
-        public async Task Handle(DeletePatientLabTestPrescriptionCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeletePatientLabTestPrescriptionCommand request, CancellationToken cancellationToken)
     {
         var patientLabTestPrescription = await _repository.PatientLabTestPrescription.GetEntityAsync(request.patientId, request.LabTestPrescriptionId, request.TrackChanges);
         if (patientLabTestPrescription is null)

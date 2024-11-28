@@ -6,9 +6,9 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.DoctorMedicalSpecialtyHandlers;
 
-public sealed record GetAllDoctorsMedicalSpecialtyQuery(Guid DoctorId, bool TrackChanges) : IRequest<DoctorMedicalSpecialtyDto>;
+public sealed record GetAllDoctorsMedicalSpecialtiesQuery(Guid DoctorId, bool TrackChanges) : IRequest<DoctorMedicalSpecialtyDto>;
 
-internal sealed class GetAllDoctorsMedicalSpecialtyHandler : IRequestHandler<GetDoctorMedicalSpecialtyQuery, DoctorMedicalSpecialtyDto>
+internal sealed class GetAllDoctorsMedicalSpecialtyHandler : IRequestHandler<GetAllDoctorsMedicalSpecialtiesQuery, DoctorMedicalSpecialtyDto>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
@@ -19,11 +19,11 @@ internal sealed class GetAllDoctorsMedicalSpecialtyHandler : IRequestHandler<Get
         _mapper = mapper;
     }
 
-    public async Task<DoctorMedicalSpecialtyDto> Handle(GetDoctorMedicalSpecialtyQuery request, CancellationToken cancellationToken)
+    public async Task<DoctorMedicalSpecialtyDto> Handle(GetAllDoctorsMedicalSpecialtiesQuery request, CancellationToken cancellationToken)
     {
         var doctorMedicalSpecialty = await _repository.DoctorMedicalSpecialty.GetByDoctor(request.DoctorId, request.TrackChanges);
         if (doctorMedicalSpecialty is null)
-            throw new EntityNotFoundException(request.SpecialtyId);
+            throw new EntityNotFoundException(request.DoctorId);
 
         return _mapper.Map<DoctorMedicalSpecialtyDto>(doctorMedicalSpecialty);
     }

@@ -2,6 +2,9 @@
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientIllnessHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientMedicationPrescriptionHandlers;
+using SedisBackend.Core.Domain.DTO.Entities.PatientMedicationPrescription;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 
 namespace WebApi.Controllers.v1.Relations.PatientMedicationPrescriptionController;
@@ -18,22 +21,13 @@ public class PatientMedicationPrescriptionController : BaseApiController
         _loggerManager = loggerManager;
     }
 
-    [HttpGet(Name = "GetAllPatientMedicationPrescriptions")]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientMedicationPrescriptionDto>))]
-    public async Task<IActionResult> Get()
-    {
-        return Ok(await _sender.Send(new GetPatientMedicationPrescriptionsQuery(false)));
-    }
-
     [HttpGet("{id:guid}", Name = "GetPatientMedicationPrescriptionById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientMedicationPrescriptionDto))]
     public async Task<IActionResult> Get(Guid id)
     {
-        return Ok(await _sender.Send(new GetPatientMedicationPrescriptionQuery(id, false)));
+        return Ok(await _sender.Send(new GetPatientMedicationsQuery(id, false)));
     }
 
     [HttpPost]
