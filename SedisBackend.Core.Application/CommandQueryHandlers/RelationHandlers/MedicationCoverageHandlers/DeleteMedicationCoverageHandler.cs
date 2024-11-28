@@ -17,7 +17,7 @@ internal sealed class DeleteMedicationCoverageHandler : IRequestHandler<DeleteMe
         var medicationCoverage = await _repository.MedicationCoverage.GetEntityAsync(request.Id, request.TrackChanges);
         if (medicationCoverage is null)
             throw new EntityNotFoundException(request.Id);
-        medicationCoverage.CoverageStatus = "Inactivo";
+        medicationCoverage.Status = false;
         _repository.MedicationCoverage.UpdateEntity(medicationCoverage);
         await _repository.SaveAsync(cancellationToken);
     }

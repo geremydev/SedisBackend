@@ -21,8 +21,7 @@ internal sealed class GetPatientAllergiesHandler : IRequestHandler<GetPatientAll
 
     public async Task<IEnumerable<PatientAllergyDto>> Handle(GetPatientAllergiesQuery request, CancellationToken cancellationToken)
     {
-        var Allergies = await _repository.PatientAllergy.GetAllEntitiesAsync(request.TrackChanges);
-        var patientAllergies = Allergies.Where(e => e.PatientId == request.PatientId && e.Status == true).ToList();
+        var patientAllergies = await _repository.PatientAllergy.GetByPatient(request.PatientId, request.TrackChanges);
         if (patientAllergies is null || !patientAllergies.Any())
             throw new EntitiesNotFoundException();
 

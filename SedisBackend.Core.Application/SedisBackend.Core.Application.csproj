@@ -18,4 +18,14 @@
     <ProjectReference Include="..\SedisBackend.Core.Domain\SedisBackend.Core.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CommandQueryHandlers\RelationHandlers\DoctorMedicalSpecialtyHandlers\" />
+    <Folder Include="CommandQueryHandlers\RelationHandlers\HealthCenterServicesHandlers\" />
+    <Folder Include="CommandQueryHandlers\RelationHandlers\PatientMedicationPrescriptionHandlers\" />
+    <Folder Include="CommandQueryHandlers\RelationHandlers\PatientLabTestPrescriptionHandlers\" />
+    <Folder Include="CommandQueryHandlers\RelationHandlers\PatientIllnessHandlers\" />
+    <Folder Include="CommandQueryHandlers\RelationHandlers\PatientHealthInsuranceHandlers\" />
+    <Folder Include="CommandQueryHandlers\RelationHandlers\PatientDiscapacityHandlers\" />
+  </ItemGroup>
+
 </Project>
