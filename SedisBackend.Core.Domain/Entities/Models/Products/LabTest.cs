@@ -1,4 +1,6 @@
-﻿namespace SedisBackend.Core.Domain.Entities.Models.Products;
+﻿using SedisBackend.Core.Domain.Entities.Relations;
+
+namespace SedisBackend.Core.Domain.Entities.Models.Products;
 
 public class LabTest : IBaseEntity
 {
@@ -12,4 +14,5 @@ public class LabTest : IBaseEntity
     public bool Status { get; set; }
 
     //Realizarle la relación de un Appointment es realizado por muchos laboratorios etc etc
+    public ICollection<PatientLabTestPrescription> Prescriptions { get; set; }
 }

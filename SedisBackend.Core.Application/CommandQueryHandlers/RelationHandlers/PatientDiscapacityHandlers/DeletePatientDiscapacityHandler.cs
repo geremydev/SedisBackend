@@ -6,7 +6,7 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientDiscapacityHandlers;
 
-public sealed record DeletePatientDiscapacityCommand(Guid patientId, Guid DiscapacityId, PatientDiscapacityForUpdateDto PatientDiscapacity, bool TrackChanges) : IRequest<Unit>;
+public sealed record DeletePatientDiscapacityCommand(Guid patientId, Guid DiscapacityId, bool TrackChanges) : IRequest<Unit>;
 
 public class DeletePatientDiscapacityHandler
 {

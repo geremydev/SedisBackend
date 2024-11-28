@@ -135,7 +135,7 @@ public sealed class RepositoryManager : IRepositoryManager
     public IPatientRepository Patient => _patientRepository.Value;
     public IRegistratorRepository Registrator => _registratorRepository.Value;
     public ILabTechRepository LabTech => _labTechRepository.Value;
-    public IPatientMedicationPrescriptionRepository PatientMedicationPrescriptionRepository => _patientMedicationPrescriptionRepository.Value;
+    public IPatientMedicationPrescriptionRepository PatientMedicationPrescription => _patientMedicationPrescriptionRepository.Value;
     public IPatientLabTestPrescriptionRepository PatientLabTestPrescription => _patientLabTestPrescriptionRepository.Value;
     public IPatientVaccineRepository PatientVaccineRepository => _patientVaccineRepository.Value;
 }

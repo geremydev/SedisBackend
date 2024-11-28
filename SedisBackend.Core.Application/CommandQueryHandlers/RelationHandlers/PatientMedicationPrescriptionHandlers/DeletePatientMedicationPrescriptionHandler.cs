@@ -6,7 +6,7 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientMedicationPrescriptionHandlers;
 
-public sealed record DeletePatientMedicationPrescriptionCommand(Guid patientId, Guid MedicationPrescriptionId, PatientMedicationPrescriptionForUpdateDto PatientMedicationPrescription, bool TrackChanges) : IRequest<Unit>;
+public sealed record DeletePatientMedicationPrescriptionCommand(Guid Id, bool TrackChanges) : IRequest<Unit>;
 
 public class DeletePatientMedicationPrescriptionHandler
 {
@@ -21,11 +21,11 @@ public class DeletePatientMedicationPrescriptionHandler
 
         public async Task Handle(DeletePatientMedicationPrescriptionCommand request, CancellationToken cancellationToken)
     {
-        var patientMedicationPrescription = await _repository.PatientMedicationPrescriptionRepository.GetEntityAsync(request.patientId, request.MedicationPrescriptionId, request.TrackChanges);
+        var patientMedicationPrescription = await _repository.PatientMedicationPrescription.GetEntityAsync(request.Id, request.TrackChanges);
         if (patientMedicationPrescription is null)
-            throw new EntityNotFoundException(request.MedicationPrescriptionId);
+            throw new EntityNotFoundException(request.Id);
         patientMedicationPrescription.Status = false;
-        _repository.PatientMedicationPrescriptionRepository.UpdateEntity(patientMedicationPrescription);
+        _repository.PatientMedicationPrescription.UpdateEntity(patientMedicationPrescription);
         await _repository.SaveAsync(cancellationToken);
     }
 }

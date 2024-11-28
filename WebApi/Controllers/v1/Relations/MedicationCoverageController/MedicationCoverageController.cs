@@ -35,9 +35,9 @@ public class MedicationCoverageController : BaseApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicationCoverageDto))]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<IActionResult> Get(Guid MedicationId, Guid HealthInsuranceId)
     {
-        return Ok(await _sender.Send(new GetMedicationCoverageQuery(id, false)));
+        return Ok(await _sender.Send(new GetMedicationCoverageQuery(MedicationId, HealthInsuranceId, false)));
     }
 
     [HttpPost]
@@ -62,9 +62,9 @@ public class MedicationCoverageController : BaseApiController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicationCoverageForUpdateDto))]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] MedicationCoverageForUpdateDto medicationcoverage)
+    public async Task<IActionResult> Put(Guid MedicationId, Guid HealthInsuranceId, [FromBody] MedicationCoverageForUpdateDto medicationcoverage)
     {
-        var command = new UpdateMedicationCoverageCommand(id, medicationcoverage, true);
+        var command = new UpdateMedicationCoverageCommand(MedicationId, HealthInsuranceId, medicationcoverage, true);
 
         await _sender.Send(command);
         return Ok();
@@ -74,12 +74,12 @@ public class MedicationCoverageController : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicationCoverageForUpdateDto))]
-    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<MedicationCoverageForUpdateDto> patchDoc)
+    public async Task<IActionResult> Patch(Guid MedicationId, Guid HealthInsuranceId, [FromBody] JsonPatchDocument<MedicationCoverageForUpdateDto> patchDoc)
     {
         if (patchDoc is null)
             return BadRequest("patchDoc object sent from client is null.");
 
-        var command = new PatchMedicationCoverageCommand(id, true, patchDoc);
+        var command = new PatchMedicationCoverageCommand(MedicationId, HealthInsuranceId, true, patchDoc);
         var (medicationcoverageToPatch, _) = await _sender.Send(command);
 
         return Ok(medicationcoverageToPatch);
@@ -88,9 +88,9 @@ public class MedicationCoverageController : BaseApiController
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid MedicationId, Guid HealthInsuranceId)
     {
-        var notification = new DeleteMedicationCoverageCommand(id, true);
+        var notification = new DeleteMedicationCoverageCommand(MedicationId, HealthInsuranceId, true);
         await _sender.Send(notification);
         return NoContent();
     }

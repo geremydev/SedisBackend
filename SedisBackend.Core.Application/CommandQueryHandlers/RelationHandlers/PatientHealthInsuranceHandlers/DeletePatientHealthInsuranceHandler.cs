@@ -6,7 +6,7 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientHealthInsuranceHandlers;
 
-public sealed record DeletePatientHealthInsuranceCommand(Guid patientId, Guid HealthInsuranceId, PatientHealthInsuranceForUpdateDto PatientHealthInsurance, bool TrackChanges) : IRequest<Unit>;
+public sealed record DeletePatientHealthInsuranceCommand(Guid patientId, Guid HealthInsuranceId, bool TrackChanges) : IRequest<Unit>;
 
 public class DeletePatientHealthInsuranceHandler
 {
@@ -19,7 +19,7 @@ public class DeletePatientHealthInsuranceHandler
         _mapper = mapper;
     }
 
-        public async Task Handle(DeletePatientHealthInsuranceCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeletePatientHealthInsuranceCommand request, CancellationToken cancellationToken)
     {
         var patientHealthInsurance = await _repository.PatientHealthInsurance.GetEntityAsync(request.patientId, request.HealthInsuranceId, request.TrackChanges);
         if (patientHealthInsurance is null)

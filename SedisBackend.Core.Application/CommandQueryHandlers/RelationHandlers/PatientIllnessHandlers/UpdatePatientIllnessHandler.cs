@@ -6,14 +6,14 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientIllnessHandlers;
 
-public sealed record UpdatePatientIllnessCommand(Guid Id, PatientIllnessForUpdateDto PatientIllness, bool TrackChanges) : IRequest<Unit>;
+public sealed record UpdatePatientIllnessCommand(Guid PatientId, Guid IllnessId, PatientIllnessForUpdateDto PatientIllness, bool TrackChanges) : IRequest<Unit>;
 
-internal sealed class UpdatePatientHealthInsuranceHandler : IRequestHandler<UpdatePatientIllnessCommand, Unit>
+internal sealed class UpdatePatientIllnessHandler : IRequestHandler<UpdatePatientIllnessCommand, Unit>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
 
-    public UpdatePatientHealthInsuranceHandler(IRepositoryManager repository, IMapper mapper)
+    public UpdatePatientIllnessHandler(IRepositoryManager repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
@@ -23,7 +23,7 @@ internal sealed class UpdatePatientHealthInsuranceHandler : IRequestHandler<Upda
     {
         var patientIllnessEntity = await _repository.PatientIllness.GetEntityAsync(request.PatientIllness.PatientId, request.PatientIllness.IllnessId, request.TrackChanges);
         if (patientIllnessEntity is null)
-            throw new EntityNotFoundException(request.Id);
+            throw new EntityNotFoundException(request.IllnessId);
 
         _mapper.Map(request.PatientIllness, patientIllnessEntity);
         _repository.PatientIllness.UpdateEntity(patientIllnessEntity);

@@ -6,9 +6,9 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientDiscapacityHandlers;
 
-public sealed record GetPatientIllnesessQuery(Guid PatientId, bool TrackChanges) : IRequest<IEnumerable<PatientDiscapacityDto>>;
+public sealed record GetPatientDiscapacityQuery(Guid PatientId, Guid DiscapacityId, bool TrackChanges) : IRequest<PatientDiscapacityDto>;
 
-internal sealed class GetPatientDiscapacityHandler : IRequestHandler<GetPatientIllnesessQuery, IEnumerable<PatientDiscapacityDto>>
+internal sealed class GetPatientDiscapacityHandler : IRequestHandler<GetPatientDiscapacityQuery, PatientDiscapacityDto>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
@@ -19,14 +19,14 @@ internal sealed class GetPatientDiscapacityHandler : IRequestHandler<GetPatientI
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<PatientDiscapacityDto>> Handle(GetPatientIllnesessQuery request, CancellationToken cancellationToken)
+    public async Task<PatientDiscapacityDto> Handle(GetPatientDiscapacityQuery request, CancellationToken cancellationToken)
     {
-        var patientIllnesess = await _repository.PatientDiscapacity.GetPatientDiscapacities(request.PatientId, request.TrackChanges);
-        if (patientIllnesess is null || !patientIllnesess.Any())
+        var patientDiscapacities = await _repository.PatientDiscapacity.GetEntityAsync(request.PatientId,request.DiscapacityId, request.TrackChanges);
+        if (patientDiscapacities is null)
             throw new EntitiesNotFoundException();
 
-        var patientIllnesessDot = _mapper.Map<IEnumerable<PatientDiscapacityDto>>(patientIllnesess);
-        return patientIllnesessDot;
+        var patientDiscapacitiesDto = _mapper.Map<PatientDiscapacityDto>(patientDiscapacities);
+        return patientDiscapacitiesDto;
     }
 }
 

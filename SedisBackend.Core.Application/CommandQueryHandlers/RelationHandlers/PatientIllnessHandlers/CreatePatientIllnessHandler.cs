@@ -11,12 +11,12 @@ using SedisBackend.Core.Domain.Medical_History.Allergies;
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientIllnessHandlers;
 public sealed record CreatePatientIllnessCommand(PatientIllnessForCreationDto patientIllness) : IRequest<PatientIllnessDto>;
 
-public class CreatePatientLabTestHandler : IRequestHandler<CreatePatientIllnessCommand, PatientIllnessDto>
+public class CreatePatientIllnessHandler : IRequestHandler<CreatePatientIllnessCommand, PatientIllnessDto>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
 
-    public CreatePatientLabTestHandler(IRepositoryManager repository, IMapper mapper)
+    public CreatePatientIllnessHandler(IRepositoryManager repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

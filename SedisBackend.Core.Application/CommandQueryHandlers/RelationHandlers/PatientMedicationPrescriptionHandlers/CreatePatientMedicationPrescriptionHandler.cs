@@ -21,35 +21,9 @@ public class CreatePatientMedicationPrescriptionHandler : IRequestHandler<Create
     public async Task<PatientMedicationPrescriptionDto> Handle(CreatePatientMedicationPrescriptionCommand request, CancellationToken cancellationToken)
     {
         var MedicationPrescriptionEntity = _mapper.Map<PatientMedicationPrescription>(request.patientMedicationPrescription);
-        PatientMedicationPrescription existingMedicationPrescription = new();
-        try
-        {
-            existingMedicationPrescription = await _repository.PatientMedicationPrescriptionRepository.GetEntityAsync(request.patientMedicationPrescription.PatientId, request.patientMedicationPrescription.MedicationId, false);
-            if (existingMedicationPrescription != null && existingMedicationPrescription.Status == true)
-            {
-                throw new Exception("This patient has already registered this MedicationPrescription");
-            }
-            else if (existingMedicationPrescription != null && existingMedicationPrescription.Status == false)
-            {
-                _mapper.Map(request.patientMedicationPrescription, existingMedicationPrescription);
-                request.patientMedicationPrescription.Status = true;
-                _repository.PatientMedicationPrescriptionRepository.UpdateEntity(existingMedicationPrescription);
-                await _repository.SaveAsync(cancellationToken);
-            }
-        }
-        catch (Exception ex)
-        {
-            if (ex.GetType() == typeof(KeyNotFoundException))
-            {
-                _repository.PatientMedicationPrescriptionRepository.CreateEntity(MedicationPrescriptionEntity);
-                await _repository.SaveAsync(cancellationToken);
-            }
-            else
-            {
-                throw ex;
-            }
-        }
-
+        _repository.PatientMedicationPrescription.CreateEntity(MedicationPrescriptionEntity);
+        await _repository.SaveAsync(cancellationToken);
+            
         return _mapper.Map<PatientMedicationPrescriptionDto>(MedicationPrescriptionEntity);
     }
 }

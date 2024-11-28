@@ -1,6 +1,9 @@
 ﻿using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using SedisBackend.Core.Application.CommandQueryHandlers.UserHandlers.RegistratorHandlers;
+using SedisBackend.Core.Domain.DTO.Entities.Users.Registrator;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 
 namespace WebApi.Controllers.v1.Users.RegistratorController;

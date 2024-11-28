@@ -16,8 +16,10 @@ public class Doctor
     public HealthCenter CurrentlyWorkingHealthCenter { get; set; }
     public ICollection<DoctorMedicalSpecialty> Specialties { get; set; }
     public ICollection<Appointment> Appointments { get; set; }
-    public ICollection<MedicalConsultation> MedicalConsultations { get; set; }
     public ICollection<Patient> PrimaryCarePatients { get; set; }
+    public ICollection<MedicalConsultation> MedicalConsultations { get; set; }
+    public ICollection<PatientLabTestPrescription> LabTestsPrescribed { get; set; }    
+    public ICollection<PatientMedicationPrescription> MedicationPrescribed { get; set; }    
     public bool Status {  get; set; }
     public User ApplicationUser { get; set; }
 }

@@ -8,26 +8,26 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientIllnessHandlers;
 
-public sealed record GetPatientLabTestsQuery(Guid PatientId, bool TrackChanges) : IRequest<IEnumerable<PatientLabTestPrescriptionDto>>;
+public sealed record GetPatientLabTestQuery(Guid Id, bool TrackChanges) : IRequest<PatientLabTestPrescriptionDto>;
 
-internal sealed class GetPatientLabTestsPrescriptionHandler : IRequestHandler<GetPatientLabTestsQuery, IEnumerable<PatientLabTestPrescriptionDto>>
+internal sealed class GetPatientLabTestPrescriptionHandler : IRequestHandler<GetPatientLabTestQuery, PatientLabTestPrescriptionDto>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
 
-    public GetPatientLabTestsPrescriptionHandler(IRepositoryManager repository, IMapper mapper)
+    public GetPatientLabTestPrescriptionHandler(IRepositoryManager repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<PatientLabTestPrescriptionDto>> Handle(GetPatientLabTestsQuery request, CancellationToken cancellationToken)
+    public async Task<PatientLabTestPrescriptionDto> Handle(GetPatientLabTestQuery request, CancellationToken cancellationToken)
     {
-        var patientLabTests = await _repository.PatientIllness.GetByPatient(request.PatientId, request.TrackChanges);
-        if (patientLabTests is null || !patientLabTests.Any())
+        var patientLabTests = await _repository.PatientLabTestPrescription.GetEntityAsync(request.Id, request.TrackChanges);
+        if (patientLabTests is null)
             throw new EntitiesNotFoundException();
 
-        var patientAllergiesDot = _mapper.Map<IEnumerable<PatientLabTestPrescriptionDto>>(patientLabTests);
+        var patientAllergiesDot = _mapper.Map<PatientLabTestPrescriptionDto>(patientLabTests);
         return patientAllergiesDot;
     }
 }

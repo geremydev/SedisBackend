@@ -6,7 +6,7 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.MedicationCoverageHandlers;
 
-public sealed record UpdateMedicationCoverageCommand(Guid Id, MedicationCoverageForUpdateDto MedicationCoverage, bool TrackChanges) : IRequest<Unit>;
+public sealed record UpdateMedicationCoverageCommand(Guid MedicationId, Guid HealthInsuranceId, MedicationCoverageForUpdateDto MedicationCoverage, bool TrackChanges) : IRequest<Unit>;
 
 internal sealed class UpdateDoctorMedicalSpecialtyHandler : IRequestHandler<UpdateMedicationCoverageCommand, Unit>
 {
@@ -21,9 +21,9 @@ internal sealed class UpdateDoctorMedicalSpecialtyHandler : IRequestHandler<Upda
 
     public async Task<Unit> Handle(UpdateMedicationCoverageCommand request, CancellationToken cancellationToken)
     {
-        var medicationCoverageEntity = await _repository.MedicationCoverage.GetEntityAsync(request.Id, request.TrackChanges);
+        var medicationCoverageEntity = await _repository.MedicationCoverage.GetEntityAsync(request.MedicationId, request.HealthInsuranceId, request.TrackChanges);
         if (medicationCoverageEntity is null)
-            throw new EntityNotFoundException(request.Id);
+            throw new EntityNotFoundException(request.HealthInsuranceId);
 
         _mapper.Map(request.MedicationCoverage, medicationCoverageEntity);
         _repository.MedicationCoverage.UpdateEntity(medicationCoverageEntity);

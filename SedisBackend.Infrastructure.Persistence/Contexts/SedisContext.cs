@@ -39,6 +39,8 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<LabTest> LabTests { get; set; }
     public DbSet<Medication> Medications { get; set; }
     public DbSet<Patient> Patients { get; set; }
+    public DbSet<PatientMedicationPrescription> PatientMedicationPrescriptions { get; set; }
+    public DbSet<PatientLabTestPrescription> PatientLabTestPrescriptions { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<LabTech> LabTechs { get; set; }
     public DbSet<Location> Locations { get; set; }
@@ -381,7 +383,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.Entity<HealthCenterServices>(entity =>
         {
             entity.ToTable("HealthCenterServices");
-            entity.HasKey(a => a.Id);
+            entity.HasKey(pa => new { pa.HealthCenterId, pa.ServiceId });
 
 
             entity.HasOne(hcs => hcs.HealthCenter)
@@ -509,7 +511,26 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .OnDelete(DeleteBehavior.NoAction);
         });
 
-        modelBuilder.Entity<PatientDiscapacity>(entity =>
+        modelBuilder.Entity<PatientMedicationPrescription>(entity =>
+        {
+            entity.ToTable("PatientMedicationPrescriptions");
+            entity.HasKey(pa => pa.Id );
+
+            entity.HasOne(m => m.Patient)
+            .WithMany(p => p.Medications)
+            .HasForeignKey(m => m.PatientId);
+
+            entity.HasOne(m => m.Medication)
+            .WithMany(p => p.PatientMedicationPrescriptions)
+            .HasForeignKey(m => m.MedicationId);
+
+            entity.HasOne(m => m.MedicalConsultation)
+            .WithMany(p => p.PatientMedications)
+            .HasForeignKey(m => m.MedicalConsultationId);
+
+        });
+
+            modelBuilder.Entity<PatientDiscapacity>(entity =>
         {
             entity.ToTable("PatientDiscapacities");
             entity.HasKey(pa => new { pa.PatientId, pa.DiscapacityId });
@@ -692,7 +713,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.Entity<MedicationCoverage>(entity =>
         {
             entity.ToTable("MedicationCoverages");
-            entity.HasKey(a => a.Id);
+            entity.HasKey(pa => new { pa.MedicationId, pa.HealthInsuranceId });
 
             entity.HasOne(mc => mc.HealthInsurance)
                 .WithMany(mc => mc.MedicationCoverages)
@@ -803,7 +824,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.Entity<DoctorMedicalSpecialty>(entity =>
         {
             entity.ToTable("DoctorMedicalSpecialities");
-            entity.HasKey(a => a.Id);
+            entity.HasKey(pa => new { pa.DoctorId, pa.MedicalSpecialtyId });
 
             entity.HasOne(dms => dms.Doctor)
                 .WithMany(d => d.Specialties)
@@ -866,6 +887,61 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .WithMany(hi => hi.SubscribedPatients)
                 .HasForeignKey(ph => ph.HealthInsuranceId);
         });
+
+        modelBuilder.Entity<PatientLabTestPrescription>(entity =>
+        {
+            entity.ToTable("PatientLabTestPrescriptions");
+
+            entity.HasKey(ph => ph.Id);
+
+            entity.HasOne(e=>e.MedicalConsultation)
+                .WithMany(c=>c.PatientLabTests)
+                .HasForeignKey(ph => ph.MedicalConsultationId);
+
+
+            entity.HasOne(ph => ph.Patient)
+                .WithMany(c => c.LabTests)
+                .HasForeignKey(ph => ph.PatientId);
+
+            entity.HasOne(lt => lt.Doctor)
+                .WithMany(c => c.LabTestsPrescribed)
+                .HasForeignKey(ph => ph.DoctorId);
+
+            entity.HasOne(lt => lt.LabTech)
+                .WithMany(c => c.Prescriptions)
+                .HasForeignKey(ph => ph.LabTechId);
+
+            entity.HasOne(lt => lt.LabTest)
+                .WithMany(c => c.Prescriptions)
+                .HasForeignKey(ph => ph.LabTestId);
+
+            entity.Property(ph => ph.Status)
+                .IsRequired();
+        });
+
+        modelBuilder.Entity<PatientMedicationPrescription>(entity =>
+        {
+            entity.ToTable("PatientMedicationPrescription");
+
+            entity.HasKey(ph => ph.Id);
+
+            entity.HasOne(e => e.MedicalConsultation)
+                .WithMany(c => c.PatientMedications)
+                .HasForeignKey(ph => ph.MedicalConsultationId);
+
+
+            entity.HasOne(ph => ph.Patient)
+                .WithMany(c => c.Medications)
+                .HasForeignKey(ph => ph.PatientId);
+
+            entity.HasOne(lt => lt.Doctor)
+                .WithMany(c => c.MedicationPrescribed)
+                .HasForeignKey(ph => ph.DoctorId);
+
+            entity.Property(ph => ph.Status)
+                .IsRequired();
+        });
+
 
         /*modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new PatientConfiguration());

@@ -2,6 +2,9 @@
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientIllnessHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientMedicationPrescriptionHandlers;
+using SedisBackend.Core.Domain.DTO.Entities.PatientMedicationPrescription;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 
 namespace WebApi.Controllers.v1.Relations.PatientMedicationPrescriptionController;
@@ -24,16 +27,16 @@ public class PatientMedicationPrescriptionController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientMedicationPrescriptionDto>))]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _sender.Send(new GetPatientMedicationPrescriptionsQuery(false)));
+        return Ok(await _sender.Send(new GetAllPatientMedicationsPresctiptionQuery(false)));
     }
 
     [HttpGet("{id:guid}", Name = "GetPatientMedicationPrescriptionById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientMedicationPrescriptionDto))]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<IActionResult> Get(Guid Id)
     {
-        return Ok(await _sender.Send(new GetPatientMedicationPrescriptionQuery(id, false)));
+        return Ok(await _sender.Send(new GetAllPatientMedicationsPresctiptionQuery(false)));
     }
 
     [HttpPost]
@@ -66,7 +69,7 @@ public class PatientMedicationPrescriptionController : BaseApiController
         return Ok();
     }
 
-    [HttpPatch("{id:guid}")]
+    /*[HttpPatch("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientMedicationPrescriptionForUpdateDto))]
@@ -79,14 +82,14 @@ public class PatientMedicationPrescriptionController : BaseApiController
         var (PatientMedicationPrescriptionsToPatch, _) = await _sender.Send(command);
 
         return Ok(PatientMedicationPrescriptionsToPatch);
-    }
+    }*/
 
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid Id)
     {
-        var notification = new DeletePatientMedicationPrescriptionCommand(id, true);
+        var notification = new DeletePatientMedicationPrescriptionCommand(Id, true);
         await _sender.Send(notification);
         return NoContent();
     }

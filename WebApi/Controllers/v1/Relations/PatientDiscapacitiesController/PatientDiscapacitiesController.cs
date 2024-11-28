@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientDiscapacityHandlers;
+using SedisBackend.Core.Domain.DTO.Entities.Medical_History.PatientDiscapacity;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 
 namespace WebApi.Controllers.v1.Relations.PatientDiscapacitiesController;
@@ -22,19 +24,19 @@ public class PatientDiscapacitiesController : BaseApiController
     [HttpGet(Name = "GetAllPatientDiscapacities")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientDiscapacitiesDto>))]
-    public async Task<IActionResult> Get()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientDiscapacityDto>))]
+    public async Task<IActionResult> Get(Guid PatientId)
     {
-        return Ok(await _sender.Send(new GetPatientDiscapacitiesQuery(false)));
+        return Ok(await _sender.Send(new GetPatientDiscapacitiesQuery(PatientId, false)));
     }
 
     [HttpGet("{id:guid}", Name = "GetPatientDiscapacityById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientDiscapacitiesDto))]
-    public async Task<IActionResult> Get(Guid id)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientDiscapacityDto))]
+    public async Task<IActionResult> Get(Guid PatientId, Guid DiscapacityId)
     {
-        return Ok(await _sender.Send(new GetPatientDiscapacityQuery(id, false)));
+        return Ok(await _sender.Send(new GetPatientDiscapacityQuery(PatientId, DiscapacityId, false)));
     }
 
     [HttpPost]
@@ -42,14 +44,14 @@ public class PatientDiscapacitiesController : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Post([FromBody] PatientDiscapacitiesForCreationDto PatientDiscapacities)
+    public async Task<IActionResult> Post([FromBody] PatientDiscapacityForCreationDto PatientDiscapacities)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var command = new CreatePatientDiscapacitiesCommand(PatientDiscapacities);
+        var command = new CreatePatientDiscapacityCommand(PatientDiscapacities);
         await _sender.Send(command);
         return NoContent();
     }
@@ -57,37 +59,22 @@ public class PatientDiscapacitiesController : BaseApiController
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientDiscapacitiesForUpdateDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientDiscapacityForUpdateDto))]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] PatientDiscapacitiesForUpdateDto PatientDiscapacities)
+    public async Task<IActionResult> Put(Guid id, [FromBody] PatientDiscapacityForUpdateDto PatientDiscapacities)
     {
-        var command = new UpdatePatientDiscapacitiesCommand(id, PatientDiscapacities, true);
+        var command = new UpdatePatientDiscapacityCommand(id, PatientDiscapacities, true);
 
         await _sender.Send(command);
         return Ok();
     }
 
-    [HttpPatch("{id:guid}")]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientDiscapacitiesForUpdateDto))]
-    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<PatientDiscapacitiesForUpdateDto> patchDoc)
-    {
-        if (patchDoc is null)
-            return BadRequest("patchDoc object sent from client is null.");
-
-        var command = new PatchPatientDiscapacitiesCommand(id, true, patchDoc);
-        var (PatientDiscapacitiesToPatch, _) = await _sender.Send(command);
-
-        return Ok(PatientDiscapacitiesToPatch);
-    }
-
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid PatientId, Guid DiscapacityId)
     {
-        var notification = new DeletePatientDiscapacitiesCommand(id, true);
+        var notification = new DeletePatientDiscapacityCommand(PatientId, DiscapacityId,true);
         await _sender.Send(notification);
         return NoContent();
     }

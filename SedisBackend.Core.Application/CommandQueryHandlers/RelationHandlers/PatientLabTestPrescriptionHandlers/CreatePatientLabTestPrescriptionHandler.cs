@@ -21,34 +21,9 @@ public class CreatePatientLabTestPrescriptionHandler : IRequestHandler<CreatePat
     public async Task<PatientLabTestPrescriptionDto> Handle(CreatePatientLabTestPrescriptionCommand request, CancellationToken cancellationToken)
     {
         var LabTestPrescriptionEntity = _mapper.Map<PatientLabTestPrescription>(request.patientLabTestPrescription);
-        PatientLabTestPrescription existingLabTestPrescription = new();
-        try
-        {
-            existingLabTestPrescription = await _repository.PatientLabTestPrescription.GetEntityAsync(request.patientLabTestPrescription.PatientId, request.patientLabTestPrescription.LabTestId, false);
-            if (existingLabTestPrescription != null && existingLabTestPrescription.Status == "Activo")
-            {
-                throw new Exception("This patient has already registered this LabTestPrescription");
-            }
-            else if (existingLabTestPrescription != null && existingLabTestPrescription.Status == "Inactivo")
-            {
-                _mapper.Map(request.patientLabTestPrescription, existingLabTestPrescription);
-                request.patientLabTestPrescription.Status = "Activo";
-                _repository.PatientLabTestPrescription.UpdateEntity(existingLabTestPrescription);
-                await _repository.SaveAsync(cancellationToken);
-            }
-        }
-        catch (Exception ex)
-        {
-            if (ex.GetType() == typeof(KeyNotFoundException))
-            {
-                _repository.PatientLabTestPrescription.CreateEntity(LabTestPrescriptionEntity);
-                await _repository.SaveAsync(cancellationToken);
-            }
-            else
-            {
-                throw ex;
-            }
-        }
+        _repository.PatientLabTestPrescription.CreateEntity(LabTestPrescriptionEntity);
+        await _repository.SaveAsync(cancellationToken);
+            
 
         return _mapper.Map<PatientLabTestPrescriptionDto>(LabTestPrescriptionEntity);
     }

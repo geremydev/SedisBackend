@@ -2,6 +2,9 @@
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientHealthInsuranceHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientIllnessHandlers;
+using SedisBackend.Core.Domain.DTO.Entities.PatientHealthInsurance;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 
 namespace WebApi.Controllers.v1.Relations.PatientHealthInsuranceController;
@@ -22,19 +25,19 @@ public class PatientHealthInsuranceController : BaseApiController
     [HttpGet(Name = "GetAllPatientHealthInsurances")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientHealthInsurancesDto>))]
-    public async Task<IActionResult> Get()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientHealthInsuranceDto>))]
+    public async Task<IActionResult> Get(Guid PatientId)
     {
-        return Ok(await _sender.Send(new GetPatientHealthInsurancesQuery(false)));
+        return Ok(await _sender.Send(new GetPatientHealthInsuranceByPatientQuery(PatientId, false)));
     }
 
     [HttpGet("{id:guid}", Name = "GetPatientHealthInsuranceById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientHealthInsurancesDto))]
-    public async Task<IActionResult> Get(Guid id)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientHealthInsuranceDto))]
+    public async Task<IActionResult> Get(Guid PatientId, Guid HealthInsuranceId)
     {
-        return Ok(await _sender.Send(new GetPatientHealthInsuranceQuery(id, false)));
+        return Ok(await _sender.Send(new GetPatientHealthInsuranceByIdQuery(PatientId, HealthInsuranceId, false)));
     }
 
     [HttpPost]
@@ -67,7 +70,7 @@ public class PatientHealthInsuranceController : BaseApiController
         return Ok();
     }
 
-    [HttpPatch("{id:guid}")]
+    /*[HttpPatch("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientHealthInsuranceForUpdateDto))]
@@ -80,14 +83,14 @@ public class PatientHealthInsuranceController : BaseApiController
         var (PatientHealthInsurancesToPatch, _) = await _sender.Send(command);
 
         return Ok(PatientHealthInsurancesToPatch);
-    }
+    }*/
 
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid PatientId, Guid HealthInsuranceId)
     {
-        var notification = new DeletePatientHealthInsuranceCommand(id, true);
+        var notification = new DeletePatientHealthInsuranceCommand(PatientId, HealthInsuranceId, true);
         await _sender.Send(notification);
         return NoContent();
     }

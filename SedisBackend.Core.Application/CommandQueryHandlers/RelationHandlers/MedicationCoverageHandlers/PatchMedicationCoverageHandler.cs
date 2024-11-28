@@ -8,16 +8,16 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.MedicationCoverageHandlers;
 
-public sealed record PatchMedicationCoverageCommand(Guid Id, bool TrackChanges, JsonPatchDocument<MedicationCoverageForUpdateDto> PatchDoc)
+public sealed record PatchMedicationCoverageCommand(Guid MedicationId, Guid HealthInsuranceId, bool TrackChanges, JsonPatchDocument<MedicationCoverageForUpdateDto> PatchDoc)
     : IRequest<(MedicationCoverageForUpdateDto MedicationCoverageToPatch, MedicationCoverage MedicationCoverageEntity)>;
 
-internal sealed class PatchDoctorMedicalSpecialtyHandler
+internal sealed class PatchMedicationCoverageHandler
     : IRequestHandler<PatchMedicationCoverageCommand, (MedicationCoverageForUpdateDto MedicationCoverageToPatch, MedicationCoverage MedicationCoverageEntity)>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
 
-    public PatchDoctorMedicalSpecialtyHandler(IRepositoryManager repository, IMapper mapper)
+    public PatchMedicationCoverageHandler(IRepositoryManager repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
@@ -26,9 +26,9 @@ internal sealed class PatchDoctorMedicalSpecialtyHandler
     public async Task<(MedicationCoverageForUpdateDto MedicationCoverageToPatch, MedicationCoverage MedicationCoverageEntity)> Handle(
         PatchMedicationCoverageCommand request, CancellationToken cancellationToken)
     {
-        var MedicationCoverageEntity = await _repository.MedicationCoverage.GetEntityAsync(request.Id, request.TrackChanges);
+        var MedicationCoverageEntity = await _repository.MedicationCoverage.GetEntityAsync(request.MedicationId, request.HealthInsuranceId, request.TrackChanges);
         if (MedicationCoverageEntity is null)
-            throw new EntityNotFoundException(request.Id);
+            throw new EntityNotFoundException(request.HealthInsuranceId);
 
         var MedicationCoverageToPatch = _mapper.Map<MedicationCoverageForUpdateDto>(MedicationCoverageEntity);
         request.PatchDoc.ApplyTo(MedicationCoverageToPatch);
