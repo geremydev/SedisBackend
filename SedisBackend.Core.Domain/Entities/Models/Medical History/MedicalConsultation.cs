@@ -2,11 +2,6 @@
 using SedisBackend.Core.Domain.Entities.Models;
 using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Medical_History.Allergies;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
-using SedisBackend.Core.Domain.Medical_History.Vaccines;
 
 namespace SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
@@ -32,7 +27,7 @@ public class MedicalConsultation : IBaseEntity
     public DateTime? CreatedDate { get; set; }
     public DateTime? LastModifiedDate { get; set; }
     public string Status { get; set; }
-   
+
 
 
     /* Ejemplo de campos
