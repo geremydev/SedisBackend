@@ -11,4 +11,5 @@ public class DoctorMedicalSpecialty : IBaseEntity
     public Doctor Doctor { get; set; }
     public Guid MedicalSpecialtyId { get; set; }
     public MedicalSpecialty MedicalSpecialty { get; set; }
+    public bool Status { get; set; }
 }

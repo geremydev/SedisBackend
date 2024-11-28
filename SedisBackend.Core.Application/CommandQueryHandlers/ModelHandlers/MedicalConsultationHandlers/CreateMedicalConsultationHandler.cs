@@ -6,9 +6,9 @@ using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.ClinicalHistoryHandlers;
 
-public sealed record CreateMedicalConsultionCommand(MedicalConsultationForCreationDto medicalConsultation) : IRequest<MedicalConsultationDto>;
+public sealed record CreateMedicalConsultationCommand(MedicalConsultationForCreationDto medicalConsultation) : IRequest<MedicalConsultationDto>;
 
-internal sealed class CreateMedicalConsultationHandler : IRequestHandler<CreateMedicalConsultionCommand, MedicalConsultationDto>
+internal sealed class CreateMedicalConsultationHandler : IRequestHandler<CreateMedicalConsultationCommand, MedicalConsultationDto>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
@@ -19,7 +19,7 @@ internal sealed class CreateMedicalConsultationHandler : IRequestHandler<CreateM
         _mapper = mapper;
     }
 
-    public async Task<MedicalConsultationDto> Handle(CreateMedicalConsultionCommand request, CancellationToken cancellationToken)
+    public async Task<MedicalConsultationDto> Handle(CreateMedicalConsultationCommand request, CancellationToken cancellationToken)
     {
         var clinicalHistoryEntity = _mapper.Map<MedicalConsultation>(request.medicalConsultation);
         _repository.MedicalConsultation.CreateEntity(clinicalHistoryEntity);

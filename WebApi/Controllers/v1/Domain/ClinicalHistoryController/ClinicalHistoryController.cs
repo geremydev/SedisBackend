@@ -28,7 +28,7 @@ public class ClinicalHistoryController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicalConsultationDto))]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _sender.Send(new GetMedicalConsultationQuery(false)));
+        return base.Ok(await _sender.Send<IEnumerable<MedicalConsultationDto>>(new GetMedicalConsultationsQuery(false)));
     }
 
     [HttpGet("{id:guid}", Name = "GetClinicalHistoryById")]
@@ -37,7 +37,7 @@ public class ClinicalHistoryController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicalConsultationDto))]
     public async Task<IActionResult> Get(Guid id)
     {
-        return Ok(await _sender.Send(new GetClinicalHistoryQuery(id, false)));
+        return base.Ok((object)await _sender.Send<MedicalConsultationDto>(new GetMedicalConsultationQuery(id, false)));
     }
 
     [HttpPost]
@@ -52,7 +52,7 @@ public class ClinicalHistoryController : BaseApiController
             return BadRequest(ModelState);
         }
 
-        var command = new CreateMedicalConsultionCommand(clinicalhistory);
+        var command = new CreateMedicalConsultationCommand(clinicalhistory);
         await _sender.Send(command);
         return NoContent();
     }

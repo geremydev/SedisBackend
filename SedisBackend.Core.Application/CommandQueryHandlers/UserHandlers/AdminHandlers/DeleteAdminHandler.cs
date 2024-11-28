@@ -6,11 +6,11 @@ namespace SedisBackend.Core.Application.CommandQueryHandlers.UserHandlers.AdminH
 
 public record DeleteAdminCommand(Guid Id, bool TrackChanges) : IRequest;
 
-internal sealed class DeleteAdminHandler : IRequestHandler<DeleteAdminCommand>
+internal sealed class DeleteLabTechHandler : IRequestHandler<DeleteAdminCommand>
 {
     private readonly IRepositoryManager _repository;
 
-    public DeleteAdminHandler(IRepositoryManager repository) => _repository = repository;
+    public DeleteLabTechHandler(IRepositoryManager repository) => _repository = repository;
 
     public async Task Handle(DeleteAdminCommand request, CancellationToken cancellationToken)
     {

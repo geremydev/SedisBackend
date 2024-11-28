@@ -8,12 +8,12 @@ namespace SedisBackend.Core.Application.CommandQueryHandlers.UserHandlers.AdminH
 
 public sealed record GetAdminQuery(Guid Id, bool TrackChanges) : IRequest<AdminDto>;
 
-internal sealed class GetAdminHandler : IRequestHandler<GetAdminQuery, AdminDto>
+internal sealed class GetLabTechHandler : IRequestHandler<GetAdminQuery, AdminDto>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
 
-    public GetAdminHandler(IRepositoryManager repository, IMapper mapper)
+    public GetLabTechHandler(IRepositoryManager repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

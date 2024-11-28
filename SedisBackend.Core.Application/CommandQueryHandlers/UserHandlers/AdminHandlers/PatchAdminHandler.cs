@@ -14,14 +14,14 @@ namespace SedisBackend.Core.Application.CommandQueryHandlers.UserHandlers.AdminH
 public sealed record PatchAdminCommand(Guid Id, bool TrackChanges, JsonPatchDocument<AdminForUpdateDto> PatchDoc)
     : IRequest<(AdminForUpdateDto AdminToPatch, Admin AdminEntity)>;
 
-internal sealed class PatchAdminHandler
+internal sealed class PatchLabTechHandler
     : IRequestHandler<PatchAdminCommand, (AdminForUpdateDto AdminToPatch, Admin AdminEntity)>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
 
-    public PatchAdminHandler(IRepositoryManager repository, IMapper mapper, UserManager<User> userManager)
+    public PatchLabTechHandler(IRepositoryManager repository, IMapper mapper, UserManager<User> userManager)
     {
         _repository = repository;
         _mapper = mapper;
