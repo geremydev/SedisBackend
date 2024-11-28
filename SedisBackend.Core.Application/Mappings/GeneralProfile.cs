@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SedisBackend.Core.Application.Events;
 using SedisBackend.Core.Domain.DTO.Entities.Appointments;
 using SedisBackend.Core.Domain.DTO.Entities.Health_Centers;
 using SedisBackend.Core.Domain.DTO.Entities.Locations;
@@ -498,5 +499,12 @@ public class GeneralProfile : Profile
                 .ReverseMap();
         CreateMap<User, BaseUserForUpdateDto>()
                 .ReverseMap();
+
+        // Events 
+        CreateMap<Appointment, AppointmentCreatedEvent>()
+            .ReverseMap();
+
+        CreateMap<Appointment, AppointmentApprovedEvent>()
+            .ReverseMap();
     }
 }

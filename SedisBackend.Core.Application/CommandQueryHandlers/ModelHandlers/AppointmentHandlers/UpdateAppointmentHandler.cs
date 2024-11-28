@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using SedisBackend.Core.Application.Events;
 using SedisBackend.Core.Domain.DTO.Entities.Appointments;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
@@ -25,9 +26,15 @@ internal sealed class UpdateAppointmentHandler : IRequestHandler<UpdateAppointme
         if (AppointmentEntity is null)
             throw new EntityNotFoundException(request.Id);
 
-        _mapper.Map(request.Appointment, AppointmentEntity);
-        _repository.Appointment.UpdateEntity(AppointmentEntity);
-        await _repository.SaveAsync(cancellationToken);
+        if (request.Appointment.AppointmentStatus == "Aprobada") // Si se actualiza como aprobada vino del asistente, entonces pasa a estar pendiente para el doctor
+        {
+            _mapper.Map(request.Appointment, AppointmentEntity);
+            AppointmentEntity.Status = "Pendiente";
+            _repository.Appointment.UpdateEntity(AppointmentEntity);
+            await _repository.SaveAsync(cancellationToken);
+
+            var appointmentApprovedEvent = _mapper.Map<AppointmentApprovedEvent>(AppointmentEntity);
+        }
 
         return Unit.Value;
     }

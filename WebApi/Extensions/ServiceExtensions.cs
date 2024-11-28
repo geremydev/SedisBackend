@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using SedisBackend.Core.Application;
+using SedisBackend.Core.Application.Events;
 using SedisBackend.Core.Application.Validators.LabTestValidators;
 using SedisBackend.Core.Domain.DTO.Error;
 using SedisBackend.Core.Domain.Entities.Users;
@@ -36,6 +38,31 @@ public static class ServiceExtensions
             .AllowAnyMethod();
         /*.WithOrigins("http://localhost:3000")*/
     }));
+
+    public static void AddMassTransit(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddMassTransit(x =>
+        {
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host(configuration["RabbitMQ:Host"], h =>
+                {
+                    h.Username(configuration["RabbitMQ:Username"]);
+                    h.Password(configuration["RabbitMQ:Password"]);
+                });
+
+                cfg.Message<AppointmentCreatedEvent>(m =>
+                {
+                    m.SetEntityName("appointment.created");
+                });
+
+                cfg.Message<AppointmentApprovedEvent>(m =>
+                {
+                    m.SetEntityName("appointment.approved");
+                });
+            });
+        });
+    }
 
     public static void AddApplicationDependencies(this IServiceCollection services)
     {

@@ -11,13 +11,8 @@ internal class RegistratorConfiguration : IEntityTypeConfiguration<Registrator>
         (
             new Registrator
             {
-                Id = Guid.Parse("37439d05-9b3b-4896-88e0-4ee7b7221a8b"),
+                Id = Guid.Parse("37439d05-9b3b-4896-88e0-4ee7b7221a5b"),
                 HealthCenterId = Guid.Parse("85bc224a-c53f-41db-97b8-92f703ee4452"),
-            },
-            new Registrator
-            {
-                Id = Guid.Parse("37439d05-9b3b-4896-88e0-4ee7b7221a8b"),
-                HealthCenterId = Guid.Parse("85bc224a-c53f-41db-97b8-92f703ee4452"), // Hospital General Dr. Darío Contreras
             },
             new Registrator
             {

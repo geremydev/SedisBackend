@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SedisBackend.Core.Domain.Entities.Relations;
-using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
 
 namespace SedisBackend.Infrastructure.Persistence.Configurations.RelationsConfigurations;
 
@@ -22,9 +19,6 @@ public class PatientIllnessConfiguration : IEntityTypeConfiguration<PatientIllne
                 DiagnosisDate = DateTime.Parse("2020-06-15"),
                 Status = "Activa",
                 Notes = "El paciente está bajo monitoreo y tratamiento tópico para los cambios en la pigmentación de la piel.",
-                Patient = new Patient(),
-                Illness = new Illness(),
-                MedicalConsultation = new MedicalConsultation(),
             },
             new PatientIllness
             {
@@ -35,9 +29,6 @@ public class PatientIllnessConfiguration : IEntityTypeConfiguration<PatientIllne
                 DiagnosisDate = DateTime.Parse("2021-08-25"),
                 Status = "En remisión",
                 Notes = "Paciente respondió favorablemente a la terapia diurética.",
-                Patient = new Patient(),
-                Illness = new Illness(),
-                MedicalConsultation = new MedicalConsultation(),
             },
             new PatientIllness
             {
@@ -48,9 +39,6 @@ public class PatientIllnessConfiguration : IEntityTypeConfiguration<PatientIllne
                 DiagnosisDate = DateTime.Parse("2022-02-12"),
                 Status = "Activa",
                 Notes = "Tratamiento antibiótico y seguimiento con oftalmología especializado.",
-                Patient = new Patient(),
-                Illness = new Illness(),
-                MedicalConsultation = new MedicalConsultation(),
             }
         );
     }

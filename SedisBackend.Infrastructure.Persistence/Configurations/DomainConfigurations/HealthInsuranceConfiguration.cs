@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Medical_Insurance;
 
@@ -19,8 +18,6 @@ public class HealthInsuranceConfiguration : IEntityTypeConfiguration<HealthInsur
                 PolicyType = PolicyType.Individual.ToString(),
                 InsuranceCompany = "SaludCo",
                 CoverageLevel = CoverageLevel.Low.ToString(),
-                MedicationCoverages = new List<MedicationCoverage>(),
-                SubscribedPatients = new List<PatientHealthInsurance>()
             },
             new HealthInsurance
             {
@@ -29,8 +26,6 @@ public class HealthInsuranceConfiguration : IEntityTypeConfiguration<HealthInsur
                 PolicyType = PolicyType.Family.ToString(),
                 InsuranceCompany = "VivaSalud",
                 CoverageLevel = CoverageLevel.High.ToString(),
-                MedicationCoverages = new List<MedicationCoverage>(),
-                SubscribedPatients = new List<PatientHealthInsurance>()
             }
         );
     }

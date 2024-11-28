@@ -139,7 +139,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             },
             new User
             {
-                Id = Guid.Parse("37439d05-9b3b-4896-88e0-4ee7b7221a8b"),
+                Id = Guid.Parse("37439d05-9b3b-4896-88e0-4ee7b7221a5b"),
                 UserName = "digitaregistrator",
                 Email = "registrator@sedis.com",
                 FirstName = "Gilthong Emmanuel",
@@ -154,24 +154,6 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
                 ImageUrl = ".",
                 SecurityStamp = Guid.NewGuid().ToString(),
                 PasswordHash = passwordHasher.HashPassword(null, "Digitador123$"),
-            },
-            new User
-            {
-                Id = Guid.Parse("37439d05-9b3b-4896-88e0-4ee7b7221a8b"),
-                UserName = "registrator_dario",
-                Email = "registrator.dario@sedis.com",
-                FirstName = "Juan",
-                LastName = "Perez",
-                CardId = "0011223344",
-                Birthdate = new DateTime(1990, 5, 15),
-                Sex = SexEnum.M,
-                PhoneNumber = "809-123-4567",
-                IsActive = true,
-                EmailConfirmed = true,
-                PhoneNumberConfirmed = true,
-                ImageUrl = ".",
-                SecurityStamp = Guid.NewGuid().ToString(),
-                PasswordHash = passwordHasher.HashPassword(null, "Digitador123$")
             },
             new User
             {

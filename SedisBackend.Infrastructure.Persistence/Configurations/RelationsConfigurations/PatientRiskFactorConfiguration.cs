@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SedisBackend.Core.Domain.Entities.Relations;
-using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
 
 namespace SedisBackend.Infrastructure.Persistence.Configurations.RelationsConfigurations;
 
@@ -20,9 +17,6 @@ public class PatientRiskFactorConfiguration : IEntityTypeConfiguration<PatientRi
                 MedicalConsultationId = Guid.Parse("3d4e8a71-17a5-45c7-bec6-a7934c0425bc"),
                 Status = "Activo",
                 DiagnosisDate = DateTime.Parse("2023-01-10"),
-                Patient = new Patient(),
-                RiskFactor = new RiskFactor(),
-                MedicalConsultation = new MedicalConsultation(),
             },
             new PatientRiskFactor
             {
@@ -31,21 +25,15 @@ public class PatientRiskFactorConfiguration : IEntityTypeConfiguration<PatientRi
                 MedicalConsultationId = Guid.Parse("3d4e8a71-17a5-45c7-bec6-a7934c0425bc"),
                 Status = "En tratamiento",
                 DiagnosisDate = DateTime.Parse("2023-02-15"),
-                Patient = new Patient(),
-                RiskFactor = new RiskFactor(),
-                MedicalConsultation = new MedicalConsultation(),
             },
 
             new PatientRiskFactor
             {
-                PatientId = Guid.Parse("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950")
+                PatientId = Guid.Parse("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
                 RiskFactorId = Guid.Parse("c98f4e56-d7f8-489a-b9e1-4567e8f9a012"),
                 MedicalConsultationId = Guid.Parse("5d2e7a36-91e8-4b4a-a769-854fa9d4cb29"),
                 Status = "Activo",
                 DiagnosisDate = DateTime.Parse("2021-11-05"),
-                Patient = new Patient(),
-                RiskFactor = new RiskFactor(),
-                MedicalConsultation = new MedicalConsultation(),
             },
 
             new PatientRiskFactor
@@ -55,9 +43,6 @@ public class PatientRiskFactorConfiguration : IEntityTypeConfiguration<PatientRi
                 MedicalConsultationId = Guid.Parse("7a8b5e23-3f6b-4315-bf4e-8b7e1a5b15bc"),
                 Status = "Activo",
                 DiagnosisDate = DateTime.Parse("2020-05-20"),
-                Patient = new Patient(),
-                RiskFactor = new RiskFactor(),
-                MedicalConsultation = new MedicalConsultation(),
             }
         );
     }

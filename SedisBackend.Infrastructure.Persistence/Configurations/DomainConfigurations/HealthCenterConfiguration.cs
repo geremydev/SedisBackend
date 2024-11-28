@@ -47,12 +47,6 @@ public class HealthCenterConfiguration : IEntityTypeConfiguration<HealthCenter>
                 LocationId = Guid.Parse("c3d4e5f6-1234-5678-9abc-def123456789"),
                 HealthCenterCategory = "General",
                 Status = true,
-                Appointments = new List<Appointment>(),
-                Doctors = new List<Doctor>(),
-                Admins = new List<Admin>(),
-                Assistants = new List<Assistant>(),
-                Registrators = new List<Registrator>(),
-                HealthCenterServices = new List<HealthCenterServices>(),
             },
             new HealthCenter
             {
@@ -61,12 +55,6 @@ public class HealthCenterConfiguration : IEntityTypeConfiguration<HealthCenter>
                 LocationId = Guid.Parse("d4e5f678-2345-3456-4567-890abcdef123"),
                 HealthCenterCategory = "General",
                 Status = true,
-                Appointments = new List<Appointment>(),
-                Doctors = new List<Doctor>(),
-                Admins = new List<Admin>(),
-                Assistants = new List<Assistant>(),
-                Registrators = new List<Registrator>(),
-                HealthCenterServices = new List<HealthCenterServices>(),
             },
             new HealthCenter
             {
@@ -75,12 +63,6 @@ public class HealthCenterConfiguration : IEntityTypeConfiguration<HealthCenter>
                 LocationId = Guid.Parse("e5f67890-3456-4567-5678-90abcdef1234"),
                 HealthCenterCategory = "Specialized",
                 Status = false,
-                Appointments = new List<Appointment>(),
-                Doctors = new List<Doctor>(),
-                Admins = new List<Admin>(),
-                Assistants = new List<Assistant>(),
-                Registrators = new List<Registrator>(),
-                HealthCenterServices = new List<HealthCenterServices>(),
             }
         );
     }

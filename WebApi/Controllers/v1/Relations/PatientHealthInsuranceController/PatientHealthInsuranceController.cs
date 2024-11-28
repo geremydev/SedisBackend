@@ -63,9 +63,9 @@ public class PatientHealthInsuranceController : BaseApiController
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid patientId, Guid healthInsuranceId)
     {
-        var notification = new DeletePatientHealthInsuranceCommand(id, true);
+        var notification = new DeletePatientHealthInsuranceCommand(patientId, healthInsuranceId, true);
         await _sender.Send(notification);
         return NoContent();
     }

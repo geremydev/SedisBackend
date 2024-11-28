@@ -37,8 +37,8 @@ NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
 
 builder.Services.AddHttpClient();
 builder.Services.ConfigureRepositoryManager();
-
-builder.Services.AddApplicationDependencies();
+builder.Services.AddMassTransit(builder.Configuration);
+builder.Services.AddApplicationDependencies(); // Importante configurar el host de rabbitMQ, comenta esto si no eres Brahiam, lol
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 
