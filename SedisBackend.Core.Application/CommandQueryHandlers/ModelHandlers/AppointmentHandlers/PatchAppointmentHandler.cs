@@ -6,7 +6,7 @@ using SedisBackend.Core.Domain.Entities.Models;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
-namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.ClinicalHistoryHandlers;
+namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.AppointmentHandlers;
 
 public sealed record PatchAppointmentCommand(Guid Id, bool TrackChanges, JsonPatchDocument<AppointmentForUpdateDto> PatchDoc)
     : IRequest<(AppointmentForUpdateDto AppointmentToPatch, Appointment Appointment)>;

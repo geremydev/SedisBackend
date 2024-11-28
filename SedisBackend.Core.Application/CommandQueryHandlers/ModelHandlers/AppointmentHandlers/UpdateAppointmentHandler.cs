@@ -4,7 +4,7 @@ using SedisBackend.Core.Domain.DTO.Entities.Appointments;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
-namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.ClinicalHistoryHandlers;
+namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.AppointmentHandlers;
 
 public sealed record UpdateAppointmentCommand(Guid Id, AppointmentForUpdateDto Appointment, bool TrackChanges) : IRequest<Unit>;
 

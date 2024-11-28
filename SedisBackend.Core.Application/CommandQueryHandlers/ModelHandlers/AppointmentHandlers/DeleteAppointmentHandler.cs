@@ -2,7 +2,7 @@ using MediatR;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
-namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.ClinicalHistoryHandlers;
+namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.AppointmentHandlers;
 
 public record DeleteAppointmentCommand(Guid Id, bool TrackChanges) : IRequest;
 

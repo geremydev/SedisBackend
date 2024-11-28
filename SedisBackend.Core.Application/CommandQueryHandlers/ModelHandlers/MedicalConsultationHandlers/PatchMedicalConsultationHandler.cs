@@ -6,7 +6,7 @@ using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
-namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.ClinicalHistoryHandlers;
+namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.MedicalConsultationHandlers;
 
 public sealed record PatchMedicalConsultationCommand(Guid Id, bool TrackChanges, JsonPatchDocument<MedicalConsultationForUpdateDto> PatchDoc)
     : IRequest<(MedicalConsultationForUpdateDto MedicalConsultationToPatch, MedicalConsultation MedicalConsultation)>;

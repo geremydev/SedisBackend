@@ -4,7 +4,7 @@ using SedisBackend.Core.Domain.DTO.Entities.Appointments;
 using SedisBackend.Core.Domain.Entities.Models;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
-namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.ClinicalHistoryHandlers;
+namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.AppointmentHandlers;
 
 public sealed record CreateAppointmentCommand(AppointmentForCreationDto Appointment) : IRequest<AppointmentDto>;
 
