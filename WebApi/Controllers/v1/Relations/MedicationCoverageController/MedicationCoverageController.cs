@@ -3,41 +3,41 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.ClinicalHistoryHandlers;
-using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Clinical_History;
+using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.MedicationCoverageHandlers;
+using SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.MedicationCoverageDTO;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 
-namespace WebApi.Controllers.v1.Domain.Products;
+namespace WebApi.Controllers.v1.Relations.MedicationCoverageController;
 
 //[Authorize(Roles = "Admin")]
 [ApiVersion("1.0")]
-public class ClinicalHistoryController : BaseApiController
+public class MedicationCoverageController : BaseApiController
 {
     private readonly ISender _sender;
     private readonly ILoggerManager _loggerManager;
 
-    public ClinicalHistoryController(ISender sender, ILoggerManager loggerManager)
+    public MedicationCoverageController(ISender sender, ILoggerManager loggerManager)
     {
         _sender = sender;
         _loggerManager = loggerManager;
     }
 
-    [HttpGet(Name = "GetAllClinicalHistories")]
+    [HttpGet(Name = "GetAllMedicationCoverages")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicalConsultationDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<MedicationCoverageDto>))]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _sender.Send(new GetMedicalConsultationQuery(false)));
+        return Ok(await _sender.Send(new GetMedicationCoveragesQuery(false)));
     }
 
-    [HttpGet("{id:guid}", Name = "GetClinicalHistoryById")]
+    [HttpGet("{id:guid}", Name = "GetMedicationCoverageById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicalConsultationDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicationCoverageDto))]
     public async Task<IActionResult> Get(Guid id)
     {
-        return Ok(await _sender.Send(new GetClinicalHistoryQuery(id, false)));
+        return Ok(await _sender.Send(new GetMedicationCoverageQuery(id, false)));
     }
 
     [HttpPost]
@@ -45,14 +45,14 @@ public class ClinicalHistoryController : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Post([FromBody] MedicalConsultationForCreationDto clinicalhistory)
+    public async Task<IActionResult> Post([FromBody] MedicationCoverageForCreationDto medicationcoverage)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var command = new CreateMedicalConsultionCommand(clinicalhistory);
+        var command = new CreateMedicationCoverageCommand(medicationcoverage);
         await _sender.Send(command);
         return NoContent();
     }
@@ -60,11 +60,11 @@ public class ClinicalHistoryController : BaseApiController
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicalConsultationForUpdateDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicationCoverageForUpdateDto))]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] MedicalConsultationForUpdateDto clinicalhistory)
+    public async Task<IActionResult> Put(Guid id, [FromBody] MedicationCoverageForUpdateDto medicationcoverage)
     {
-        var command = new UpdateMedicalConsultationCommand(id, clinicalhistory, true);
+        var command = new UpdateMedicationCoverageCommand(id, medicationcoverage, true);
 
         await _sender.Send(command);
         return Ok();
@@ -73,16 +73,16 @@ public class ClinicalHistoryController : BaseApiController
     [HttpPatch("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicalConsultationForUpdateDto))]
-    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<MedicalConsultationForUpdateDto> patchDoc)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(MedicationCoverageForUpdateDto))]
+    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<MedicationCoverageForUpdateDto> patchDoc)
     {
         if (patchDoc is null)
             return BadRequest("patchDoc object sent from client is null.");
 
-        var command = new PatchMedicalConsultationCommand(id, true, patchDoc);
-        var (clinicalhistoryToPatch, _) = await _sender.Send(command);
+        var command = new PatchMedicationCoverageCommand(id, true, patchDoc);
+        var (medicationcoverageToPatch, _) = await _sender.Send(command);
 
-        return Ok(clinicalhistoryToPatch);
+        return Ok(medicationcoverageToPatch);
     }
 
     [HttpDelete("{id:guid}")]
@@ -90,7 +90,7 @@ public class ClinicalHistoryController : BaseApiController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var notification = new DeleteMedicalConsultationCommand(id, true);
+        var notification = new DeleteMedicationCoverageCommand(id, true);
         await _sender.Send(notification);
         return NoContent();
     }

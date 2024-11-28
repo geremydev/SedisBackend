@@ -1,43 +1,40 @@
+﻿namespace WebApi.Controllers.v1.Relations.PatientLabTestPrescriptionController;
 
 using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandQueryHandlers.UserHandlers.AdminHandlers;
-using SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
+using WebApi.Controllers;
 
-namespace WebApi.Controllers.v1.Domain.Products;
-
-//[Authorize(Roles = "Admin")]
 [ApiVersion("1.0")]
-public class AdminController : BaseApiController
+public class PatientLabTestPrescriptionController : BaseApiController
 {
     private readonly ISender _sender;
     private readonly ILoggerManager _loggerManager;
 
-    public AdminController(ISender sender, ILoggerManager loggerManager)
+    public PatientLabTestPrescriptionController(ISender sender, ILoggerManager loggerManager)
     {
         _sender = sender;
         _loggerManager = loggerManager;
     }
 
-    [HttpGet(Name = "GetAllAdmins")]
+    [HttpGet(Name = "GetAllPatientLabTestPrescriptions")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AdminDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientLabTestPrescriptionDto>))]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _sender.Send(new GetAdminsQuery(false)));
+        return Ok(await _sender.Send(new GetPatientLabTestPrescriptionsQuery(false)));
     }
 
-    [HttpGet("{id:guid}", Name = "GetAdminById")]
+    [HttpGet("{id:guid}", Name = "GetPatientLabTestPrescriptionById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AdminDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientLabTestPrescriptionDto))]
     public async Task<IActionResult> Get(Guid id)
     {
-        return Ok(await _sender.Send(new GetAdminQuery(id, false)));
+        return Ok(await _sender.Send(new GetPatientLabTestPrescriptionQuery(id, false)));
     }
 
     [HttpPost]
@@ -45,14 +42,14 @@ public class AdminController : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Post([FromBody] AdminForCreationDto admin)
+    public async Task<IActionResult> Post([FromBody] PatientLabTestPrescriptionForCreationDto PatientLabTestPrescriptions)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var command = new CreateAdminCommand(admin);
+        var command = new CreatePatientLabTestPrescriptionCommand(PatientLabTestPrescriptions);
         await _sender.Send(command);
         return NoContent();
     }
@@ -60,15 +57,11 @@ public class AdminController : BaseApiController
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientLabTestPrescriptionForUpdateDto))]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] AdminForUpdateDto admin)
+    public async Task<IActionResult> Put(Guid id, [FromBody] PatientLabTestPrescriptionForUpdateDto PatientLabTestPrescriptions)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var command = new UpdateAdminCommand(id, admin, true);
+        var command = new UpdatePatientLabTestPrescriptionCommand(id, PatientLabTestPrescriptions, true);
 
         await _sender.Send(command);
         return Ok();
@@ -77,16 +70,16 @@ public class AdminController : BaseApiController
     [HttpPatch("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AdminForUpdateDto))]
-    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<AdminForUpdateDto> patchDoc)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientLabTestPrescriptionForUpdateDto))]
+    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<PatientLabTestPrescriptionForUpdateDto> patchDoc)
     {
         if (patchDoc is null)
             return BadRequest("patchDoc object sent from client is null.");
 
-        var command = new PatchAdminCommand(id, true, patchDoc);
-        var (adminToPatch, _) = await _sender.Send(command);
+        var command = new PatchPatientLabTestPrescriptionCommand(id, true, patchDoc);
+        var (PatientLabTestPrescriptionsToPatch, _) = await _sender.Send(command);
 
-        return Ok(adminToPatch);
+        return Ok(PatientLabTestPrescriptionsToPatch);
     }
 
     [HttpDelete("{id:guid}")]
@@ -94,7 +87,7 @@ public class AdminController : BaseApiController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var notification = new DeleteAdminCommand(id, true);
+        var notification = new DeletePatientLabTestPrescriptionCommand(id, true);
         await _sender.Send(notification);
         return NoContent();
     }

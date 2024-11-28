@@ -85,12 +85,12 @@ public class AllergyController : BaseApiController
         return Ok(allergyToPatch);
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{patientId:guid}, {allergyId:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid patientId, Guid allergyId)
     {
-        var notification = new DeletePatientAllergyCommand(id, true);
+        var notification = new DeletePatientAllergyCommand(patientId, allergyId, true);
         await _sender.Send(notification);
         return NoContent();
     }

@@ -84,14 +84,4 @@ public class MedicalSpecialtyController : BaseApiController
 
         return Ok(medicalspecialtyToPatch);
     }
-
-    [HttpDelete("{id:guid}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid id)
-    {
-        var notification = new DeleteMedicalSpecialtyCommand(id, true);
-        await _sender.Send(notification);
-        return NoContent();
-    }
 }
