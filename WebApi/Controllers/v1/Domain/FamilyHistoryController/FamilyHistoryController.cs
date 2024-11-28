@@ -3,8 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandHandlers.FamilyHistoryCommandHandlers;
-using SedisBackend.Core.Application.CommandQueryHandlers.FamilyHistoryHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.FamilyHistoryHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Family_History;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 

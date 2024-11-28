@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Application.Interfaces.Repositories;
-using SedisBackend.Core.Domain.Medical_Insurance;
+using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories.ModelsRepositories;
@@ -27,4 +27,6 @@ internal sealed class MedicationCoverageRepository : RepositoryBase<MedicationCo
     public void CreateEntity(MedicationCoverage medicationCoverage) => Create(medicationCoverage);
 
     public void DeleteEntity(MedicationCoverage medicationCoverage) => Delete(medicationCoverage);
+
+    public void UpdateEntity(MedicationCoverage entity) => Update(entity);
 }

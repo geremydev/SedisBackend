@@ -3,8 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandHandlers.LocationCommandHandlers;
-using SedisBackend.Core.Application.CommandQueryHandlers.LocationHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.LocationHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Locations;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 

@@ -30,4 +30,6 @@ internal sealed class HealthInsuranceRepository : RepositoryBase<HealthInsurance
     public void CreateEntity(HealthInsurance healthInsurance) => Create(healthInsurance);
 
     public void DeleteEntity(HealthInsurance healthInsurance) => Delete(healthInsurance);
+
+    public void UpdateEntity(HealthInsurance entity) => Update(entity);
 }

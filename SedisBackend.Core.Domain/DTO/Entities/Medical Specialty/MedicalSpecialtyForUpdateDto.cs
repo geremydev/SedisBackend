@@ -4,8 +4,5 @@ public record MedicalSpecialtyForUpdateDto
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public MedicalSpecialtyForUpdateDto()
-    {
-
-    }
+    public MedicalSpecialtyForUpdateDto() { }
 }

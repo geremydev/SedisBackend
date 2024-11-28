@@ -24,4 +24,6 @@ internal sealed class DiscapacityRepository : RepositoryBase<Discapacity>, IDisc
     public void CreateEntity(Discapacity discapacity) => Create(discapacity);
 
     public void DeleteEntity(Discapacity discapacity) => Delete(discapacity);
+
+    public void UpdateEntity(Discapacity entity) => Update(entity);
 }

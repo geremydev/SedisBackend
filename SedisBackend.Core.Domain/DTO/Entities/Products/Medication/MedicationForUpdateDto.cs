@@ -18,6 +18,8 @@ public record MedicationForUpdateDto
     public MedicationPresentation Presentation { get; set; }
     public string ImageUrl { get; set; }
     public string NationalCode { get; set; }
+    public bool Status { get; set; }
+
 
     public MedicationForUpdateDto()
     {

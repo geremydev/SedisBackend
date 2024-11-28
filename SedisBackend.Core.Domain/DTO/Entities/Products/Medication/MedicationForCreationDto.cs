@@ -16,4 +16,6 @@ public record MedicationForCreationDto
     public string Presentation { get; set; }
     public string ImageUrl { get; set; }
     public string NationalCode { get; set; }
+    public bool Status { get; set; } = true;
+
 }

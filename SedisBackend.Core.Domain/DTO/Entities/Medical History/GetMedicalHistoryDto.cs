@@ -5,7 +5,7 @@ namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History;
 
 public class GetMedicalHistoryDto
 {
-    public List<ClinicalHistoryDto> ClinicalHistories { get; set; }
+    public List<MedicalConsultationDto> ClinicalHistories { get; set; }
     public List<FamilyHistoryDto> FamilyHistories { get; set; }
 
     // Esto deberia ser con un PatientId, en base a ese se traen alergias, discapacidades y demas del paciente. No la tabla de relacion como tal.

@@ -38,4 +38,11 @@ internal sealed class HealthCenterServicesRepository : RepositoryBase<HealthCent
                 .Include(a => a.HealthCenter)
                 .Include(a => a.Service).ToListAsync();
     }
+
+    public Task<HealthCenterServices> GetEntityAsync(Guid entityId, bool trackChanges)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateEntity(HealthCenterServices entity) => Update(entity);
 }

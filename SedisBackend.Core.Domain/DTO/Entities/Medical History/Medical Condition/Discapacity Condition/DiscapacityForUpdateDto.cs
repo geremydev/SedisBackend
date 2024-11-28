@@ -2,10 +2,8 @@
 
 public record DiscapacityForUpdateDto
 {
-    public string Type { get; set; }
+    public string IcdCode { get; set; }
+    public string Title { get; set; }
     public string Description { get; set; }
-    public DiscapacityForUpdateDto()
-    {
-
-    }
+    public DiscapacityForUpdateDto() { }
 }

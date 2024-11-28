@@ -17,4 +17,6 @@ public record MedicationDto
     public string Presentation { get; set; } // Detalles de presentacion (e.g., Pastillas, Jarabe, etc.)
     public string ImageUrl { get; set; }
     public string NationalCode { get; set; }
+    public bool Status { get; set; }
+
 }

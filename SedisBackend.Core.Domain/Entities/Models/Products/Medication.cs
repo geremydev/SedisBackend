@@ -1,4 +1,4 @@
-﻿using SedisBackend.Core.Domain.Medical_Insurance;
+﻿using SedisBackend.Core.Domain.Entities.Relations;
 
 namespace SedisBackend.Core.Domain.Entities.Models.Products;
 
@@ -19,5 +19,6 @@ public class Medication : IBaseEntity
     public string Presentation { get; set; } // Detalles de presentacion (e.g., Pastillas, Jarabe, etc.)
     public string ImageUrl { get; set; }
     public string NationalCode { get; set; }
+    public bool Status { get; set; }
     public ICollection<MedicationCoverage> Coverages { get; set; }
 }

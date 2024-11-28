@@ -3,8 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandHandlers.AllergyCommandHandlers;
-using SedisBackend.Core.Application.CommandQueryHandlers.AllergyHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.AllergyHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Allergies;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 
@@ -91,7 +90,7 @@ public class AllergyController : BaseApiController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var notification = new DeleteAllergyCommand(id, true);
+        var notification = new DeletePatientAllergyCommand(id, true);
         await _sender.Send(notification);
         return NoContent();
     }

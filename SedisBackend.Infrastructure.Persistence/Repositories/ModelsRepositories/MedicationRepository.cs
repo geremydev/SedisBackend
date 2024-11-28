@@ -24,4 +24,6 @@ internal sealed class MedicationRepository : RepositoryBase<Medication>, IMedica
     public void CreateEntity(Medication medication) => Create(medication);
 
     public void DeleteEntity(Medication medication) => Delete(medication);
+
+    public void UpdateEntity(Medication entity) => Update(entity);
 }

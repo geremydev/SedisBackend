@@ -6,4 +6,5 @@ public interface IGenericRepository<T>
     Task<T> GetEntityAsync(Guid entityId, bool trackChanges);
     void CreateEntity(T entity);
     void DeleteEntity(T entity);
+    void UpdateEntity(T entity);    
 }

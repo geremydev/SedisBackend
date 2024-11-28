@@ -36,4 +36,6 @@ internal sealed class PatientDiscapacityRepository : RepositoryBase<PatientDisca
                         .Include(a => a.MedicalConsultation)
                         .Include(a => a.Discapacity).SingleOrDefaultAsync();
     }
+
+    public void UpdateEntity(PatientDiscapacity entity) => Update(entity);
 }

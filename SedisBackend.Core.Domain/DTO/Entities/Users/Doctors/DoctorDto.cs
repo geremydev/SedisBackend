@@ -11,5 +11,5 @@ public record DoctorDto : BaseUserDto
     public HealthCenterDto CurrentlyWorkingHealthCenter { get; set; } = new HealthCenterDto();
     public List<MedicalSpecialtyDto> Specialties { get; set; } = new List<MedicalSpecialtyDto>();
     public List<AppointmentDto> Appointments { get; set; } = new List<AppointmentDto>();
-    public List<ClinicalHistoryDto> DevelopedClinicalHistories { get; set; } = new List<ClinicalHistoryDto>();
+    public List<MedicalConsultationDto> DevelopedClinicalHistories { get; set; } = new List<MedicalConsultationDto>();
 }

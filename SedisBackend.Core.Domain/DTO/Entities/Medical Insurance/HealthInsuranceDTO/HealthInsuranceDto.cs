@@ -10,6 +10,4 @@ public record HealthInsuranceDto
     public string PolicyType { get; set; } // Usando el enum PolicyType
     public string InsuranceCompany { get; set; }
     public string CoverageLevel { get; set; } // Usando el enum CoverageLevel
-    public ICollection<MedicationCoverageDto> MedicationCoverages { get; set; }
-    public ICollection<PatientDto> SubscribedPatients { get; set; }
 }

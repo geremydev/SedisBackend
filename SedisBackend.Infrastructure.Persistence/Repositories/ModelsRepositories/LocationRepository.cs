@@ -24,4 +24,6 @@ internal sealed class LocationRepository : RepositoryBase<Location>, ILocationRe
     public void CreateEntity(Location location) => Create(location);
 
     public void DeleteEntity(Location location) => Delete(location);
+
+    public void UpdateEntity(Location entity) => Update(entity);
 }

@@ -24,4 +24,6 @@ internal sealed class AppointmentRepository : RepositoryBase<Appointment>, IAppo
     public void CreateEntity(Appointment appointment) => Create(appointment);
 
     public void DeleteEntity(Appointment appointment) => Delete(appointment);
+
+    public void UpdateEntity(Appointment entity)=> Update(entity);
 }

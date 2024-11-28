@@ -40,4 +40,6 @@ internal sealed class PatientAllergyRepository : RepositoryBase<PatientAllergy>,
                 .Include(a => a.Patient)
                 .Include(a => a.Allergy).SingleOrDefaultAsync();
     }
+
+    public void UpdateEntity(PatientAllergy entity) => Update(entity);
 }

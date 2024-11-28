@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.Entities.Relations;
+using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 
@@ -41,4 +42,18 @@ internal sealed class PatientIllnessRepository : RepositoryBase<PatientIllness>,
     public void CreateEntity(PatientIllness entity) => Create(entity);
 
     public void DeleteEntity(PatientIllness entity) => Delete(entity);
+
+    public async Task<IEnumerable<PatientIllness>> GetPatientIllnesses(Guid patientId, bool trackChanges)
+    {
+        return  FindByCondition(e => e.PatientId.Equals(patientId), trackChanges)
+            .ToList();
+    }
+
+    public async Task<IEnumerable<PatientIllness>> GetPatientsWithIllness(string illnessICDCode, bool trackChanges)
+    {
+        return FindByCondition(e => e.Illness.IcdCode.Equals(illnessICDCode), trackChanges)
+           .ToList();
+    }
+
+    public void UpdateEntity(PatientIllness entity) => Update(entity);
 }

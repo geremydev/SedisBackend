@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Enums;
-using SedisBackend.Core.Domain.Medical_Insurance;
 
 namespace SedisBackend.Infrastructure.Persistence.Configuration;
 

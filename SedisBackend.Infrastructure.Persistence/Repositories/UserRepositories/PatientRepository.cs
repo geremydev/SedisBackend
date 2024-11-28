@@ -46,4 +46,6 @@ internal sealed class PatientRepository : RepositoryBase<Patient>, IPatientRepos
     public void CreateEntity(Patient patient) => Create(patient);
 
     public void DeleteEntity(Patient patient) => Delete(patient);
+
+    public void UpdateEntity(Patient entity) => Update(entity);
 }

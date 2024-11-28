@@ -24,4 +24,6 @@ public class LabTechRepository : RepositoryBase<LabTech>, ILabTechRepository
         await FindByCondition(c => c.Id.Equals(entityId), trackChanges)
                     .Include(p => p.ApplicationUser)
                     .SingleOrDefaultAsync();
+
+    public void UpdateEntity(LabTech entity) => Update(entity);
 }

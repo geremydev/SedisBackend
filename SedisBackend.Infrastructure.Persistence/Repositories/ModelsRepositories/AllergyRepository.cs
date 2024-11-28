@@ -24,4 +24,6 @@ internal sealed class AllergyRepository : RepositoryBase<Allergy>, IAllergyRepos
     public void CreateEntity(Allergy allergy) => Create(allergy);
 
     public void DeleteEntity(Allergy allergy) => Delete(allergy);
+
+    public void UpdateEntity(Allergy entity) => Update(entity);
 }

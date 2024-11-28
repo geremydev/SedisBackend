@@ -3,8 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandHandlers.HealthCenterCommandHandlers;
-using SedisBackend.Core.Application.CommandQueryHandlers.HealthCenterHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.HealthCenterHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Health_Centers;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 

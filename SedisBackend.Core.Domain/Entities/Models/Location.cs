@@ -11,4 +11,5 @@ public class Location : IBaseEntity
     public string? PostalCode { get; set; }
     public decimal? Longitude { get; set; }
     public decimal? Latitude { get; set; }
+    public bool Status { get; set; }
 }

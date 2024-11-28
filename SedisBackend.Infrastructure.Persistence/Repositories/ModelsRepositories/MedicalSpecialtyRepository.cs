@@ -24,4 +24,6 @@ internal sealed class MedicalSpecialtyRepository : RepositoryBase<MedicalSpecial
     public void CreateEntity(MedicalSpecialty medicalSpecialty) => Create(medicalSpecialty);
 
     public void DeleteEntity(MedicalSpecialty medicalSpecialty) => Delete(medicalSpecialty);
+
+    public void UpdateEntity(MedicalSpecialty entity) => Update(entity);
 }

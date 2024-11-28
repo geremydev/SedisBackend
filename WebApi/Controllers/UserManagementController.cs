@@ -1,7 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandQueryHandlers.AdminHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Users;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 using SedisBackend.Core.Domain.DTO.Identity.Authentication;

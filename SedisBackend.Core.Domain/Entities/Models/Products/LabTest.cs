@@ -9,6 +9,7 @@ public class LabTest : IBaseEntity
 
     // Code of the lab test (LOINC, CPT, etc.)
     public string TestCode { get; set; }
+    public bool Status { get; set; }
 
     //Realizarle la relación de un Appointment es realizado por muchos laboratorios etc etc
 }

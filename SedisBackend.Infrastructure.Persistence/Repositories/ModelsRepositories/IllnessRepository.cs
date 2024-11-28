@@ -24,4 +24,6 @@ internal sealed class IllnessRepository : RepositoryBase<Illness>, IIllnessRepos
     public void CreateEntity(Illness illness) => Create(illness);
 
     public void DeleteEntity(Illness illness) => Delete(illness);
+
+    public void UpdateEntity(Illness entity) => Update(entity);
 }

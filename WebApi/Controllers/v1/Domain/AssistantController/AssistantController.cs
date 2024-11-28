@@ -3,8 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandHandlers.AssistantCommandHandlers;
-using SedisBackend.Core.Application.CommandQueryHandlers.AssistantHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.UserHandlers.AssistantHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Assistants;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 

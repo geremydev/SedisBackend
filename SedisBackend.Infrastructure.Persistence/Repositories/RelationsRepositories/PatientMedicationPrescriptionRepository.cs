@@ -47,4 +47,11 @@ internal sealed class PatientMedicationPrescriptionRepository : RepositoryBase<P
                 .Include(a => a.MedicalConsultation)
                 .Include(a => a.Medication).ToListAsync();
     }
+
+    public Task<PatientMedicationPrescription> GetEntityAsync(Guid entityId, bool trackChanges)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateEntity(PatientMedicationPrescription entity) => Update(entity);
 }

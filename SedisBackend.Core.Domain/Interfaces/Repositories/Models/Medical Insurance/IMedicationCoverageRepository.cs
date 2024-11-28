@@ -1,5 +1,5 @@
-﻿using SedisBackend.Core.Domain.Interfaces.Repositories;
-using SedisBackend.Core.Domain.Medical_Insurance;
+﻿using SedisBackend.Core.Domain.Entities.Relations;
+using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.Interfaces.Repositories;
 

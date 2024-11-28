@@ -34,4 +34,11 @@ internal sealed class DoctorMedicalSpecialtyRepository : RepositoryBase<DoctorMe
         return await FindByCondition(dms => dms.DoctorId.Equals(doctorId) && dms.MedicalSpecialtyId.Equals(medicalSpecialtyId), trackChanges)
             .SingleOrDefaultAsync();
     }
+
+    public Task<DoctorMedicalSpecialty> GetEntityAsync(Guid entityId, bool trackChanges)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateEntity(DoctorMedicalSpecialty entity) => Update(entity);
 }

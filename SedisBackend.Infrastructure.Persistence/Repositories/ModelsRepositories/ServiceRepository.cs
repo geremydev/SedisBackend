@@ -23,4 +23,6 @@ internal sealed class ServiceRepository : RepositoryBase<Service>, IServiceRepos
     public void CreateEntity(Service service) => Create(service);
 
     public void DeleteEntity(Service service) => Delete(service);
+
+    public void UpdateEntity(Service entity) => Update(entity);
 }

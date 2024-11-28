@@ -24,4 +24,6 @@ internal sealed class HealthCenterRepository : RepositoryBase<HealthCenter>, IHe
     public void CreateEntity(HealthCenter healthCenter) => Create(healthCenter);
 
     public void DeleteEntity(HealthCenter healthCenter) => Delete(healthCenter);
+
+    public void UpdateEntity(HealthCenter entity) => Update(entity);
 }

@@ -41,4 +41,11 @@ internal sealed class PatientHealthInsuranceRepository : RepositoryBase<PatientH
                 .Include(a => a.Patient)
                 .Include(a => a.HealthInsurance).SingleOrDefaultAsync();
     }
+
+    public Task<PatientHealthInsurance> GetEntityAsync(Guid entityId, bool trackChanges)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateEntity(PatientHealthInsurance entity) => Update(entity);
 }

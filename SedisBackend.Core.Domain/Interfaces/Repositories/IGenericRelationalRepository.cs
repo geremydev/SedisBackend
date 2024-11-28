@@ -5,4 +5,5 @@ public interface IGenericRelationalRepository<T> where T : class
     Task<T> GetEntityAsync(Guid entityA, Guid entityB, bool trackChanges);
     void CreateEntity(T entity);
     void DeleteEntity(T entity);
+    void UpdateEntity(T entity);
 }

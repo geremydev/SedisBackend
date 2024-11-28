@@ -173,9 +173,9 @@ public class GeneralProfile : Profile
         //#endregion
 
         #region Clinical History
-        CreateMap<MedicalConsultation, ClinicalHistoryDto>()
+        CreateMap<MedicalConsultation, MedicalConsultationDto>()
             .ReverseMap();
-        CreateMap<MedicalConsultation, ClinicalHistoryForUpdateDto>()
+        CreateMap<MedicalConsultation, MedicalConsultationForUpdateDto>()
                 .ReverseMap();
         //CreateMap<ClinicalHistory, ClinicalHistoryDto>()
         //        .ForMember(p => p.Patient, opt => opt.Ignore())
@@ -290,8 +290,6 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.PolicyType, opt => opt.MapFrom(src => src.PolicyType.ToString()))
             .ForMember(dest => dest.InsuranceCompany, opt => opt.MapFrom(src => src.InsuranceCompany))
             .ForMember(dest => dest.CoverageLevel, opt => opt.MapFrom(src => src.CoverageLevel.ToString()))
-            .ForMember(dest => dest.MedicationCoverages, opt => opt.MapFrom(src => src.MedicationCoverages))
-            .ForMember(dest => dest.SubscribedPatients, opt => opt.MapFrom(src => src.SubscribedPatients))
             .ReverseMap();
         CreateMap<HealthInsurance, HealthInsuranceForCreationDto>()
             .ReverseMap();

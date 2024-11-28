@@ -3,14 +3,7 @@
 public record IllnessDto
 {
     public Guid Id { get; set; }
-
-    // Código de la enfermedad (ICD-10, SNOMED CT, etc.)
-    public string Code { get; set; } // Codigo en si de esa codificacion especifica
-    public string CodeType { get; set; } // Tipo de codificacion del Code
-
-    // Nombre de la enfermedad
-    public string Name { get; set; }
-
-    // Descripción de la enfermedad
+    public string IcdCode { get; set; }
+    public string Title { get; set; }
     public string Description { get; set; }
 }

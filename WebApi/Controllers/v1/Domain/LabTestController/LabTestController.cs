@@ -2,8 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandHandlers.LabTestCommandHandlers;
-using SedisBackend.Core.Application.CommandQueryHandlers.LabTestHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.LabTestHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Products.LabTest;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 

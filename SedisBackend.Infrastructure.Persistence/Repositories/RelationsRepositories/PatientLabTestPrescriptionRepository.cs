@@ -57,4 +57,6 @@ internal sealed class PatientLabTestPrescriptionRepository : RepositoryBase<Pati
             .Include(a => a.Patient)
             .Include(a => a.LabTest).ToListAsync();
     }
+
+    public void UpdateEntity(PatientLabTestPrescription entity) => Update(entity);
 }

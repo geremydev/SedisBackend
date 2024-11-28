@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using SedisBackend.Core.Application.CommandHandlers.LabTestCommandHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.LabTestHandlers;
 
 namespace SedisBackend.Core.Application.Validators.LabTestValidators;
 

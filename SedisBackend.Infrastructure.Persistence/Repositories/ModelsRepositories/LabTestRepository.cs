@@ -24,4 +24,6 @@ internal sealed class LabTestRepository : RepositoryBase<LabTest>, ILabTestRepos
     public void CreateEntity(LabTest labTest) => Create(labTest);
 
     public void DeleteEntity(LabTest labTest) => Delete(labTest);
+
+    public void UpdateEntity(LabTest entity) => Update(entity);
 }

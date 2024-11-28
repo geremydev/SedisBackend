@@ -15,4 +15,5 @@ public class HealthCenter : IBaseEntity
     public ICollection<Assistant> Assistants { get; set; }
     public ICollection<Registrator> Registrators { get; set; }
     public ICollection<HealthCenterServices> HealthCenterServices { get; set; }
+    public bool Status { get; set; } = true;
 }

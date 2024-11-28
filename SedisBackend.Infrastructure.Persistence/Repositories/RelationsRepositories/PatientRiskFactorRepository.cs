@@ -40,4 +40,11 @@ internal sealed class PatientRiskFactorRepository : RepositoryBase<PatientRiskFa
                 .Include(a => a.Patient)
                 .Include(a => a.RiskFactor).SingleOrDefaultAsync();
     }
+
+    public Task<PatientRiskFactor> GetEntityAsync(Guid entityId, bool trackChanges)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateEntity(PatientRiskFactor entity) => Update(entity);
 }

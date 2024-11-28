@@ -24,7 +24,7 @@ public interface IRepositoryManager
     // Medical History
     IAllergyRepository Allergy { get; }
     IPatientAllergyRepository PatientAllergy { get; }
-    IClinicalHistoryRepository ClinicalHistory { get; }
+    IMedicalConsultationRepository MedicalConsultation { get; }
     IFamilyHistoryRepository FamilyHistory { get; }
     IVaccineRepository Vaccine { get; }
 

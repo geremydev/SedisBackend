@@ -6,8 +6,5 @@ public record VaccineForUpdateDto
     public string Disease { get; set; }
     public int Doses { get; set; }
     public string Laboratory { get; set; }
-    public VaccineForUpdateDto()
-    {
-
-    }
+    public VaccineForUpdateDto() { }
 }

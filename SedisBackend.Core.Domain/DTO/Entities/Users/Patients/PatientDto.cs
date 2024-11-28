@@ -18,7 +18,7 @@ public record PatientDto : BaseUserDto
     public string? EmergencyContactName { get; set; }
     public string? EmergencyContactPhone { get; set; }
     public Guid? PrimaryCarePhysicianId { get; set; }
-    public List<ClinicalHistoryDto> ClinicalHistories { get; set; } = new List<ClinicalHistoryDto>();
+    public List<MedicalConsultationDto> ClinicalHistories { get; set; } = new List<MedicalConsultationDto>();
     public List<AppointmentDto>? Appointments { get; set; } = new List<AppointmentDto>();
     public List<AllergyDto>? Allergies { get; set; } = new List<AllergyDto>();
     public List<IllnessDto>? Illnesses { get; set; } = new List<IllnessDto>();

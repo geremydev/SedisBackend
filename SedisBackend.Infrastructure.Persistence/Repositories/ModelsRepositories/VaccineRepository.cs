@@ -24,4 +24,6 @@ internal sealed class VaccineRepository : RepositoryBase<Vaccine>, IVaccineRepos
     public void CreateEntity(Vaccine vaccine) => Create(vaccine);
 
     public void DeleteEntity(Vaccine vaccine) => Delete(vaccine);
+
+    public void UpdateEntity(Vaccine entity) => Update(entity);
 }

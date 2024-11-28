@@ -28,4 +28,6 @@ internal sealed class AssistantRepository : RepositoryBase<Assistant>, IAssistan
     public void CreateEntity(Assistant assistant) => Create(assistant);
 
     public void DeleteEntity(Assistant assistant) => Delete(assistant);
+
+    public void UpdateEntity(Assistant entity) => Update(entity);
 }

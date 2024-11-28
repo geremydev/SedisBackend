@@ -2,9 +2,7 @@
 
 public record AllergyForUpdateDto
 {
-    public string Allergen { get; set; }
-    public AllergyForUpdateDto()
-    {
-
-    }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public AllergyForUpdateDto() { }
 }

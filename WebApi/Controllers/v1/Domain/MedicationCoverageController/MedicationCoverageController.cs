@@ -3,8 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandHandlers.MedicationCoverageCommandHandlers;
-using SedisBackend.Core.Application.CommandQueryHandlers.MedicationCoverageHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.MedicationCoverageHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.MedicationCoverageDTO;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 

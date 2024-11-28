@@ -24,4 +24,6 @@ public class RegistratorRepository : RepositoryBase<Registrator>, IRegistratorRe
         await FindByCondition(c => c.Id.Equals(entityId), trackChanges)
                     .Include(p => p.ApplicationUser)
                     .SingleOrDefaultAsync();
+
+    public void UpdateEntity(Registrator entity) => Update(entity);
 }

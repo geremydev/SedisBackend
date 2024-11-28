@@ -3,8 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandHandlers.DiscapacityCommandHandlers;
-using SedisBackend.Core.Application.CommandQueryHandlers.DiscapacityHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.DiscapacityHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Medical_Condition.Discapacity_Condition;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 

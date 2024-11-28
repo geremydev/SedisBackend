@@ -41,4 +41,11 @@ internal sealed class PatientVaccineRepository : RepositoryBase<PatientVaccine>,
                 .Include(a => a.Patient)
                 .Include(a => a.Vaccine).SingleOrDefaultAsync();
     }
+
+    public Task<PatientVaccine> GetEntityAsync(Guid entityId, bool trackChanges)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateEntity(PatientVaccine entity) => Update(entity);
 }

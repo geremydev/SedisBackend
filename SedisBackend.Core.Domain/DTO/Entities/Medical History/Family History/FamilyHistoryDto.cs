@@ -7,4 +7,5 @@ public record FamilyHistoryDto
     public Guid? RelativeId { get; set; } // Nullable por si el familiar no existe
     public string Condition { get; set; }
     public string Relationship { get; set; }
+    public bool Status { get; set; } = true;
 }

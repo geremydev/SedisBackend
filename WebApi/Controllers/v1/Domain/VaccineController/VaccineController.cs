@@ -3,8 +3,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandHandlers.VaccineCommandHandlers;
-using SedisBackend.Core.Application.CommandQueryHandlers.VaccineHandlers;
+using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.VaccineHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 

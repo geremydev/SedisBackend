@@ -24,4 +24,6 @@ internal sealed class FamilyHistoryRepository : RepositoryBase<FamilyHistory>, I
     public void CreateEntity(FamilyHistory familyHistory) => Create(familyHistory);
 
     public void DeleteEntity(FamilyHistory familyHistory) => Delete(familyHistory);
+
+    public void UpdateEntity(FamilyHistory entity) => Update(entity);
 }

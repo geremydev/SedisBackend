@@ -28,4 +28,6 @@ internal sealed class AdminRepository : RepositoryBase<Admin>, IAdminRepository
     public void CreateEntity(Admin admin) => Create(admin);
 
     public void DeleteEntity(Admin admin) => Delete(admin);
+
+    public void UpdateEntity(Admin entity) => Update(entity);
 }

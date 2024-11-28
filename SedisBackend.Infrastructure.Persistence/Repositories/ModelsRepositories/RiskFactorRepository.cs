@@ -24,4 +24,6 @@ internal sealed class RiskFactorRepository : RepositoryBase<RiskFactor>, IRiskFa
     public void CreateEntity(RiskFactor riskFactor) => Create(riskFactor);
 
     public void DeleteEntity(RiskFactor riskFactor) => Delete(riskFactor);
+
+    public void UpdateEntity(RiskFactor entity) => Update(entity);
 }

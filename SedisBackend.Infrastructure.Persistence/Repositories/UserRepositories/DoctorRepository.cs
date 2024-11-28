@@ -31,4 +31,6 @@ internal sealed class DoctorRepository : RepositoryBase<Doctor>, IDoctorReposito
     public void CreateEntity(Doctor doctor) => Create(doctor);
 
     public void DeleteEntity(Doctor doctor) => Delete(doctor);
+
+    public void UpdateEntity(Doctor entity) => Update(entity);
 }

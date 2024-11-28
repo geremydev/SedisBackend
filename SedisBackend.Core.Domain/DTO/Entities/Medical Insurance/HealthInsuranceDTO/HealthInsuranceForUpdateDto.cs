@@ -6,8 +6,5 @@ public record HealthInsuranceForUpdateDto
     public string PolicyType { get; set; }
     public string InsuranceCompany { get; set; }
     public string CoverageLevel { get; set; }
-    public HealthInsuranceForUpdateDto()
-    {
-
-    }
+    public HealthInsuranceForUpdateDto() { }
 }
