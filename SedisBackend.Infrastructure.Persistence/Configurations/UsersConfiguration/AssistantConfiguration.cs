@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 
-namespace SedisBackend.Infrastructure.Persistence.Configuration;
+namespace SedisBackend.Infrastructure.Persistence.Configuration.UsersConfiguration;
 internal class AssistantConfiguration : IEntityTypeConfiguration<Assistant>
 {
     public void Configure(EntityTypeBuilder<Assistant> builder)

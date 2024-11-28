@@ -4,7 +4,7 @@ using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Medical_Insurance;
 
-namespace SedisBackend.Infrastructure.Persistence.Configuration;
+namespace SedisBackend.Infrastructure.Persistence.Configurations.DomainConfigurations;
 
 public class HealthInsuranceConfiguration : IEntityTypeConfiguration<HealthInsurance>
 {
@@ -35,4 +35,3 @@ public class HealthInsuranceConfiguration : IEntityTypeConfiguration<HealthInsur
         );
     }
 }
-
