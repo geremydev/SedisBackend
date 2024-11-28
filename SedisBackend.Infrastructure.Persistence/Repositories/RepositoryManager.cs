@@ -30,7 +30,7 @@ public sealed class RepositoryManager : IRepositoryManager
     private readonly Lazy<IUserEntityRelationRepository> _userEntityRelationRepository;
     private readonly Lazy<IAllergyRepository> _allergyRepository;
     private readonly Lazy<IPatientAllergyRepository> _patientAllergyRepository;
-    private readonly Lazy<IMedicalConsultationRepository> _clinicalHistoryRepository;
+    private readonly Lazy<IMedicalConsultationRepository> _medicalConsultationRepository;
     private readonly Lazy<IFamilyHistoryRepository> _familyHistoryRepository;
     private readonly Lazy<IVaccineRepository> _vaccineRepository;
     private readonly Lazy<IDiscapacityRepository> _discapacityRepository;
@@ -68,7 +68,7 @@ public sealed class RepositoryManager : IRepositoryManager
         _healthCenterServicesRepository = new Lazy<IHealthCenterServicesRepository>(() => new HealthCenterServicesRepository(repositoryContext));
         _locationRepository = new Lazy<ILocationRepository>(() => new LocationRepository(repositoryContext));
         _allergyRepository = new Lazy<IAllergyRepository>(() => new AllergyRepository(repositoryContext));
-        _clinicalHistoryRepository = new Lazy<IMedicalConsultationRepository>(() => new MedicalConsultationRepository(repositoryContext));
+        _medicalConsultationRepository = new Lazy<IMedicalConsultationRepository>(() => new MedicalConsultationRepository(repositoryContext));
         _familyHistoryRepository = new Lazy<IFamilyHistoryRepository>(() => new FamilyHistoryRepository(repositoryContext));
         _vaccineRepository = new Lazy<IVaccineRepository>(() => new VaccineRepository(repositoryContext));
         _discapacityRepository = new Lazy<IDiscapacityRepository>(() => new DiscapacityRepository(repositoryContext));
@@ -114,7 +114,7 @@ public sealed class RepositoryManager : IRepositoryManager
     public IUserEntityRelationRepository UserEntityRelation => _userEntityRelationRepository.Value;
     public IAllergyRepository Allergy => _allergyRepository.Value;
     public IPatientAllergyRepository PatientAllergy => _patientAllergyRepository.Value;
-    public IMedicalConsultationRepository MedicalConsultation => _clinicalHistoryRepository.Value;
+    public IMedicalConsultationRepository MedicalConsultation => _medicalConsultationRepository.Value;
     public IFamilyHistoryRepository FamilyHistory => _familyHistoryRepository.Value;
     public IVaccineRepository Vaccine => _vaccineRepository.Value;
     public IDiscapacityRepository Discapacity => _discapacityRepository.Value;

@@ -1,7 +1,5 @@
 ﻿using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
-using System.ComponentModel.DataAnnotations;
 
 namespace SedisBackend.Core.Domain.Entities.Models;
 

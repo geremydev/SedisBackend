@@ -1,43 +1,40 @@
-
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.AllergyHandlers;
-using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Allergies;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
 
-namespace WebApi.Controllers.v1.Domain.Products;
+namespace WebApi.Controllers.v1.Relations.HealthCenterServicesController;
 
 //[Authorize(Roles = "Admin")]
 [ApiVersion("1.0")]
-public class AllergyController : BaseApiController
+public class HealthCenterServicesController : BaseApiController
 {
     private readonly ISender _sender;
     private readonly ILoggerManager _loggerManager;
 
-    public AllergyController(ISender sender, ILoggerManager loggerManager)
+    public HealthCenterServicesController(ISender sender, ILoggerManager loggerManager)
     {
         _sender = sender;
         _loggerManager = loggerManager;
     }
 
-    [HttpGet(Name = "GetAllAllergies")]
+    [HttpGet(Name = "GetAllHealthCenterServices")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AllergyDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<HealthCenterServicesDto>))]
     public async Task<IActionResult> Get()
     {
-        return Ok(await _sender.Send(new GetAllergiesQuery(false)));
+        return Ok(await _sender.Send(new GetHealthCenterServicesQuery(false)));
     }
 
-    [HttpGet("{id:guid}", Name = "GetAllergyById")]
+    [HttpGet("{id:guid}", Name = "GetHealthCenterServiceById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AllergyDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HealthCenterServicesDto))]
     public async Task<IActionResult> Get(Guid id)
     {
-        return Ok(await _sender.Send(new GetAllergyQuery(id, false)));
+        return Ok(await _sender.Send(new GetHealthCenterServiceQuery(id, false)));
     }
 
     [HttpPost]
@@ -45,14 +42,14 @@ public class AllergyController : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Post([FromBody] AllergyForCreationDto allergy)
+    public async Task<IActionResult> Post([FromBody] HealthCenterServicesForCreationDto healthCenterServices)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var command = new CreateAllergyCommand(allergy);
+        var command = new CreateHealthCenterServicesCommand(healthCenterServices);
         await _sender.Send(command);
         return NoContent();
     }
@@ -60,11 +57,11 @@ public class AllergyController : BaseApiController
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AllergyForUpdateDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HealthCenterServicesForUpdateDto))]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] AllergyForUpdateDto allergy)
+    public async Task<IActionResult> Put(Guid id, [FromBody] HealthCenterServicesForUpdateDto healthCenterServices)
     {
-        var command = new UpdateAllergyCommand(id, allergy, true);
+        var command = new UpdateHealthCenterServicesCommand(id, healthCenterServices, true);
 
         await _sender.Send(command);
         return Ok();
@@ -73,24 +70,24 @@ public class AllergyController : BaseApiController
     [HttpPatch("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AllergyForUpdateDto))]
-    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<AllergyForUpdateDto> patchDoc)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HealthCenterServicesForUpdateDto))]
+    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<HealthCenterServicesForUpdateDto> patchDoc)
     {
         if (patchDoc is null)
             return BadRequest("patchDoc object sent from client is null.");
 
-        var command = new PatchAllergyCommand(id, true, patchDoc);
-        var (allergyToPatch, _) = await _sender.Send(command);
+        var command = new PatchHealthCenterServicesCommand(id, true, patchDoc);
+        var (HealthCenterServicesToPatch, _) = await _sender.Send(command);
 
-        return Ok(allergyToPatch);
+        return Ok(HealthCenterServicesToPatch);
     }
 
-    [HttpDelete("{patientId:guid}, {allergyId:guid}")]
+    [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid patientId, Guid allergyId)
+    public async Task<IActionResult> Delete(Guid id)
     {
-        var notification = new DeletePatientAllergyCommand(patientId, allergyId, true);
+        var notification = new DeleteHealthCenterServicesCommand(id, true);
         await _sender.Send(notification);
         return NoContent();
     }

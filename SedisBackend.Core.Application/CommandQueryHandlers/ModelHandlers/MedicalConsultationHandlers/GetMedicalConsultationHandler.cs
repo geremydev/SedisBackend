@@ -4,7 +4,7 @@ using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
-namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.ClinicalHistoryHandlers;
+namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.MedicalConsultationHandlers;
 
 public sealed record GetMedicalConsultationQuery(Guid Id, bool TrackChanges) : IRequest<MedicalConsultationDto>;
 
