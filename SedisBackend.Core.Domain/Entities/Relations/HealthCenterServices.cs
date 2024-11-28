@@ -12,4 +12,5 @@ public class HealthCenterServices : IBaseEntity
     public DateTime CreationDate { get; set; }
     public TimeSpan StartTime { get; set; }
     public TimeSpan EndTime { get; set; }
+    public bool Status { get; set; }
 }

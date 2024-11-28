@@ -6,11 +6,11 @@ namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.Me
 
 public record DeleteMedicationCoverageCommand(Guid Id, bool TrackChanges) : IRequest;
 
-internal sealed class DeleteMedicationCoverageHandler : IRequestHandler<DeleteMedicationCoverageCommand>
+internal sealed class DeleteDoctorMedicalSpecialtyHandler : IRequestHandler<DeleteMedicationCoverageCommand>
 {
     private readonly IRepositoryManager _repository;
 
-    public DeleteMedicationCoverageHandler(IRepositoryManager repository) => _repository = repository;
+    public DeleteDoctorMedicalSpecialtyHandler(IRepositoryManager repository) => _repository = repository;
 
     public async Task Handle(DeleteMedicationCoverageCommand request, CancellationToken cancellationToken)
     {

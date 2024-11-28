@@ -10,13 +10,13 @@ namespace SedisBackend.Core.Application.CommandQueryHandlers.UserHandlers.AdminH
 
 public sealed record UpdateAdminCommand(Guid Id, AdminForUpdateDto Admin, bool TrackChanges) : IRequest<Unit>;
 
-internal sealed class UpdateAdminHandler : IRequestHandler<UpdateAdminCommand, Unit>
+internal sealed class UpdateLabTechHandler : IRequestHandler<UpdateAdminCommand, Unit>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
 
-    public UpdateAdminHandler(IRepositoryManager repository, IMapper mapper, UserManager<User> userManager)
+    public UpdateLabTechHandler(IRepositoryManager repository, IMapper mapper, UserManager<User> userManager)
     {
         _repository = repository;
         _mapper = mapper;

@@ -704,7 +704,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .IsRequired();
 
             entity.HasOne(mc => mc.Medication).WithMany(m => m.Coverages).HasForeignKey(mc => mc.MedicationId).IsRequired();
-            entity.Property(mc => mc.CoverageStatus).IsRequired();
+            entity.Property(mc => mc.Status).IsRequired();
             entity.Property(mc => mc.CopayAmount)
                 .HasColumnType("decimal(10, 2)")
                 .IsRequired();

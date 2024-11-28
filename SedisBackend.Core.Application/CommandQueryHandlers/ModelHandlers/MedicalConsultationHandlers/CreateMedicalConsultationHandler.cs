@@ -4,7 +4,7 @@ using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
-namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.ClinicalHistoryHandlers;
+namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.MedicalConsultationHandlers;
 
 public sealed record CreateMedicalConsultationCommand(MedicalConsultationForCreationDto medicalConsultation) : IRequest<MedicalConsultationDto>;
 

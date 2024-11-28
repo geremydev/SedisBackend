@@ -8,7 +8,7 @@ namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.Clini
 
 public sealed record GetMedicalConsultationsQuery(bool TrackChanges) : IRequest<IEnumerable<MedicalConsultationDto>>;
 
-internal sealed class GetMedicalConsultationsHandler : IRequestHandler<GetMedicalConsultationsQuery, IEnumerable<MedicalConsultationDto>>
+public sealed class GetMedicalConsultationsHandler : IRequestHandler<GetMedicalConsultationsQuery, IEnumerable<MedicalConsultationDto>>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
@@ -21,12 +21,8 @@ internal sealed class GetMedicalConsultationsHandler : IRequestHandler<GetMedica
 
     public async Task<IEnumerable<MedicalConsultationDto>> Handle(GetMedicalConsultationsQuery request, CancellationToken cancellationToken)
     {
-        var ClinicalHistorys = await _repository.MedicalConsultation.GetAllEntitiesAsync(request.TrackChanges);
 
-        if (ClinicalHistorys is null || !ClinicalHistorys.Any())
             throw new EntitiesNotFoundException();
 
-        var ClinicalHistorysDto = _mapper.Map<IEnumerable<MedicalConsultationDto>>(ClinicalHistorys);
-        return ClinicalHistorysDto;
     }
 }

@@ -8,12 +8,12 @@ namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.Pa
 
 public sealed record UpdatePatientAllergyCommand(Guid Id, PatientAllergyForUpdateDto PatientAllergy, bool TrackChanges) : IRequest<Unit>;
 
-internal sealed class UpdatePatientAllergyHandler : IRequestHandler<UpdatePatientAllergyCommand, Unit>
+internal sealed class UpdatePatientIllnessHandler : IRequestHandler<UpdatePatientAllergyCommand, Unit>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
 
-    public UpdatePatientAllergyHandler(IRepositoryManager repository, IMapper mapper)
+    public UpdatePatientIllnessHandler(IRepositoryManager repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

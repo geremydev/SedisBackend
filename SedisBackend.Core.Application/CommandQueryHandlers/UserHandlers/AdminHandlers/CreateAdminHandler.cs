@@ -12,13 +12,13 @@ namespace SedisBackend.Core.Application.CommandQueryHandlers.UserHandlers.AdminH
 
 public sealed record CreateAdminCommand(AdminForCreationDto admin) : IRequest<AdminDto>;
 
-internal sealed class CreateAdminHandler : IRequestHandler<CreateAdminCommand, AdminDto>
+internal sealed class CreateLabTechHandler : IRequestHandler<CreateAdminCommand, AdminDto>
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
 
-    public CreateAdminHandler(IRepositoryManager repository, IMapper mapper, UserManager<User> userManager)
+    public CreateLabTechHandler(IRepositoryManager repository, IMapper mapper, UserManager<User> userManager)
     {
         _repository = repository;
         _userManager = userManager;

@@ -9,5 +9,7 @@ public class LabTech
     [ForeignKey(nameof(ApplicationUser))]
     public Guid Id { get; set; }
     public bool Status { get; set; }
+    public Guid HealthCenterId { get; set; }
+    HealthCenter HealthCenter { get; set; }
     public User ApplicationUser { get; set; }
 }

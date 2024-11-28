@@ -55,6 +55,10 @@ public interface IRepositoryManager
     IDoctorMedicalSpecialtyRepository DoctorMedicalSpecialty { get; }
     IMedicalSpecialtyRepository MedicalSpecialty { get; }
     IPatientRepository Patient { get; }
+    ILabTechRepository LabTech { get; }
+    IRegistratorRepository Registrator { get; }
+
+    IAppointmentRepository Appointment { get; }
 
     Task SaveAsync(CancellationToken cancellationToken = default);
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
