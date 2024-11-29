@@ -29,11 +29,11 @@ jobs:
 
       - name: Deploy API on Remote Server
         env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_HOST: ${{ secrets.GENESIS_SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.GENESIS_SSH_USERNAME }}
           SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/sedis_rsa $SSH_USERNAME@$SSH_HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/sedis_rsa $SSH_USERNAME@$SSH_HOST -p 2004 << 'EOF'
           docker pull imbrahiam/webapi
           docker-compose down
           docker-compose up -d
