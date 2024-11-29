@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace SedisBackend.Core.Domain.DTO.Identity.Authentication;
-public record UpgradeUserRequest
+public class UpgradeUserRequest
 {
     [Required(ErrorMessage = "Cédula requerida")]
     public string CardId { get; set; }

@@ -1,7 +1,4 @@
-﻿using SedisBackend.Core.Domain.Entities.Models;
-using SedisBackend.Core.Domain.Entities.Users.Persons;
-
-namespace SedisBackend.Core.Domain.DTO.Entities.DoctorMedicalSpecialty;
+﻿namespace SedisBackend.Core.Domain.DTO.Entities.DoctorMedicalSpecialty;
 public class DoctorMedicalSpecialtyForUpdateDto
 {
     public Guid DoctorId { get; set; }

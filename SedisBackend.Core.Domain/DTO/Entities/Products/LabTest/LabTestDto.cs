@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Products.LabTest;
 
-public record LabTestDto
+public class LabTestDto
 {
     public Guid Id { get; set; }
     public string TestName { get; set; }

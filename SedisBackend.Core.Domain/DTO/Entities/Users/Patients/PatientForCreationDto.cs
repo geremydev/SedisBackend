@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Users.Patients;
 
-public record PatientForCreationDto 
+public class PatientForCreationDto
 {
     public Guid UserId { get; set; }
     public string BloodType { get; set; }

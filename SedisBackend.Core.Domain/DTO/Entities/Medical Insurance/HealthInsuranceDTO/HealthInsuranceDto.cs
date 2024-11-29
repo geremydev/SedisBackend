@@ -1,9 +1,6 @@
-﻿using SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.MedicationCoverageDTO;
-using SedisBackend.Core.Domain.DTO.Entities.Users.Patients;
+﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.HealthInsuranceDTO;
 
-namespace SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.HealthInsuranceDTO;
-
-public record HealthInsuranceDto
+public class HealthInsuranceDto
 {
     public Guid Id { get; set; }
     public string InsuranceName { get; set; }

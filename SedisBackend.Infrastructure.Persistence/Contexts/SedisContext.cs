@@ -980,7 +980,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
         modelBuilder.ApplyConfiguration(new LocationConfiguration());
         modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
-        //modelBuilder.ApplyConfiguration(new ServicesConfiguration());
+        modelBuilder.ApplyConfiguration(new ServiceConfiguration());
 
         modelBuilder.ApplyConfiguration(new PatientConfiguration());
         modelBuilder.ApplyConfiguration(new AdminConfiguration());

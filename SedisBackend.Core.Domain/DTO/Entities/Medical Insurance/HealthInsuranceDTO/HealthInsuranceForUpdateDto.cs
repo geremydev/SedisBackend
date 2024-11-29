@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.HealthInsuranceDTO;
 
-public record HealthInsuranceForUpdateDto
+public class HealthInsuranceForUpdateDto
 {
     public string InsuranceName { get; set; }
     public string PolicyType { get; set; }

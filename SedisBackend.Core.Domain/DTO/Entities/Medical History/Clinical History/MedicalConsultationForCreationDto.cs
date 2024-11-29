@@ -1,10 +1,6 @@
-﻿using SedisBackend.Core.Domain.Entities.Models;
-using SedisBackend.Core.Domain.Entities.Relations;
-using SedisBackend.Core.Domain.Entities.Users.Persons;
+﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History.Clinical_History;
 
-namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History.Clinical_History;
-
-public record MedicalConsultationForCreationDto
+public class MedicalConsultationForCreationDto
 {
     public Guid PatientId { get; set; }
     public Guid DoctorId { get; set; }

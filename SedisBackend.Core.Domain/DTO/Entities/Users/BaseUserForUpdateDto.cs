@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Users;
 
-public record BaseUserForUpdateDto
+public class BaseUserForUpdateDto
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

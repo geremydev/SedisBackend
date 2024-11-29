@@ -7,7 +7,6 @@ using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medi
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Models;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
-using SedisBackend.Core.Domain.Interfaces.Repositories.Shared;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Users;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 using SedisBackend.Infrastructure.Persistence.Repositories.ModelsRepositories;
@@ -19,8 +18,6 @@ namespace SedisBackend.Infrastructure.Persistence.Repositories;
 public sealed class RepositoryManager : IRepositoryManager
 {
     private readonly SedisContext _repositoryContext;
-
-    private readonly Lazy<IICD11Repository> _icd11Repository;
 
     private readonly Lazy<IAppointmentRepository> _appointmentRepository;
     private readonly Lazy<ILabTestRepository> _labtestRepository;
@@ -103,8 +100,6 @@ public sealed class RepositoryManager : IRepositoryManager
     {
         return await _repositoryContext.Database.BeginTransactionAsync(cancellationToken);
     }
-
-    public IICD11Repository ICD11 => _icd11Repository.Value;
     public IAppointmentRepository Appointment => _appointmentRepository.Value;
 
     public ILabTestRepository LabTest => _labtestRepository.Value;

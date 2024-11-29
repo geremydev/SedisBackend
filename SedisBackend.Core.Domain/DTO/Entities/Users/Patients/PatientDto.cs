@@ -9,7 +9,7 @@ using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Vaccines;
 
 namespace SedisBackend.Core.Domain.DTO.Entities.Users.Patients;
 
-public record PatientDto : BaseUserDto
+public class PatientDto : BaseUserDto
 {
     public string BloodType { get; set; }
     public string? BloodTypeLabResultURl { get; set; }

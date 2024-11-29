@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Locations;
 
-public record LocationForCreationDto
+public class LocationForCreationDto
 {
     //public Guid EntityId { get; set; }
     //public string EntityType { get; set; } // Doctor, Paciente, Hospital, Clinica

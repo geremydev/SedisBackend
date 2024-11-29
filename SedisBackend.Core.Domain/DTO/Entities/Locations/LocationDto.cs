@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Locations;
 
-public record LocationDto
+public class LocationDto
 {
     public Guid Id { get; set; }
     //public Guid EntityId { get; set; }

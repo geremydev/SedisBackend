@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Users;
 
-public record BaseUserDto
+public class BaseUserDto
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; }

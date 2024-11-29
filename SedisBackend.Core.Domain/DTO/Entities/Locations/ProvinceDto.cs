@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Locations;
 
-public record ProvinceDto
+public class ProvinceDto
 {
     public string Name { get; set; }
     public string Code { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Appointments;
 
-public record AppointmentForUpdateDto
+public class AppointmentForUpdateDto
 {
     public Guid PatientId { get; set; }
     public Guid DoctorId { get; set; }
