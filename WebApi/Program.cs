@@ -17,7 +17,7 @@ using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Fua
+// Linux character scaping is shit
 LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 builder.Services.ConfigureCors();
