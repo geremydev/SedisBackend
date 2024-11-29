@@ -16,7 +16,7 @@ jobs:
       - name: Set up SSH key for deployment
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/sedis_rsa
+          echo "${{ secrets.SEDIS_SSH_PRIVATE_KEY }}" > ~/.ssh/sedis_rsa
           chmod 600 ~/.ssh/sedis_rsa
 
       - name: Login to DockerHub
@@ -37,7 +37,6 @@ jobs:
         env:
           SSH_HOST: ${{ secrets.GENESIS_SSH_HOST }}
           SSH_USERNAME: ${{ secrets.GENESIS_SSH_USERNAME }}
-          SSH_KEY: ${{ secrets.SEDIS_SSH_PRIVATE_KEY }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/sedis_rsa $SSH_USERNAME@$SSH_HOST -p 2004 << 'EOF'
           docker pull imbrahiam/webapi
