@@ -310,7 +310,7 @@ public class GeneralProfile : Profile
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Patient.ApplicationUser.FirstName))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Patient.ApplicationUser.LastName))
             .ForMember(dest => dest.CardId, opt => opt.MapFrom(src => src.Patient.ApplicationUser.CardId))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Patient.ApplicationUser.IsActive)) //Revisar
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Patient.ApplicationUser.Status)) //Revisar
             .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.Patient.ApplicationUser.Birthdate))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Patient.ApplicationUser.PhoneNumber))
             .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Patient.ApplicationUser.Sex.ToString()))
