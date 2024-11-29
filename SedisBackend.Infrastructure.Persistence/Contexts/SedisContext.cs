@@ -74,6 +74,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.Entity<IdentityUserLogin<Guid>>(entity => { entity.ToTable("UserLogins"); });
         modelBuilder.Entity<IdentityUserToken<Guid>>(entity => { entity.ToTable("UserTokens"); });
 
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("Users");
@@ -321,6 +322,8 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .WithOne(pa => pa.Allergy)
                 .HasForeignKey(pa => pa.AllergyId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+
         });
 
         modelBuilder.Entity<Appointment>(entity =>
@@ -349,7 +352,10 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .WithMany(a => a.Appointments)
                 .HasForeignKey(a => a.DoctorId)
                 .IsRequired();
+
+            
         });
+
 
 
 
@@ -452,10 +458,10 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<MedicalConsultation>()
-                .HasMany(mc => mc.Appointments)
+                .HasMany(mc => mc.Appointments) 
                 .WithOne(a => a.MedicalConsultation)
                 .HasForeignKey(a => a.MedicalConsultationId)
-                .IsRequired()
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<MedicalConsultation>()
