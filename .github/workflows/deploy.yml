@@ -41,5 +41,5 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/sedis_rsa $SSH_USERNAME@$SSH_HOST -p 2004 << 'EOF'
           docker pull imbrahiam/webapi
           docker-compose down
-          docker-compose up -d
+          docker-compose -f /home/shared/compose/docker-compose.yml up -d
           EOF
