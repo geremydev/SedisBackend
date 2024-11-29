@@ -6,7 +6,7 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientMedicationPrescriptionHandlers;
 
-public sealed record UpdatePatientMedicationPrescriptionCommand(Guid PatientId, Guid MedicationId, PatientMedicationPrescriptionForUpdateDto PatientMedicationPrescription, bool TrackChanges) : IRequest<Unit>;
+public sealed record UpdatePatientMedicationPrescriptionCommand(Guid Id, PatientMedicationPrescriptionForUpdateDto PatientMedicationPrescription, bool TrackChanges) : IRequest<Unit>;
 
 internal sealed class UpdatePatientMedicationPrescriptionHandler : IRequestHandler<UpdatePatientMedicationPrescriptionCommand, Unit>
 {
@@ -21,12 +21,12 @@ internal sealed class UpdatePatientMedicationPrescriptionHandler : IRequestHandl
 
     public async Task<Unit> Handle(UpdatePatientMedicationPrescriptionCommand request, CancellationToken cancellationToken)
     {
-        var patientMedicationPrescriptionEntity = await _repository.PatientMedicationPrescriptionRepository.GetEntityAsync(request.PatientMedicationPrescription.PatientId, request.PatientMedicationPrescription.MedicationId, request.TrackChanges);
+        var patientMedicationPrescriptionEntity = await _repository.PatientMedicationPrescription.GetEntityAsync(request.Id, request.TrackChanges);
         if (patientMedicationPrescriptionEntity is null)
-            throw new EntityNotFoundException(request.MedicationId);
+            throw new EntityNotFoundException(request.Id);
 
         _mapper.Map(request.PatientMedicationPrescription, patientMedicationPrescriptionEntity);
-        _repository.PatientMedicationPrescriptionRepository.UpdateEntity(patientMedicationPrescriptionEntity);
+        _repository.PatientMedicationPrescription.UpdateEntity(patientMedicationPrescriptionEntity);
         await _repository.SaveAsync(cancellationToken);
 
         return Unit.Value;

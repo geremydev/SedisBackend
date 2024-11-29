@@ -11,7 +11,7 @@ internal class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
         (
             new Appointment
             {
-                Id = Guid.Parse("792b5eb8-35dc-4e11-8d36-bb4b0344f582"),
+                Id = Guid.Parse("85bc224a-c53f-41db-97b8-92f703ee4452"),
                 PatientId = Guid.Parse("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
                 DoctorId = Guid.Parse("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
                 AppointmentDate = DateTime.Parse("2023-10-15 09:00:00"),

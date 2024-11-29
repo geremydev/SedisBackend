@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 
 namespace SedisBackend.Infrastructure.Persistence.Configurations.DomainConfigurations;
@@ -75,7 +76,20 @@ public class MedicalConsultationConfiguration : IEntityTypeConfiguration<Medical
                 PhysicalExamination = "Inflamación severa en cámara anterior, opacidades vítreas observadas.",
                 CreatedDate = DateTime.UtcNow,
                 LastModifiedDate = DateTime.UtcNow,
-                Status = "Completed"
+                Status = "Completed",
+                Discapacities =  new List<PatientDiscapacity>
+                {
+                    new PatientDiscapacity
+                    {
+                        PatientId = Guid.Parse("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
+                        DiscapacityId = Guid.Parse("1b54e13f-7a32-4cc1-ad6d-35298426a2fb"),
+                        DiagnosisDate = DateTime.Parse("2018-05-15"),
+                        Severity = "Severa",
+                        Description = "El paciente presenta dificultades visuales complejas.",
+                        Status = true,
+                        MedicalConsultationId = Guid.Parse("84f2c6b1-3a45-4c12-b5af-81f8576bcd49")
+                    },
+                }
             }
         );
     }

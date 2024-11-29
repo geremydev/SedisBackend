@@ -14,11 +14,10 @@ internal sealed class MedicationCoverageRepository : RepositoryBase<MedicationCo
 
     public async Task<IEnumerable<MedicationCoverage>> GetAllEntitiesAsync(bool trackChanges) =>
         await FindAll(trackChanges)
-                    .OrderBy(c => c.Id)
                     .ToListAsync();
 
-    public async Task<MedicationCoverage> GetEntityAsync(Guid medicationCoverageId, bool trackChanges) =>
-        await FindByCondition(c => c.Id.Equals(medicationCoverageId), trackChanges)
+    public async Task<MedicationCoverage> GetEntityAsync(Guid medicationId, Guid healthInsuranceId, bool trackChanges) =>
+        await FindByCondition(c => c.MedicationId.Equals(medicationId) && c.HealthInsuranceId.Equals(healthInsuranceId), trackChanges)
                     .Include(p => p.HealthInsurance)
                     .Include(p => p.Medication)
                     .AsSplitQuery()

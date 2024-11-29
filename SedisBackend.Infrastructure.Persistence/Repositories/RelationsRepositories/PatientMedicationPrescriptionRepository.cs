@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SedisBackend.Core.Domain.Entities.Models.Products;
 using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
 using SedisBackend.Infrastructure.Persistence.Contexts;
@@ -16,9 +17,9 @@ internal sealed class PatientMedicationPrescriptionRepository : RepositoryBase<P
     public async Task<IEnumerable<PatientMedicationPrescription>> GetAllEntitiesAsync(bool trackChanges) =>
             await GetAllEntitiesAsync(trackChanges);
 
-    public async Task<PatientMedicationPrescription> GetEntityAsync(Guid patientId, Guid medicationId, bool trackChanges)
+    public async Task<PatientMedicationPrescription> GetEntityAsync(Guid Id, bool trackChanges)
     {
-        return await FindByCondition(c => c.PatientId.Equals(patientId) && c.Medication.Equals(medicationId), trackChanges)
+        return await FindByCondition(c => c.Id.Equals(Id), trackChanges)
                 .Include(a => a.Patient)
                 .Include(a => a.MedicalConsultation)
                 .Include(a => a.Medication).SingleOrDefaultAsync();
@@ -48,10 +49,6 @@ internal sealed class PatientMedicationPrescriptionRepository : RepositoryBase<P
                 .Include(a => a.Medication).ToListAsync();
     }
 
-    public Task<PatientMedicationPrescription> GetEntityAsync(Guid entityId, bool trackChanges)
-    {
-        throw new NotImplementedException();
-    }
-
     public void UpdateEntity(PatientMedicationPrescription entity) => Update(entity);
+
 }

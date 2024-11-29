@@ -1,7 +1,7 @@
 ﻿using SedisBackend.Core.Domain.Entities.Relations;
 
 namespace SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
-public interface IPatientLabTestPrescriptionRepository : IGenericRelationalRepository<PatientLabTestPrescription>
+public interface IPatientLabTestPrescriptionRepository : IGenericRepository<PatientLabTestPrescription>
 {
     Task<IEnumerable<PatientLabTestPrescription>> GetByPatient(Guid patientId, bool trackChanges);
     Task<IEnumerable<PatientLabTestPrescription>> GetByLabTestPrescription(Guid labtestPrescriptionId, bool trackChanges);

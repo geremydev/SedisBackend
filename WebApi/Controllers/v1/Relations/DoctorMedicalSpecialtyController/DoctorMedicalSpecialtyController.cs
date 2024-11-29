@@ -24,7 +24,7 @@ public class DoctorMedicalSpecialtyController : BaseApiController
         _loggerManager = loggerManager;
     }
 
-    [HttpGet(Name = "GetDoctorMedicalSpecialties")]
+    [HttpGet(Name = "GetAllDoctorMedicalSpecialties")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DoctorMedicalSpecialtyDto>))]
@@ -37,9 +37,9 @@ public class DoctorMedicalSpecialtyController : BaseApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DoctorMedicalSpecialtyDto))]
-    public async Task<IActionResult> Get(Guid doctorId, Guid specialtyId)
+    public async Task<IActionResult> Get(Guid DoctorId, Guid SpecialtyId)
     {
-        return Ok(await _sender.Send(new GetDoctorMedicalSpecialtyQuery(doctorId, specialtyId, false)));
+        return Ok(await _sender.Send(new GetDoctorMedicalSpecialtyQuery(DoctorId, SpecialtyId, false)));
     }
 
     [HttpPost]
@@ -64,9 +64,9 @@ public class DoctorMedicalSpecialtyController : BaseApiController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DoctorMedicalSpecialtyForUpdateDto))]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Put(Guid doctorId, Guid specialtyId, [FromBody] DoctorMedicalSpecialtyForUpdateDto doctorMedicalSpecialty)
+    public async Task<IActionResult> Put(Guid DoctorId, Guid MedicalSpecialtyId, [FromBody] DoctorMedicalSpecialtyForUpdateDto doctorMedicalSpecialty)
     {
-        var command = new UpdateDoctorMedicalSpecialtyCommand(doctorId, specialtyId, doctorMedicalSpecialty, true);
+        var command = new UpdateDoctorMedicalSpecialtyCommand(DoctorId, MedicalSpecialtyId, doctorMedicalSpecialty, true);
 
         await _sender.Send(command);
         return Ok();
@@ -76,12 +76,12 @@ public class DoctorMedicalSpecialtyController : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DoctorMedicalSpecialtyForUpdateDto))]
-    public async Task<IActionResult> Patch(Guid doctorId, Guid specialtyId, [FromBody] JsonPatchDocument<DoctorMedicalSpecialtyForUpdateDto> patchDoc)
+    public async Task<IActionResult> Patch(Guid DoctorId, Guid MedicalSpecialtyId, [FromBody] JsonPatchDocument<DoctorMedicalSpecialtyForUpdateDto> patchDoc)
     {
         if (patchDoc is null)
             return BadRequest("patchDoc object sent from client is null.");
 
-        var command = new PatchDoctorMedicalSpecialtyCommand(doctorId, specialtyId, true, patchDoc);
+        var command = new PatchDoctorMedicalSpecialtyCommand(DoctorId, MedicalSpecialtyId, true, patchDoc);
         var (DoctorMedicalSpecialtyToPatch, _) = await _sender.Send(command);
 
         return Ok(DoctorMedicalSpecialtyToPatch);
@@ -90,9 +90,9 @@ public class DoctorMedicalSpecialtyController : BaseApiController
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid doctorId, Guid specialtyId)
+    public async Task<IActionResult> Delete(Guid DoctorId, Guid MedicalSpecialtyId)
     {
-        var notification = new DeleteDoctorMedicalSpecialtyCommand(doctorId, specialtyId, true);
+        var notification = new DeleteDoctorMedicalSpecialtyCommand(DoctorId, MedicalSpecialtyId, true);
         await _sender.Send(notification);
         return NoContent();
     }

@@ -18,7 +18,7 @@ public class PatientDiscapacityConfiguration : IEntityTypeConfiguration<PatientD
                 Severity = "Severa",
                 Description = "El paciente presenta dificultades visuales complejas.",
                 Status = true,
-                MedicalConsultationId = Guid.Parse("84f2c6b1-3a45-4c12-b5af-81f8576bcd49")
+                MedicalConsultationId = Guid.Parse("7a8b5e23-3f6b-4315-bf4e-8b7e1a5b15bc")
             },
             new PatientDiscapacity
             {

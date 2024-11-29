@@ -5,7 +5,7 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientLabTestPrescriptionHandlers;
 
-public sealed record DeletePatientLabTestPrescriptionCommand(Guid patientId, Guid LabTestPrescriptionId, bool TrackChanges) : IRequest<Unit>;
+public sealed record DeletePatientLabTestPrescriptionCommand(Guid Id, bool TrackChanges) : IRequest<Unit>;
 
 public class DeletePatientMedicationPrescriptionHandler
 {
@@ -20,9 +20,9 @@ public class DeletePatientMedicationPrescriptionHandler
 
     public async Task Handle(DeletePatientLabTestPrescriptionCommand request, CancellationToken cancellationToken)
     {
-        var patientLabTestPrescription = await _repository.PatientLabTestPrescription.GetEntityAsync(request.patientId, request.LabTestPrescriptionId, request.TrackChanges);
+        var patientLabTestPrescription = await _repository.PatientLabTestPrescription.GetEntityAsync(request.Id, request.TrackChanges);
         if (patientLabTestPrescription is null)
-            throw new EntityNotFoundException(request.LabTestPrescriptionId);
+            throw new EntityNotFoundException(request.Id);
         patientLabTestPrescription.Status = "Inactivo";
         _repository.PatientLabTestPrescription.UpdateEntity(patientLabTestPrescription);
         await _repository.SaveAsync(cancellationToken);

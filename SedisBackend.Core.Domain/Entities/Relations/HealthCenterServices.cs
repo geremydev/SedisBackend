@@ -2,9 +2,8 @@
 
 namespace SedisBackend.Core.Domain.Entities.Relations;
 
-public class HealthCenterServices : IBaseEntity
+public class HealthCenterServices 
 {
-    public Guid Id { get; set; }
     public Guid HealthCenterId { get; set; }
     public HealthCenter HealthCenter { get; set; }
     public Guid ServiceId { get; set; }

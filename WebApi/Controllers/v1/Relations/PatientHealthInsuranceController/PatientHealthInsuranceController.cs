@@ -21,13 +21,22 @@ public class PatientHealthInsuranceController : BaseApiController
         _loggerManager = loggerManager;
     }
 
+    [HttpGet(Name = "GetAllPatientHealthInsurances")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientHealthInsuranceDto>))]
+    public async Task<IActionResult> Get(Guid PatientId)
+    {
+        return Ok(await _sender.Send(new GetPatientHealthInsuranceByPatientQuery(PatientId, false)));
+    }
+
     [HttpGet("{id:guid}", Name = "GetPatientHealthInsuranceById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientHealthInsuranceDto))]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<IActionResult> Get(Guid PatientId, Guid HealthInsuranceId)
     {
-        return Ok(await _sender.Send(new GetPatientHealthInsurancesQuery(id, false)));
+        return Ok(await _sender.Send(new GetPatientHealthInsuranceByIdQuery(PatientId, HealthInsuranceId, false)));
     }
 
     [HttpPost]
@@ -60,12 +69,27 @@ public class PatientHealthInsuranceController : BaseApiController
         return Ok();
     }
 
+    /*[HttpPatch("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientHealthInsuranceForUpdateDto))]
+    public async Task<IActionResult> Patch(Guid id, [FromBody] JsonPatchDocument<PatientHealthInsuranceForUpdateDto> patchDoc)
+    {
+        if (patchDoc is null)
+            return BadRequest("patchDoc object sent from client is null.");
+
+        var command = new PatchPatientHealthInsuranceCommand(id, true, patchDoc);
+        var (PatientHealthInsurancesToPatch, _) = await _sender.Send(command);
+
+        return Ok(PatientHealthInsurancesToPatch);
+    }*/
+
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid patientId, Guid healthInsuranceId)
+    public async Task<IActionResult> Delete(Guid PatientId, Guid HealthInsuranceId)
     {
-        var notification = new DeletePatientHealthInsuranceCommand(patientId, healthInsuranceId, true);
+        var notification = new DeletePatientHealthInsuranceCommand(PatientId, HealthInsuranceId, true);
         await _sender.Send(notification);
         return NoContent();
     }

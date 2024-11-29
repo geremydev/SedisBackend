@@ -21,4 +21,5 @@ public class Medication : IBaseEntity
     public string NationalCode { get; set; }
     public bool Status { get; set; }
     public ICollection<MedicationCoverage> Coverages { get; set; }
+    public ICollection<PatientMedicationPrescription> PatientMedicationPrescriptions { get; set; }
 }

@@ -20,13 +20,22 @@ public class PatientDiscapacitiesController : BaseApiController
         _loggerManager = loggerManager;
     }
 
+    [HttpGet(Name = "GetAllPatientDiscapacities")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientDiscapacityDto>))]
+    public async Task<IActionResult> Get(Guid PatientId)
+    {
+        return Ok(await _sender.Send(new GetPatientDiscapacitiesQuery(PatientId, false)));
+    }
+
     [HttpGet("{id:guid}", Name = "GetPatientDiscapacityById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientDiscapacityDto))]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<IActionResult> Get(Guid PatientId, Guid DiscapacityId)
     {
-        return Ok(await _sender.Send(new GetPatientDiscapacitiesQuery(id, false)));
+        return Ok(await _sender.Send(new GetPatientDiscapacityQuery(PatientId, DiscapacityId, false)));
     }
 
     [HttpPost]
@@ -62,9 +71,9 @@ public class PatientDiscapacitiesController : BaseApiController
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Delete(Guid patientId, Guid DiscapacityId)
+    public async Task<IActionResult> Delete(Guid PatientId, Guid DiscapacityId)
     {
-        var notification = new DeletePatientDiscapacityCommand(patientId, DiscapacityId, true);
+        var notification = new DeletePatientDiscapacityCommand(PatientId, DiscapacityId, true);
         await _sender.Send(notification);
         return NoContent();
     }

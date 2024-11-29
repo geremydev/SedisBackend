@@ -17,7 +17,8 @@ public class PatientMedicationPrescriptionConfiguration : IEntityTypeConfigurati
                 StartDate = new DateTime(2024, 01, 01),
                 EndDate = new DateTime(2024, 06, 01),
                 Notes = "Iniciar tratamiento para controlar la glucosa.",
-                Status = true
+                Status = true,
+                MedicalConsultationId = Guid.Parse("5d2e7a36-91e8-4b4a-a769-854fa9d4cb29")
             },
             new PatientMedicationPrescription
             {
@@ -27,7 +28,9 @@ public class PatientMedicationPrescriptionConfiguration : IEntityTypeConfigurati
                 StartDate = new DateTime(2024, 03, 01),
                 EndDate = new DateTime(2024, 03, 15),
                 Notes = "Tratamiento para el dolor abdominal severo y fiebre.",
-                Status = true
+                Status = true,
+                MedicalConsultationId = Guid.Parse("2c4f7b60-71a9-4ea8-82f1-7f3c0dbed832")
+
             },
             new PatientMedicationPrescription
             {
@@ -37,7 +40,8 @@ public class PatientMedicationPrescriptionConfiguration : IEntityTypeConfigurati
                 StartDate = new DateTime(2024, 02, 15),
                 EndDate = new DateTime(2024, 03, 01),
                 Notes = "Medicamento para el dolor articular y la inflamación.",
-                Status = true
+                Status = true,
+                MedicalConsultationId = Guid.Parse("8f7319e7-89b4-4d5c-90cb-cf2e5a0c9fbd")
             },
             new PatientMedicationPrescription
             {
@@ -47,7 +51,8 @@ public class PatientMedicationPrescriptionConfiguration : IEntityTypeConfigurati
                 StartDate = new DateTime(2024, 03, 05),
                 EndDate = new DateTime(2024, 06, 05),
                 Notes = "Tratamiento para depresión y ansiedad.",
-                Status = true
+                Status = true,
+                MedicalConsultationId = Guid.Parse("3d4e8a71-17a5-45c7-bec6-a7934c0425bc")
             },
             new PatientMedicationPrescription
             {
@@ -57,7 +62,8 @@ public class PatientMedicationPrescriptionConfiguration : IEntityTypeConfigurati
                 StartDate = new DateTime(2024, 01, 15),
                 EndDate = new DateTime(2024, 07, 15),
                 Notes = "Tratamiento para hipertensión.",
-                Status = true
+                Status = true,
+                MedicalConsultationId = Guid.Parse("8f7319e7-89b4-4d5c-90cb-cf2e5a0c9fbd")
             },
             new PatientMedicationPrescription
             {
@@ -67,7 +73,8 @@ public class PatientMedicationPrescriptionConfiguration : IEntityTypeConfigurati
                 StartDate = new DateTime(2024, 02, 01),
                 EndDate = new DateTime(2024, 08, 01),
                 Notes = "Control de glucosa en paciente con diabetes tipo 2.",
-                Status = true
+                Status = true,
+                MedicalConsultationId = Guid.Parse("7a8b5e23-3f6b-4315-bf4e-8b7e1a5b15bc")
             }
         );
     }

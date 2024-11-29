@@ -4,9 +4,8 @@ using SedisBackend.Core.Domain.Medical_Insurance;
 
 namespace SedisBackend.Core.Domain.Entities.Relations;
 
-public class MedicationCoverage : IBaseEntity
+public class MedicationCoverage 
 {
-    public Guid Id { get; set; }
     public Guid HealthInsuranceId { get; set; } // FK
     public HealthInsurance HealthInsurance { get; set; }
     public Guid MedicationId { get; set; } // FK

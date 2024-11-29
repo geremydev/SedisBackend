@@ -7,12 +7,12 @@ namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.Pa
 
 public sealed record DeletePatientIllnessCommand(Guid patientId, Guid IllnessId, bool TrackChanges) : IRequest<Unit>;
 
-public class DeletePatientLabTestPrescriptionHandler
+public class DeletePatientIllnessPrescriptionHandler
 {
     private readonly IRepositoryManager _repository;
     private readonly IMapper _mapper;
 
-    public DeletePatientLabTestPrescriptionHandler(IRepositoryManager repository, IMapper mapper)
+    public DeletePatientIllnessPrescriptionHandler(IRepositoryManager repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

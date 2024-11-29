@@ -59,4 +59,9 @@ internal sealed class PatientLabTestPrescriptionRepository : RepositoryBase<Pati
     }
 
     public void UpdateEntity(PatientLabTestPrescription entity) => Update(entity);
+
+    public async Task<PatientLabTestPrescription> GetEntityAsync(Guid entityId, bool trackChanges)
+    {
+        return await GetEntityAsync(entityId, trackChanges);
+    }
 }

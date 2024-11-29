@@ -21,7 +21,7 @@ internal sealed class GetPatientMedicationsPrescriptionHandler : IRequestHandler
 
     public async Task<IEnumerable<PatientMedicationPrescriptionDto>> Handle(GetPatientMedicationsQuery request, CancellationToken cancellationToken)
     {
-        var patientMedications = await _repository.PatientMedicationPrescriptionRepository.GetByPatient(request.PatientId, request.TrackChanges);
+        var patientMedications = await _repository.PatientMedicationPrescription.GetByPatient(request.PatientId, request.TrackChanges);
         if (patientMedications is null || !patientMedications.Any())
             throw new EntitiesNotFoundException();
 

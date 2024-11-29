@@ -37,9 +37,9 @@ public class HealthCenterServicesController : BaseApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HealthCenterServiceDto))]
-    public async Task<IActionResult> Get(Guid healthcenterId)
+    public async Task<IActionResult> Get(Guid HealthCenterId)
     {
-        return Ok(await _sender.Send(new GetAllHealthCentersServicesQuery(healthcenterId, false)));
+        return Ok(await _sender.Send(new GetAllHealthCentersServicesQuery(HealthCenterId, false)));
     }
 
     [HttpPost]
