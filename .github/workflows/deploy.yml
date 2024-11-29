@@ -10,11 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Debug - Check Secrets
-        run: |
-          echo "Docker Username: ${{ secrets.SEDIS_DOCKER_USERNAME }}"
-          echo "Docker Password: ${{ secrets.SEDIS_DOCKER_PASSWORD }}"
-
       - name: Checkout Code
         uses: actions/checkout@v3
 
@@ -28,6 +23,7 @@ jobs:
           password: ${{ secrets.SEDIS_DOCKER_PASSWORD }}
 
       - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
         run: |
           docker build -t imbrahiam/webapi -f WebApi/Dockerfile .
           docker push imbrahiam/webapi
