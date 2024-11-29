@@ -1,8 +1,4 @@
-﻿using SedisBackend.Core.Domain.Entities.Models.Products;
-using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
-
-namespace SedisBackend.Core.Domain.DTO.Entities.PatientLabTestPrescription;
+﻿namespace SedisBackend.Core.Domain.DTO.Entities.PatientLabTestPrescription;
 public class PatientLabTestPrescriptionDto
 {
     public Guid Id { get; set; }

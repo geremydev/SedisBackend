@@ -8,16 +8,10 @@ public static class DefaultRoles
 {
     public static async Task SeedAsync(UserManager<User> userManager, RoleManager<IdentityRole<Guid>> roleManager)
     {
-        //if (!await roleManager.RoleExistsAsync(RolesEnum.SuperAdmin.ToString()))
-        //{
-        //    await roleManager.CreateAsync(new IdentityRole<Guid>(RolesEnum.SuperAdmin.ToString()));
-        //}
-
         if (!await roleManager.RoleExistsAsync(RolesEnum.Admin.ToString()))
         {
             await roleManager.CreateAsync(new IdentityRole<Guid>(RolesEnum.Admin.ToString()));
         }
-
 
         if (!await roleManager.RoleExistsAsync(RolesEnum.Doctor.ToString()))
         {
@@ -32,6 +26,21 @@ public static class DefaultRoles
         if (!await roleManager.RoleExistsAsync(RolesEnum.Assistant.ToString()))
         {
             await roleManager.CreateAsync(new IdentityRole<Guid>(RolesEnum.Assistant.ToString()));
+        }
+
+        if (!await roleManager.RoleExistsAsync(RolesEnum.LabTech.ToString()))
+        {
+            await roleManager.CreateAsync(new IdentityRole<Guid>(RolesEnum.LabTech.ToString()));
+        }
+
+        if (!await roleManager.RoleExistsAsync(RolesEnum.Registrator.ToString()))
+        {
+            await roleManager.CreateAsync(new IdentityRole<Guid>(RolesEnum.Registrator.ToString()));
+        }
+
+        if (!await roleManager.RoleExistsAsync(RolesEnum.SuperAdmin.ToString()))
+        {
+            await roleManager.CreateAsync(new IdentityRole<Guid>(RolesEnum.SuperAdmin.ToString()));
         }
     }
 }

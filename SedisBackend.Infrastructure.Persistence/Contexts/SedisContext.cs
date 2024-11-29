@@ -8,11 +8,11 @@ using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Medical_History.Family_History;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
+using SedisBackend.Core.Domain.Medical_History.MedicalConsultation;
 using SedisBackend.Core.Domain.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.Medical_Insurance;
 using SedisBackend.Infrastructure.Persistence.Configuration.UsersConfiguration;
@@ -40,6 +40,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     public DbSet<MedicalConsultation> MedicalConsultations { get; set; }
     public DbSet<FamilyHistory> FamilyHistories { get; set; }
     public DbSet<Discapacity> Discapacities { get; set; }
+    public DbSet<Service> Services { get; set; }
     public DbSet<LabTest> LabTests { get; set; }
     public DbSet<Medication> Medications { get; set; }
     public DbSet<Patient> Patients { get; set; }
@@ -383,6 +384,21 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                     .OnDelete(DeleteBehavior.NoAction);
         });
 
+        modelBuilder.Entity<Service>(entity =>
+        {
+            entity.ToTable("Services");
+            entity.HasKey(s => s.Id);
+
+            entity.Property(s => s.Name)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            entity.Property(s => s.Description)
+                .HasMaxLength(500);
+
+            entity.Property(s => s.ImageURL)
+                .HasMaxLength(255);
+        });
 
         modelBuilder.Entity<HealthCenterServices>(entity =>
         {
@@ -397,6 +413,11 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasOne(hcs => hcs.Service)
                 .WithMany(s => s.HealthCenterServices)
                 .HasForeignKey(hcs => hcs.ServiceId);
+
+            entity.Property(hcs => hcs.CreationDate).IsRequired();
+            entity.Property(hcs => hcs.StartTime).IsRequired();
+            entity.Property(hcs => hcs.EndTime).IsRequired();
+            entity.Property(hcs => hcs.Status).IsRequired();
         });
 
         modelBuilder.Entity<Location>(entity =>
@@ -551,7 +572,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             .HasDefaultValueSql("GETDATE()");
         entity.HasOne(pa => pa.MedicalConsultation)
             .WithMany(a => a.Discapacities)
-            .HasForeignKey(pa => pa.DiscapacityId);
+            .HasForeignKey(pa => pa.MedicalConsultationId);
     });
 
         modelBuilder.Entity<Illness>(entity =>
@@ -587,7 +608,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             entity.HasOne(pa => pa.MedicalConsultation)
                 .WithMany(a => a.Illnesses)
-                .HasForeignKey(pa => pa.IllnessId)
+                .HasForeignKey(pa => pa.MedicalConsultationId)
                 .IsRequired(false);
 
             entity.Property(pi => pi.DocumentURL).HasMaxLength(2048);
@@ -634,7 +655,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             entity.HasOne(pa => pa.MedicalConsultation)
                 .WithMany(a => a.RiskFactors)
-                .HasForeignKey(pa => pa.RiskFactorId);
+                .HasForeignKey(pa => pa.MedicalConsultationId);
 
             entity.Property(pa => pa.DiagnosisDate)
                 .HasDefaultValueSql("GETDATE()")
@@ -945,7 +966,8 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.Property(ph => ph.Status)
                 .IsRequired();
         });
-        /*modelBuilder.ApplyConfiguration(new UserConfiguration());
+
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new DiscapacityConfiguration());
         modelBuilder.ApplyConfiguration(new IllnessConfiguration());
         modelBuilder.ApplyConfiguration(new AllergyConfiguration());
@@ -953,13 +975,12 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.ApplyConfiguration(new MedicationConfiguration());
         modelBuilder.ApplyConfiguration(new RiskFactorConfiguration());
         modelBuilder.ApplyConfiguration(new FamilyHistoryConfiguration());
-        //modelBuilder.ApplyConfiguration(new MedicalConsultationConfiguration());
+        modelBuilder.ApplyConfiguration(new MedicalConsultationConfiguration());
         modelBuilder.ApplyConfiguration(new VaccineConfiguration());
         modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
         modelBuilder.ApplyConfiguration(new LocationConfiguration());
         modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
         //modelBuilder.ApplyConfiguration(new ServicesConfiguration());
-        
 
         modelBuilder.ApplyConfiguration(new PatientConfiguration());
         modelBuilder.ApplyConfiguration(new AdminConfiguration());
@@ -968,10 +989,10 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.ApplyConfiguration(new LabTechConfiguration());
         modelBuilder.ApplyConfiguration(new RegistratorConfiguration());
         modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
-        modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());*/
+        modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());
 
         //Relations
-       /* modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
+        modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
         modelBuilder.ApplyConfiguration(new MedicationCoverageConfiguration());
         modelBuilder.ApplyConfiguration(new PatientAllergyConfiguration());
         modelBuilder.ApplyConfiguration(new PatientDiscapacityConfiguration());
@@ -980,8 +1001,6 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.ApplyConfiguration(new PatientLabTestPrescriptionConfiguration());
         modelBuilder.ApplyConfiguration(new PatientRiskFactorConfiguration());
         modelBuilder.ApplyConfiguration(new PatientVaccineConfiguration());
-        modelBuilder.ApplyConfiguration(new PatientMedicationPrescriptionConfiguration());*/
+        modelBuilder.ApplyConfiguration(new PatientMedicationPrescriptionConfiguration());
     }
 }
-
-        

@@ -22,13 +22,13 @@ public class PatientDiscapacityConfiguration : IEntityTypeConfiguration<PatientD
             },
             new PatientDiscapacity
             {
-                PatientId = Guid.Parse("d9a832b8-123a-4c98-baba-6e2a32e94b9e"),
+                PatientId = Guid.Parse("d8e2f93f-3b9f-4b88-981f-56eaa8ddc3e9"),
                 DiscapacityId = Guid.Parse("5c52a9d3-6ee2-496e-a922-139de857d9d4"),
                 DiagnosisDate = DateTime.Parse("2020-11-20"),
                 Severity = "Moderada",
                 Description = "El paciente presenta pérdida auditiva moderada desde el nacimiento.",
                 Status = true,
-                MedicalConsultationId = Guid.Parse("91a82d3e-5276-4ab9-bc2f-05b8b174ccd7") // Ejemplo consulta médica
+                MedicalConsultationId = Guid.Parse("2c4f7b60-71a9-4ea8-82f1-7f3c0dbed832") // Ejemplo consulta médica
             },
             new PatientDiscapacity
             {
@@ -38,7 +38,7 @@ public class PatientDiscapacityConfiguration : IEntityTypeConfiguration<PatientD
                 Severity = "Leve",
                 Description = "El paciente requiere soporte para tareas visuales prolongadas.",
                 Status = true,
-                MedicalConsultationId = Guid.Parse("eb3c9f01-abc6-4e17-a2a8-8c194f2bc938") // Ejemplo consulta médica
+                MedicalConsultationId = Guid.Parse("5d2e7a36-91e8-4b4a-a769-854fa9d4cb29") // Ejemplo consulta médica
             }
         );
     }

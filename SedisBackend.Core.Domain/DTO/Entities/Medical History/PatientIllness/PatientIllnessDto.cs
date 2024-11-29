@@ -1,8 +1,4 @@
-﻿using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
-using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
-
-namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History.PatientIllness;
+﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History.PatientIllness;
 public class PatientIllnessDto
 {
     public Guid PatientId { get; set; }

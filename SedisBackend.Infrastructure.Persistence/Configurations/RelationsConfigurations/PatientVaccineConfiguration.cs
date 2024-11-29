@@ -28,7 +28,7 @@ public class PatientVaccineConfiguration : IEntityTypeConfiguration<PatientVacci
             },
             new PatientVaccine
             {
-                PatientId = Guid.Parse("d9a832b8-123a-4c98-baba-6e2a32e94b9e"),
+                PatientId = Guid.Parse("b7e1e44d-72c9-4c91-a933-9e4f0e6b5f11"),
                 VaccineId = Guid.Parse("9c7bed88-e92c-459d-8a50-2fd9041c2c26"),
                 AppliedDoses = 3,
                 LastApplicationDate = DateTime.Parse("2022-07-20"),

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
+using SedisBackend.Core.Domain.Medical_History.MedicalConsultation;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories.ModelsRepositories;

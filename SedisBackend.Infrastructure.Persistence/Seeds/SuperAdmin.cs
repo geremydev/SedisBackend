@@ -11,7 +11,7 @@ public class SuperAdmin
         User adminuser = new();
         adminuser.UserName = "superadminuser";
         adminuser.Email = "superadminuser@email.com";
-        adminuser.PhoneNumber = "829-123-9811";
+        adminuser.PhoneNumber = "";
         adminuser.IsActive = true;
         adminuser.EmailConfirmed = true;
         adminuser.PhoneNumberConfirmed = true;

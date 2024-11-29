@@ -15,6 +15,8 @@ internal sealed class DoctorRepository : RepositoryBase<Doctor>, IDoctorReposito
     public async Task<IEnumerable<Doctor>> GetAllEntitiesAsync(bool trackChanges) =>
          await FindAll(trackChanges)
                     .Include(a => a.ApplicationUser)
+                    .Include(p => p.Specialties)
+                        .ThenInclude(pa => pa.MedicalSpecialty)
                     .OrderBy(c => c.Id)
                     .ToListAsync();
     public async Task<Doctor> GetEntityAsync(Guid doctorId, bool trackChanges) =>

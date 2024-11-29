@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using SedisBackend.Core.Application.Events;
 using SedisBackend.Core.Domain.DTO.Entities.Appointments;
+using SedisBackend.Core.Domain.DTO.Entities.DoctorMedicalSpecialty;
 using SedisBackend.Core.Domain.DTO.Entities.Health_Centers;
+using SedisBackend.Core.Domain.DTO.Entities.HealthCenterService;
 using SedisBackend.Core.Domain.DTO.Entities.Locations;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Allergies;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Clinical_History;
@@ -9,17 +11,24 @@ using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Family_History;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Medical_Condition.Discapacity_Condition;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Medical_Condition.Illness_Condition;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Medical_Condition.Risk_Factor_Condition;
+using SedisBackend.Core.Domain.DTO.Entities.Medical_History.PatientDiscapacity;
+using SedisBackend.Core.Domain.DTO.Entities.Medical_History.PatientIllness;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.HealthInsuranceDTO;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.MedicationCoverageDTO;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_Specialty;
+using SedisBackend.Core.Domain.DTO.Entities.PatientHealthInsurance;
+using SedisBackend.Core.Domain.DTO.Entities.PatientLabTestPrescription;
+using SedisBackend.Core.Domain.DTO.Entities.PatientMedicationPrescription;
 using SedisBackend.Core.Domain.DTO.Entities.Products.LabTest;
 using SedisBackend.Core.Domain.DTO.Entities.Products.Medication;
 using SedisBackend.Core.Domain.DTO.Entities.Users;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Assistants;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
+using SedisBackend.Core.Domain.DTO.Entities.Users.LabTech;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Patients;
+using SedisBackend.Core.Domain.DTO.Entities.Users.Registrator;
 using SedisBackend.Core.Domain.DTO.Identity.Authentication;
 using SedisBackend.Core.Domain.DTO.Identity.Users;
 using SedisBackend.Core.Domain.Entities.Models;
@@ -29,11 +38,11 @@ using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Medical_History.Allergies;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Medical_History.Family_History;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Condition;
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
+using SedisBackend.Core.Domain.Medical_History.MedicalConsultation;
 using SedisBackend.Core.Domain.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.Medical_Insurance;
 
@@ -480,6 +489,62 @@ public class GeneralProfile : Profile
            .ReverseMap();
         #endregion
 
+        #region Registrator
+        CreateMap<Registrator, RegistratorDto>()
+            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.ApplicationUser.FirstName))
+            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.ApplicationUser.LastName))
+            .ForMember(dest => dest.CardId, opt => opt.MapFrom(src => src.ApplicationUser.CardId))
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.Status))
+            .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.ApplicationUser.Birthdate))
+            .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.ApplicationUser.Sex.ToString()))
+            .ForMember(dest => dest.HealthCenter, opt => opt.MapFrom(src => src.HealthCenter))
+            .ReverseMap()
+            .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());
+
+        CreateMap<Registrator, RegistratorForCreationDto>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.ApplicationUser))
+            .ForMember(dest => dest.HealthCenterId, opt => opt.MapFrom(src => src.HealthCenterId))
+            .ReverseMap()
+            .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());
+
+        CreateMap<Registrator, RegistratorForUpdateDto>()
+            .ForMember(dest => dest.HealthCenterId, opt => opt.MapFrom(src => src.HealthCenterId))
+            .ReverseMap()
+            .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore())
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+
+        CreateMap<RegistratorDto, RegistratorForUpdateDto>()
+           .ReverseMap();
+        #endregion
+
+        #region LabTech
+        CreateMap<LabTech, LabTechDto>()
+            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.ApplicationUser.FirstName))
+            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.ApplicationUser.LastName))
+            .ForMember(dest => dest.CardId, opt => opt.MapFrom(src => src.ApplicationUser.CardId))
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.Status))
+            .ForMember(dest => dest.Birthdate, opt => opt.MapFrom(src => src.ApplicationUser.Birthdate))
+            .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.ApplicationUser.Sex.ToString()))
+            .ForMember(dest => dest.HealthCenter, opt => opt.MapFrom(src => src.HealthCenter))
+            .ReverseMap()
+            .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());
+
+        CreateMap<LabTech, LabTechForCreationDto>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.ApplicationUser))
+            .ForMember(dest => dest.HealthCenterId, opt => opt.MapFrom(src => src.HealthCenterId))
+            .ReverseMap()
+            .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore());
+
+        CreateMap<LabTech, LabTechForUpdateDto>()
+            .ForMember(dest => dest.HealthCenterId, opt => opt.MapFrom(src => src.HealthCenterId))
+            .ReverseMap()
+            .ForMember(dest => dest.ApplicationUser, opt => opt.Ignore())
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+
+        CreateMap<LabTechDto, LabTechForUpdateDto>()
+           .ReverseMap();
+        #endregion
+
         #endregion
 
         #endregion
@@ -505,6 +570,34 @@ public class GeneralProfile : Profile
             .ReverseMap();
 
         CreateMap<Appointment, AppointmentApprovedEvent>()
+            .ReverseMap();
+
+        // Relations DTO's
+        CreateMap<DoctorMedicalSpecialty, DoctorMedicalSpecialtyDto>()
+            .ReverseMap();
+
+        CreateMap<HealthCenterServices, HealthCenterServiceDto>()
+            .ReverseMap();
+
+        CreateMap<MedicationCoverage, MedicationCoverageDto>()
+            .ReverseMap();
+
+        CreateMap<PatientAllergy, PatientAllergyDto>()
+            .ReverseMap();
+
+        CreateMap<PatientDiscapacity, PatientDiscapacityDto>()
+            .ReverseMap();
+
+        CreateMap<PatientHealthInsurance, PatientHealthInsuranceDto>()
+            .ReverseMap();
+
+        CreateMap<PatientIllness, PatientIllnessDto>()
+            .ReverseMap();
+
+        CreateMap<PatientLabTestPrescription, PatientLabTestPrescriptionDto>()
+            .ReverseMap();
+
+        CreateMap<PatientMedicationPrescription, PatientMedicationPrescriptionDto>()
             .ReverseMap();
     }
 }

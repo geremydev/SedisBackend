@@ -3,7 +3,7 @@ using SedisBackend.Core.Domain.Entities.Models;
 using SedisBackend.Core.Domain.Entities.Relations;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 
-namespace SedisBackend.Core.Domain.Medical_History.Clinical_History;
+namespace SedisBackend.Core.Domain.Medical_History.MedicalConsultation;
 
 public class MedicalConsultation : IBaseEntity
 {

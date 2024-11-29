@@ -1,9 +1,4 @@
-﻿using SedisBackend.Core.Domain.Entities.Users.Persons;
-using SedisBackend.Core.Domain.Medical_History.Allergies;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
-using System.Text.Json.Serialization;
-
-namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History.Allergies;
+﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History.Allergies;
 public class PatientAllergyDto
 {
     public Guid PatientId { get; set; }

@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
+using SedisBackend.Core.Domain.Medical_History.MedicalConsultation;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.MedicalConsultationHandlers;
 

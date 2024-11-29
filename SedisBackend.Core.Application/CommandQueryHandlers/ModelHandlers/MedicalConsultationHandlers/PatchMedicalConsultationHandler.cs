@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
+using SedisBackend.Core.Domain.Medical_History.MedicalConsultation;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.MedicalConsultationHandlers;
 
@@ -23,7 +23,7 @@ internal sealed class PatchMedicalConsultationHandler
         _mapper = mapper;
     }
 
-    public async Task<(MedicalConsultationForUpdateDto MedicalConsultationToPatch, MedicalConsultation MedicalConsultation)> 
+    public async Task<(MedicalConsultationForUpdateDto MedicalConsultationToPatch, MedicalConsultation MedicalConsultation)>
         Handle(PatchMedicalConsultationCommand request, CancellationToken cancellationToken)
     {
         var medicalConsultationEntity = await _repository.MedicalConsultation.GetEntityAsync(request.Id, request.TrackChanges);

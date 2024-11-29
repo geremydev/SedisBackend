@@ -1,6 +1,4 @@
 ﻿using SedisBackend.Core.Domain.DTO.Entities.Health_Centers;
-using SedisBackend.Core.Domain.Entities.Models;
-using SedisBackend.Core.Domain.Entities.Users;
 
 namespace SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 

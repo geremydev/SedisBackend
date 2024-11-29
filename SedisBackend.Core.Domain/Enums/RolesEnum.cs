@@ -7,5 +7,6 @@ public enum RolesEnum
     Admin,
     SuperAdmin,
     Assistant,
-    Enroller
+    Registrator,
+    LabTech
 }

@@ -23,6 +23,27 @@ public class LabTestConfiguration : IEntityTypeConfiguration<LabTest>
                 TestName = "Perfil Lipídico",
                 TestCode = "P002",
                 Status = true
+            },
+            new LabTest
+            {
+                Id = Guid.Parse("ab3f3482-973d-4912-8848-f82bbb107792"), // Test de biopsia de piel
+                TestName = "Biopsia de piel",
+                TestCode = "B003",
+                Status = true
+            },
+            new LabTest
+            {
+                Id = Guid.Parse("3c5d6e7f-89ab-4cde-bdef-3456789abcd0"), // Examen microbiológico ocular
+                TestName = "Examen microbiológico ocular",
+                TestCode = "M004",
+                Status = true
+            },
+            new LabTest
+            {
+                Id = Guid.Parse("0c8b53f4-6962-4f89-807e-737900741e13"), // Radiografía de tórax
+                TestName = "Radiografía de tórax",
+                TestCode = "R005",
+                Status = true
             }
         );
     }

@@ -105,6 +105,101 @@ public class MedicationConfiguration : IEntityTypeConfiguration<Medication>
                 ImageUrl = "http://example.com/paracetamol.jpg",
                 NationalCode = "P120",
                 Status = true
+            },
+            new Medication
+            {
+                Id = Guid.Parse("c3a1a1e3-e2b5-42ac-8b34-358ea7745d6e"), // Relacionado con el tratamiento del dolor abdominal
+                Name = "Ibuprofeno",
+                DosageForm = DosageForm.Tablet.ToString(),
+                ActiveIngredient = "Ibuprofeno",
+                Concentration = 200,
+                UnitOfMeasurement = "mg",
+                RouteOfAdministration = "Oral",
+                Indications = "Alivio de dolor leve a moderado y fiebre.",
+                Contraindications = "Úlceras gástricas, insuficiencia renal.",
+                Precautions = "Administrar con alimentos para evitar malestar estomacal.",
+                SideEffects = "Malestar estomacal, dolor de cabeza, mareos.",
+                DrugInteractions = "Puede aumentar el riesgo de sangrado con anticoagulantes.",
+                Presentation = "Caja con 20 tabletas de 200 mg.",
+                ImageUrl = "http://example.com/ibuprofeno.jpg",
+                NationalCode = "I200",
+                Status = true
+            },
+            new Medication
+            {
+                Id = Guid.Parse("f1c839fa-d3f8-433d-b6e3-e8d5296d22d9"), // Relacionado con el tratamiento de dolor articular
+                Name = "Naproxeno",
+                DosageForm = DosageForm.Tablet.ToString(),
+                ActiveIngredient = "Naproxeno",
+                Concentration = 250,
+                UnitOfMeasurement = "mg",
+                RouteOfAdministration = "Oral",
+                Indications = "Alivio de dolor articular e inflamación.",
+                Contraindications = "Úlceras gástricas, insuficiencia renal.",
+                Precautions = "Tomar con alimentos para reducir riesgo de irritación estomacal.",
+                SideEffects = "Dolor estomacal, mareos, somnolencia.",
+                DrugInteractions = "Aumenta el riesgo de sangrado con anticoagulantes.",
+                Presentation = "Caja con 30 tabletas de 250 mg.",
+                ImageUrl = "http://example.com/naproxeno.jpg",
+                NationalCode = "N250",
+                Status = true
+            },
+            new Medication
+            {
+                Id = Guid.Parse("4b2c6894-cc7d-4565-bb18-aba013826de7"), // Relacionado con tratamiento para depresión
+                Name = "Sertralina",
+                DosageForm = DosageForm.Tablet.ToString(),
+                ActiveIngredient = "Sertralina",
+                Concentration = 50,
+                UnitOfMeasurement = "mg",
+                RouteOfAdministration = "Oral",
+                Indications = "Tratamiento de la depresión y trastornos de ansiedad.",
+                Contraindications = "Hipersensibilidad a la sertralina, embarazo.",
+                Precautions = "Uso con precaución en personas con antecedentes de trastornos convulsivos.",
+                SideEffects = "Náuseas, insomnio, mareos.",
+                DrugInteractions = "Puede interactuar con inhibidores de la monoaminooxidasa (IMAO).",
+                Presentation = "Caja con 30 tabletas de 50 mg.",
+                ImageUrl = "http://example.com/sertralina.jpg",
+                NationalCode = "S50",
+                Status = true
+            },
+            new Medication
+            {
+                Id = Guid.Parse("e4c9b8d4-9a5d-44d3-9be7-85e2e57b73c1"), // Relacionado con tratamiento para hipertensión
+                Name = "Losartán",
+                DosageForm = DosageForm.Tablet.ToString(),
+                ActiveIngredient = "Losartán",
+                Concentration = 50,
+                UnitOfMeasurement = "mg",
+                RouteOfAdministration = "Oral",
+                Indications = "Tratamiento para hipertensión y insuficiencia renal.",
+                Contraindications = "Embarazo, lactancia, hipersensibilidad al losartán.",
+                Precautions = "Controlar la función renal durante el tratamiento.",
+                SideEffects = "Mareo, dolor de cabeza, hiperkalemia.",
+                DrugInteractions = "Interacción con diuréticos y otros antihipertensivos.",
+                Presentation = "Caja con 30 tabletas de 50 mg.",
+                ImageUrl = "http://example.com/losartan.jpg",
+                NationalCode = "L50",
+                Status = true
+            },
+            new Medication
+            {
+                Id = Guid.Parse("3d69e605-c5e4-42f0-9f00-18f3a12f54ed"), // Relacionado con el tratamiento para glucosa
+                Name = "Glimepirida",
+                DosageForm = DosageForm.Tablet.ToString(),
+                ActiveIngredient = "Glimepirida",
+                Concentration = 2,
+                UnitOfMeasurement = "mg",
+                RouteOfAdministration = "Oral",
+                Indications = "Tratamiento de la diabetes tipo 2.",
+                Contraindications = "Insuficiencia renal severa, cetoacidosis diabética.",
+                Precautions = "Uso con precaución en personas con antecedentes de hipoglucemia.",
+                SideEffects = "Hipoglucemia, aumento de peso, mareos.",
+                DrugInteractions = "Interacción con otros medicamentos antidiabéticos.",
+                Presentation = "Caja con 30 tabletas de 2 mg.",
+                ImageUrl = "http://example.com/glimepirida.jpg",
+                NationalCode = "G2",
+                Status = true
             }
         );
     }

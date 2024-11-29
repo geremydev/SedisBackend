@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SedisBackend.Core.Domain.Entities.Relations;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
+using SedisBackend.Core.Domain.Medical_History.MedicalConsultation;
 
 namespace SedisBackend.Infrastructure.Persistence.Configurations.DomainConfigurations;
 
@@ -42,7 +41,7 @@ public class MedicalConsultationConfiguration : IEntityTypeConfiguration<Medical
             new MedicalConsultation
             {
                 Id = Guid.Parse("8f7319e7-89b4-4d5c-90cb-cf2e5a0c9fbd"),
-                PatientId = Guid.Parse("d9a832b8-123a-4c98-baba-6e2a32e94b9e"),
+                PatientId = Guid.Parse("9c87b12f-d892-4f2b-8e2c-5347c8c1b056"),
                 DoctorId = Guid.Parse("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
                 AppointmentId = Guid.Parse("d6c8a3b4-a72f-45df-9143-17c8b3d2fdf0"),
                 ReasonForVisit = "Hearing difficulties and speech development concerns.",
@@ -69,7 +68,7 @@ public class MedicalConsultationConfiguration : IEntityTypeConfiguration<Medical
             {
                 Id = Guid.Parse("7a8b5e23-3f6b-4315-bf4e-8b7e1a5b15bc"),
                 PatientId = Guid.Parse("ea48eb4c-01c4-44d2-a81f-fc9246d2ec20"),
-                DoctorId = Guid.Parse("f86a1609-cb84-4d6a-8d8a-8e49b6b9a5b9"),
+                DoctorId = Guid.Parse("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
                 AppointmentId = Guid.Parse("09876543-21dc-ba98-7654-3210fedcba98"),
                 ReasonForVisit = "Dolor ocular y disminución de visión.",
                 CurrentHistory = "Paciente refiere inicio agudo de dolor ocular intenso, acompañado de visión borrosa.",
@@ -77,19 +76,6 @@ public class MedicalConsultationConfiguration : IEntityTypeConfiguration<Medical
                 CreatedDate = DateTime.UtcNow,
                 LastModifiedDate = DateTime.UtcNow,
                 Status = "Completed",
-                Discapacities =  new List<PatientDiscapacity>
-                {
-                    new PatientDiscapacity
-                    {
-                        PatientId = Guid.Parse("c7f1d0d1-2b5f-4e77-a2a8-4b5d06d75950"),
-                        DiscapacityId = Guid.Parse("1b54e13f-7a32-4cc1-ad6d-35298426a2fb"),
-                        DiagnosisDate = DateTime.Parse("2018-05-15"),
-                        Severity = "Severa",
-                        Description = "El paciente presenta dificultades visuales complejas.",
-                        Status = true,
-                        MedicalConsultationId = Guid.Parse("84f2c6b1-3a45-4c12-b5af-81f8576bcd49")
-                    },
-                }
             }
         );
     }

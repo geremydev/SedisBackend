@@ -9,8 +9,8 @@ using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
-using SedisBackend.Core.Domain.Medical_History.Clinical_History;
 using SedisBackend.Core.Domain.Medical_History.Family_History;
+using SedisBackend.Core.Domain.Medical_History.MedicalConsultation;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.UserHandlers.PatientHandlers;
 
