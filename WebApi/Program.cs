@@ -35,7 +35,7 @@ NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
     new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
     .Services.BuildServiceProvider()
     .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
-    .OfType<NewtonsoftJsonPatchInputFormatter>().First(); //
+    .OfType<NewtonsoftJsonPatchInputFormatter>().First();
 
 builder.Services.AddHttpClient();
 builder.Services.ConfigureRepositoryManager();
