@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Products.Medication;
 
-public record MedicationForCreationDto
+public class MedicationForCreationDto
 {
     public string Name { get; set; }
     public string DosageForm { get; set; }

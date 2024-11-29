@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History.Family_History;
 
-public record FamilyHistoryDto
+public class FamilyHistoryDto
 {
     public Guid Id { get; set; }
     public Guid PatientId { get; set; }

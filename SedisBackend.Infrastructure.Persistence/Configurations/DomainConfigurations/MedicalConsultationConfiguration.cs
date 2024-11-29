@@ -8,8 +8,6 @@ public class MedicalConsultationConfiguration : IEntityTypeConfiguration<Medical
 {
     public void Configure(EntityTypeBuilder<MedicalConsultation> builder)
     {
-        builder.ToTable("ClinicalHistories");
-
         builder.HasData
         (
             new MedicalConsultation

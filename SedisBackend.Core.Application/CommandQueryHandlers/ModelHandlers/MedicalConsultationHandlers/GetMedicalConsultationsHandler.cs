@@ -21,8 +21,13 @@ public sealed class GetMedicalConsultationsHandler : IRequestHandler<GetMedicalC
 
     public async Task<IEnumerable<MedicalConsultationDto>> Handle(GetMedicalConsultationsQuery request, CancellationToken cancellationToken)
     {
+        var consultations = await _repository.MedicalConsultation.GetAllEntitiesAsync(request.TrackChanges);
 
+        if (consultations is null || !consultations.Any())
             throw new EntitiesNotFoundException();
+
+        var consultationsDto = _mapper.Map<IEnumerable<MedicalConsultationDto>>(consultations);
+        return consultationsDto;
 
     }
 }

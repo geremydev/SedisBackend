@@ -1,6 +1,4 @@
-﻿using SedisBackend.Core.Domain.Entities.Models;
-
-namespace SedisBackend.Core.Domain.DTO.Entities.HealthCenterService;
+﻿namespace SedisBackend.Core.Domain.DTO.Entities.HealthCenterService;
 public class HealthCenterServiceDto
 {
     public Guid Id { get; set; }

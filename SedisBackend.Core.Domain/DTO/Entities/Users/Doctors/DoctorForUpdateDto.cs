@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 
-public record DoctorForUpdateDto
+public class DoctorForUpdateDto
 {
     public bool Status { get; set; }
     public string LicenseNumber { get; set; }

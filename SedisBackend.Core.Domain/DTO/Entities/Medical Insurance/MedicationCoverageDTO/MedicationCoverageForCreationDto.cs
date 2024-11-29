@@ -1,9 +1,6 @@
-﻿using SedisBackend.Core.Domain.Entities.Models.Products;
-using SedisBackend.Core.Domain.Medical_Insurance;
+﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.MedicationCoverageDTO;
 
-namespace SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.MedicationCoverageDTO;
-
-public record MedicationCoverageForCreationDto
+public class MedicationCoverageForCreationDto
 {
     public Guid HealthInsuranceId { get; set; } // FK
     public Guid MedicationId { get; set; } // FK

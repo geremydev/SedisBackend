@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History.Medical_Condition.Illness_Condition;
 
-public record IllnessForUpdateDto
+public class IllnessForUpdateDto
 {
     public string IcdCode { get; set; }
     public string Title { get; set; }

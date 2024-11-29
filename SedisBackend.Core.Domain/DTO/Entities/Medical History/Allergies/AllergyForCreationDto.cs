@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History.Allergies;
 
-public record AllergyForCreationDto
+public class AllergyForCreationDto
 {
     public string IcdCode { get; set; }
     public string Title { get; set; }

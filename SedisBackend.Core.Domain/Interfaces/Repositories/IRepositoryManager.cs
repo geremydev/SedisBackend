@@ -6,16 +6,12 @@ using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medi
 using SedisBackend.Core.Application.Interfaces.Repositories.Medical_History.Medical_Condition.Risk_Factor_Condition;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Models;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Relations;
-using SedisBackend.Core.Domain.Interfaces.Repositories.Shared;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Users;
 
 namespace SedisBackend.Core.Domain.Interfaces.Repositories;
 
 public interface IRepositoryManager
 {
-    // ICD11 Repository
-    IICD11Repository ICD11 { get; }
-
     IHealthCenterRepository HealthCenter { get; }
     IHealthCenterServicesRepository HealthCenterServices { get; }
     ILocationRepository Location { get; }

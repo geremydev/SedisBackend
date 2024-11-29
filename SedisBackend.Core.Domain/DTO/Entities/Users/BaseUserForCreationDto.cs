@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Users;
 
-public record BaseUserForCreationDto
+public class BaseUserForCreationDto
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

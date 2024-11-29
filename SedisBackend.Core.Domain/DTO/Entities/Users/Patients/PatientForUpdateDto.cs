@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Users.Patients;
 
-public record PatientForUpdateDto
+public class PatientForUpdateDto
 {
     public string BloodType { get; set; }
     public string? BloodTypeLabResultURl { get; set; }

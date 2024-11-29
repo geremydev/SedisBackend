@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_History.Vaccines;
 
-public record VaccineForCreationDto
+public class VaccineForCreationDto
 {
     public string Name { get; set; }
     public string Disease { get; set; }

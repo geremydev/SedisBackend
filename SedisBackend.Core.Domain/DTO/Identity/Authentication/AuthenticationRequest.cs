@@ -2,7 +2,7 @@
 
 namespace SedisBackend.Core.Domain.DTO.Identity.Authentication;
 
-public record AuthenticationRequest
+public class AuthenticationRequest
 {
     [Required(ErrorMessage = "Identification is required")]
     public string? CardId { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Locations;
 
-public record LocationForUpdateDto
+public class LocationForUpdateDto
 {
     public Guid RegionId { get; set; }
     public Guid MunicipalityId { get; set; }

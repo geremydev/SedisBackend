@@ -21,6 +21,16 @@ internal sealed class MedicalConsultationRepository : RepositoryBase<MedicalCons
         await FindByCondition(c => c.Id.Equals(clinicalHistoryId), trackChanges)
                             .SingleOrDefaultAsync();
 
+    public async Task<IEnumerable<MedicalConsultation>> GetByDoctor(Guid doctorId, bool trackChanges) =>
+        await FindByCondition(c => c.DoctorId.Equals(doctorId), trackChanges)
+                            .Include(m => m.Doctor)
+                            .ToListAsync();
+
+    public async Task<IEnumerable<MedicalConsultation>> GetByPatient(Guid patientId, bool trackChanges) =>
+        await FindByCondition(c => c.PatientId.Equals(patientId), trackChanges)
+                            .Include(m => m.Patient)
+                            .ToListAsync();
+
     public void CreateEntity(MedicalConsultation clinicalHistory) => Create(clinicalHistory);
 
     public void DeleteEntity(MedicalConsultation clinicalHistory) => Delete(clinicalHistory);

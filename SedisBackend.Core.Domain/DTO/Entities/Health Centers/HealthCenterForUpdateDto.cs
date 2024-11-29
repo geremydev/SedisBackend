@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Health_Centers;
 
-public record HealthCenterForUpdateDto
+public class HealthCenterForUpdateDto
 {
     public string Name { get; set; }
     public Guid? LocationId { get; set; }

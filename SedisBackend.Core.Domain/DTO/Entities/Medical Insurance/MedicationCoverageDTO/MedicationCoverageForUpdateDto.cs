@@ -1,6 +1,6 @@
 ﻿namespace SedisBackend.Core.Domain.DTO.Entities.Medical_Insurance.MedicationCoverageDTO;
 
-public record MedicationCoverageForUpdateDto
+public class MedicationCoverageForUpdateDto
 {
     public Guid HealthInsuranceId { get; set; } // FK
     public Guid MedicationId { get; set; } // FK

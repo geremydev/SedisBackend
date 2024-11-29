@@ -39,6 +39,24 @@ public class MedicalConsultationController : BaseApiController
         return Ok(await _sender.Send(new GetMedicalConsultationQuery(id, false)));
     }
 
+    [HttpGet("doctor/{doctorId:guid}", Name = "GetMedicalConsultationByDoctorId")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<MedicalConsultationDto>))]
+    public async Task<IActionResult> GetByDoctorId(Guid doctorId)
+    {
+        return Ok(await _sender.Send(new GetMedicalConsultationByDoctorQuery(doctorId, false)));
+    }
+
+    [HttpGet("patient/{patientId:guid}", Name = "GetMedicalConsultationByPatientId")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<MedicalConsultationDto>))]
+    public async Task<IActionResult> GetByPatientId(Guid patientId)
+    {
+        return Ok(await _sender.Send(new GetMedicalConsultationByPatientQuery(patientId, false)));
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
