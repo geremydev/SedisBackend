@@ -17,6 +17,7 @@ using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Fu
 LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 builder.Services.ConfigureCors();

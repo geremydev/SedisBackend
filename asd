@@ -7,7 +7,6 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -22,6 +21,10 @@ COPY . .
 WORKDIR "/src/WebApi"
 RUN dotnet build "./WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
+# Instalar dependencias necesarias (OpenSSL y krb5)
+RUN apt-get update && apt-get install -y libkrb5-dev openssl ca-certificates && \
+    apt-get clean
+
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
@@ -31,4 +34,4 @@ RUN dotnet publish "./WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WebApi.dll"]
+ENTRYPOINT ["dotnet", "WebApi.dll", "ef", "database", "update"]
