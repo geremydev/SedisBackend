@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using SedisBackend.Core.Domain.DTO.Entities.Medical_History.PatientDiscapacity;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -19,7 +18,7 @@ public class DeletePatientDiscapacityHandler
         _mapper = mapper;
     }
 
-        public async Task Handle(DeletePatientDiscapacityCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeletePatientDiscapacityCommand request, CancellationToken cancellationToken)
     {
         var patientDiscapacity = await _repository.PatientDiscapacity.GetEntityAsync(request.patientId, request.DiscapacityId, request.TrackChanges);
         if (patientDiscapacity is null)

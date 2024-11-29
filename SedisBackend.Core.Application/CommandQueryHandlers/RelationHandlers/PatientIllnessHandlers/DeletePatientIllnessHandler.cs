@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.MedicationCoverageHandlers;
-using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Allergies;
-using SedisBackend.Core.Domain.DTO.Entities.Medical_History.PatientIllness;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
-using System.Threading;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientIllnessHandlers;
 
@@ -22,7 +18,7 @@ public class DeletePatientIllnessPrescriptionHandler
         _mapper = mapper;
     }
 
-        public async Task Handle(DeletePatientIllnessCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeletePatientIllnessCommand request, CancellationToken cancellationToken)
     {
         var patientIllness = await _repository.PatientIllness.GetEntityAsync(request.patientId, request.IllnessId, request.TrackChanges);
         if (patientIllness is null)

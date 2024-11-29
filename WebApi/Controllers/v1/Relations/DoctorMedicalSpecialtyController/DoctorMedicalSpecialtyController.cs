@@ -24,13 +24,13 @@ public class DoctorMedicalSpecialtyController : BaseApiController
         _loggerManager = loggerManager;
     }
 
-    [HttpGet(Name = "GetDoctorsMedicalSpecialties")]
+    [HttpGet(Name = "GetAllDoctorMedicalSpecialties")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DoctorMedicalSpecialtyDto>))]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<IActionResult> GetByDoctorId(Guid doctorId)
     {
-        return Ok(await _sender.Send(new GetAllDoctorsMedicalSpecialtyQuery(id, false)));
+        return Ok(await _sender.Send(new GetAllDoctorsMedicalSpecialtiesQuery(doctorId, false)));
     }
 
     [HttpGet("{id:guid}", Name = "GetDoctorMedicalSpecialtyById")]
@@ -92,7 +92,7 @@ public class DoctorMedicalSpecialtyController : BaseApiController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid DoctorId, Guid MedicalSpecialtyId)
     {
-        var notification = new DeleteMedicalSpecialtyCommand(DoctorId, MedicalSpecialtyId, true);
+        var notification = new DeleteDoctorMedicalSpecialtyCommand(DoctorId, MedicalSpecialtyId, true);
         await _sender.Send(notification);
         return NoContent();
     }

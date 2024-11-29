@@ -1,6 +1,5 @@
 using AutoMapper;
 using MediatR;
-using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Allergies;
 using SedisBackend.Core.Domain.DTO.Entities.PatientLabTestPrescription;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;

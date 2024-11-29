@@ -15,6 +15,10 @@ using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Discapacity_Co
 using SedisBackend.Core.Domain.Medical_History.Medical_Conditions.Risk_Factor;
 using SedisBackend.Core.Domain.Medical_History.Vaccines;
 using SedisBackend.Core.Domain.Medical_Insurance;
+using SedisBackend.Infrastructure.Persistence.Configuration.UsersConfiguration;
+using SedisBackend.Infrastructure.Persistence.Configurations.DomainConfigurations;
+using SedisBackend.Infrastructure.Persistence.Configurations.RelationsConfigurations;
+using SedisBackend.Infrastructure.Persistence.Configurations.UsersConfiguration;
 
 namespace SedisBackend.Infrastructure.Persistence.Contexts;
 
@@ -514,7 +518,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.Entity<PatientMedicationPrescription>(entity =>
         {
             entity.ToTable("PatientMedicationPrescriptions");
-            entity.HasKey(pa => pa.Id );
+            entity.HasKey(pa => pa.Id);
 
             entity.HasOne(m => m.Patient)
             .WithMany(p => p.Medications)
@@ -530,25 +534,25 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
         });
 
-            modelBuilder.Entity<PatientDiscapacity>(entity =>
-        {
-            entity.ToTable("PatientDiscapacities");
-            entity.HasKey(pa => new { pa.PatientId, pa.DiscapacityId });
+        modelBuilder.Entity<PatientDiscapacity>(entity =>
+    {
+        entity.ToTable("PatientDiscapacities");
+        entity.HasKey(pa => new { pa.PatientId, pa.DiscapacityId });
 
-            entity.HasOne(pa => pa.Patient)
-                .WithMany(p => p.Discapacities)
-                .HasForeignKey(pa => pa.PatientId)
-                .IsRequired(false);
-            entity.HasOne(pa => pa.Discapacity)
-                .WithMany(a => a.PatientDiscapacities)
-                .HasForeignKey(pa => pa.DiscapacityId);
-            entity.Property(pa => pa.DiagnosisDate)
-                .IsRequired()
-                .HasDefaultValueSql("GETDATE()");
-            entity.HasOne(pa => pa.MedicalConsultation)
-                .WithMany(a => a.Discapacities)
-                .HasForeignKey(pa => pa.DiscapacityId);
-        });
+        entity.HasOne(pa => pa.Patient)
+            .WithMany(p => p.Discapacities)
+            .HasForeignKey(pa => pa.PatientId)
+            .IsRequired(false);
+        entity.HasOne(pa => pa.Discapacity)
+            .WithMany(a => a.PatientDiscapacities)
+            .HasForeignKey(pa => pa.DiscapacityId);
+        entity.Property(pa => pa.DiagnosisDate)
+            .IsRequired()
+            .HasDefaultValueSql("GETDATE()");
+        entity.HasOne(pa => pa.MedicalConsultation)
+            .WithMany(a => a.Discapacities)
+            .HasForeignKey(pa => pa.DiscapacityId);
+    });
 
         modelBuilder.Entity<Illness>(entity =>
         {
@@ -894,8 +898,8 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             entity.HasKey(ph => ph.Id);
 
-            entity.HasOne(e=>e.MedicalConsultation)
-                .WithMany(c=>c.PatientLabTests)
+            entity.HasOne(e => e.MedicalConsultation)
+                .WithMany(c => c.PatientLabTests)
                 .HasForeignKey(ph => ph.MedicalConsultationId);
 
 
@@ -941,62 +945,43 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.Property(ph => ph.Status)
                 .IsRequired();
         });
-
-
         /*modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new DiscapacityConfiguration());
+        modelBuilder.ApplyConfiguration(new IllnessConfiguration());
+        modelBuilder.ApplyConfiguration(new AllergyConfiguration());
+        modelBuilder.ApplyConfiguration(new LabTestConfiguration());
+        modelBuilder.ApplyConfiguration(new MedicationConfiguration());
+        modelBuilder.ApplyConfiguration(new RiskFactorConfiguration());
+        modelBuilder.ApplyConfiguration(new FamilyHistoryConfiguration());
+        //modelBuilder.ApplyConfiguration(new MedicalConsultationConfiguration());
+        modelBuilder.ApplyConfiguration(new VaccineConfiguration());
+        modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
+        modelBuilder.ApplyConfiguration(new LocationConfiguration());
+        modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
+        //modelBuilder.ApplyConfiguration(new ServicesConfiguration());
+        
+
         modelBuilder.ApplyConfiguration(new PatientConfiguration());
         modelBuilder.ApplyConfiguration(new AdminConfiguration());
-        modelBuilder.ApplyConfiguration(new DoctorConfiguration());
         modelBuilder.ApplyConfiguration(new AssistantConfiguration());
+        modelBuilder.ApplyConfiguration(new DoctorConfiguration());
+        modelBuilder.ApplyConfiguration(new LabTechConfiguration());
+        modelBuilder.ApplyConfiguration(new RegistratorConfiguration());
+        modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
+        modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());*/
 
-        // Configuraciones relacionadas con el paciente y sus atributos
+        //Relations
+       /* modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
+        modelBuilder.ApplyConfiguration(new MedicationCoverageConfiguration());
         modelBuilder.ApplyConfiguration(new PatientAllergyConfiguration());
         modelBuilder.ApplyConfiguration(new PatientDiscapacityConfiguration());
         modelBuilder.ApplyConfiguration(new PatientHealthInsuranceConfiguration());
         modelBuilder.ApplyConfiguration(new PatientIllnessConfiguration());
+        modelBuilder.ApplyConfiguration(new PatientLabTestPrescriptionConfiguration());
         modelBuilder.ApplyConfiguration(new PatientRiskFactorConfiguration());
         modelBuilder.ApplyConfiguration(new PatientVaccineConfiguration());
-
-        // Configuraciones relacionadas con el historial clínico y prescripciones
-        modelBuilder.ApplyConfiguration(new MedicalConsultationConfiguration());
-        *//*modelBuilder.ApplyConfiguration(new PrescriptionConfiguration());
-        modelBuilder.ApplyConfiguration(new MedicationPrescriptionConfiguration());*//*
-
-        // Configuraciones relacionadas con citas y servicios médicos
-        modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
-        modelBuilder.ApplyConfiguration(new HealthCenterConfiguration());
-        modelBuilder.ApplyConfiguration(new MedicalSpecialtyConfiguration());
-
-        //modelBuilder.ApplyConfiguration(new DoctorHealthCenterConfiguration());
-        modelBuilder.ApplyConfiguration(new DoctorMedicalSpecialtyConfiguration());
-        //modelBuilder.ApplyConfiguration(new PatientLabTestPrescriptionConfiguration());
-
-        // Configuraciones de entidades secundarias y auxiliares
-        modelBuilder.ApplyConfiguration(new HealthInsuranceConfiguration());
-        modelBuilder.ApplyConfiguration(new LocationConfiguration());
-        modelBuilder.ApplyConfiguration(new AllergyConfiguration());
-        modelBuilder.ApplyConfiguration(new IllnessConfiguration());
-        modelBuilder.ApplyConfiguration(new DiscapacityConfiguration());
-        modelBuilder.ApplyConfiguration(new RiskFactorConfiguration());
-        modelBuilder.ApplyConfiguration(new VaccineConfiguration());
-
-        // Configuraciones de laboratorios y medicamentos
-        modelBuilder.ApplyConfiguration(new MedicationConfiguration());
-        modelBuilder.ApplyConfiguration(new MedicationCoverageConfiguration());*/
-    }
-
-    private static string TimeSpanToString(TimeSpan timeSpan)
-    {
-        return timeSpan.ToString(@"hh\:mm\:ss");
-    }
-
-    private static TimeSpan StringToTimeSpan(string timeString)
-    {
-        if (TimeSpan.TryParse(timeString, out var timeSpan))
-        {
-            return timeSpan;
-        }
-
-        return TimeSpan.Zero;
+        modelBuilder.ApplyConfiguration(new PatientMedicationPrescriptionConfiguration());*/
     }
 }
+
+        

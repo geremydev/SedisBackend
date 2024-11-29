@@ -1,5 +1,7 @@
 using AutoMapper;
+using MassTransit;
 using MediatR;
+using SedisBackend.Core.Application.Events;
 using SedisBackend.Core.Domain.DTO.Entities.Appointments;
 using SedisBackend.Core.Domain.Entities.Models;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
@@ -11,19 +13,28 @@ public sealed record CreateAppointmentCommand(AppointmentForCreationDto Appointm
 internal sealed class CreateAppointmentHandler : IRequestHandler<CreateAppointmentCommand, AppointmentDto>
 {
     private readonly IRepositoryManager _repository;
+    private readonly IPublishEndpoint _publishEndpoint;
     private readonly IMapper _mapper;
 
-    public CreateAppointmentHandler(IRepositoryManager repository, IMapper mapper)
+    public CreateAppointmentHandler(IRepositoryManager repository, IMapper mapper, IPublishEndpoint publishEndpoint)
     {
         _repository = repository;
         _mapper = mapper;
+        _publishEndpoint = publishEndpoint;
     }
 
     public async Task<AppointmentDto> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
     {
         var clinicalHistoryEntity = _mapper.Map<Appointment>(request.Appointment);
+        clinicalHistoryEntity.Status = "Solicitada"; // La cita está solicitada, si se aprueba está pendiente hasta que se de con el doctor.
         _repository.Appointment.CreateEntity(clinicalHistoryEntity);
         await _repository.SaveAsync(cancellationToken);
+
+        // El usuario va a crear la solicitud de cita, solo que la guardaremos como Solicitada de aprobacion hasta que el asistente apruebe.
+        // No es ideal pero no hay tiempo.
+        var createdAppointment = _mapper.Map<AppointmentCreatedEvent>(clinicalHistoryEntity);
+        await _publishEndpoint.Publish(createdAppointment);
+
         return _mapper.Map<AppointmentDto>(clinicalHistoryEntity);
     }
 }

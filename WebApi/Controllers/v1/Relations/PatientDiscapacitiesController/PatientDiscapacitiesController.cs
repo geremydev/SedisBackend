@@ -1,6 +1,5 @@
 ﻿using Asp.Versioning;
 using MediatR;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientDiscapacityHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.PatientDiscapacity;
@@ -74,7 +73,7 @@ public class PatientDiscapacitiesController : BaseApiController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete(Guid PatientId, Guid DiscapacityId)
     {
-        var notification = new DeletePatientDiscapacityCommand(PatientId, DiscapacityId,true);
+        var notification = new DeletePatientDiscapacityCommand(PatientId, DiscapacityId, true);
         await _sender.Send(notification);
         return NoContent();
     }

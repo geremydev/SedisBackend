@@ -23,13 +23,23 @@ public class HealthCenterServicesController : BaseApiController
         _loggerManager = loggerManager;
     }
 
+    // De momento no hay command para traer todas las entidades, tampoco es necesario
+    //[HttpGet(Name = "GetAllHealthCenterServices")]
+    //[ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<HealthCenterServiceDto>))]
+    //public async Task<IActionResult> Get()
+    //{
+    //    return Ok(await _sender.Send(new GetAllHealthCentersServicesQuery(false)));
+    //}
+
     [HttpGet("{id:guid}", Name = "GetHealthCenterServiceById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HealthCenterServiceDto))]
     public async Task<IActionResult> Get(Guid HealthCenterId)
     {
-        return Ok(await _sender.Send(new GetAllHealthCentersMedicalSpecialtyQuery(HealthCenterId, false)));
+        return Ok(await _sender.Send(new GetAllHealthCentersServicesQuery(HealthCenterId, false)));
     }
 
     [HttpPost]

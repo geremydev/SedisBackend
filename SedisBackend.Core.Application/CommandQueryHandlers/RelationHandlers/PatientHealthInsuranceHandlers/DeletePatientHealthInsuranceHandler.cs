@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using SedisBackend.Core.Domain.DTO.Entities.PatientHealthInsurance;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -24,7 +23,7 @@ public class DeletePatientHealthInsuranceHandler
         var patientHealthInsurance = await _repository.PatientHealthInsurance.GetEntityAsync(request.patientId, request.HealthInsuranceId, request.TrackChanges);
         if (patientHealthInsurance is null)
             throw new EntityNotFoundException(request.HealthInsuranceId);
-        patientHealthInsurance.Status =false;
+        patientHealthInsurance.Status = false;
         _repository.PatientHealthInsurance.UpdateEntity(patientHealthInsurance);
         await _repository.SaveAsync(cancellationToken);
     }

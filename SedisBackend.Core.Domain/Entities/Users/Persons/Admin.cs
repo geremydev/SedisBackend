@@ -11,6 +11,6 @@ public class Admin
     public Guid Id { get; set; }
     public Guid HealthCenterId { get; set; }
     public HealthCenter HealthCenter { get; set; }
-    public bool Status{ get; set; }
+    public bool Status { get; set; }
     public User ApplicationUser { get; set; }
 }

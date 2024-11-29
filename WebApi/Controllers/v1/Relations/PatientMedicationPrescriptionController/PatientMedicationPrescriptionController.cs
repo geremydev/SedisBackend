@@ -1,6 +1,5 @@
 ﻿using Asp.Versioning;
 using MediatR;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientIllnessHandlers;
 using SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientMedicationPrescriptionHandlers;
@@ -61,9 +60,9 @@ public class PatientMedicationPrescriptionController : BaseApiController
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientMedicationPrescriptionForUpdateDto))]
     ////[Authorize(Roles = "Admin")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] PatientMedicationPrescriptionForUpdateDto PatientMedicationPrescriptions)
+    public async Task<IActionResult> Put(Guid MedicationPrescriptionId, [FromBody] PatientMedicationPrescriptionForUpdateDto PatientMedicationPrescriptions)
     {
-        var command = new UpdatePatientMedicationPrescriptionCommand(id, PatientMedicationPrescriptions, true);
+        var command = new UpdatePatientMedicationPrescriptionCommand(MedicationPrescriptionId, PatientMedicationPrescriptions, true);
 
         await _sender.Send(command);
         return Ok();
