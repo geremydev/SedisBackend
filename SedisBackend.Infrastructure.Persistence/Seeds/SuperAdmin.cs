@@ -12,7 +12,7 @@ public class SuperAdmin
         adminuser.UserName = "superadminuser";
         adminuser.Email = "superadminuser@email.com";
         adminuser.PhoneNumber = "";
-        adminuser.IsActive = true;
+        adminuser.Status = true;
         adminuser.EmailConfirmed = true;
         adminuser.PhoneNumberConfirmed = true;
         adminuser.ImageUrl = ".";
