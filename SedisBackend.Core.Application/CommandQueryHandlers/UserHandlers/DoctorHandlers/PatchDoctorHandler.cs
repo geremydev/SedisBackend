@@ -46,11 +46,11 @@ internal sealed class PatchDoctorHandler
         doctorEntity.Status = originalIsActive;
         if (doctorEntity.ApplicationUser != null)
         {
-            if (doctorToPatch.IsActive != null)
+            if (doctorToPatch.Status != null)
             {
-                if (doctorEntity.Status != doctorToPatch.IsActive)
+                if (doctorEntity.Status != doctorToPatch.Status)
                 {
-                    doctorEntity.Status = doctorToPatch.IsActive;
+                    doctorEntity.Status = doctorToPatch.Status;
 
                     var currentUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == doctorEntity.Id, cancellationToken);
                     if (doctorEntity.Status)

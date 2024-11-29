@@ -41,7 +41,7 @@ internal sealed class CreateAssistantHandler : IRequestHandler<CreateAssistantCo
         {
             Id = request.assistant.UserId,
             HealthCenterId = request.assistant.HealthCenterId,
-            IsActive = true
+            Status = true
         };
 
         _repository.Assistant.CreateEntity(assistantEntity);

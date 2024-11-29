@@ -34,9 +34,9 @@ internal sealed class UpdateDoctorHandler : IRequestHandler<UpdateDoctorCommand,
 
         var doctorEntity = await _repository.Doctor.GetEntityAsync(request.Id, true);
 
-        if (doctorEntity.Status != request.Doctor.IsActive)
+        if (doctorEntity.Status != request.Doctor.Status)
         {
-            doctorEntity.Status = request.Doctor.IsActive;
+            doctorEntity.Status = request.Doctor.Status;
             if (doctorEntity.Status)
                 await _userManager.AddToRoleAsync(existingUser, "Doctor");
             else

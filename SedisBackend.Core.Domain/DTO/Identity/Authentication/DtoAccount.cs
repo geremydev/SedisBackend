@@ -10,7 +10,7 @@ public class DtoAccount
     public string Password { get; set; }
     public List<string> Roles { get; set; }
     public bool IsVerified { get; set; }
-    public bool IsActive { get; set; }
+    public bool Status { get; set; }
     public bool Succeeded { get; set; }
     public string? Error { get; set; }
 }

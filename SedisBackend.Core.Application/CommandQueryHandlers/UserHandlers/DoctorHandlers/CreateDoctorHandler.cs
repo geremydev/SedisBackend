@@ -44,7 +44,8 @@ internal sealed class CreateDoctorHandler : IRequestHandler<CreateDoctorCommand,
             Id = request.doctor.UserId,
             LicenseNumber = request.doctor.LicenseNumber,
             Specialties = new List<DoctorMedicalSpecialty>(),
-            Status = true
+            Status = true,
+            CurrentlyWorkingHealthCenterId = request.doctor.HealthCenterId
         };
 
 

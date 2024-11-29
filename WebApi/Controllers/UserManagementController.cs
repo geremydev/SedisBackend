@@ -28,7 +28,7 @@ public class UserManagementController : ControllerBase
         [FromRoute] RolesEnum role,
         [FromBody] ChangeRoleStatusRequest request)
     {
-        var result = await _authService.ChangeRoleStatus(request.CardId, role, request.IsActive);
+        var result = await _authService.ChangeRoleStatus(request.CardId, role, request.Status);
         return result.Succeeded ? NoContent() : BadRequest(result.Errors);
     }
 

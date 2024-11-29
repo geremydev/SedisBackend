@@ -2,6 +2,6 @@
 
 public record AssistantForUpdateDto
 {
-    public bool IsActive { get; set; }
+    public bool Status { get; set; }
     public Guid HealthCenterId { get; set; }
 }

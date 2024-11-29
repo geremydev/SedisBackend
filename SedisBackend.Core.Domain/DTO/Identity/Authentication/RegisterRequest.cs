@@ -31,7 +31,7 @@ public class RegisterRequest
     [JsonIgnore]
     public IFormFile? FormFile { get; set; }
     public string? ImageUrl { get; set; }
-    public bool IsActive { get; set; }
+    public bool Status { get; set; }
     public string? PhoneNumber { get; set; }
     public DateTime Birthdate { get; set; }
     public SexEnum Sex { get; set; }

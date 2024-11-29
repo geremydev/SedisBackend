@@ -11,7 +11,7 @@ public class User : IdentityUser<Guid>
 
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public bool IsActive { get; set; }
+    public bool Status { get; set; }
     public DateTime Birthdate { get; set; }
     public SexEnum Sex { get; set; }
     public string? ImageUrl { get; set; }

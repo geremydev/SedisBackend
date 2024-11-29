@@ -2,7 +2,7 @@
 
 namespace SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 
-public record AdminDto : BaseUserDto
+public class AdminDto : BaseUserDto
 {
     //public Guid HealthCenterId { get; set; }
     public HealthCenterDto HealthCenter { get; set; }

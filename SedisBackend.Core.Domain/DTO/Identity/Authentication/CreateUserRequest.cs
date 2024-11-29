@@ -14,7 +14,7 @@ public class CreateUserRequest
     [Required(ErrorMessage = "Card Id is required")]
 
     public string CardId { get; set; }
-    public bool IsActive { get; set; } = true;
+    public bool Status { get; set; } = true;
     [Required(ErrorMessage = "Birthdate is required")]
 
     public DateTime Birthdate { get; set; }

@@ -35,10 +35,10 @@ internal sealed class UpdateAssistantHandler : IRequestHandler<UpdateAssistantCo
 
         var asisstantEntity = await _repository.Assistant.GetEntityAsync(request.Id, true);
         asisstantEntity.HealthCenterId = request.Assistant.HealthCenterId;
-        if (asisstantEntity.IsActive != request.Assistant.IsActive)
+        if (asisstantEntity.Status != request.Assistant.Status)
         {
-            asisstantEntity.IsActive = request.Assistant.IsActive;
-            if (asisstantEntity.IsActive)
+            asisstantEntity.Status = request.Assistant.Status;
+            if (asisstantEntity.Status)
                 await _userManager.AddToRoleAsync(existingUser, "Assistant");
             else
                 await _userManager.RemoveFromRoleAsync(existingUser, "Assistant");

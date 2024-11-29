@@ -58,7 +58,7 @@ public class AuthenticationService : IAuthService
                 Error = "Invalid identification number or password."
             };
         }
-        if (user != null && user.IsActive == false)
+        if (user != null && user.Status == false)
         {
             return new AuthenticationResponse
             {
@@ -134,7 +134,7 @@ public class AuthenticationService : IAuthService
             LockoutEnabled = false,
             SecurityStamp = Guid.NewGuid().ToString(),
             Email = request.Email,
-            IsActive = request.IsActive,
+            Status = request.Status,
             PhoneNumber = request.PhoneNumber,
         };
 
@@ -267,7 +267,7 @@ public class AuthenticationService : IAuthService
             Id = user.Id,
             UserName = user.UserName,
             ImageUrl = user.ImageUrl,
-            IsActive = user.IsActive,
+            Status = user.Status,
             PhoneNumber = user.PhoneNumber,
             Password = user.PasswordHash
         };
@@ -283,7 +283,7 @@ public class AuthenticationService : IAuthService
             Id = user.Id,
             UserName = user.UserName,
             ImageUrl = user.ImageUrl,
-            IsActive = user.IsActive,
+            Status = user.Status,
             PhoneNumber = user.PhoneNumber,
             Password = user.PasswordHash
         };
@@ -300,7 +300,7 @@ public class AuthenticationService : IAuthService
             Id = user.Id,
             UserName = user.UserName,
             ImageUrl = user.ImageUrl,
-            IsActive = user.IsActive,
+            Status = user.Status,
             PhoneNumber = user.PhoneNumber,
         };
         return dtoaccount;
@@ -332,7 +332,7 @@ public class AuthenticationService : IAuthService
             var userDto = new DtoAccount();
 
             userDto.ImageUrl = user.ImageUrl;
-            userDto.IsActive = user.IsActive;
+            userDto.Status = user.Status;
             userDto.Email = user.Email;
             userDto.Id = user.Id;
             userDto.Roles = _userManager.GetRolesAsync(user).Result.ToList();
@@ -344,7 +344,7 @@ public class AuthenticationService : IAuthService
     //USER AUTHENTICATION
 
     //CHANGE USER STATUS
-    public async Task<ServiceResult> ChangeUserStatus(Guid Id, bool isActive)
+    public async Task<ServiceResult> ChangeUserStatus(Guid Id, bool Status)
     {
         ServiceResult response = new();
 
@@ -355,9 +355,9 @@ public class AuthenticationService : IAuthService
             return response;
         }
 
-        user.IsActive = isActive;
+        user.Status = Status;
 
-        if (user.IsActive == false) //Si se inactiva el user entonces inactiva todos los roles que tiene asignado
+        if (user.Status == false) //Si se inactiva el user entonces inactiva todos los roles que tiene asignado
         {
             var userRoles = (await _userManager.GetRolesAsync(user)).ToList();
             foreach (var role in userRoles)
@@ -370,7 +370,7 @@ public class AuthenticationService : IAuthService
                         break;
                     case "Assistant":
                         var assistant = await _repository.Assistant.GetEntityAsync(user.Id, true);
-                        assistant.IsActive = false;
+                        assistant.Status = false;
                         break;
                     case "Patient":
                         var patient = await _repository.Patient.GetEntityAsync(user.Id, true);
@@ -450,7 +450,7 @@ public class AuthenticationService : IAuthService
             LockoutEnabled = false,
             SecurityStamp = Guid.NewGuid().ToString(),
             Email = request.Email,
-            IsActive = request.IsActive,
+            Status = request.Status,
             PhoneNumber = request.PhoneNumber,
         };
 
@@ -608,7 +608,7 @@ public class AuthenticationService : IAuthService
         }
     }
 
-    public async Task<ServiceResult> ChangeRoleStatus(string cardId, RolesEnum role, bool isActive)
+    public async Task<ServiceResult> ChangeRoleStatus(string cardId, RolesEnum role, bool Status)
     {
         var response = new ServiceResult();
         using var transaction = await _repository.BeginTransactionAsync();
@@ -623,7 +623,7 @@ public class AuthenticationService : IAuthService
             }
 
             // Actualizar estado en la tabla del rol
-            await UpdateRoleEntityStatus(user.Id, role, isActive);
+            await UpdateRoleEntityStatus(user.Id, role, Status);
 
             await transaction.CommitAsync();
             response.Succeeded = true;
@@ -653,7 +653,7 @@ public class AuthenticationService : IAuthService
             //    _repository.Enroller.CreateEntity(new Patient
             //    {
             //        Id = userId,
-            //        IsActive = true,
+            //        Status = true,
             //        IsDeleted = false,
             //    });
             //    break;
@@ -673,8 +673,7 @@ public class AuthenticationService : IAuthService
                 {
                     Id = userId,
                     HealthCenterId = healthCenterId,
-                    IsActive = true,
-                    IsDeleted = false,
+                    Status = true
                 });
                 break;
 
@@ -705,8 +704,7 @@ public class AuthenticationService : IAuthService
                 var assistant = await _repository.Assistant.GetEntityAsync(userId, true);
                 if (assistant != null)
                 {
-                    assistant.IsActive = false;
-                    assistant.IsDeleted = true;
+                    assistant.Status = true;
                 }
                 break;
 
@@ -722,7 +720,7 @@ public class AuthenticationService : IAuthService
         await _repository.SaveAsync();
     }
 
-    private async Task UpdateRoleEntityStatus(Guid userId, RolesEnum role, bool isActive)
+    private async Task UpdateRoleEntityStatus(Guid userId, RolesEnum role, bool Status)
     {
         switch (role)
         {
@@ -730,7 +728,7 @@ public class AuthenticationService : IAuthService
                 var patient = await _repository.Patient.GetEntityAsync(userId, true);
                 if (patient != null)
                 {
-                    patient.Status = isActive;
+                    patient.Status = Status;
                 }
                 break;
 
@@ -738,7 +736,7 @@ public class AuthenticationService : IAuthService
                 var doctor = await _repository.Doctor.GetEntityAsync(userId, true);
                 if (doctor != null)
                 {
-                    doctor.Status = isActive;
+                    doctor.Status = Status;
                 }
                 break;
 
@@ -746,7 +744,7 @@ public class AuthenticationService : IAuthService
                 var assistant = await _repository.Assistant.GetEntityAsync(userId, true);
                 if (assistant != null)
                 {
-                    assistant.IsActive = isActive;
+                    assistant.Status = Status;
                 }
                 break;
 
@@ -754,7 +752,7 @@ public class AuthenticationService : IAuthService
                 var admin = await _repository.Admin.GetEntityAsync(userId, true);
                 if (admin != null)
                 {
-                    admin.Status = isActive;
+                    admin.Status = Status;
                 }
                 break;
         }
@@ -796,7 +794,7 @@ public class AuthenticationService : IAuthService
             return response;
         }
 
-        user.IsActive = true;
+        user.Status = true;
         var result = await _userManager.UpdateAsync(user);
 
         if (!result.Succeeded)
@@ -812,7 +810,7 @@ public class AuthenticationService : IAuthService
     public async Task<MinimalAuthenticationResponse> SetCurrentRole(Guid Id, string Role)
     {
         MinimalAuthenticationResponse response = new();
-        var user = await _userManager.Users.FirstOrDefaultAsync(e => e.Id == Id && e.IsActive);
+        var user = await _userManager.Users.FirstOrDefaultAsync(e => e.Id == Id && e.Status);
         if (user != null)
         {
             var userRoles = (await _userManager.GetRolesAsync(user)).ToList();

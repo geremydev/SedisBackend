@@ -32,7 +32,7 @@ internal sealed class PatchAssistantHandler
         PatchAssistantCommand request, CancellationToken cancellationToken)
     {
         var assistantEntity = await _repository.Assistant.GetEntityAsync(request.Id, request.TrackChanges);
-        var originalIsActive = assistantEntity.IsActive;
+        var originalIsActive = assistantEntity.Status;
         if (assistantEntity is null)
             throw new EntityNotFoundException(request.Id);
 
@@ -44,19 +44,19 @@ internal sealed class PatchAssistantHandler
         });
 
         _mapper.Map(assistantToPatch, assistantEntity);
-        assistantEntity.IsActive = originalIsActive;
+        assistantEntity.Status = originalIsActive;
 
         if (assistantEntity.ApplicationUser != null)
         {
-            if (assistantEntity.IsActive != null)
+            if (assistantEntity.Status != null)
             {
-                if (assistantEntity.IsActive != assistantToPatch.IsActive)
+                if (assistantEntity.Status != assistantToPatch.Status)
                 {
-                    assistantEntity.IsActive = assistantToPatch.IsActive;
+                    assistantEntity.Status = assistantToPatch.Status;
 
                     var currentUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == assistantEntity.Id, cancellationToken);
 
-                    if (assistantEntity.IsActive)
+                    if (assistantEntity.Status)
                         await _userManager.AddToRoleAsync(currentUser, "Assistant");
                     else
                         await _userManager.RemoveFromRoleAsync(currentUser, "Assistant");

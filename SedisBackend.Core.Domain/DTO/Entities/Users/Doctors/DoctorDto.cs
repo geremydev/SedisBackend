@@ -5,7 +5,7 @@ using SedisBackend.Core.Domain.DTO.Entities.Medical_Specialty;
 
 namespace SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 
-public record DoctorDto : BaseUserDto
+public class DoctorDto : BaseUserDto
 {
     public string LicenseNumber { get; set; }
     public HealthCenterDto CurrentlyWorkingHealthCenter { get; set; } = new HealthCenterDto();

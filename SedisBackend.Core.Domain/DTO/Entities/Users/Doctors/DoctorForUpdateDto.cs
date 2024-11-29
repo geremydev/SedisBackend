@@ -2,7 +2,7 @@
 
 public record DoctorForUpdateDto
 {
-    public bool IsActive { get; set; }
+    public bool Status { get; set; }
     public string LicenseNumber { get; set; }
     public ICollection<Guid> CurrentlyWorkingHealthCenters { get; set; }
 }

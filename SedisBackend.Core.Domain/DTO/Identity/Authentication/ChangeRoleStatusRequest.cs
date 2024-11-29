@@ -7,5 +7,5 @@ public class ChangeRoleStatusRequest
     public string CardId { get; set; }
 
     [Required(ErrorMessage = "Estado requerido")]
-    public bool IsActive { get; set; }
+    public bool Status { get; set; }
 }
