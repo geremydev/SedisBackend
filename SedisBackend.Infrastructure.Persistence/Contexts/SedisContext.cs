@@ -359,8 +359,6 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             
         });
 
-
-
         modelBuilder.Entity<HealthCenter>(entity =>
         {
             entity.ToTable("HealthCenters");
