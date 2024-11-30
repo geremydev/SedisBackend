@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -85,6 +86,14 @@ builder.Services.AddControllers(config =>
     })
     .AddXmlDataContractSerializerFormatters();
 
+if (builder.Environment.IsProduction())
+{
+    builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(@"/var/aspnet/DataProtection-Keys"))
+    .ProtectKeysWithDpapi()
+    .SetApplicationName("SedisBackend");
+}
+
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILoggerManager>();
@@ -106,8 +115,10 @@ using (var scope = app.Services.CreateScope())
         var userManager = services.GetRequiredService<UserManager<User>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
 
-        context.Database.Migrate();
-
+        if (!context.Database.CanConnect())
+        {
+            context.Database.Migrate();
+        }
         await DefaultRoles.SeedAsync(userManager, roleManager);
         await DefaultUsers.SeedAsync(userManager, roleManager);
     }
