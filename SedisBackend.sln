@@ -11,17 +11,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{3087BAF1-A2F6-4E53-B8C4-79238D116ADE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SedisBackend.Core.Application", "SedisBackend.Core.Application\SedisBackend.Core.Application.csproj", "{3345A0F1-DBC5-4788-A9B7-76B2E53D3C26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SedisBackend.Core.Application", "SedisBackend.Core.Application\SedisBackend.Core.Application.csproj", "{3345A0F1-DBC5-4788-A9B7-76B2E53D3C26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SedisBackend.Core.Domain", "SedisBackend.Core.Domain\SedisBackend.Core.Domain.csproj", "{47E84053-F953-4BE4-8E5A-A6970738A63B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SedisBackend.Core.Domain", "SedisBackend.Core.Domain\SedisBackend.Core.Domain.csproj", "{47E84053-F953-4BE4-8E5A-A6970738A63B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SedisBackend.Infrastructure.Persistence", "SedisBackend.Infrastructure.Persistence\SedisBackend.Infrastructure.Persistence.csproj", "{68CF6715-5023-4164-BF14-26FF6F16E0D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SedisBackend.Infrastructure.Persistence", "SedisBackend.Infrastructure.Persistence\SedisBackend.Infrastructure.Persistence.csproj", "{68CF6715-5023-4164-BF14-26FF6F16E0D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SedisBackend.Infrastructure.Identity", "SedisBackend.Infrastructure.Identity\SedisBackend.Infrastructure.Identity.csproj", "{E927C138-4E51-4342-9F9B-D76C071EFF7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{0271018B-E83E-4580-9950-FB5E3A7B30B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{0271018B-E83E-4580-9950-FB5E3A7B30B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SedisBackend.Infrastructure.Shared", "SedisBackend.Infrastructure.Shared\SedisBackend.Infrastructure.Shared.csproj", "{E9B60C34-61CA-4C83-94E9-68FDA7870ADB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SedisBackend.Infrastructure.Shared", "SedisBackend.Infrastructure.Shared\SedisBackend.Infrastructure.Shared.csproj", "{E9B60C34-61CA-4C83-94E9-68FDA7870ADB}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{70080B9B-DB0A-4C8A-ADCD-A713817FC3A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,6 @@ Global
 		{68CF6715-5023-4164-BF14-26FF6F16E0D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68CF6715-5023-4164-BF14-26FF6F16E0D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68CF6715-5023-4164-BF14-26FF6F16E0D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E927C138-4E51-4342-9F9B-D76C071EFF7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E927C138-4E51-4342-9F9B-D76C071EFF7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E927C138-4E51-4342-9F9B-D76C071EFF7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E927C138-4E51-4342-9F9B-D76C071EFF7C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0271018B-E83E-4580-9950-FB5E3A7B30B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0271018B-E83E-4580-9950-FB5E3A7B30B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0271018B-E83E-4580-9950-FB5E3A7B30B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +49,10 @@ Global
 		{E9B60C34-61CA-4C83-94E9-68FDA7870ADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9B60C34-61CA-4C83-94E9-68FDA7870ADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9B60C34-61CA-4C83-94E9-68FDA7870ADB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70080B9B-DB0A-4C8A-ADCD-A713817FC3A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70080B9B-DB0A-4C8A-ADCD-A713817FC3A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70080B9B-DB0A-4C8A-ADCD-A713817FC3A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70080B9B-DB0A-4C8A-ADCD-A713817FC3A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,7 +64,6 @@ Global
 		{3345A0F1-DBC5-4788-A9B7-76B2E53D3C26} = {48697479-91C1-444F-BE63-029C0B6A89D1}
 		{47E84053-F953-4BE4-8E5A-A6970738A63B} = {48697479-91C1-444F-BE63-029C0B6A89D1}
 		{68CF6715-5023-4164-BF14-26FF6F16E0D7} = {28329CD5-2ABF-4AF0-8D45-315C74B4B751}
-		{E927C138-4E51-4342-9F9B-D76C071EFF7C} = {28329CD5-2ABF-4AF0-8D45-315C74B4B751}
 		{0271018B-E83E-4580-9950-FB5E3A7B30B4} = {3087BAF1-A2F6-4E53-B8C4-79238D116ADE}
 		{E9B60C34-61CA-4C83-94E9-68FDA7870ADB} = {28329CD5-2ABF-4AF0-8D45-315C74B4B751}
 	EndGlobalSection

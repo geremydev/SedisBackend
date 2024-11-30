@@ -2,44 +2,43 @@
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using SedisBackend.Core.Application.Dtos.Shared_Dtos;
-using SedisBackend.Core.Application.Interfaces.Services;
+using SedisBackend.Core.Domain.DTO.Shared;
+using SedisBackend.Core.Domain.Interfaces.Services.Shared;
 using SedisBackend.Core.Domain.Settings;
 
-namespace SedisBackend.Infrastructure.Shared.Services
+namespace SedisBackend.Infrastructure.Shared.Services;
+
+public class EmailService : IEmailService
 {
-    public class EmailService : IEmailService
+    private MailSettings _mailSettings { get; }
+
+    public EmailService(IOptions<MailSettings> mailSettings)
     {
-        private MailSettings _mailSettings { get; }
+        _mailSettings = mailSettings.Value;
+    }
 
-        public EmailService(IOptions<MailSettings> mailSettings)
+    public async Task SendAsync(EmailRequest request)
+    {
+        try
         {
-            _mailSettings = mailSettings.Value;
+            MimeMessage email = new();
+            email.Sender = MailboxAddress.Parse($"{_mailSettings.DisplayName} <{_mailSettings.EmailFrom}>");
+            email.To.Add(MailboxAddress.Parse(request.To));
+            email.Subject = request.Subject;
+            BodyBuilder builder = new BodyBuilder();
+            builder.HtmlBody = request.Body;
+            email.Body = builder.ToMessageBody();
+
+            using SmtpClient smtp = new();
+            smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+            smtp.Connect(_mailSettings.SmtpHost, _mailSettings.SmtpPort, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_mailSettings.SmtpUser, _mailSettings.SmtpPass);
+            await smtp.SendAsync(email);
+            smtp.Disconnect(true);
         }
-
-        public async Task SendAsync(EmailRequest request)
+        catch (Exception ex)
         {
-            try
-            {
-                MimeMessage email = new();
-                email.Sender = MailboxAddress.Parse($"{_mailSettings.DisplayName} <{_mailSettings.EmailFrom}>");
-                email.To.Add(MailboxAddress.Parse(request.To));
-                email.Subject = request.Subject;
-                BodyBuilder builder = new BodyBuilder();
-                builder.HtmlBody = request.Body;
-                email.Body = builder.ToMessageBody();
 
-                using SmtpClient smtp = new();
-                smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
-                smtp.Connect(_mailSettings.SmtpHost, _mailSettings.SmtpPort, SecureSocketOptions.StartTls);
-                smtp.Authenticate(_mailSettings.SmtpUser, _mailSettings.SmtpPass);
-                await smtp.SendAsync(email);
-                smtp.Disconnect(true);
-            }
-            catch (Exception ex)
-            {
-
-            }
         }
     }
 }

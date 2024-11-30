@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace SedisBackend.WebApi.Controllers.v1
-{
-    [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
-    public abstract class BaseApiController : ControllerBase
-    {
+namespace WebApi.Controllers;
 
-    }
+[ApiController]
+//[Route("api/{v:apiversion}/[controller]")]
+[Route("api/[controller]")]
+public abstract class BaseApiController : ControllerBase
+{
+
 }

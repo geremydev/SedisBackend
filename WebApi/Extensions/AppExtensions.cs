@@ -1,18 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Swashbuckle.AspNetCore.SwaggerUI;
+﻿using Swashbuckle.AspNetCore.SwaggerUI;
 
-namespace SedisBackend.WebApi.Extensions
+namespace WebApi.Extensions;
+
+public static class AppExtensions
 {
-    public static class AppExtensions
+    public static void UseSwaggerExtension(this IApplicationBuilder app)
     {
-        public static void UseSwaggerExtension(this IApplicationBuilder app)
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Sedis API");
-                options.DefaultModelRendering(ModelRendering.Model);
-            });
-        }
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Sedis API");
+            options.DefaultModelRendering(ModelRendering.Model);
+        });
     }
 }
