@@ -6,7 +6,6 @@ services:
       dockerfile: WebApi/Dockerfile
     volumes:
       - C:/Users/Brahiam/.aspnet/https:/https:ro
-      - datakeys:/var/aspnet/DataProtection-Keys
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=https://+:443;http://+:80
@@ -60,4 +59,3 @@ networks:
 
 volumes:
   mssql-data:
-  datakeys:

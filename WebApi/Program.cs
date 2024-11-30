@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -42,7 +41,7 @@ NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
 builder.Services.AddHttpClient();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.AddMassTransit(builder.Configuration);
-builder.Services.AddApplicationDependencies(); // Importante configurar el host de rabbitMQ, comenta esto si no eres Brahiam, lol
+builder.Services.AddApplicationDependencies(); // Importante configurar el host de rabbitMQ, comenta esto si no eres Brahiam
 builder.Services.AddPersistenceInfrastructure(builder.Configuration);
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 
@@ -85,14 +84,6 @@ builder.Services.AddControllers(config =>
         //options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     })
     .AddXmlDataContractSerializerFormatters();
-
-if (builder.Environment.IsProduction())
-{
-    builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo(@"/var/aspnet/DataProtection-Keys"))
-    .ProtectKeysWithDpapi()
-    .SetApplicationName("SedisBackend");
-}
 
 var app = builder.Build();
 
