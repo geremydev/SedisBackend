@@ -54,7 +54,7 @@ public class AuthenticationService : IAuthService
         {
             return new AuthenticationResponse
             {
-                Succeeded = true,
+                Succeeded = false,
                 Error = "Invalid identification number or password."
             };
         }
