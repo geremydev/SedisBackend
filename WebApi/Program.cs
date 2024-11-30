@@ -106,10 +106,8 @@ using (var scope = app.Services.CreateScope())
         var userManager = services.GetRequiredService<UserManager<User>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
 
-        if (!context.Database.CanConnect())
-        {
-            context.Database.Migrate();
-        }
+        context.Database.Migrate();
+
         await DefaultRoles.SeedAsync(userManager, roleManager);
         await DefaultUsers.SeedAsync(userManager, roleManager);
     }
