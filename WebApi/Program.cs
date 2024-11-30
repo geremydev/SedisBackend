@@ -17,8 +17,9 @@ using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Linux character scaping is shit image EFe
 LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
-// For commit sake
+
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureLoggerService();

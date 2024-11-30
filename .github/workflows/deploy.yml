@@ -3,7 +3,7 @@ name: Deploy API
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
@@ -13,14 +13,18 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Set up SSH key for deployment
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SEDIS_SSH_PRIVATE_KEY }}" > ~/.ssh/sedis_rsa
+          chmod 600 ~/.ssh/sedis_rsa
 
       - name: Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.SEDIS_DOCKER_USERNAME }}
           password: ${{ secrets.SEDIS_DOCKER_PASSWORD }}
+
 
       - name: Build and Push Docker Image
         run: |
@@ -29,12 +33,12 @@ jobs:
 
       - name: Deploy API on Remote Server
         env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.GENESIS_SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.GENESIS_SSH_USERNAME }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/sedis_rsa $SSH_USERNAME@$SSH_HOST << 'EOF'
-          docker pull imbrahiam/webapi
-          docker-compose down
-          docker-compose up -d
-          EOF
+
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/sedis_rsa $SSH_USERNAME@$SSH_HOST -p 2004 << 'EOF'
+            cd /home/shared/compose
+            docker pull imbrahiam/webapi
+            docker-compose down
+            docker-compose -f /home/shared/compose/docker-compose.yml up -d

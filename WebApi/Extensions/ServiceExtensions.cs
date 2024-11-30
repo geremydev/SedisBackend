@@ -84,8 +84,15 @@ public static class ServiceExtensions
         {
             services.AddDbContext<SedisContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    m => m.MigrationsAssembly(typeof(PersistenceAssemblyReference).Assembly.FullName))
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), m =>
+                {
+                    m.EnableRetryOnFailure(
+                    maxRetryCount: 2000,
+                    maxRetryDelay: TimeSpan.FromSeconds(5),
+                    errorNumbersToAdd: null);
+
+                    m.MigrationsAssembly(typeof(PersistenceAssemblyReference).Assembly.FullName);
+                })
                 .EnableSensitiveDataLogging(true);
             });
         }
