@@ -365,7 +365,6 @@ FodyWeavers.xsd
 /WebApi/appsettings.json
 /WebApi/appsettings.json
 /WebApi/internal_logs/internallog.txt
-/SedisBackend.Infrastructure.Persistence/Migrations
 
 # Ignorar la carpeta de logs internos
 Presentation/WebApi/internal_logs/
