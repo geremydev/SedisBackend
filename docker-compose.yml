@@ -1,4 +1,3 @@
-
 services:
   webapi:
     image: imbrahiam/webapi:latest
@@ -25,6 +24,7 @@ services:
       - rabbitmq
     networks:
       - sedis-network
+    restart: always
 
   database:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -38,6 +38,7 @@ services:
     volumes:
       - mssql-data:/var/opt/mssql
     container_name: sedis-database
+    restart: always
 
   rabbitmq:
     image: rabbitmq:4.0-management
@@ -50,6 +51,7 @@ services:
     networks:
       - sedis-network
     container_name: sedis-rabbitmq
+    restart: always
 
 networks:
   sedis-network:
