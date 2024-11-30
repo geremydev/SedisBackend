@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -105,6 +106,11 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<SedisContext>();
         var userManager = services.GetRequiredService<UserManager<User>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+
+        if (!context.Database.CanConnect())
+        {
+            context.Database.EnsureCreated();
+        }
 
         context.Database.Migrate();
 
