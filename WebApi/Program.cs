@@ -17,7 +17,7 @@ using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Linux character scaping is shit image EF
+// Linux character scaping is shit image EFe
 LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 builder.Services.ConfigureCors();
