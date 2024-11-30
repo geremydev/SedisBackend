@@ -10,7 +10,7 @@ public class Appointment : IBaseEntity
     public Patient Patient { get; set; }
     public Guid DoctorId { get; set; }
     public Doctor Doctor { get; set; }
-    public DateTime AppointmentDate { get; set; }
+    public DateTime? AppointmentDate { get; set; }
     public Guid HealthCenterId { get; set; }
     public HealthCenter HealthCenter { get; set; }
     public string Status { get; set; } // Indicates the current status of the appointment (e.g., scheduled, canceled, completed)

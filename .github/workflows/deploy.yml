@@ -25,8 +25,6 @@ jobs:
           username: ${{ secrets.SEDIS_DOCKER_USERNAME }}
           password: ${{ secrets.SEDIS_DOCKER_PASSWORD }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
 
       - name: Build and Push Docker Image
         run: |
@@ -38,9 +36,9 @@ jobs:
           SSH_HOST: ${{ secrets.GENESIS_SSH_HOST }}
           SSH_USERNAME: ${{ secrets.GENESIS_SSH_USERNAME }}
         run: |
+
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/sedis_rsa $SSH_USERNAME@$SSH_HOST -p 2004 << 'EOF'
             cd /home/shared/compose
             docker pull imbrahiam/webapi
             docker-compose down
             docker-compose -f /home/shared/compose/docker-compose.yml up -d
-          EOF

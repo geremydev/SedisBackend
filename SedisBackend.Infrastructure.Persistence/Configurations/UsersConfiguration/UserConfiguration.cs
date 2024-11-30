@@ -37,7 +37,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
                 UserName = "adminuser",
                 FirstName = "Geremy",
                 LastName = "Ferrán",
-                CardId = "40323958764",
+                CardId = "40208899928",
                 Email = "geremy@sedis.com",
                 PhoneNumber = "829-143-9811",
                 Sex = SexEnum.M,

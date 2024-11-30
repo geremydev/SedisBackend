@@ -29,6 +29,20 @@ public class AppointmentController : BaseApiController
     {
         return Ok(await _sender.Send(new GetAppointmentQuery(AppointmentId, false)));
     }
+
+
+
+    [HttpGet("patients/active/{patientId:guid}", Name = "GetPatientActiveAppointment")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AppointmentDto))]
+    public async Task<IActionResult> GetPatientActiveAppointment(Guid PatientId)
+    {
+        return Ok(await _sender.Send(new GetPatientActiveAppointmentQuery(PatientId, false)));
+    }
+
+
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
