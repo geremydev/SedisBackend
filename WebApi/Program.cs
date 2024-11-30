@@ -135,7 +135,7 @@ if (app.Environment.IsProduction())
 //    await next();
 //});
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors("SedisPolicy");
 //app.UseMiddleware<CsrfProtectionMiddleware>();
