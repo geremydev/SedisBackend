@@ -32,7 +32,7 @@ public class AppointmentController : BaseApiController
 
 
 
-    [HttpGet("patients/{patientId:guid}/activecappointments", Name = "GetPatientActiveAppointment")]
+    [HttpGet("patients/active/{patientId:guid}", Name = "GetPatientActiveAppointment")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AppointmentDto))]

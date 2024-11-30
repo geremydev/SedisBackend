@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
@@ -9,6 +10,7 @@ using NLog;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
+using SedisBackend.Infrastructure.Persistence.Contexts;
 using SedisBackend.Infrastructure.Persistence.Seeds;
 using WebApi.Extensions;
 using WebApi.Middlewares;
@@ -99,8 +101,11 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
+        var context = services.GetRequiredService<SedisContext>();
         var userManager = services.GetRequiredService<UserManager<User>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+
+        context.Database.Migrate();
 
         await DefaultRoles.SeedAsync(userManager, roleManager);
         await DefaultUsers.SeedAsync(userManager, roleManager);

@@ -20,23 +20,14 @@ public class PatientMedicationPrescriptionController : BaseApiController
         _loggerManager = loggerManager;
     }
 
-    [HttpGet(Name = "GetAllPatientMedicationPrescriptions")]
+    /*[HttpGet(Name = "GetAllPatientMedicationPrescriptions")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientMedicationPrescriptionDto>))]
     public async Task<IActionResult> Get()
     {
         return Ok(await _sender.Send(new GetAllPatientMedicationsPresctiptionQuery(false)));
-    }
-
-    [HttpGet("{id:guid}", Name = "GetPatientMedicationPrescriptionById")]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientMedicationPrescriptionDto))]
-    public async Task<IActionResult> Get(Guid Id)
-    {
-        return Ok(await _sender.Send(new GetAllPatientMedicationsPresctiptionQuery(false)));
-    }
+    }*/
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -92,4 +83,13 @@ public class PatientMedicationPrescriptionController : BaseApiController
         await _sender.Send(notification);
         return NoContent();
     }
+/*
+    [HttpGet("patient/{PatientId:guid}", Name = "GetPatientMedications")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ICollection<PatientMedicationPrescriptionDto>))]
+    public async Task<IActionResult> GetPatientMedications(Guid PatientId)
+    {
+        return Ok(await _sender.Send(new GetPatientMedicationsQuery(PatientId, false)));
+    }*/
 }

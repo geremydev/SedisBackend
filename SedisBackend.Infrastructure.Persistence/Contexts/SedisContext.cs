@@ -334,6 +334,7 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasOne(a => a.Patient)
                     .WithMany(p => p.Appointments)
                     .HasForeignKey(a => a.PatientId)
+                    .IsRequired(false)
                     .OnDelete(DeleteBehavior.NoAction);
 
             entity.HasOne(a => a.HealthCenter)
@@ -345,7 +346,6 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             entity.HasOne(a => a.MedicalConsultation)
                 .WithMany(a => a.Appointments)
                 .HasForeignKey(a => a.MedicalConsultationId)
-                .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 
             entity.HasOne(a => a.Doctor)
@@ -353,9 +353,11 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasForeignKey(a => a.DoctorId)
                 .IsRequired();
 
+            entity.Property(a=>a.AppointmentDate)
+            .IsRequired(false);
+
             
         });
-
 
 
 

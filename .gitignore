@@ -366,3 +366,40 @@ FodyWeavers.xsd
 /WebApi/appsettings.json
 /WebApi/internal_logs/internallog.txt
 /SedisBackend.Infrastructure.Persistence/Migrations
+
+# Ignorar la carpeta de logs internos
+Presentation/WebApi/internal_logs/
+
+# Ignorar configuraciones locales de Docker
+docker-compose.override.yml
+.dockerignore
+
+# Ignorar archivos de construcción de Docker
+Presentation/WebApi/Dockerfile
+
+# Ignorar archivos de configuración locales de Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignorar binarios y carpetas de compilación
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# Ignorar archivos de configuración temporales y de entorno
+.env
+.env.*
+*.tmp
+
+# Ignorar logs generales
+*.log
+logs/
+
+# Ignorar archivos de metadatos específicos
+.idea/
+*.swp
