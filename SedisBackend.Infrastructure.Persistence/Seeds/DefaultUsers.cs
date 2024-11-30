@@ -10,10 +10,10 @@ public static class DefaultUsers
     {
         var roleAssignments = new Dictionary<Guid, List<string>>
         {
-            { Guid.Parse("ea48eb4c-01c4-44d2-a81f-fc9246d2ec20"),
+            { Guid.Parse("f86a1609-cb84-4d6a-8d8a-8e49b6b9a5b9"),
                 Enum.GetNames(typeof(RolesEnum)).ToList() },
 
-            { Guid.Parse("f86a1609-cb84-4d6a-8d8a-8e49b6b9a5b9"), new List<string> { RolesEnum.Admin.ToString(), RolesEnum.Patient.ToString() } },
+            { Guid.Parse("ea48eb4c-01c4-44d2-a81f-fc9246d2ec20"), new List<string> { RolesEnum.Admin.ToString(), RolesEnum.Patient.ToString() } },
             { Guid.Parse("37439d05-9b3b-4896-88e0-4ee7b7221a8b"), new List<string> { RolesEnum.Assistant.ToString(), RolesEnum.Patient.ToString() } },
             { Guid.Parse("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"), new List<string> { RolesEnum.Doctor.ToString(), RolesEnum.Patient.ToString() } },
             { Guid.Parse("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"), new List<string> { RolesEnum.Doctor.ToString(), RolesEnum.Patient.ToString() } },
