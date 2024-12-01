@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.AppointmentHandlers;
-using SedisBackend.Core.Application.CommandQueryHandlers.ModelHandlers.DiscapacityHandlers;
 using SedisBackend.Core.Domain.DTO.Entities.Appointments;
 using SedisBackend.Core.Domain.DTO.Entities.Medical_History.Medical_Condition.Discapacity_Condition;
 using SedisBackend.Core.Domain.Interfaces.Loggers;
@@ -21,6 +20,15 @@ public class AppointmentController : BaseApiController
         _loggerManager = loggerManager;
     }
 
+    [HttpGet(Name = "GetAllAppointments")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DiscapacityDto))]
+    public async Task<IActionResult> Get()
+    {
+        return Ok(await _sender.Send(new GetAppointmentsQuery(false)));
+    }
+
     [HttpGet("{id:guid}", Name = "GetAppointmentById")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -30,18 +38,51 @@ public class AppointmentController : BaseApiController
         return Ok(await _sender.Send(new GetAppointmentQuery(AppointmentId, false)));
     }
 
-
-
-    [HttpGet("patients/active/{patientId:guid}", Name = "GetPatientActiveAppointment")]
+    [HttpGet("patients/ongoing/{patientId:guid}", Name = "GetPatientOngoingAppointment")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AppointmentDto))]
-    public async Task<IActionResult> GetPatientActiveAppointment(Guid PatientId)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AppointmentDto>))]
+    public async Task<IActionResult> GetPatientOngoingAppointment(Guid PatientId)
     {
-        return Ok(await _sender.Send(new GetPatientActiveAppointmentQuery(PatientId, false)));
+        return Ok(await _sender.Send(new GetPatientOngoingAppointmentsQuery(PatientId, false)));
+    }
+
+    [HttpGet("patients/requested/{patientId:guid}", Name = "GetPatientRequestedAppointments")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AppointmentDto>))]
+    public async Task<IActionResult> GetPatientRequestedAppointments(Guid PatientId)
+    {
+        return Ok(await _sender.Send(new GetPatientRequestedAppointmentsQuery(PatientId, false)));
     }
 
 
+    [HttpGet("patients/Scheduled/{patientId:guid}", Name = "GetPatientScheduledAppointments")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AppointmentDto>))]
+    public async Task<IActionResult> GetPatientScheduledAppointments(Guid patientId)
+    {
+        return Ok(await _sender.Send(new GetPatientScheduledAppointmentsQuery(patientId, false)));
+    }
+
+    [HttpGet("doctors/Scheduled/{doctorId:guid}", Name = "GetDoctorScheduledAppointments")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AppointmentDto>))]
+    public async Task<IActionResult> GetDoctorScheduledAppointments(Guid doctorId)
+    {
+        return Ok(await _sender.Send(new GetDoctorScheduledAppointmentsQuery(doctorId, false)));
+    }
+
+    [HttpGet("doctors/completed/{doctorId:guid}", Name = "GetDoctorCompletedAppointments")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AppointmentDto>))]
+    public async Task<IActionResult> GetDoctorCompletedAppointments(Guid doctorId)
+    {
+        return Ok(await _sender.Send(new GetDoctorCompletedAppointmentsQuery(doctorId, false)));
+    }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
