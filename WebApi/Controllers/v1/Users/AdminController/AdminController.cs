@@ -98,4 +98,13 @@ public class AdminController : BaseApiController
         await _sender.Send(notification);
         return NoContent();
     }
+
+    [HttpGet("dashboard", Name = "AdminDashboard")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AdminDto))]
+    public async Task<IActionResult> GetDashboard(Guid Id)
+    {
+        return Ok(await _sender.Send(new GetAdminDashboardQuery(Id)));
+    }
 }
