@@ -110,7 +110,8 @@ using (var scope = app.Services.CreateScope())
         // Al hacer un cambio que agregue migraciones, hacer lo que dice abajo, o antes de pushear eliminar manualmente la base de datos remota
 
         // Descomenta esta linea si el cambio que haras agrega una nueva migracion, si es de codigo dejala asi
-        // context.Database.EnsureDeleted();
+        context.Database.EnsureDeleted();
+
         context.Database.Migrate();
 
         await DefaultRoles.SeedAsync(userManager, roleManager);
