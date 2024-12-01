@@ -4,4 +4,5 @@ namespace SedisBackend.Core.Domain.Interfaces.Repositories.Users;
 
 public interface IAssistantRepository : IGenericRepository<Assistant>
 {
+    ICollection<Assistant> GetByHealthCenterId(Guid HealthCenterId);
 }

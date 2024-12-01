@@ -94,4 +94,13 @@ public class HealthCenterController : BaseApiController
         await _sender.Send(notification);
         return NoContent();
     }
+
+    [HttpGet("workers/{id:guid}", Name = "GetHealthCenterWorkers")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HealthCenterDto))]
+    public async Task<IActionResult> GetHealthCenterWorkers(Guid id)
+    {
+        return Ok(await _sender.Send(new GetHealthCenterWorkersQuery(id)));
+    }
 }

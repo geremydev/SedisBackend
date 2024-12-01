@@ -18,7 +18,9 @@ public class HealthCenterConfiguration : IEntityTypeConfiguration<HealthCenter>
                  Name = "Hospital General Dr. Darío Contreras",
                  LocationId = Guid.Parse("a1c1b2c3-d4e5-678f-1234-56789abcdef0"),
                  HealthCenterCategory = "General",
-                 Status = true
+                 Status = true,
+                 Details = "Ninguno",
+                 LocationString = "SDE"
              },
             new HealthCenter
             {
@@ -26,7 +28,9 @@ public class HealthCenterConfiguration : IEntityTypeConfiguration<HealthCenter>
                 Name = "Centro de Diagnóstico Médico (CDM)",
                 LocationId = Guid.Parse("b2c3d4e5-f678-1234-5678-abcdef123456"),
                 HealthCenterCategory = "Specialized",
-                Status = true
+                Status = true,
+                Details = "Ninguno",
+                LocationString = "SDE"
             },
             new HealthCenter
             {
@@ -34,7 +38,9 @@ public class HealthCenterConfiguration : IEntityTypeConfiguration<HealthCenter>
                 Name = "Clínica Unión Médica del Norte",
                 LocationId = Guid.Parse("c3d4e5f6-1234-5678-9abc-def123456789"),
                 HealthCenterCategory = "General",
-                Status = true
+                Status = true,
+                Details = "Ninguno",
+                LocationString = "SDE"
             },
             new HealthCenter
             {
@@ -42,7 +48,9 @@ public class HealthCenterConfiguration : IEntityTypeConfiguration<HealthCenter>
                 Name = "Hospital General y de Especialidades Nuestra Señora de la Altagracia (HGENSA)",
                 LocationId = Guid.Parse("d4e5f678-2345-3456-4567-890abcdef123"),
                 HealthCenterCategory = "General",
-                Status = true
+                Status = true,
+                Details = "Ninguno",
+                LocationString = "SDE"
             },
             new HealthCenter
             {
@@ -50,7 +58,9 @@ public class HealthCenterConfiguration : IEntityTypeConfiguration<HealthCenter>
                 Name = "Centro Médico Cibao",
                 LocationId = Guid.Parse("e5f67890-3456-4567-5678-90abcdef1234"),
                 HealthCenterCategory = "Specialized",
-                Status = false
+                Status = false,
+                Details = "Ninguno",
+                LocationString = "SDE"
             }
         );
     }

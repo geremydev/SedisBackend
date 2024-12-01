@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.Entities.Users.Persons;
 using SedisBackend.Core.Domain.Interfaces.Repositories.Users;
+using SedisBackend.Core.Domain.Medical_Insurance;
 using SedisBackend.Infrastructure.Persistence.Contexts;
 
 namespace SedisBackend.Infrastructure.Persistence.Repositories.UserRepositories;
@@ -35,4 +36,10 @@ internal sealed class DoctorRepository : RepositoryBase<Doctor>, IDoctorReposito
     public void DeleteEntity(Doctor doctor) => Delete(doctor);
 
     public void UpdateEntity(Doctor entity) => Update(entity);
+
+    public ICollection<Doctor> GetByHealthCenterId(Guid HealthCenterId) =>
+         FindByCondition(c => c.CurrentlyWorkingHealthCenterId.Equals(HealthCenterId), true)
+                          .Include(p => p.ApplicationUser)
+                          .AsSplitQuery()
+                          .ToList();
 }
