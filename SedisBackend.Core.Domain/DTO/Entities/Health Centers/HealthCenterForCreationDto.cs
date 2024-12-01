@@ -6,4 +6,5 @@ public class HealthCenterForCreationDto
     public Guid? LocationId { get; set; }
     public string HealthCenterCategory { get; set; } //Primary ...
     public bool Status { get; set; } = true;
+    public string LocationString { get; set; }
 }

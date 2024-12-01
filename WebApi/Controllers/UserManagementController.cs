@@ -79,4 +79,13 @@ public class UserManagementController : ControllerBase
         var result = await _authService.SetCurrentRole(Id, Role);
         return result.Succeeded ? Ok(result ): BadRequest(result.Error);
     }
+
+    [HttpGet("get-user-roles")]
+    [SwaggerOperation(Summary = "Obtiene los roles de un usuario por su ID.",
+        Description = "")]
+    public async Task<IActionResult> GetUserRoles(Guid Id)
+    {
+        var result = await _authService.GetUserRoles(Id);
+        return Ok(result);
+    }
 }

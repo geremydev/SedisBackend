@@ -422,11 +422,17 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
                 .HasForeignKey(hcs => hcs.ServiceId);
 
             entity.Property(hcs => hcs.CreationDate).IsRequired();
-            entity.Property(hcs => hcs.StartTime).IsRequired();
-            entity.Property(hcs => hcs.EndTime).IsRequired();
+            entity.Property(hcs => hcs.Description).IsRequired();
+            entity.Property(hcs => hcs.PhoneNumber).IsRequired();
+            entity.Property(hcs => hcs.Email).IsRequired();
+            entity.Property(hcs => hcs.Address).IsRequired();
             entity.Property(hcs => hcs.Status).IsRequired();
-        });
+            entity.Property(hcs => hcs.Requirements).IsRequired(false);
+            entity.Property(hcs => hcs.OperatingHours).IsRequired();
+            entity.Property(hcs => hcs.Cost).IsRequired();
+            entity.Property(hcs => hcs.AdditionalInformation).IsRequired(false);
 
+        });
         modelBuilder.Entity<Location>(entity =>
         {
             entity.ToTable("Locations");

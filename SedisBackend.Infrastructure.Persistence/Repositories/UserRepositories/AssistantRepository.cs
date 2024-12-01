@@ -30,4 +30,10 @@ internal sealed class AssistantRepository : RepositoryBase<Assistant>, IAssistan
     public void DeleteEntity(Assistant assistant) => Delete(assistant);
 
     public void UpdateEntity(Assistant entity) => Update(entity);
+
+    public ICollection<Assistant> GetByHealthCenterId(Guid HealthCenterId) =>
+         FindByCondition(c => c.HealthCenterId.Equals(HealthCenterId), true)
+                          .Include(p => p.ApplicationUser)
+                          .AsSplitQuery()
+                          .ToList();
 }

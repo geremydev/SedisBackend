@@ -3,4 +3,5 @@
 namespace SedisBackend.Core.Domain.Interfaces.Repositories.Users;
 public interface ILabTechRepository : IGenericRepository<LabTech>
 {
+    ICollection<LabTech> GetByHealthCenterId(Guid HealthCenterId);
 }
