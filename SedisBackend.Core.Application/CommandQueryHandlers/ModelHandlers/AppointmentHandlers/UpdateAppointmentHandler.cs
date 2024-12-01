@@ -26,15 +26,11 @@ internal sealed class UpdateAppointmentHandler : IRequestHandler<UpdateAppointme
         if (AppointmentEntity is null)
             throw new EntityNotFoundException(request.Id);
 
-        if (request.Appointment.AppointmentStatus == "Aprobada") // Si se actualiza como aprobada vino del asistente, entonces pasa a estar pendiente para el doctor
-        {
-            _mapper.Map(request.Appointment, AppointmentEntity);
-            AppointmentEntity.Status = "Pendiente";
-            _repository.Appointment.UpdateEntity(AppointmentEntity);
-            await _repository.SaveAsync(cancellationToken);
+        var entity = _mapper.Map(request.Appointment, AppointmentEntity);
+        _repository.Appointment.UpdateEntity(entity);
+        await _repository.SaveAsync(cancellationToken);
 
-            var appointmentApprovedEvent = _mapper.Map<AppointmentApprovedEvent>(AppointmentEntity);
-        }
+        var appointmentApprovedEvent = _mapper.Map<AppointmentApprovedEvent>(AppointmentEntity);
 
         return Unit.Value;
     }

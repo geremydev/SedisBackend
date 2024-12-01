@@ -25,9 +25,14 @@ internal sealed class AppointmentRepository : RepositoryBase<Appointment>, IAppo
 
     public void DeleteEntity(Appointment appointment) => Delete(appointment);
 
-    public void UpdateEntity(Appointment entity)=> Update(entity);
-    public ICollection<Appointment> GetAppointmentsByPatientAsync(Guid patientId, bool trackChanges)
+    public void UpdateEntity(Appointment entity) => Update(entity);
+    public async Task<ICollection<Appointment>> GetAppointmentsByPatientAsync(Guid patientId, bool trackChanges)
     {
-         return FindByCondition(c => c.PatientId.Equals(patientId), trackChanges).ToList();
+        return await FindByCondition(c => c.PatientId.Equals(patientId), trackChanges).ToListAsync();
+    }
+
+    public async Task<ICollection<Appointment>> GetAppointmentsByDoctor(Guid doctorId, bool trackChanges)
+    {
+        return await FindByCondition(c => c.DoctorId.Equals(doctorId), trackChanges).ToListAsync();
     }
 }

@@ -16,7 +16,7 @@ internal class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
                 DoctorId = Guid.Parse("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
                 AppointmentDate = DateTime.Parse("2023-10-15 09:00:00"),
                 HealthCenterId = Guid.Parse("85bc224a-c53f-41db-97b8-92f703ee4452"),
-                Status = "Active",
+                Status = "Scheduled",
                 ConsultationRoom = "Room 101",
                 MedicalConsultationId = Guid.Parse("5d2e7a36-91e8-4b4a-a769-854fa9d4cb29")
             },
@@ -27,7 +27,7 @@ internal class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
                 DoctorId = Guid.Parse("b2f7d5b4-2f4d-4b2b-a292-1b9b65d5d6c0"),
                 AppointmentDate = DateTime.Parse("2023-11-01 14:30:00"),
                 HealthCenterId = Guid.Parse("deb707b2-50f1-4245-9f8d-12a3b6e74933"),
-                Status = "Solicited",
+                Status = "Requested",
                 ConsultationRoom = "Room 102",
                 MedicalConsultationId = Guid.Parse("2c4f7b60-71a9-4ea8-82f1-7f3c0dbed832")
             },
@@ -38,7 +38,7 @@ internal class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
                 DoctorId = Guid.Parse("e9f7a7e1-f0d2-4f2c-bcb9-3e1a5a7a1e0b"),
                 AppointmentDate = DateTime.Parse("2023-11-10 10:00:00"),
                 HealthCenterId = Guid.Parse("c8b0812e-7205-40ad-a249-fb9e6ae64c37"),
-                Status = "Canceled",
+                Status = "Ongoing",
                 ConsultationRoom = "Room 103",
                 MedicalConsultationId = Guid.Parse("8f7319e7-89b4-4d5c-90cb-cf2e5a0c9fbd")
             }

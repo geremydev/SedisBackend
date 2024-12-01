@@ -33,7 +33,7 @@ internal sealed class CreateAppointmentHandler : IRequestHandler<CreateAppointme
 
         var clinicalHistoryEntity = _mapper.Map<Appointment>(request.Appointment);
         clinicalHistoryEntity.HealthCenterId = doctor.CurrentlyWorkingHealthCenterId;
-        clinicalHistoryEntity.Status = "Solicitada"; // La cita está solicitada, si se aprueba está pendiente hasta que se de con el doctor.
+        clinicalHistoryEntity.Status = "Requested"; // La cita está solicitada, si se aprueba está pendiente hasta que se de con el doctor.
         _repository.Appointment.CreateEntity(clinicalHistoryEntity);
         await _repository.SaveAsync(cancellationToken);
 
