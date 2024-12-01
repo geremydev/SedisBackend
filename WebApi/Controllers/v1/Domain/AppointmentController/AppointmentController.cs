@@ -57,22 +57,22 @@ public class AppointmentController : BaseApiController
     }
 
 
-    [HttpGet("patients/pending/{patientId:guid}", Name = "GetPatientPendingAppointments")]
+    [HttpGet("patients/Scheduled/{patientId:guid}", Name = "GetPatientScheduledAppointments")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AppointmentDto>))]
-    public async Task<IActionResult> GetPatientPendingAppointments(Guid patientId)
+    public async Task<IActionResult> GetPatientScheduledAppointments(Guid patientId)
     {
-        return Ok(await _sender.Send(new GetPatientPendingAppointmentsQuery(patientId, false)));
+        return Ok(await _sender.Send(new GetPatientScheduledAppointmentsQuery(patientId, false)));
     }
 
-    [HttpGet("doctors/pending/{doctorId:guid}", Name = "GetDoctorPendingAppointments")]
+    [HttpGet("doctors/Scheduled/{doctorId:guid}", Name = "GetDoctorScheduledAppointments")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AppointmentDto>))]
-    public async Task<IActionResult> GetDoctorPendingAppointments(Guid doctorId)
+    public async Task<IActionResult> GetDoctorScheduledAppointments(Guid doctorId)
     {
-        return Ok(await _sender.Send(new GetDoctorPendingAppointmentsQuery(doctorId, false)));
+        return Ok(await _sender.Send(new GetDoctorScheduledAppointmentsQuery(doctorId, false)));
     }
 
     [HttpGet("doctors/completed/{doctorId:guid}", Name = "GetDoctorCompletedAppointments")]
