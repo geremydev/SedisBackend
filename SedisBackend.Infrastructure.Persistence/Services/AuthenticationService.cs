@@ -84,6 +84,16 @@ public class AuthenticationService : IAuthService
     {
         return await _tokenService.RefreshTokenAsync(token, refreshToken);
     }
+    public async Task<List<string>> GetUserRoles(Guid UserId)
+    {
+        var user = await _userManager.FindByIdAsync(UserId.ToString());
+        if(user != null)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles.ToList();
+        }
+        return new List<string>();
+    } 
 
     public async Task SingOutAsync()
     {
