@@ -26,4 +26,10 @@ public class LabTechRepository : RepositoryBase<LabTech>, ILabTechRepository
                     .SingleOrDefaultAsync();
 
     public void UpdateEntity(LabTech entity) => Update(entity);
+
+    public ICollection<LabTech> GetByHealthCenterId(Guid HealthCenterId) =>
+         FindByCondition(c => c.HealthCenterId.Equals(HealthCenterId), true)
+                          .Include(p => p.ApplicationUser)
+                          .AsSplitQuery()
+                          .ToList();
 }

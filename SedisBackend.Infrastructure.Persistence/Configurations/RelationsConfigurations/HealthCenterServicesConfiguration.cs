@@ -16,8 +16,15 @@ public class HealthCenterServicesConfiguration : IEntityTypeConfiguration<Health
                 HealthCenterId = Guid.Parse("85bc224a-c53f-41db-97b8-92f703ee4452"),
                 ServiceId = Guid.NewGuid(), // Asocia el ID de un servicio real
                 CreationDate = DateTime.UtcNow,
-                StartTime = new TimeSpan(8, 0, 0),
-                EndTime = new TimeSpan(16, 0, 0),
+                AdditionalInformation = "Lo ofrecemos gratis si eres lindo",
+                Address = "Calle f",
+                Cost = "100 DOP",
+                Department = "Departamento de Salud",
+                Email = "salud@hospital.com",
+                Description = "Servicio brindado por nosotros",
+                OperatingHours = "de 7am a 8pm",
+                PhoneNumber = "8099298782",
+                Requirements = "cédula",
                 Status = true
             },
             new HealthCenterServices
@@ -25,8 +32,15 @@ public class HealthCenterServicesConfiguration : IEntityTypeConfiguration<Health
                 HealthCenterId = Guid.Parse("57efafa6-1eec-4228-b7c1-ab87fe2097da"),
                 ServiceId = Guid.NewGuid(), // Asocia el ID de un servicio real
                 CreationDate = DateTime.UtcNow,
-                StartTime = new TimeSpan(9, 0, 0),
-                EndTime = new TimeSpan(17, 0, 0),
+                AdditionalInformation = "Lo ofrecemos gratis si eres lindo",
+                Address = "Calle f",
+                Cost = "100 DOP",
+                Department = "Departamento de Salud",
+                Email = "salud@hospital.com",
+                Description = "Servicio brindado por nosotros",
+                OperatingHours = "de 7am a 8pm",
+                PhoneNumber = "8099298782",
+                Requirements = "cédula",
                 Status = true
             }
             // Agrega más relaciones de servicios a centros de salud según sea necesario
