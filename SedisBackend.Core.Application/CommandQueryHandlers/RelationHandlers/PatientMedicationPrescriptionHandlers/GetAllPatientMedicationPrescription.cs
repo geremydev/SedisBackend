@@ -6,7 +6,7 @@ using SedisBackend.Core.Domain.Interfaces.Repositories;
 
 namespace SedisBackend.Core.Application.CommandQueryHandlers.RelationHandlers.PatientIllnessHandlers;
 
-public sealed record GetAllPatientMedicationsPresctiptionQuery(bool TrackChanges) : IRequest<IEnumerable<PatientMedicationPrescriptionDto>>;
+public sealed record GetAllPatientMedicationsPresctiptionQuery(Guid PatientId, bool TrackChanges) : IRequest<IEnumerable<PatientMedicationPrescriptionDto>>;
 
 internal sealed class GetAllPatientMedicationsPresctiptionHandler : IRequestHandler<GetAllPatientMedicationsPresctiptionQuery, IEnumerable<PatientMedicationPrescriptionDto>>
 {
@@ -21,12 +21,12 @@ internal sealed class GetAllPatientMedicationsPresctiptionHandler : IRequestHand
 
     public async Task<IEnumerable<PatientMedicationPrescriptionDto>> Handle(GetAllPatientMedicationsPresctiptionQuery request, CancellationToken cancellationToken)
     {
-        var patientMedications = await _repository.PatientMedicationPrescription.GetAllEntitiesAsync(request.TrackChanges);
+        var patientMedications = await _repository.PatientMedicationPrescription.GetByPatient(request.PatientId, request.TrackChanges);
         if (patientMedications is null || !patientMedications.Any())
             throw new EntitiesNotFoundException();
 
         var patientMedicationDto = _mapper.Map<IEnumerable<PatientMedicationPrescriptionDto>>(patientMedications);
-        return patientMedicationDto;
+        return patientMedicationDto.ToList();
     }
 }
 

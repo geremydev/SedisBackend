@@ -19,7 +19,7 @@ public class PatientLabTestPrescription
     public DateTime? PerformedDate { get; set; }
     public DateTime? InvalidationDate { get; set; }
     public string Status { get; set; } // Usamos el enum AppointmentStatus
-    public Guid LabTechId { get; set; }
-    public LabTech LabTech { get; set; }
-    public string ResultUrl { get; set; }
+    public Guid? LabTechId { get; set; }
+    public LabTech? LabTech { get; set; }
+    public string? ResultUrl { get; set; }
 }
