@@ -11,6 +11,5 @@ public class PatientLabTestPrescriptionForUpdateDto
     public DateTime? InvalidationDate { get; set; }
     public string Status { get; set; } // Usamos el enum AppointmentStatus
     public Guid LabTechId { get; set; }
-    public LabTech LabTech { get; set; }
     public string ResultUrl { get; set; }
 }
