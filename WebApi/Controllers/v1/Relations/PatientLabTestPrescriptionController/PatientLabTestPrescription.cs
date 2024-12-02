@@ -30,7 +30,7 @@ public class PatientLabTestPrescriptionController : BaseApiController
         return Ok(await _sender.Send(new GetPatientLabTestPrescriptionQuery(false)));
     }*/
 
-    [HttpGet("{id:guid}", Name = "GetPatientLabTestPrescriptionByPatientId")]
+    [HttpGet(Name = "GetPatientLabTestPrescriptionByPatientId")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientLabTestPrescriptionDto))]

@@ -947,7 +947,8 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             entity.HasOne(lt => lt.LabTech)
                 .WithMany(c => c.Prescriptions)
-                .HasForeignKey(ph => ph.LabTechId);
+                .HasForeignKey(ph => ph.LabTechId)
+                .IsRequired(false);
 
             entity.HasOne(lt => lt.LabTest)
                 .WithMany(c => c.Prescriptions)
@@ -955,6 +956,9 @@ public class SedisContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
             entity.Property(ph => ph.Status)
                 .IsRequired();
+
+            entity.Property(ph => ph.ResultUrl)
+                .IsRequired(false);
         });
 
         modelBuilder.Entity<PatientMedicationPrescription>(entity =>

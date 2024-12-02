@@ -7,7 +7,7 @@ public class PatientMedicationPrescriptionDto
     public Guid Id { get; set; }
     public Guid PatientId { get; set; }
     public Guid MedicationId { get; set; }
-    public Medication Medication { get; set; }
+    public MedicationDto Medication { get; set; }
     public Guid? MedicalConsultationId { get; set; }
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
