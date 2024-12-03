@@ -7,4 +7,5 @@ public interface IPatientLabTestPrescriptionRepository : IGenericRepository<Pati
     Task<IEnumerable<PatientLabTestPrescription>> GetByLabTestPrescription(Guid labtestPrescriptionId, bool trackChanges);
     Task<IEnumerable<PatientLabTestPrescription>> GetByLabTech(Guid labtechId, bool trackChanges);
     Task<IEnumerable<PatientLabTestPrescription>> GetByDoctor(Guid doctorId, bool trackChanges);
+    Task<IEnumerable<PatientLabTestPrescription>> GetByHealthCenter(Guid healthCenterId, bool trackChanges);
 }
