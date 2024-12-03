@@ -44,6 +44,13 @@ internal sealed class PatientLabTestPrescriptionRepository : RepositoryBase<Pati
                 .Include(a => a.LabTest).ToListAsync();
     }
 
+    public async Task<IEnumerable<PatientLabTestPrescription>> GetByHealthCenter(Guid healthCenterId, bool trackChanges)
+    {
+        return await FindByCondition(c => c.Doctor.CurrentlyWorkingHealthCenterId.Equals(healthCenterId), trackChanges)
+                .Include(a => a.Patient)
+                .Include(a => a.LabTest).ToListAsync();
+    }
+
     public async Task<IEnumerable<PatientLabTestPrescription>> GetByLabTech(Guid labtestPrescriptionId, bool trackChanges)
     {
         return await FindByCondition(c => c.LabTestId.Equals(labtestPrescriptionId), trackChanges)

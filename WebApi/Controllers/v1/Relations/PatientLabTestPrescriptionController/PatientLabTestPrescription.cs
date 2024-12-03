@@ -30,13 +30,22 @@ public class PatientLabTestPrescriptionController : BaseApiController
         return Ok(await _sender.Send(new GetPatientLabTestPrescriptionQuery(false)));
     }*/
 
-    [HttpGet(Name = "GetPatientLabTestPrescriptionByPatientId")]
+    [HttpGet("{PatientId:guid}", Name = "GetPatientLabTestPrescriptionByPatientId")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PatientLabTestPrescriptionDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ICollection<PatientLabTestPrescriptionDto>))]
     public async Task<IActionResult> Get(Guid PatientId)
     {
         return Ok(await _sender.Send(new GetPatientLabTestsByPatientIdQuery(PatientId, false)));
+    }
+    
+    [HttpGet( Name = "GetPatientLabTestPrescriptionByHealthCenterId")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ICollection<PatientLabTestPrescriptionDto>))]
+    public async Task<IActionResult> GetByHealthCenter(Guid HealthCenterId)
+    {
+        return Ok(await _sender.Send(new GetLabTestPrescriptionsByHealthCenterQuery(HealthCenterId, false)));
     }
 
     [HttpPost]
