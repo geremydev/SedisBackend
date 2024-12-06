@@ -52,7 +52,6 @@ public sealed class RepositoryManager : IRepositoryManager
     private readonly Lazy<IPatientLabTestPrescriptionRepository> _patientLabTestPrescriptionRepository;
     private readonly Lazy<IPatientVaccineRepository> _patientVaccineRepository;
 
-
     public RepositoryManager(SedisContext repositoryContext, HttpClient httpClient)
     {
         _repositoryContext = repositoryContext;
@@ -100,6 +99,12 @@ public sealed class RepositoryManager : IRepositoryManager
     {
         return await _repositoryContext.Database.BeginTransactionAsync(cancellationToken);
     }
+
+    public async Task<IExecutionStrategy> CreateExecutionStrategy(CancellationToken cancellationToken = default)
+    {
+        return _repositoryContext.Database.CreateExecutionStrategy();
+    }
+
     public IAppointmentRepository Appointment => _appointmentRepository.Value;
 
     public ILabTestRepository LabTest => _labtestRepository.Value;

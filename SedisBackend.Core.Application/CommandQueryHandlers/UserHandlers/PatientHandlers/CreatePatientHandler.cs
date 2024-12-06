@@ -31,38 +31,52 @@ internal sealed class CreatePatientHandler : IRequestHandler<CreatePatientComman
 
     public async Task<PatientDto> Handle(CreatePatientCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.patient.UserId);
 
-        if (existingUser == null)
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            throw new UserNotFoundException(request.patient.UserId.ToString());
-        }
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
-        var patientEntity = new Patient
-        {
-            Id = request.patient.UserId,
-            MedicalConsultations = new List<MedicalConsultation>(),
-            Appointments = new List<Appointment>(),
-            Allergies = new List<PatientAllergy>(),
-            Illnesses = new List<PatientIllness>(),
-            Discapacities = new List<PatientDiscapacity>(),
-            RiskFactors = new List<PatientRiskFactor>(),
-            Vaccines = new List<PatientVaccine>(),
-            FamilyHistories = new List<FamilyHistory>(),
-            Status = true
-        };
+            try
+            {
+                var existingUser = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.Id == request.patient.UserId, cancellationToken);
 
-        _repository.Patient.CreateEntity(patientEntity);
+                if (existingUser == null)
+                {
+                    throw new UserNotFoundException(request.patient.UserId.ToString());
+                }
 
-        await _repository.SaveAsync(cancellationToken);
+                var patientEntity = new Patient
+                {
+                    Id = request.patient.UserId,
+                    MedicalConsultations = new List<MedicalConsultation>(),
+                    Appointments = new List<Appointment>(),
+                    Allergies = new List<PatientAllergy>(),
+                    Illnesses = new List<PatientIllness>(),
+                    Discapacities = new List<PatientDiscapacity>(),
+                    RiskFactors = new List<PatientRiskFactor>(),
+                    Vaccines = new List<PatientVaccine>(),
+                    FamilyHistories = new List<FamilyHistory>(),
+                    Status = true
+                };
 
-        await _userManager.AddToRoleAsync(existingUser, "Patient");
+                _repository.Patient.CreateEntity(patientEntity);
 
-        await transaction.CommitAsync(cancellationToken);
+                await _repository.SaveAsync(cancellationToken);
 
-        return _mapper.Map<PatientDto>(patientEntity);
+                await _userManager.AddToRoleAsync(existingUser, "Patient");
 
+                await transaction.CommitAsync(cancellationToken);
+
+                return _mapper.Map<PatientDto>(patientEntity);
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }

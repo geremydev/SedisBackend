@@ -58,4 +58,5 @@ public interface IRepositoryManager
 
     Task SaveAsync(CancellationToken cancellationToken = default);
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
+    Task<IExecutionStrategy> CreateExecutionStrategy(CancellationToken cancellationToken = default);
 }
