@@ -8,7 +8,7 @@ public class PatientLabTestPrescriptionForCreationDto
     public DateTime? SolicitedDate { get; set; }
     public DateTime? PerformedDate { get; set; }
     public DateTime? InvalidationDate { get; set; }
-    public string Status { get; set; } // Usamos el enum AppointmentStatus
-    public Guid LabTechId { get; set; }
-    public string ResultUrl { get; set; }
+    public string? Status { get; set; } // Usamos el enum AppointmentStatus
+    public Guid? LabTechId { get; set; }
+    public string? ResultUrl { get; set; }
 }

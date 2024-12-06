@@ -596,6 +596,12 @@ public class GeneralProfile : Profile
 
         CreateMap<PatientLabTestPrescription, PatientLabTestPrescriptionDto>()
             .ReverseMap();
+        
+        CreateMap<PatientLabTestPrescriptionForCreationDto, PatientLabTestPrescription>()
+            .ReverseMap();
+        
+        CreateMap<PatientLabTestPrescriptionForUpdateDto, PatientLabTestPrescription>()
+            .ReverseMap();
 
         CreateMap<PatientMedicationPrescription, PatientMedicationPrescriptionDto>()
             .ReverseMap();

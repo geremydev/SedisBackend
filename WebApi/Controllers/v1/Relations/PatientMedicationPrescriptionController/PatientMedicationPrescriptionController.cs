@@ -20,14 +20,15 @@ public class PatientMedicationPrescriptionController : BaseApiController
         _loggerManager = loggerManager;
     }
 
-    /*[HttpGet(Name = "GetAllPatientMedicationPrescriptions")]
+    [HttpGet(Name = "GetAllPatientMedicationPrescriptions")]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PatientMedicationPrescriptionDto>))]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get(Guid PatientId)
     {
-        return Ok(await _sender.Send(new GetAllPatientMedicationsPresctiptionQuery(false)));
-    }*/
+        var result = await _sender.Send(new GetAllPatientMedicationsPresctiptionQuery(PatientId, false));
+        return Ok(result);
+    }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
