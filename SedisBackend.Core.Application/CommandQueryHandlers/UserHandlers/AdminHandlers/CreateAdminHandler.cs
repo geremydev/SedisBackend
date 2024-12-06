@@ -27,32 +27,44 @@ internal sealed class CreateLabTechHandler : IRequestHandler<CreateAdminCommand,
 
     public async Task<AdminDto> Handle(CreateAdminCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        // Validar que el usuario exista
-        var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.admin.UserId);
-
-        if (existingUser == null)
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            throw new UserNotFoundException(request.admin.UserId.ToString());
-        }
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
+            try
+            {
+                // Validar que el usuario exista
+                var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.admin.UserId);
 
-        var adminEntity = new Admin
-        {
-            Id = request.admin.UserId,
-            HealthCenterId = request.admin.HealthCenterId,
-            Status = true
-        };
+                if (existingUser == null)
+                {
+                    throw new UserNotFoundException(request.admin.UserId.ToString());
+                }
 
-        _repository.Admin.CreateEntity(adminEntity);
+                var adminEntity = new Admin
+                {
+                    Id = request.admin.UserId,
+                    HealthCenterId = request.admin.HealthCenterId,
+                    Status = true
+                };
 
-        await _repository.SaveAsync(cancellationToken);
+                _repository.Admin.CreateEntity(adminEntity);
 
-        await _userManager.AddToRoleAsync(existingUser, "admin");
+                await _repository.SaveAsync(cancellationToken);
 
-        await transaction.CommitAsync(cancellationToken);
+                await _userManager.AddToRoleAsync(existingUser, "admin");
 
-        return _mapper.Map<AdminDto>(adminEntity);
+                await transaction.CommitAsync(cancellationToken);
+
+                return _mapper.Map<AdminDto>(adminEntity);
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }

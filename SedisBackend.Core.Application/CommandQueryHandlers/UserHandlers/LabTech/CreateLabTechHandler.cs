@@ -27,32 +27,45 @@ internal sealed class CreateRegistratorHandler : IRequestHandler<CreateLabTechCo
 
     public async Task<LabTechDto> Handle(CreateLabTechCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        // Validar que el usuario exista
-        var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.LabTech.UserId);
-
-        if (existingUser == null)
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            throw new UserNotFoundException(request.LabTech.UserId.ToString());
-        }
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+            try
+            {
+
+                // Validar que el usuario exista
+                var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.LabTech.UserId);
+
+                if (existingUser == null)
+                {
+                    throw new UserNotFoundException(request.LabTech.UserId.ToString());
+                }
 
 
-        var LabTechEntity = new LabTech
-        {
-            Id = request.LabTech.UserId,
-            HealthCenterId = request.LabTech.HealthCenterId,
-            Status = true
-        };
+                var LabTechEntity = new LabTech
+                {
+                    Id = request.LabTech.UserId,
+                    HealthCenterId = request.LabTech.HealthCenterId,
+                    Status = true
+                };
 
-        _repository.LabTech.CreateEntity(LabTechEntity);
+                _repository.LabTech.CreateEntity(LabTechEntity);
 
-        await _repository.SaveAsync(cancellationToken);
+                await _repository.SaveAsync(cancellationToken);
 
-        await _userManager.AddToRoleAsync(existingUser, "LabTech");
+                await _userManager.AddToRoleAsync(existingUser, "LabTech");
 
-        await transaction.CommitAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
 
-        return _mapper.Map<LabTechDto>(LabTechEntity);
+                return _mapper.Map<LabTechDto>(LabTechEntity);
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }

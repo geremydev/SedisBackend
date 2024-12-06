@@ -29,31 +29,44 @@ internal sealed class CreateDoctorHandler : IRequestHandler<CreateDoctorCommand,
     public async Task<DoctorDto> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
     {
         // TODO mandar el id del healthcenter que pertenece el doctor
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        var existingUser = await _userManager.Users
+        return await executionStrategy.ExecuteAsync(async () =>
+        {
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+            try
+            {
+
+                var existingUser = await _userManager.Users
             .FirstOrDefaultAsync(u => u.Id == request.doctor.UserId, cancellationToken);
 
-        if (existingUser == null)
-        {
-            throw new UserNotFoundException(request.doctor.UserId.ToString());
-        }
+                if (existingUser == null)
+                {
+                    throw new UserNotFoundException(request.doctor.UserId.ToString());
+                }
 
-        var doctorEntity = new Doctor
-        {
-            Id = request.doctor.UserId,
-            LicenseNumber = request.doctor.LicenseNumber,
-            Specialties = new List<DoctorMedicalSpecialty>(),
-            Status = true,
-            CurrentlyWorkingHealthCenterId = request.doctor.HealthCenterId
-        };
+                var doctorEntity = new Doctor
+                {
+                    Id = request.doctor.UserId,
+                    LicenseNumber = request.doctor.LicenseNumber,
+                    Specialties = new List<DoctorMedicalSpecialty>(),
+                    Status = true,
+                    CurrentlyWorkingHealthCenterId = request.doctor.HealthCenterId
+                };
 
 
-        _repository.Doctor.CreateEntity(doctorEntity);
-        await _repository.SaveAsync(cancellationToken);
-        await _userManager.AddToRoleAsync(existingUser, "Doctor");
-        await transaction.CommitAsync(cancellationToken);
+                _repository.Doctor.CreateEntity(doctorEntity);
+                await _repository.SaveAsync(cancellationToken);
+                await _userManager.AddToRoleAsync(existingUser, "Doctor");
+                await transaction.CommitAsync(cancellationToken);
 
-        return _mapper.Map<DoctorDto>(doctorEntity);
+                return _mapper.Map<DoctorDto>(doctorEntity);
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }

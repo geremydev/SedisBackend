@@ -27,32 +27,43 @@ internal sealed class CreateRegistratorHandler : IRequestHandler<CreateRegistrat
 
     public async Task<RegistratorDto> Handle(CreateRegistratorCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        // Validar que el usuario exista
-        var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.Registrator.UserId);
-
-        if (existingUser == null)
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            throw new UserNotFoundException(request.Registrator.UserId.ToString());
-        }
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
+            try
+            {
+                var existingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.Registrator.UserId);
 
-        var RegistratorEntity = new Registrator
-        {
-            Id = request.Registrator.UserId,
-            HealthCenterId = request.Registrator.HealthCenterId,
-            Status = true
-        };
+                if (existingUser == null)
+                {
+                    throw new UserNotFoundException(request.Registrator.UserId.ToString());
+                }
 
-        _repository.Registrator.CreateEntity(RegistratorEntity);
+                var RegistratorEntity = new Registrator
+                {
+                    Id = request.Registrator.UserId,
+                    HealthCenterId = request.Registrator.HealthCenterId,
+                    Status = true
+                };
 
-        await _repository.SaveAsync(cancellationToken);
+                _repository.Registrator.CreateEntity(RegistratorEntity);
 
-        await _userManager.AddToRoleAsync(existingUser, "Registrator");
+                await _repository.SaveAsync(cancellationToken);
 
-        await transaction.CommitAsync(cancellationToken);
+                await _userManager.AddToRoleAsync(existingUser, "Registrator");
 
-        return _mapper.Map<RegistratorDto>(RegistratorEntity);
+                await transaction.CommitAsync(cancellationToken);
+
+                return _mapper.Map<RegistratorDto>(RegistratorEntity);
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }
