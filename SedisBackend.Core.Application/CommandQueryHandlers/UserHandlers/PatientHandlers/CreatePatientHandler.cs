@@ -50,6 +50,13 @@ internal sealed class CreatePatientHandler : IRequestHandler<CreatePatientComman
                 var patientEntity = new Patient
                 {
                     Id = request.patient.UserId,
+                    BloodType = request.patient.BloodType,
+                    BloodTypeLabResultURl = request.patient.BloodTypeLabResultURl,
+                    Height = request.patient.Height,
+                    Weight = request.patient.Weight,
+                    EmergencyContactName = request.patient.EmergencyContactName,
+                    EmergencyContactPhone = request.patient.EmergencyContactName,
+                    PrimaryCarePhysicianId = request.patient.PrimaryCarePhysicianId,
                     MedicalConsultations = new List<MedicalConsultation>(),
                     Appointments = new List<Appointment>(),
                     Allergies = new List<PatientAllergy>(),
