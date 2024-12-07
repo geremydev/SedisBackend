@@ -1,9 +1,9 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Assistants;
 using SedisBackend.Core.Domain.Entities.Users;
-using SedisBackend.Core.Domain.Enums;
 using SedisBackend.Core.Domain.Exceptions;
 using SedisBackend.Core.Domain.Interfaces.Repositories;
 
@@ -26,24 +26,37 @@ internal sealed class UpdateAssistantHandler : IRequestHandler<UpdateAssistantCo
 
     public async Task<Unit> Handle(UpdateAssistantCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
-
-        if (existingUser is null)
-            throw new EntityNotFoundException(request.Id);
-
-        var asisstantEntity = await _repository.Assistant.GetEntityAsync(request.Id, true);
-        asisstantEntity.HealthCenterId = request.Assistant.HealthCenterId;
-        if (asisstantEntity.Status != request.Assistant.Status)
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            asisstantEntity.Status = request.Assistant.Status;
-            if (asisstantEntity.Status)
-                await _userManager.AddToRoleAsync(existingUser, "Assistant");
-            else
-                await _userManager.RemoveFromRoleAsync(existingUser, "Assistant");
-        }
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
-        return Unit.Value;
+            try
+            {
+                var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
+
+                if (existingUser is null)
+                    throw new EntityNotFoundException(request.Id);
+
+                var asisstantEntity = await _repository.Assistant.GetEntityAsync(request.Id, true);
+                asisstantEntity.HealthCenterId = request.Assistant.HealthCenterId;
+                if (asisstantEntity.Status != request.Assistant.Status)
+                {
+                    asisstantEntity.Status = request.Assistant.Status;
+                    if (asisstantEntity.Status)
+                        await _userManager.AddToRoleAsync(existingUser, "Assistant");
+                    else
+                        await _userManager.RemoveFromRoleAsync(existingUser, "Assistant");
+                }
+
+                return Unit.Value;
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }

@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Registrator;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Exceptions;
@@ -25,28 +26,40 @@ internal sealed class UpdateRegistratorHandler : IRequestHandler<UpdateRegistrat
 
     public async Task<Unit> Handle(UpdateRegistratorCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
-
-        if (existingUser is null)
-            throw new EntityNotFoundException(request.Id);
-
-        var RegistratorEntity = await _repository.Registrator.GetEntityAsync(request.Id, true);
-        RegistratorEntity.HealthCenterId = request.Registrator.HealthCenterId;
-        if (RegistratorEntity.Status != request.Registrator.Status)
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            RegistratorEntity.Status = request.Registrator.Status;
-            if (RegistratorEntity.Status)
-                await _userManager.AddToRoleAsync(existingUser, "Registrator");
-            else
-                await _userManager.RemoveFromRoleAsync(existingUser, "Registrator");
-        }
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
-        await _repository.SaveAsync(cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
+            try
+            {
+                var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
 
+                if (existingUser is null)
+                    throw new EntityNotFoundException(request.Id);
 
-        return Unit.Value;
+                var RegistratorEntity = await _repository.Registrator.GetEntityAsync(request.Id, true);
+                RegistratorEntity.HealthCenterId = request.Registrator.HealthCenterId;
+                if (RegistratorEntity.Status != request.Registrator.Status)
+                {
+                    RegistratorEntity.Status = request.Registrator.Status;
+                    if (RegistratorEntity.Status)
+                        await _userManager.AddToRoleAsync(existingUser, "Registrator");
+                    else
+                        await _userManager.RemoveFromRoleAsync(existingUser, "Registrator");
+                }
+
+                await _repository.SaveAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+
+                return Unit.Value;
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }

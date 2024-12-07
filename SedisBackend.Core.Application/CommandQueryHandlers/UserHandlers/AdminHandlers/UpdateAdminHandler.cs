@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Admins;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Exceptions;
@@ -25,28 +26,41 @@ internal sealed class UpdateLabTechHandler : IRequestHandler<UpdateAdminCommand,
 
     public async Task<Unit> Handle(UpdateAdminCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
-
-        if (existingUser is null)
-            throw new EntityNotFoundException(request.Id);
-
-        var adminEntity = await _repository.Admin.GetEntityAsync(request.Id, true);
-        adminEntity.HealthCenterId = request.Admin.HealthCenterId;
-        if (adminEntity.Status != request.Admin.Status)
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            adminEntity.Status = request.Admin.Status;
-            if (adminEntity.Status)
-                await _userManager.AddToRoleAsync(existingUser, "Admin");
-            else
-                await _userManager.RemoveFromRoleAsync(existingUser, "Admin");
-        }
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
-        await _repository.SaveAsync(cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
+            try
+            {
+                var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
+
+                if (existingUser is null)
+                    throw new EntityNotFoundException(request.Id);
+
+                var adminEntity = await _repository.Admin.GetEntityAsync(request.Id, true);
+                adminEntity.HealthCenterId = request.Admin.HealthCenterId;
+                if (adminEntity.Status != request.Admin.Status)
+                {
+                    adminEntity.Status = request.Admin.Status;
+                    if (adminEntity.Status)
+                        await _userManager.AddToRoleAsync(existingUser, "Admin");
+                    else
+                        await _userManager.RemoveFromRoleAsync(existingUser, "Admin");
+                }
+
+                await _repository.SaveAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
 
 
-        return Unit.Value;
+                return Unit.Value;
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }

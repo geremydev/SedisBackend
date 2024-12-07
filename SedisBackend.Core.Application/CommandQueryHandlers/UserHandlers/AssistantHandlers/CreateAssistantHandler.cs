@@ -36,7 +36,7 @@ internal sealed class CreateAssistantHandler : IRequestHandler<CreateAssistantCo
             try
             {
                 var existingUser = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.Id == request.assistant.UserId, cancellationToken);
+                .FirstOrDefaultAsync(u => u.Id == request.assistant.UserId, cancellationToken);
 
                 if (existingUser == null)
                 {
@@ -59,7 +59,8 @@ internal sealed class CreateAssistantHandler : IRequestHandler<CreateAssistantCo
                 await transaction.CommitAsync(cancellationToken);
 
                 return _mapper.Map<AssistantDto>(assistantEntity);
-                    catch
+            }
+            catch
             {
                 await transaction.RollbackAsync(cancellationToken);
                 throw;

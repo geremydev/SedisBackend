@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.LabTech;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Exceptions;
@@ -25,28 +26,41 @@ internal sealed class UpdateRegistratorHandler : IRequestHandler<UpdateLabTechCo
 
     public async Task<Unit> Handle(UpdateLabTechCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
-
-        if (existingUser is null)
-            throw new EntityNotFoundException(request.Id);
-
-        var LabTechEntity = await _repository.LabTech.GetEntityAsync(request.Id, true);
-        LabTechEntity.HealthCenterId = request.LabTech.HealthCenterId;
-        if (LabTechEntity.Status != request.LabTech.Status)
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            LabTechEntity.Status = request.LabTech.Status;
-            if (LabTechEntity.Status)
-                await _userManager.AddToRoleAsync(existingUser, "LabTech");
-            else
-                await _userManager.RemoveFromRoleAsync(existingUser, "LabTech");
-        }
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
-        await _repository.SaveAsync(cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
+            try
+            {
+                var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
 
+                if (existingUser is null)
+                    throw new EntityNotFoundException(request.Id);
 
-        return Unit.Value;
+                var LabTechEntity = await _repository.LabTech.GetEntityAsync(request.Id, true);
+                LabTechEntity.HealthCenterId = request.LabTech.HealthCenterId;
+                if (LabTechEntity.Status != request.LabTech.Status)
+                {
+                    LabTechEntity.Status = request.LabTech.Status;
+                    if (LabTechEntity.Status)
+                        await _userManager.AddToRoleAsync(existingUser, "LabTech");
+                    else
+                        await _userManager.RemoveFromRoleAsync(existingUser, "LabTech");
+                }
+
+                await _repository.SaveAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+
+                return Unit.Value;
+
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }

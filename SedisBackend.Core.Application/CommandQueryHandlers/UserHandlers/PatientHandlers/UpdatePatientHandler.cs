@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Patients;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Exceptions;
@@ -25,34 +26,48 @@ internal sealed class UpdatePatientHandler : IRequestHandler<UpdatePatientComman
 
     public async Task<Unit> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
-
-        if (existingUser is null)
-            throw new EntityNotFoundException(request.Id);
-
-        var patientEntity = await _repository.Patient.GetEntityAsync(request.Id, true);
-
-        patientEntity.BloodType = request.Patient.BloodType;
-        patientEntity.EmergencyContactName = request.Patient.EmergencyContactName;
-        patientEntity.EmergencyContactPhone = request.Patient.EmergencyContactPhone;
-        patientEntity.Height = request.Patient.Height;
-        patientEntity.Weight = request.Patient.Weight;
-        patientEntity.PrimaryCarePhysicianId = request.Patient.PrimaryCarePhysicianId;
-
-        if (patientEntity.Status != request.Patient.Status)
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            patientEntity.Status = request.Patient.Status;
-            if (patientEntity.Status)
-                await _userManager.AddToRoleAsync(existingUser, "Patient");
-            else
-                await _userManager.RemoveFromRoleAsync(existingUser, "Patient");
-        }
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
-        await _repository.SaveAsync(cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
+            try
+            {
+                var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
 
-        return Unit.Value;
+                if (existingUser is null)
+                    throw new EntityNotFoundException(request.Id);
+
+                var patientEntity = await _repository.Patient.GetEntityAsync(request.Id, true);
+
+                patientEntity.BloodType = request.Patient.BloodType;
+                patientEntity.EmergencyContactName = request.Patient.EmergencyContactName;
+                patientEntity.EmergencyContactPhone = request.Patient.EmergencyContactPhone;
+                patientEntity.Height = request.Patient.Height;
+                patientEntity.Weight = request.Patient.Weight;
+                patientEntity.PrimaryCarePhysicianId = request.Patient.PrimaryCarePhysicianId;
+
+                if (patientEntity.Status != request.Patient.Status)
+                {
+                    patientEntity.Status = request.Patient.Status;
+                    if (patientEntity.Status)
+                        await _userManager.AddToRoleAsync(existingUser, "Patient");
+                    else
+                        await _userManager.RemoveFromRoleAsync(existingUser, "Patient");
+                }
+
+                await _repository.SaveAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+
+                return Unit.Value;
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
+
     }
 }

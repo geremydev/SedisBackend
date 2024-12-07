@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SedisBackend.Core.Domain.DTO.Entities.Users.Doctors;
 using SedisBackend.Core.Domain.Entities.Users;
 using SedisBackend.Core.Domain.Exceptions;
@@ -25,28 +26,41 @@ internal sealed class UpdateDoctorHandler : IRequestHandler<UpdateDoctorCommand,
 
     public async Task<Unit> Handle(UpdateDoctorCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
+        var executionStrategy = await _repository.CreateExecutionStrategy();
 
-        var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
-
-        if (existingUser is null)
-            throw new EntityNotFoundException(request.Id);
-
-        var doctorEntity = await _repository.Doctor.GetEntityAsync(request.Id, true);
-
-        if (doctorEntity.Status != request.Doctor.Status)
+        return await executionStrategy.ExecuteAsync(async () =>
         {
-            doctorEntity.Status = request.Doctor.Status;
-            if (doctorEntity.Status)
-                await _userManager.AddToRoleAsync(existingUser, "Doctor");
-            else
-                await _userManager.RemoveFromRoleAsync(existingUser, "Doctor");
-        }
-        doctorEntity.ApplicationUser.PhoneNumberConfirmed = false;
+            await using var transaction = await _repository.BeginTransactionAsync(cancellationToken);
 
-        await _repository.SaveAsync(cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
+            try
+            {
+                var existingUser = await _userManager.FindByIdAsync(request.Id.ToString());
 
-        return Unit.Value;
+                if (existingUser is null)
+                    throw new EntityNotFoundException(request.Id);
+
+                var doctorEntity = await _repository.Doctor.GetEntityAsync(request.Id, true);
+
+                if (doctorEntity.Status != request.Doctor.Status)
+                {
+                    doctorEntity.Status = request.Doctor.Status;
+                    if (doctorEntity.Status)
+                        await _userManager.AddToRoleAsync(existingUser, "Doctor");
+                    else
+                        await _userManager.RemoveFromRoleAsync(existingUser, "Doctor");
+                }
+                doctorEntity.ApplicationUser.PhoneNumberConfirmed = false;
+
+                await _repository.SaveAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+
+                return Unit.Value;
+            }
+            catch
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                throw;
+            }
+        });
     }
 }
